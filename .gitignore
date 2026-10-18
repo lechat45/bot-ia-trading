@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+memoire/sessions/*_simulation.md
+memoire/sessions/*_simulation.json
+memoire/etat.json
+site/
+.env.*
+!.env.example
+.claude/

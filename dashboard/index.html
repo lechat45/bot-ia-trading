@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bot IA Trading</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%238b5cf6'/><stop offset='1' stop-color='%2322d3ee'/></linearGradient></defs><rect width='32' height='32' rx='9' fill='url(%23g)'/><path d='M7 21l6-6 4 4 8-8' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+      <div>
+        <h1>Bot IA Trading</h1>
+        <span class="sub">6 agents · Gemini × Groq · Alpaca</span>
+      </div>
+    </div>
+    <div class="top-status">
+      <span id="mode-badge" class="badge">…</span>
+      <span id="market" class="market"><i class="dot"></i><span>Marché…</span></span>
+    </div>
+    <div class="actions">
+      <button id="btn-sim" class="btn primary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>
+        <span>Lancer une simulation</span>
+      </button>
+      <button id="btn-real" class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+        <span>Session réelle</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="grid" id="main">
+    <div id="banner" class="banner" hidden></div>
+
+    <section class="kpis span-12" id="kpis">
+      <div class="card kpi main">
+        <div class="label">Valeur du portefeuille</div>
+        <div class="value skeleton" id="k-equity">100 000 $</div>
+        <div class="delta" id="k-day">&nbsp;</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Performance (1 mois)</div>
+        <div class="value skeleton" id="k-perf">+0,0 %</div>
+        <div class="delta muted" id="k-perf-sub">&nbsp;</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Liquidités</div>
+        <div class="value skeleton" id="k-cash">0 $</div>
+        <div class="meter"><i id="k-cash-bar" style="width:0%"></i></div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Positions</div>
+        <div class="value skeleton" id="k-pos">0</div>
+        <div class="delta muted" id="k-pos-sub">&nbsp;</div>
+      </div>
+    </section>
+
+    <section class="card span-8">
+      <div class="card-head">
+        <h2>Évolution du portefeuille</h2>
+        <span class="hint" id="chart-hint">30 derniers jours</span>
+      </div>
+      <div id="chart"></div>
+    </section>
+
+    <section class="card span-4">
+      <div class="card-head">
+        <h2>Session en direct</h2>
+        <span class="hint" id="live-status">En veille</span>
+      </div>
+      <ol class="stepper" id="stepper"></ol>
+      <pre class="console" id="console">Clique sur « Lancer une simulation » pour voir l'équipe travailler.</pre>
+    </section>
+
+    <div class="section-title span-12">
+      <h2>L'équipe</h2><span class="muted">Clique sur un agent pour lire ses pensées et ses notes</span>
+    </div>
+    <section class="agents span-12" id="agents"></section>
+
+    <section class="card span-12">
+      <div class="card-head">
+        <h2>Positions</h2>
+        <span class="hint">stop loss ← prix → objectif de gain</span>
+      </div>
+      <div class="table-wrap" id="positions"></div>
+    </section>
+
+    <section class="card span-12">
+      <div class="card-head">
+        <h2>Historique des sessions</h2>
+        <span class="hint" id="sess-count"></span>
+      </div>
+      <div class="history">
+        <div class="sess-list" id="sess-list"></div>
+        <div class="detail" id="detail"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true"></aside>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <h3>Lancer une session réelle ?</h3>
+      <p id="modal-text">Les agents vont envoyer de vrais ordres sur ton compte Alpaca.</p>
+      <div class="row">
+        <button class="btn" id="modal-no">Annuler</button>
+        <button class="btn danger" id="modal-yes">Oui, lancer</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

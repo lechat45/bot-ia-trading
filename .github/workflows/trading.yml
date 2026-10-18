@@ -1,0 +1,125 @@
+# Hébergement gratuit : GitHub Actions lance 2 sessions par jour ouvré pendant la séance
+# de New York (comme les 2 sessions quotidiennes d'Aywen), recommite la mémoire, puis publie
+# le tableau de bord en ligne :
+#   - dépôt PUBLIC  -> GitHub Pages (Settings > Pages > Source : « GitHub Actions »)
+#   - dépôt PRIVÉ   -> Cloudflare Pages (variable CLOUDFLARE_PROJECT + secrets
+#                      CLOUDFLARE_API_TOKEN et CLOUDFLARE_ACCOUNT_ID, voir le README)
+name: Bot IA trading
+
+on:
+  schedule:
+    # Heures UTC, du lundi au vendredi. 15:05 UTC ≈ 17h05 Paris (après l'ouverture de NY),
+    # 18:35 UTC ≈ 20h35 Paris. Valable toute l'année malgré les changements d'heure.
+    # (GitHub peut retarder un cron de quelques minutes.)
+    - cron: "5 15 * * 1-5"
+    - cron: "35 18 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Simulation (aucun ordre envoyé)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trading
+  cancel-in-progress: false
+
+jobs:
+  session:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Session de trading
+        env:
+          GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GROQ_API_KEY_1: ${{ secrets.GROQ_API_KEY_1 }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
+          GROQ_API_KEY_3: ${{ secrets.GROQ_API_KEY_3 }}
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          ALPACA_PAPER: "true"
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+        run: python main.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+
+      - name: Sauvegarder la mémoire des agents
+        if: always()
+        run: |
+          git config user.name "bot-ia-trading"
+          git config user.email "bot-ia-trading@users.noreply.github.com"
+          git add memoire/
+          if git diff --cached --quiet; then
+            echo "Rien à sauvegarder."
+          else
+            git commit -m "Mémoire : session du $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Construire le tableau de bord en ligne
+        if: always()
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          ALPACA_PAPER: "true"
+        run: python build_site.py
+
+      - uses: actions/upload-pages-artifact@v3
+        if: always()
+        with:
+          path: site
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site
+          path: site
+          include-hidden-files: true
+          retention-days: 3
+
+  # Dépôt public : publication sur GitHub Pages
+  pages:
+    needs: session
+    if: ${{ always() && !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  # Dépôt privé : publication sur Cloudflare Pages (gratuit)
+  cloudflare:
+    needs: session
+    if: ${{ always() && vars.CLOUDFLARE_PROJECT != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+      - name: Publier sur Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ vars.CLOUDFLARE_PROJECT }}
+        run: |
+          npx --yes wrangler@3 pages project create "$PROJECT" --production-branch=main || true
+          npx --yes wrangler@3 pages deploy site --project-name="$PROJECT" --branch=main
