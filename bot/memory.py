@@ -1,32 +1,61 @@
-"""Mémoire persistante (l'outil « Notes » d'Aywen) : notes par agent, journal, rapports.
-Le dossier memoire/ est recommité par GitHub Actions après chaque session."""
+"""Mémoire persistante : notes de chaque IA (l'outil « Notes » d'Aywen), plan d'ouverture, journal,
+rapports de séance et état en direct. Le dossier memoire/ est recommité par GitHub Actions."""
 import datetime as dt
 import json
+import threading
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent / "memoire"
 MAX_NOTES = 3500
+_lock = threading.Lock()
 
 
+def _write(p: Path, text: str):
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(text, encoding="utf-8")
+
+
+def _read_json(p: Path, default):
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return default
+
+
+# ---------------------------------------------------------------------- notes
 def read_notes(agent: str) -> str:
     p = ROOT / "notes" / f"{agent}.md"
-    return p.read_text(encoding="utf-8")[-MAX_NOTES:] if p.exists() else "(aucune note : première session)"
+    return p.read_text(encoding="utf-8")[-MAX_NOTES:] if p.exists() else ""
 
 
 def write_notes(agent: str, text: str, when: str) -> None:
-    if not text or not text.strip():
-        return
-    p = ROOT / "notes" / f"{agent}.md"
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(f"_Mis à jour : {when}_\n\n{text.strip()[:MAX_NOTES]}\n", encoding="utf-8")
+    if text and text.strip():
+        _write(ROOT / "notes" / f"{agent}.md", f"_Mis à jour : {when}_\n\n{text.strip()[:MAX_NOTES]}\n")
 
 
+# ---------------------------------------------------------------------- plan d'ouverture
+def plan_path(simulation: bool) -> Path:
+    return ROOT / ("plan_simulation.json" if simulation else "plan.json")
+
+
+def read_plan(simulation: bool = False) -> dict:
+    return _read_json(plan_path(simulation), {})
+
+
+def write_plan(plan: dict, simulation: bool = False) -> None:
+    _write(plan_path(simulation), json.dumps(plan, ensure_ascii=False, indent=1))
+
+
+# ---------------------------------------------------------------------- journal
 def append_journal(entries: list[dict]) -> None:
-    p = ROOT / "journal.jsonl"
-    p.parent.mkdir(parents=True, exist_ok=True)
-    with p.open("a", encoding="utf-8") as f:
-        for e in entries:
-            f.write(json.dumps(e, ensure_ascii=False) + "\n")
+    if not entries:
+        return
+    with _lock:
+        p = ROOT / "journal.jsonl"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        with p.open("a", encoding="utf-8") as f:
+            for e in entries:
+                f.write(json.dumps(e, ensure_ascii=False) + "\n")
 
 
 def recent_journal(days: int) -> list[dict]:
@@ -45,29 +74,68 @@ def recent_journal(days: int) -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------------- séances
 def write_report(name: str, markdown: str) -> Path:
     p = ROOT / "sessions" / f"{name}.md"
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(markdown, encoding="utf-8")
+    _write(p, markdown)
     return p
 
 
-def append_history(row: dict) -> None:
-    p = ROOT / "historique.csv"
+def write_session_json(name: str, data: dict) -> None:
+    _write(ROOT / "sessions" / f"{name}.json", json.dumps(data, ensure_ascii=False, indent=1, default=str))
+
+
+def append_history(rows: list[dict]) -> None:
+    """Valeur de chaque sous-compte après chaque séance (courbes du tableau de bord)."""
+    p = ROOT / "historique_ia.csv"
     new = not p.exists()
     with p.open("a", encoding="utf-8") as f:
         if new:
-            f.write(",".join(row) + "\n")
-        f.write(",".join(str(v) for v in row.values()) + "\n")
+            f.write("date,agent,valeur,cash,positions\n")
+        for r in rows:
+            f.write(f"{r['date']},{r['agent']},{r['valeur']},{r['cash']},{r['positions']}\n")
 
 
-def write_session_json(name: str, data: dict) -> None:
-    p = ROOT / "sessions" / f"{name}.json"
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(data, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+def read_history() -> list[dict]:
+    p = ROOT / "historique_ia.csv"
+    if not p.exists():
+        return []
+    rows = []
+    for line in p.read_text(encoding="utf-8").splitlines()[1:]:
+        parts = line.split(",")
+        if len(parts) == 5:
+            rows.append({"date": parts[0], "agent": parts[1], "valeur": float(parts[2]),
+                         "cash": float(parts[3]), "positions": int(parts[4])})
+    return rows
 
 
-def write_state(state: dict) -> None:
-    p = ROOT / "etat.json"
-    p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+# ---------------------------------------------------------------------- état en direct
+_state: dict = {}
+
+
+def state_start(mode: str, simulation: bool, agents: list[str]) -> None:
+    global _state
+    with _lock:
+        _state = {"running": True, "mode": mode, "simulation": simulation,
+                  "debut": dt.datetime.now(dt.timezone.utc).isoformat(),
+                  "agents": {a: {"statut": "attente", "action": "", "etapes": 0} for a in agents}}
+        _flush()
+
+
+def state_agent(agent: str, **kw) -> None:
+    with _lock:
+        if _state:
+            _state.setdefault("agents", {}).setdefault(agent, {}).update(kw)
+            _flush()
+
+
+def state_stop() -> None:
+    with _lock:
+        if _state:
+            _state["running"] = False
+            _flush()
+
+
+def _flush():
+    _state["maj"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    _write(ROOT / "etat.json", json.dumps(_state, ensure_ascii=False))

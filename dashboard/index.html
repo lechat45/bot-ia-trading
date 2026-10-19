@@ -28,7 +28,7 @@
       <button id="theme-btn" class="icon-btn" aria-label="Passer en thème sombre" title="Thème clair / sombre"></button>
       <button id="btn-real" class="btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></svg>
-        <span>Session réelle</span>
+        <span>Séance réelle</span>
       </button>
       <button id="btn-sim" class="btn btn-primary">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8a1 1 0 0 0-1.5.86z"/></svg>
@@ -40,7 +40,8 @@
   <div class="shell">
     <nav class="sidenav" aria-label="Sections">
       <a class="nav-item active" href="#vue" data-s="vue"><span class="js-ic" data-ic="home"></span>Vue d'ensemble</a>
-      <a class="nav-item" href="#equipe" data-s="equipe"><span class="js-ic" data-ic="users"></span>L'équipe<span class="count">6</span></a>
+      <a class="nav-item" href="#ia" data-s="ia"><span class="js-ic" data-ic="users"></span>Les IA<span class="count">4</span></a>
+      <a class="nav-item" href="#plan" data-s="plan"><span class="js-ic" data-ic="calendar"></span>Plan d'ouverture<span class="count" id="nav-plan"></span></a>
       <a class="nav-item" href="#positions" data-s="positions"><span class="js-ic" data-ic="briefcase"></span>Positions<span class="count" id="nav-pos"></span></a>
       <a class="nav-item" href="#historique" data-s="historique"><span class="js-ic" data-ic="clock"></span>Historique<span class="count" id="nav-sess"></span></a>
       <div class="nav-foot" id="nav-foot"></div>
@@ -50,7 +51,7 @@
       <section class="section" id="vue">
         <div class="page-head">
           <div>
-            <div class="overline">Tableau de bord</div>
+            <div class="overline">4 IA en bourse · inspiré d'Aywen</div>
             <h1>Vue d'ensemble</h1>
           </div>
           <div class="status-mobile">
@@ -68,15 +69,15 @@
             <path d="M0 210 C 110 220, 170 90, 280 100 S 440 0, 540 -10" stroke-width="1" opacity=".2"/>
           </svg>
           <div>
-            <div class="overline">Valeur du portefeuille</div>
+            <div class="overline">Valeur totale des 4 sous-comptes</div>
             <div class="band-value skeleton" id="k-equity">100 000,00 $</div>
             <div class="band-delta" id="k-day">&nbsp;</div>
           </div>
           <div class="band-tiles">
             <div class="tile">
-              <div class="overline">Performance 1 mois</div>
-              <div class="tile-v skeleton" id="k-perf">+0,00 %</div>
-              <div class="tile-s" id="k-perf-sub">&nbsp;</div>
+              <div class="overline">En tête</div>
+              <div class="tile-v skeleton" id="k-lead">—</div>
+              <div class="tile-s" id="k-lead-sub">&nbsp;</div>
             </div>
             <div class="tile">
               <div class="overline">Liquidités</div>
@@ -94,41 +95,56 @@
         <div class="row-2">
           <div class="card">
             <div class="card-head">
-              <span class="ic-box js-ic" data-ic="chart"></span>
-              <h2>Évolution du portefeuille</h2>
-              <span class="right">30 derniers jours</span>
+              <span class="ic-box js-ic" data-ic="trophy"></span>
+              <h2>Classement des IA</h2>
+              <span class="right">Résultat de chaque sous-compte</span>
             </div>
-            <div id="chart"></div>
+            <div class="leaderboard" id="leaderboard"></div>
           </div>
           <div class="card">
             <div class="card-head">
-              <span class="ic-box js-ic" data-ic="spark"></span>
-              <h2>Session en direct</h2>
+              <span class="ic-box js-ic" data-ic="calendar"></span>
+              <h2>Journée de bourse</h2>
               <span class="right" id="live-status">En veille</span>
             </div>
-            <ol class="stepper" id="stepper"></ol>
-            <pre class="console" id="console">Cliquez sur « Lancer une simulation » pour voir l'équipe travailler.</pre>
+            <ol class="day" id="day"></ol>
+            <div class="live" id="live"></div>
+            <pre class="console" id="console" hidden></pre>
           </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="chart"></span>
+            <h2>Évolution des sous-comptes</h2>
+            <span class="right" id="chart-legend"></span>
+          </div>
+          <div id="chart"></div>
         </div>
       </section>
 
-      <section class="section" id="equipe">
+      <section class="section" id="ia">
         <div class="section-head">
-          <h2>L'équipe</h2>
-          <span class="muted">Cliquez sur un agent pour lire sa réflexion et ses notes</span>
+          <h2>Les IA</h2>
+          <span class="muted">Un modèle, une stratégie et un sous-compte chacune. Cliquez pour voir son cerveau.</span>
         </div>
         <div class="agents" id="agents"></div>
       </section>
 
+      <section class="section" id="plan">
+        <div class="section-head"><h2>Plan d'ouverture</h2><span class="muted" id="plan-sub"></span></div>
+        <div class="card" id="plan-card"></div>
+      </section>
+
       <section class="section" id="positions">
-        <div class="section-head"><h2>Positions</h2><span class="muted">Stop loss, prix actuel et objectif de gain</span></div>
+        <div class="section-head"><h2>Positions</h2><span class="muted">Par IA, avec stop loss, prix actuel et objectif de gain</span></div>
         <div class="card">
           <div class="table-wrap" id="positions-table"></div>
         </div>
       </section>
 
       <section class="section" id="historique">
-        <div class="section-head"><h2>Historique des sessions</h2><span class="muted" id="sess-count"></span></div>
+        <div class="section-head"><h2>Historique des séances</h2><span class="muted" id="sess-count"></span></div>
         <div class="card">
           <div class="history">
             <div class="sess-list" id="sess-list"></div>
@@ -141,9 +157,10 @@
 
   <nav class="tabbar" aria-label="Sections">
     <a class="active" href="#vue" data-s="vue"><span class="js-ic" data-ic="home"></span>Accueil</a>
-    <a href="#equipe" data-s="equipe"><span class="js-ic" data-ic="users"></span>Équipe</a>
+    <a href="#ia" data-s="ia"><span class="js-ic" data-ic="users"></span>IA</a>
+    <a href="#plan" data-s="plan"><span class="js-ic" data-ic="calendar"></span>Plan</a>
     <a href="#positions" data-s="positions"><span class="js-ic" data-ic="briefcase"></span>Positions</a>
-    <a href="#historique" data-s="historique"><span class="js-ic" data-ic="clock"></span>Historique</a>
+    <a href="#historique" data-s="historique"><span class="js-ic" data-ic="clock"></span>Séances</a>
   </nav>
 
   <div class="scrim" id="scrim"></div>
@@ -152,12 +169,12 @@
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-box">
       <div class="body">
-        <h3 id="modal-title">Lancer une session réelle ?</h3>
-        <p id="modal-text">Les agents vont envoyer de vrais ordres sur votre compte Alpaca.</p>
+        <h3 id="modal-title">Lancer une séance réelle ?</h3>
+        <p id="modal-text">Les IA vont envoyer de vrais ordres sur votre compte Alpaca.</p>
       </div>
       <div class="row">
         <button class="btn" id="modal-no">Annuler</button>
-        <button class="btn btn-primary" id="modal-yes">Lancer la session</button>
+        <button class="btn btn-primary" id="modal-yes">Lancer la séance</button>
       </div>
     </div>
   </div>

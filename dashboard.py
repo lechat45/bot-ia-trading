@@ -19,7 +19,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from bot.agents import ANALYSTES, CRITIQUE, GERANT
+from bot import memory
+from bot.agents import AGENTS
+from bot.comptes import PATH as COMPTES_PATH
+from bot.comptes import Comptes
 from bot.config import Config
 
 ROOT = Path(__file__).resolve().parent
@@ -58,11 +61,11 @@ class Runner:
             if self.running:
                 return "Une session tourne déjà."
             if DEMO:
-                args, mode = ["--offline"], "demo"
+                args, mode = ["--offline", "--force"], "demo"
             elif mode == "reel":
-                args = []
+                args = ["--mode", "auto", "--force"]
             else:
-                args, mode = ["--dry-run", "--force"], "simulation"
+                args, mode = ["--mode", "auto", "--dry-run", "--force"], "simulation"
             env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUNBUFFERED": "1"}
             self.logs.clear()
             self.proc = subprocess.Popen(
@@ -88,41 +91,53 @@ runner = Runner()
 _cache: dict = {}
 
 
-def _agent(a, role):
+def _agent(a):
     keys = cfg.gemini_keys if a.provider == "gemini" else cfg.groq_keys
-    return {"id": a.id, "nom": a.nom, "provider": a.provider, "cle": a.key_index + 1,
-            "strategie": a.strategie, "role": role,
+    return {"id": a.id, "nom": a.nom, "provider": a.provider, "cle": a.key_index + 1, "modele": a.models[0],
+            "strategie": a.strategie, "inspire_de": a.inspire_de,
             "cle_configuree": DEMO or a.key_index < len(keys)}
+
+
+def _comptes(equity: float, prices: dict) -> tuple[dict, list]:
+    """Valeur de chaque sous-compte et positions attribuées à chaque IA."""
+    ids = [a.id for a in AGENTS]
+    if COMPTES_PATH.exists():
+        c = Comptes(json.loads(COMPTES_PATH.read_text(encoding="utf-8")), persist=False)
+        demarre = True
+    else:
+        c, demarre = Comptes.load(ids, equity or 100_000, persist=False), False
+    missing = [s for s in c.symbols() if s not in prices]
+    if missing:
+        try:
+            prices = {**prices, **broker.latest_prices(missing)}
+        except Exception:
+            pass
+    vals, positions = {}, []
+    for aid in ids:
+        v = c.valuation(aid, prices)
+        v["demarre"] = demarre
+        vals[aid] = v
+        positions += [{**p, "agent": aid} for p in v["positions"]]
+    return vals, positions
 
 
 def overview() -> dict:
     hit = _cache.get("overview")
     if hit and time.time() - hit[0] < 15 and not runner.running:
         return hit[1]
-    out = {"demo": DEMO, "paper": cfg.paper,
-           "agents": [_agent(a, "analyste") for a in ANALYSTES]
-           + [_agent(CRITIQUE, "critique"), _agent(GERANT, "gerant")],
+    out = {"demo": DEMO, "paper": cfg.paper, "agents": [_agent(a) for a in AGENTS],
            "limites": {k: getattr(cfg, k) for k in (
-               "max_position_pct", "min_cash_pct", "max_positions", "max_orders",
-               "max_stop_distance_pct", "min_reward_risk")},
-           "cles": {"gemini": len(cfg.gemini_keys), "groq": len(cfg.groq_keys),
-                    "alpaca": not DEMO}}
+               "max_position_pct", "min_cash_pct", "max_positions", "max_orders", "max_stop_distance_pct",
+               "min_reward_risk", "max_gap_pct", "preparation_heure")},
+           "cles": {"gemini": len(cfg.gemini_keys), "groq": len(cfg.groq_keys), "alpaca": not DEMO},
+           "plan": memory.read_plan(simulation=DEMO) or memory.read_plan(simulation=True),
+           "historique_ia": memory.read_history()}
     try:
         acct = broker.account()
         out["compte"] = {k: float(acct.get(k) or 0) for k in ("equity", "cash", "last_equity", "buying_power")}
         out["horloge"] = broker.clock()
-        exits = {}
-        for o in broker.open_orders():
-            e = exits.setdefault(o["symbol"], {})
-            if o["side"] == "sell" and o["type"] in ("stop", "stop_limit") and o.get("stop_price"):
-                e["stop"] = max(float(o["stop_price"]), e.get("stop", 0))
-            elif o["side"] == "sell" and o["type"] == "limit" and o.get("limit_price"):
-                e["tp"] = float(o["limit_price"])
-        out["positions"] = [{
-            "symbole": p["symbol"], "qty": float(p["qty"]), "prix_achat": float(p["avg_entry_price"]),
-            "prix": float(p["current_price"]), "valeur": float(p["market_value"]),
-            "pl": float(p.get("unrealized_pl") or float(p["market_value"]) - float(p["qty"]) * float(p["avg_entry_price"])), "pl_pct": float(p["unrealized_plpc"]) * 100,
-            **exits.get(p["symbol"], {})} for p in broker.positions()]
+        prices = {p["symbol"]: float(p["current_price"]) for p in broker.positions()}
+        out["comptes"], out["positions"] = _comptes(out["compte"]["equity"], prices)
         h = broker.portfolio_history("1M", "1D")
         out["historique"] = [{"t": t, "v": v} for t, v in zip(h.get("timestamp") or [], h.get("equity") or [])
                              if v]  # Alpaca renvoie 0 avant le premier dépôt
@@ -134,16 +149,19 @@ def overview() -> dict:
 
 def sessions() -> list:
     rows = []
-    for p in sorted((MEM / "sessions").glob("*.json"), reverse=True)[:60]:
+    for p in sorted((MEM / "sessions").glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:60]:
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        rows.append({"nom": d.get("nom", p.stem), "quand": d.get("quand"), "simulation": d.get("simulation"),
-                     "valeur": d.get("portefeuille", {}).get("valeur_totale"),
-                     "ordres": len(d.get("ordres") or []), "rejets": len(d.get("rejets") or []),
-                     "propositions": len(d.get("propositions") or []),
-                     "synthese": (d.get("decision") or {}).get("synthese", "")[:220]})
+        if "agents" not in d and "executions" not in d:
+            continue  # ancien format (avant la refonte « comme Aywen »)
+        ag = d.get("agents") or {}
+        rows.append({"nom": d.get("nom", p.stem), "quand": d.get("quand"), "mode": d.get("mode"),
+                     "simulation": d.get("simulation"),
+                     "ordres": sum(len(r.get("ordres") or []) for r in ag.values()) + len(d.get("executions") or []),
+                     "erreurs": sum(1 for r in ag.values() if r.get("erreur")),
+                     "resume": {aid: (r.get("compte_rendu") or "")[:160] for aid, r in ag.items()}})
     return rows
 
 

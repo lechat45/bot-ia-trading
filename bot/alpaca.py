@@ -85,13 +85,35 @@ class Alpaca:
                          params={"by": "volume", "top": top}).get("most_actives", [])
 
     # ---- Ordres ----
-    def submit_bracket(self, symbol, qty: int, stop: float, take_profit: float):
-        return self._req("POST", f"{self.base}/v2/orders", json={
+    def submit_bracket(self, symbol, qty: int, stop: float, take_profit: float, client_id: str | None = None):
+        body = {
             "symbol": symbol, "qty": str(qty), "side": "buy", "type": "market",
             "time_in_force": "gtc", "order_class": "bracket",
             "take_profit": {"limit_price": _px(take_profit)},
             "stop_loss": {"stop_price": _px(stop)},
-        })
+        }
+        if client_id:
+            body["client_order_id"] = client_id
+        return self._req("POST", f"{self.base}/v2/orders", json=body)
+
+    def submit_market_sell(self, symbol, qty: int, client_id: str | None = None):
+        body = {"symbol": symbol, "qty": str(qty), "side": "sell", "type": "market", "time_in_force": "day"}
+        if client_id:
+            body["client_order_id"] = client_id
+        return self._req("POST", f"{self.base}/v2/orders", json=body)
+
+    def get_order(self, order_id):
+        return self._req("GET", f"{self.base}/v2/orders/{order_id}", params={"nested": "true"})
+
+    def latest_prices(self, symbols: list[str]) -> dict[str, float]:
+        out = {}
+        for i in range(0, len(symbols), 100):
+            snaps = self.snapshots(symbols[i:i + 100])
+            for s, snap in (snaps or {}).items():
+                p = ((snap or {}).get("latestTrade") or {}).get("p") or ((snap or {}).get("dailyBar") or {}).get("c")
+                if p:
+                    out[s] = float(p)
+        return out
 
     def submit_exits(self, symbol, qty: int, stop: float, take_profit: float | None):
         """Remet des ordres de sortie (OCO stop + TP, ou stop seul) sur une position existante."""

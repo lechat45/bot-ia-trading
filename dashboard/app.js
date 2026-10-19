@@ -5,14 +5,18 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Petite mise en forme des textes des IA (gras, listes, retours à la ligne), après échappement.
+const md = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|\n)[ \t]*[-*•] +/g, "$1• ").replace(/\n/g, "<br>");
+const plain = (t) => String(t ?? "").replace(/\*\*/g, "").replace(/\s*\n\s*/g, " ");
 const num = (v) => (v === null || v === undefined || v === "" || isNaN(+v) ? null : +v);
 const money = (v, d = 0) => num(v) === null ? "—" : `${new Intl.NumberFormat("fr-FR", {
   minimumFractionDigits: d, maximumFractionDigits: d }).format(v)} $`;
 const pct = (v, d = 2) => num(v) === null ? "—" : `${v > 0 ? "+" : ""}${(+v).toFixed(d).replace(".", ",")} %`;
 const tone = (v) => (v > 0 ? "up" : v < 0 ? "down" : "muted");
-const fmtDate = (d, opt) => new Date(d).toLocaleString("fr-FR", opt);
+const fmtDate = (d, opt) => new Date(d).toLocaleString("fr-FR", { timeZone: "Europe/Paris", ...opt });
+const hm = (d) => fmtDate(d, { hour: "2-digit", minute: "2-digit" });
 
-// En ligne (GitHub Pages / Cloudflare), pas de serveur : on lit les fichiers générés par build_site.py.
+// En ligne (GitHub Pages), pas de serveur : on lit les fichiers générés par build_site.py.
 const STATIC = !!window.STATIC_SITE;
 function staticPath(p) {
   const u = new URL(p, location.href);
@@ -27,55 +31,55 @@ const P = {
   users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><path d="M15.5 5.6a3 3 0 0 1 0 5.8M17.5 14.6c1.6.6 2.7 2 3 4.4"/>',
   briefcase: '<rect x="3.5" y="7" width="17" height="12.5" rx="2"/><path d="M8.5 7V5.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17"/>',
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  calendar: '<rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
   chart: '<path d="M4 4v16h16"/><path d="m7.5 14.5 3.5-3.5 3 3 5-5.5"/>',
+  trophy: '<path d="M8 4.5h8v5a4 4 0 0 1-8 0z"/><path d="M8 6.5H5v1.5a3 3 0 0 0 3 3M16 6.5h3v1.5a3 3 0 0 1-3 3M12 13.5V17M8.5 20h7M9.5 17h5"/>',
   spark: '<path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2.1 2.1M15.9 15.9 18 18M6 18l2.1-2.1M15.9 8.1 18 6"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.8v2M12 19.2v2M2.8 12h2M19.2 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M5.5 18.5l1.4-1.4M17.1 6.9l1.4-1.4"/>',
   moon: '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>',
+  sunrise: '<path d="M4 18.5h16M7 15a5 5 0 0 1 10 0M12 4.5v4M9.5 7 12 4.5 14.5 7M4.5 11.5l1.4 1M19.5 11.5l-1.4 1"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
   up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
   down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
   alert: '<path d="M12 4 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17h.01"/>',
-  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   key: '<circle cx="8" cy="15" r="3.5"/><path d="m10.5 12.5 8-8M15.5 7.5l2.5 2.5"/>',
-  shield: '<path d="M12 3.5 5 6v5.5c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9V6z"/>',
+  filter: '<path d="M4 5h16l-6 7.5V19l-4-2v-4.5z"/>',
+  news: '<rect x="3.5" y="5" width="13" height="14.5" rx="1.5"/><path d="M16.5 9h3v8.5a2 2 0 0 1-4 0M7 9h6M7 12.5h6M7 16h3.5"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/>',
+  doc: '<path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4M9 12h6M9 15.5h6"/>',
+  edit: '<path d="M14.5 5.5l4 4L9 19H5v-4z"/><path d="M12.5 7.5l4 4"/>',
+  book: '<path d="M4.5 5.5c2.5-1 5-1 7.5.5v13c-2.5-1.5-5-1.5-7.5-.5zM19.5 5.5c-2.5-1-5-1-7.5.5v13c2.5-1.5 5-1.5 7.5-.5z"/>',
   wallet: '<rect x="3.5" y="6" width="17" height="13" rx="2"/><path d="M3.5 9.5h17M16 14h1.5"/>',
-  // Agents
+  chat: '<path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4 3.5v-3.5h0.5a2 2 0 0 1-2-2z"/>',
+  shield: '<path d="M12 3.5 5 6v5.5c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9V6z"/>',
+  // Les IA
   qualite: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4M8.5 11h5M11 8.5v5"/>',
   equilibre: '<path d="M12 4v16M7 20h10M5 7.5h14"/><path d="m5 7.5-2.5 6a2.5 2.5 0 0 0 5 0zM19 7.5l-2.5 6a2.5 2.5 0 0 0 5 0z"/>',
   sentiment: '<path d="M12 21c3.9 0 6.5-2.8 6.5-6.5 0-2.8-1.9-5-3.3-6.4-.3 1.8-1.3 2.8-2.3 2.8 0-2.8-1.4-5.6-3.6-7.4.1 3.8-3.8 6-3.8 11 0 3.7 2.6 6.5 6.5 6.5z"/>',
   contrarien: '<path d="M4.5 8h13l-3-3M19.5 16h-13l3 3"/>',
-  critique: '<path d="M12 3.5 5 6v5.5c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/>',
-  gerant: '<path d="m3.5 8.5 4 3 4.5-6 4.5 6 4-3-2 10h-13z"/><path d="M5.5 20.5h13"/>',
 };
 const icon = (name, cls = "ic") =>
-  `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[name] || ""}</svg>`;
+  `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[name] || P.spark}</svg>`;
 
 const META = {
-  qualite: { tag: "Qualité · chiffres et patience",
-    desc: "Épluche les chiffres (croissance, marges, dette, valorisation). Cherche des entreprises solides à prix raisonnable et ne panique pas quand le prix baisse tant que la thèse tient. Inspiré de l'agent « Claude » d'Aywen." },
-  equilibre: { tag: "Équilibre · diversification",
-    desc: "Construit un portefeuille diversifié sur des secteurs variés pour limiter le risque, sans tout analyser pour ne jamais agir. Inspiré de l'agent « ChatGPT » d'Aywen." },
-  sentiment: { tag: "Sentiment · momentum",
-    desc: "Mise sur l'humeur du marché : actualité chaude, tendances Reddit, actions en forte dynamique. Accepte plus de risque, dans les limites du code. Inspiré de l'agent « Grok », vainqueur de l'expérience d'Aywen." },
-  contrarien: { tag: "Contrarien · rebonds",
-    desc: "Cherche les actions qui ont beaucoup chuté, à condition de prouver que le marché a surréagi, avec un catalyseur daté. A retenu les leçons des erreurs de l'agent « Mistral »." },
-  critique: { tag: "Avocat du diable",
-    desc: "Contrôle chaque proposition : faits datés, catalyseur dans l'horizon, stop hors du bruit, paris corrélés, comportements interdits. Verdict : ok, réserve ou rejet." },
-  gerant: { tag: "Décision finale",
-    desc: "Synthétise les 4 analystes et l'avis du critique, vérifie avec Google Search, surveille l'ensemble du portefeuille et décide des ordres. Ses notes sont le journal de bord de l'équipe." },
+  qualite: { color: "var(--coral)", tag: "Qualité · chiffres et patience",
+    desc: "Épluche les chiffres (croissance, marges, dette, valorisation). Cherche des entreprises solides à prix raisonnable et ne panique pas quand le prix baisse tant que la thèse tient." },
+  equilibre: { color: "var(--sky)", tag: "Équilibre · diversification",
+    desc: "Construit un portefeuille diversifié sur des secteurs variés pour limiter le risque, en osant agir quand l'analyse est bonne." },
+  sentiment: { color: "var(--peach)", tag: "Sentiment · prise de risque",
+    desc: "Mise sur l'humeur des réseaux et l'actualité chaude : tendances Reddit, actions en forte dynamique. Accepte plus de risque, dans les limites du code." },
+  contrarien: { color: "var(--plum)", tag: "Contrarien · préférence Europe",
+    desc: "Cherche les actions qui ont beaucoup chuté, de préférence européennes (cotées à New York), à condition de prouver que le marché s'est trompé." },
 };
-const STEPS = [
-  ["portefeuille", "Lecture du portefeuille"], ["marche", "Screener et actualités"],
-  ["selection", "Sélection des titres"], ["donnees", "Collecte des données"],
-  ["theses", "Rédaction des thèses"], ["critique", "Contrôle du critique"],
-  ["gerant", "Décision du gérant"], ["ordres", "Garde-fous et ordres"],
-];
-const STAGE_LABEL = { selection: "sélectionne ses titres", theses: "rédige ses thèses", critique: "contrôle les propositions", gerant: "prend la décision" };
-const VERDICT = { ok: "pill-sage", reserve: "pill-peach", rejet: "pill-danger" };
+const MODE = { preparation: ["Préparation", "pill-coral"], ouverture: ["Ouverture", "pill-sky"], suivi: ["Suivi", "pill-plum"] };
+const STATUT = { en_attente: ["En attente", "pill-peach"], execute: ["Exécuté", "pill-sage"], annule: ["Annulé", ""],
+  rejete: ["Refusé", "pill-danger"], erreur: ["Erreur", "pill-danger"] };
 
-const S = { ov: null, sessions: [], latest: null, current: null, notes: {}, live: null, wasRunning: false, tab: "qualite" };
+const S = { ov: null, sessions: [], brain: null, current: null, notes: {}, live: null, wasRunning: false, tab: null };
 
 function toast(msg, ic = "info") {
   const t = $("#toast");
@@ -86,13 +90,16 @@ function toast(msg, ic = "info") {
 }
 const empty = (ic, title, sub) =>
   `<div class="empty"><span class="ic-box">${icon(ic)}</span><b>${esc(title)}</b><span class="small">${esc(sub)}</span></div>`;
+const agentOf = (id) => S.ov?.agents.find((a) => a.id === id) || { id, nom: id, provider: "", cle: "" };
+const avatar = (id, small) => `<span class="avatar${small ? " sm" : ""}" style="--c:${META[id]?.color || "var(--coral)"}">${icon(id)}</span>`;
+const providerPill = (a) => `<span class="pill ${a.provider === "gemini" ? "pill-sky" : "pill-peach"}">${a.provider === "gemini" ? "Gemini" : "Groq"} · clé ${a.cle}</span>`;
+const modelName = (m) => String(m || "").replace(/^(gemini|groq)#\d:/, "").replace("openai/", "").replace("qwen/", "");
 
-/* ---------- Thème clair / sombre ---------- */
+/* ---------- Thème ---------- */
 function applyThemeButton() {
   const dark = document.documentElement.dataset.theme === "dark";
-  const b = $("#theme-btn");
-  b.innerHTML = icon(dark ? "sun" : "moon");
-  b.setAttribute("aria-label", dark ? "Passer en thème clair" : "Passer en thème sombre");
+  $("#theme-btn").innerHTML = icon(dark ? "sun" : "moon");
+  $("#theme-btn").setAttribute("aria-label", dark ? "Passer en thème clair" : "Passer en thème sombre");
 }
 $("#theme-btn").onclick = () => {
   const dark = document.documentElement.dataset.theme !== "dark";
@@ -107,7 +114,7 @@ function relTime(iso) {
   const ms = new Date(iso) - Date.now();
   if (isNaN(ms)) return "";
   const h = Math.floor(ms / 3.6e6), m = Math.round((ms % 3.6e6) / 6e4);
-  return h >= 24 ? fmtDate(iso, { weekday: "short", hour: "2-digit", minute: "2-digit" })
+  return h >= 20 ? fmtDate(iso, { weekday: "long", hour: "2-digit", minute: "2-digit" })
     : h > 0 ? `dans ${h} h ${String(m).padStart(2, "0")}` : `dans ${m} min`;
 }
 
@@ -115,9 +122,8 @@ function renderHeader(o) {
   const [cls, label] = o.demo ? ["pill-peach", "Démo"] : o.paper ? ["pill-sky", "Paper trading"] : ["pill-danger", "Argent réel"];
   $$(".js-mode").forEach((b) => { b.className = `js-mode pill ${cls}`; b.textContent = label; });
   const h = o.horloge || {};
-  const open = !!h.is_open;
   $$(".js-market").forEach((m) => {
-    m.innerHTML = `<i class="dot ${open ? "on" : ""}"></i><span>${open
+    m.innerHTML = `<i class="dot ${h.is_open ? "on" : ""}"></i><span>${h.is_open
       ? `Bourse de New York ouverte · ferme ${esc(relTime(h.next_close))}`
       : `Bourse fermée · ouvre ${esc(relTime(h.next_open))}`}</span>`;
   });
@@ -128,143 +134,207 @@ function renderHeader(o) {
   const ban = $("#banner");
   const show = (kind, ic, html) => { ban.className = `banner ${kind}`; ban.innerHTML = `${icon(ic)}<span>${html}</span>`; ban.hidden = false; };
   if (o.erreur) show("err", "alert", `Alpaca ne répond pas : ${esc(o.erreur)}`);
-  else if (STATIC) show("info", "info", `Version en ligne, mise à jour automatiquement après chaque session. Dernière mise à jour : ${esc(fmtDate(o.genere_le, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }))}.`);
-  else if (o.demo) show("warn", "info", "Mode démo : aucune clé Alpaca dans le fichier .env, les chiffres affichés sont factices. Remplissez .env puis relancez « python dashboard.py ».");
+  else if (STATIC) show("info", "info", `Version en ligne, mise à jour après chaque séance. Dernière mise à jour : ${esc(fmtDate(o.genere_le, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }))}.`);
+  else if (o.demo) show("warn", "info", "Mode démo : aucune clé Alpaca dans le fichier .env, les chiffres affichés sont factices.");
   else ban.hidden = true;
 
-  const k = o.cles || {};
+  const k = o.cles || {}, L = o.limites || {};
   $("#nav-foot").innerHTML = `
     <div class="row"><span>Clés Gemini</span><span class="pill ${k.gemini >= 3 || o.demo ? "pill-sage" : "pill-peach"}">${o.demo ? "démo" : `${k.gemini}/3`}</span></div>
     <div class="row"><span>Clés Groq</span><span class="pill ${k.groq >= 3 || o.demo ? "pill-sage" : "pill-peach"}">${o.demo ? "démo" : `${k.groq}/3`}</span></div>
-    <div class="row"><span>Max par titre</span><span>${esc(o.limites.max_position_pct)} %</span></div>
-    <div class="row"><span>Cash minimum</span><span>${esc(o.limites.min_cash_pct)} %</span></div>`;
+    <div class="row"><span>Max par titre</span><span>${esc(L.max_position_pct)} %</span></div>
+    <div class="row"><span>Écart max à l'ouverture</span><span>${esc(L.max_gap_pct)} %</span></div>`;
 }
 
-/* ---------- Bandeau : chiffres clés ---------- */
-function renderKpis(o) {
+/* ---------- Bandeau et classement ---------- */
+function ranking(o) {
+  return o.agents.map((a) => ({ a, v: o.comptes?.[a.id] })).filter((x) => x.v)
+    .sort((x, y) => y.v.pl_pct - x.v.pl_pct);
+}
+
+function renderBand(o) {
   const a = o.compte;
   if (!a) return;
   $$(".band .skeleton").forEach((e) => e.classList.remove("skeleton"));
   const day = a.equity - a.last_equity;
   $("#k-equity").textContent = money(a.equity, 2);
   $("#k-day").innerHTML = `<span class="${tone(day)}" style="display:inline-flex;align-items:center;gap:4px">${icon(day >= 0 ? "up" : "down")}${esc(money(Math.abs(day), 2))} (${esc(pct(a.last_equity ? (day / a.last_equity) * 100 : 0))})</span> aujourd'hui`;
-  const h = o.historique || [];
-  const first = h.find((p) => p.v > 0);
-  const perf = first ? (a.equity / first.v - 1) * 100 : 0;
-  $("#k-perf").innerHTML = `<span class="${tone(perf)}">${esc(pct(perf))}</span>`;
-  $("#k-perf-sub").textContent = first ? `${money(a.equity - first.v, 0)} depuis le ${fmtDate(first.t * 1000, { day: "numeric", month: "short" })}` : "";
-  const cashPct = a.equity ? (a.cash / a.equity) * 100 : 0;
-  $("#k-cash").textContent = money(a.cash, 0);
-  $("#k-cash-bar").style.width = `${Math.max(0, Math.min(100, cashPct))}%`;
+  const rank = ranking(o);
+  const lead = rank[0];
+  const started = rank.some((x) => x.v.demarre);
+  $("#k-lead").innerHTML = lead && started ? esc(lead.a.nom.replace("Analyste ", "")) : "—";
+  $("#k-lead-sub").innerHTML = lead && started ? `<span class="${tone(lead.v.pl_pct)}">${esc(pct(lead.v.pl_pct))}</span> · ${esc(money(lead.v.pl, 0))}` : "Pas encore de séance réelle";
+  const cash = rank.reduce((s, x) => s + x.v.cash, 0), total = rank.reduce((s, x) => s + x.v.valeur, 0) || 1;
+  $("#k-cash").textContent = money(cash, 0);
+  $("#k-cash-bar").style.width = `${Math.max(0, Math.min(100, (cash / total) * 100))}%`;
   const pos = o.positions || [];
-  const pl = pos.reduce((s, p) => s + p.pl, 0);
   $("#k-pos").textContent = `${pos.length}`;
-  $("#k-pos-sub").innerHTML = pos.length
-    ? `Latent : <span class="${tone(pl)}">${esc(money(pl, 0))}</span> · max ${esc(o.limites.max_positions)}`
-    : `max ${esc(o.limites.max_positions)} · ${cashPct.toFixed(0)} % en cash`;
+  $("#k-pos-sub").textContent = pos.length ? `${new Set(pos.map((p) => p.agent)).size} IA investie(s)` : `${((cash / total) * 100).toFixed(0)} % en liquidités`;
   $("#nav-pos").textContent = pos.length || "";
 }
 
-/* ---------- Graphique ---------- */
+function renderLeaderboard(o) {
+  const rank = ranking(o);
+  const max = Math.max(1, ...rank.map((x) => Math.abs(x.v.pl_pct)));
+  $("#leaderboard").innerHTML = rank.map(({ a, v }, i) => `
+    <button class="lb-row" data-id="${esc(a.id)}">
+      <span class="lb-rank">${i + 1}</span>${avatar(a.id, true)}
+      <span class="lb-name"><b>${esc(a.nom.replace("Analyste ", ""))}</b><span class="small muted">${esc(modelName(a.modele))} · comme ${esc(a.inspire_de)}</span></span>
+      <span class="lb-bar"><i class="${v.pl_pct >= 0 ? "pos" : "neg"}" style="width:${(Math.abs(v.pl_pct) / max) * 100}%"></i></span>
+      <span class="lb-val"><b>${esc(money(v.valeur, 0))}</b><span class="pill ${v.pl >= 0 ? "pill-sage" : "pill-danger"}">${esc(pct(v.pl_pct))}</span></span>
+    </button>`).join("") || empty("trophy", "Pas encore de résultats", "");
+  $$(".lb-row").forEach((b) => (b.onclick = () => openDrawer(b.dataset.id)));
+}
+
+/* ---------- Journée de bourse ---------- */
+function todayParis(d) { return fmtDate(d, { year: "numeric", month: "2-digit", day: "2-digit" }); }
+
+function renderDay() {
+  const o = S.ov;
+  if (!o) return;
+  const now = new Date();
+  const plan = o.plan || {};
+  const h = o.horloge || {};
+  const prepH = o.limites?.preparation_heure ?? 9;
+  const openAt = h.next_open && todayParis(h.next_open) === todayParis(now) ? hm(h.next_open) : "15:30";
+  const suiviAt = hm(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 17, 30)));
+  const planToday = plan.date && plan.cree_le && todayParis(plan.cree_le) === todayParis(now);
+  const nPlan = (plan.ordres || []).length;
+  const isoParis = now.toLocaleDateString("sv-SE", { timeZone: "Europe/Paris" });
+  const suiviDone = S.sessions.some((s) => s.mode === "suivi" && !s.simulation && s.nom.startsWith(isoParis));
+  const live = S.live?.etat || {};
+  const running = S.live?.runner?.running || live.running;
+  const steps = [
+    ["preparation", `${String(prepH).padStart(2, "0")}:00`, "Préparation", "Les IA décident quoi acheter à l'ouverture",
+      planToday ? `${nPlan} ordre${nPlan > 1 ? "s" : ""} planifié${nPlan > 1 ? "s" : ""}` : null],
+    ["ouverture", openAt, "Ouverture de New York", "Exécution automatique des ordres planifiés",
+      planToday && plan.execute_le ? `exécuté à ${hm(plan.execute_le)}` : null],
+    ["suivi", suiviAt, "Suivi", "Les IA font le point et agissent en direct", suiviDone ? "fait" : null],
+  ];
+  $("#day").innerHTML = steps.map(([k, t, title, sub, done]) => {
+    const active = running && live.mode === k;
+    return `<li class="day-step ${done ? "done" : ""} ${active ? "active" : ""}">
+      <span class="day-t mono">${esc(t)}</span><span class="day-dot">${done ? icon("check", "") : ""}</span>
+      <span class="day-body"><b>${esc(title)}</b><span class="small muted">${esc(active ? "en cours…" : done || sub)}</span></span></li>`;
+  }).join("");
+}
+
+function renderLive() {
+  const L = S.live;
+  if (!L) return;
+  const r = L.runner || {}, etat = L.etat || {};
+  const running = r.running || (etat.running && Date.now() - new Date(etat.maj) < 10 * 60e3);
+  const agents = etat.agents || {};
+  $("#live").innerHTML = running ? Object.entries(agents).map(([id, st]) => {
+    const label = st.statut === "reflechit" ? `<span class="typing"><i></i><i></i><i></i></span>réfléchit…`
+      : st.statut === "outil" ? esc(st.action) : st.statut === "termine" ? `${icon("check")}terminé`
+      : st.statut === "erreur" ? `<span class="down">erreur</span>` : "en attente";
+    return `<div class="live-row">${avatar(id, true)}<b>${esc(agentOf(id).nom.replace("Analyste ", ""))}</b><span class="live-act">${label}</span><span class="small muted">${st.etapes || 0} outils</span></div>`;
+  }).join("") : "";
+  const st = $("#live-status");
+  st.innerHTML = running ? `<span class="pill pill-coral"><i class="dot run"></i>${esc(MODE[etat.mode]?.[0] || "Séance")}${etat.simulation ? " (simulation)" : ""} en cours</span>`
+    : r.code === 0 ? `<span class="pill pill-sage">${icon("check")}Terminée</span>`
+    : r.code ? `<span class="pill pill-danger">Erreur (code ${esc(r.code)})</span>` : "En veille";
+  const con = $("#console");
+  if (!STATIC && (r.logs || []).length) {
+    con.hidden = false;
+    const stick = con.scrollTop + con.clientHeight >= con.scrollHeight - 30;
+    con.innerHTML = r.logs.map((l) => `<span class="${/erreur|error|échec|traceback/i.test(l) ? "err" : /exécuté|terminée|planifié/i.test(l) ? "ok" : ""}">${esc(l)}</span>`).join("\n");
+    if (stick) con.scrollTop = con.scrollHeight;
+  }
+  $("#btn-sim").disabled = !STATIC && running;
+  $("#btn-real").disabled = running;
+  if (S.wasRunning && !running) {
+    toast(r.code === 0 || r.code == null ? "Séance terminée" : "La séance s'est arrêtée avec une erreur", r.code ? "alert" : "check");
+    refreshAll(true);
+  }
+  S.wasRunning = running;
+  renderDay();
+  renderAgents();
+}
+
+/* ---------- Graphique (une courbe par IA) ---------- */
 function smoothPath(pts) {
   if (pts.length < 2) return "";
   let d = `M${pts[0][0]},${pts[0][1]}`;
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
-    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
-    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-    d += ` C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${p2[0]},${p2[1]}`;
+    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
   }
   return d;
 }
 
-function renderChart(points) {
-  const box = $("#chart");
-  if (!points || points.length < 2) {
-    box.innerHTML = empty("chart", "Pas encore d'historique", "La courbe apparaîtra après quelques jours de trading.");
-    return;
+function chartSeries(o) {
+  const rows = o.historique_ia || [];
+  const byAgent = {};
+  rows.forEach((r) => (byAgent[r.agent] ||= []).push({ t: new Date(r.date).getTime(), v: r.valeur }));
+  const ok = Object.values(byAgent).some((s) => s.length >= 2);
+  if (ok) {
+    return o.agents.filter((a) => byAgent[a.id]).map((a) => ({ id: a.id, name: a.nom.replace("Analyste ", ""), color: META[a.id].color, pts: byAgent[a.id] }));
   }
-  const W = box.clientWidth || 700, H = box.clientHeight || 260, L = 64, R = 12, T = 12, B = 28;
-  const vs = points.map((p) => p.v);
-  let lo = Math.min(...vs), hi = Math.max(...vs);
-  const pad = (hi - lo) * 0.15 || hi * 0.01 || 1;
-  lo -= pad; hi += pad;
-  const x = (i) => L + (i / (points.length - 1)) * (W - L - R);
-  const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
-  const pts = points.map((p, i) => [x(i), y(p.v)]);
-  const line = smoothPath(pts);
-  let grid = "";
-  for (let k = 0; k <= 4; k++) {
-    const v = lo + ((hi - lo) * k) / 4, yy = y(v);
-    grid += `<line class="c-grid" x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}"/>
-      <text class="c-label" x="${L - 10}" y="${yy + 4}" text-anchor="end">${esc(money(v, 0))}</text>`;
-  }
-  const n = Math.min(5, points.length);
-  for (let k = 0; k < n; k++) {
-    const i = Math.round((k * (points.length - 1)) / (n - 1 || 1));
-    grid += `<text class="c-label" x="${x(i)}" y="${H - 6}" text-anchor="${k === 0 ? "start" : k === n - 1 ? "end" : "middle"}">${esc(fmtDate(points[i].t * 1000, { day: "numeric", month: "short" }))}</text>`;
-  }
-  const last = pts[pts.length - 1];
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Évolution de la valeur du portefeuille">
-    <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="c-stop-a"/><stop offset="1" class="c-stop-b"/></linearGradient></defs>
-    ${grid}
-    <path d="${line} L${last[0]},${H - B} L${pts[0][0]},${H - B} Z" fill="url(#area)"/>
-    <path class="c-line" d="${line}"/>
-    <circle class="c-dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/>
-    <g id="hover" opacity="0"><line class="c-hover-line" id="hl" y1="${T}" y2="${H - B}"/><circle class="c-hover-dot" id="hc" r="5"/></g>
-    <rect x="${L}" y="0" width="${W - L - R}" height="${H}" fill="transparent" id="hit"/>
-  </svg><div class="chart-tip" id="tip"></div>`;
-  const hit = $("#hit", box), g = $("#hover", box), tip = $("#tip", box);
-  hit.addEventListener("mousemove", (e) => {
-    const r = box.getBoundingClientRect();
-    const mx = ((e.clientX - r.left) / r.width) * W;
-    const i = Math.max(0, Math.min(points.length - 1, Math.round(((mx - L) / (W - L - R)) * (points.length - 1))));
-    const [px, py] = pts[i];
-    g.setAttribute("opacity", "1");
-    $("#hl", box).setAttribute("x1", px); $("#hl", box).setAttribute("x2", px);
-    $("#hc", box).setAttribute("cx", px); $("#hc", box).setAttribute("cy", py);
-    const chg = (points[i].v / points[0].v - 1) * 100;
-    tip.innerHTML = `<b>${esc(money(points[i].v, 2))}</b> <span class="${tone(chg)}">${esc(pct(chg))}</span><br><span class="muted">${esc(fmtDate(points[i].t * 1000, { weekday: "long", day: "numeric", month: "long" }))}</span>`;
-    tip.style.left = `${(px / W) * 100}%`; tip.style.top = `${(py / H) * r.height}px`; tip.style.opacity = "1";
-  });
-  hit.addEventListener("mouseleave", () => { g.setAttribute("opacity", "0"); tip.style.opacity = "0"; });
+  const h = o.historique || [];
+  return h.length >= 2 ? [{ id: "total", name: "Compte total", color: "var(--coral)", pts: h.map((p) => ({ t: p.t * 1000, v: p.v })) }] : [];
 }
 
-/* ---------- Agents ---------- */
-function agentLast(id, d = S.latest) {
-  if (!d) return {};
-  const so = d.sorties || {};
-  if (id === "gerant") return { texte: d.decision?.synthese, modele: d.modeles?.["gerant:gerant"], props: d.decision?.ordres || [] };
-  if (id === "critique") return { texte: so.critique?.risques_portefeuille, modele: d.modeles?.["critique:critique"], avis: so.critique?.avis || [] };
-  const sel = so[`selection:${id}`] || {}, th = so[`theses:${id}`] || {};
-  return { tickers: sel.tickers || [], raison: sel.raison, texte: th.analyse || sel.raison,
-    modele: d.modeles?.[`theses:${id}`] || d.modeles?.[`selection:${id}`], props: th.propositions || [] };
+function renderChart(o) {
+  const box = $("#chart");
+  const series = chartSeries(o);
+  $("#chart-legend").innerHTML = series.map((s) => `<span class="legend"><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join("");
+  if (!series.length) {
+    box.innerHTML = empty("chart", "Pas encore d'historique", "Les courbes apparaîtront après les premières séances.");
+    return;
+  }
+  const W = box.clientWidth || 700, H = box.clientHeight || 260, L = 70, R = 12, T = 12, B = 28;
+  const all = series.flatMap((s) => s.pts);
+  const t0 = Math.min(...all.map((p) => p.t)), t1 = Math.max(...all.map((p) => p.t)) || t0 + 1;
+  let lo = Math.min(...all.map((p) => p.v)), hi = Math.max(...all.map((p) => p.v));
+  const pad = (hi - lo) * 0.15 || hi * 0.01 || 1;
+  lo -= pad; hi += pad;
+  const x = (t) => L + ((t - t0) / ((t1 - t0) || 1)) * (W - L - R);
+  const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+  let grid = "";
+  for (let k = 0; k <= 4; k++) {
+    const v = lo + ((hi - lo) * k) / 4;
+    grid += `<line class="c-grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="c-label" x="${L - 10}" y="${y(v) + 4}" text-anchor="end">${esc(money(v, 0))}</text>`;
+  }
+  for (let k = 0; k < 4; k++) {
+    const t = t0 + ((t1 - t0) * k) / 3;
+    grid += `<text class="c-label" x="${x(t)}" y="${H - 6}" text-anchor="${k === 0 ? "start" : k === 3 ? "end" : "middle"}">${esc(fmtDate(t, { day: "numeric", month: "short" }))}</text>`;
+  }
+  const single = series.length === 1;
+  const paths = series.map((s) => {
+    const pts = s.pts.sort((a, b) => a.t - b.t).map((p) => [x(p.t), y(p.v)]);
+    const last = pts[pts.length - 1];
+    const area = single ? `<path d="${smoothPath(pts)} L${last[0]},${H - B} L${pts[0][0]},${H - B} Z" fill="url(#area)"/>` : "";
+    return `${area}<path d="${smoothPath(pts)}" fill="none" stroke-width="2" style="stroke:${s.color}"/>
+      <circle cx="${last[0]}" cy="${last[1]}" r="4" style="fill:${s.color};stroke:var(--surface-1);stroke-width:2"/>`;
+  }).join("");
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Évolution de la valeur des sous-comptes">
+    <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="c-stop-a"/><stop offset="1" class="c-stop-b"/></linearGradient></defs>
+    ${grid}${paths}</svg>`;
 }
-const providerPill = (a) => `<span class="pill ${a.provider === "gemini" ? "pill-sky" : "pill-peach"}">${a.provider === "gemini" ? "Gemini" : "Groq"} · clé ${a.cle}</span>`;
+
+/* ---------- Les IA ---------- */
+function brainOf(id) { return S.brain?.agents?.[id] || null; }
 
 function renderAgents() {
   const o = S.ov;
   if (!o) return;
   const etat = S.live?.etat || {}, running = S.live?.runner?.running || etat.running;
   $("#agents").innerHTML = o.agents.map((a) => {
-    const m = META[a.id] || {};
-    const last = agentLast(a.id);
-    const thinking = running && etat.agent === a.id;
+    const m = META[a.id] || {}, v = o.comptes?.[a.id] || {}, b = brainOf(a.id);
+    const st = etat.agents?.[a.id] || {};
+    const thinking = running && ["reflechit", "outil"].includes(st.statut);
     const status = thinking
-      ? `<span class="typing"><i></i><i></i><i></i></span><span style="color:var(--coral-soft);font-weight:600">${esc(STAGE_LABEL[etat.etape] || "réfléchit")}…</span>`
-      : !a.cle_configuree ? `<span class="pill pill-peach">${icon("key")}Clé manquante, relais par une autre clé</span>`
-      : `<i class="dot"></i>En veille`;
-    const tickers = (last.tickers || []).map((t) => `<span class="pill tk">${esc(t)}</span>`).join("");
-    const n = (last.props || []).length;
-    const extra = a.id === "critique" && last.avis?.length ? `<span class="pill">${last.avis.length} avis</span>`
-      : n ? `<span class="pill pill-coral">${n} ${a.id === "gerant" ? "ordre" : "proposition"}${n > 1 ? "s" : ""}</span>` : "";
-    return `<article class="card agent ${thinking ? "thinking" : ""}" data-id="${esc(a.id)}" tabindex="0" role="button" aria-label="Voir le détail de ${esc(a.nom)}">
-      <div class="agent-top">
-        <span class="avatar">${icon(a.id)}</span>
-        <div><h3>${esc(a.nom)}</h3><div class="tag">${esc(m.tag)}</div></div>
-      </div>
-      <div class="chips">${providerPill(a)}${tickers}${extra}</div>
-      <p class="excerpt">${esc(last.texte || "Pas encore de session : lancez une simulation pour voir son raisonnement.")}</p>
+      ? `<span class="typing"><i></i><i></i><i></i></span><span style="color:var(--coral-soft);font-weight:600">${esc(st.statut === "outil" ? st.action : "réfléchit…")}</span>`
+      : !a.cle_configuree ? `<span class="pill pill-peach">${icon("key")}Clé manquante, relais par une autre</span>`
+      : `<i class="dot"></i>${b ? `Dernière séance : ${esc(MODE[S.brain.mode]?.[0] || "")} du ${esc(fmtDate(S.brain.ts, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))}` : "En veille"}`;
+    const pos = (v.positions || []).map((p) => `<span class="pill tk">${esc(p.symbole)}</span>`).join("");
+    return `<article class="card agent ${thinking ? "thinking" : ""}" data-id="${esc(a.id)}" tabindex="0" role="button" aria-label="Voir le cerveau de ${esc(a.nom)}">
+      <div class="agent-top">${avatar(a.id)}<div><h3>${esc(a.nom)}</h3><div class="tag">${esc(m.tag)} · comme ${esc(a.inspire_de)}</div></div></div>
+      <div class="agent-money"><b>${esc(money(v.valeur, 0))}</b><span class="pill ${v.pl >= 0 ? "pill-sage" : "pill-danger"}">${esc(pct(v.pl_pct))}</span><span class="small muted">${esc(money(v.cash, 0))} de liquidités</span></div>
+      <div class="chips">${providerPill(a)}<span class="pill mono">${esc(modelName(b?.modele || a.modele))}</span>${pos}</div>
+      <p class="excerpt">${esc(plain(b?.compte_rendu) || "Pas encore de séance : lancez une simulation pour voir son raisonnement.")}</p>
       <div class="agent-status">${status}</div>
     </article>`;
   }).join("");
@@ -274,41 +344,68 @@ function renderAgents() {
   });
 }
 
-function actionPill(action) {
-  const a = String(action || "").toLowerCase();
-  const cls = a.startsWith("vend") || a.startsWith("all") ? "pill-danger" : a === "ajuster_stop" ? "pill-sky" : "pill-sage";
-  return `<span class="pill ${cls}">${esc(String(action || "").replace("_", " "))}</span>`;
+/* ---------- Le « cerveau » : chaque réflexion et chaque outil ---------- */
+function toolLabel(st) {
+  const a = st.args || {};
+  const L = {
+    consulter_portefeuille: ["briefcase", "Consulte son portefeuille"],
+    screener: ["filter", `Screener : ${String(a.critere || "").replaceAll("_", " ")}`],
+    historique_prix: ["chart", `Historique du cours : ${a.symbole || ""}`],
+    donnees_financieres: ["doc", `Données financières : ${a.symbole || ""}`],
+    actualites: ["news", `Actualités : ${a.symbole || "marché"}`],
+    recherche_web: ["search", `Recherche web : « ${a.question || ""} »`],
+    sentiment_reseaux: ["users", `Sentiment des réseaux : ${a.symbole || ""}`],
+    ecrire_notes: ["edit", "Met à jour ses notes"],
+    passer_ordre: ["wallet", `Ordre : ${a.action || ""} ${a.symbole || ""}${a.montant_usd ? ` pour ${money(a.montant_usd, 0)}` : ""}${a.stop_loss_pct ? ` · stop -${a.stop_loss_pct} % · objectif +${a.take_profit_pct} %` : ""}`],
+    annuler_ordre: ["x", `Annule l'ordre planifié sur ${a.symbole || ""}`],
+    ajuster_stop: ["shield", `Remonte le stop de ${a.symbole || ""} à ${money(a.nouveau_stop, 2)}`],
+    lire_skill: ["book", `Lit le skill « ${a.nom || ""} »`],
+    terminer_session: ["check", "Termine la séance"],
+  };
+  return L[st.nom] || ["spark", st.nom];
 }
 
-function propCard(p) {
-  const rows = [
-    ["Poids", p.poids_pct != null ? `${p.poids_pct} %` : null], ["Stop loss", p.stop_loss], ["Objectif", p.take_profit],
-    ["Horizon", p.horizon_jours ? `${p.horizon_jours} jours` : null], ["Arguments", p.arguments || p.justification],
-    ["Risques", p.risques], ["Invalidation", p.invalidation], ["Source", p.source],
-  ].filter(([, v]) => v !== null && v !== undefined && v !== "");
-  return `<div class="prop"><div class="prop-h">${actionPill(p.action)}<span class="s">${esc(p.symbole)}</span>${p.confiance ? `<span class="pill">confiance ${esc(p.confiance)}</span>` : ""}</div>
-    <dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl></div>`;
+function brain(steps) {
+  if (!steps?.length) return '<p class="muted">Aucune étape enregistrée.</p>';
+  return `<ol class="brain">${steps.map((st) => {
+    let ic, title, body = "", details = "";
+    if (st.type === "pensee") { ic = "chat"; title = "Réflexion"; body = st.texte; }
+    else if (st.type === "notes") { ic = "book"; title = "Relit ses notes"; body = st.texte; }
+    else if (st.type === "refus") { ic = "alert"; title = `Ordre refusé par les garde-fous (${st.symbole || ""})`; body = st.raison; }
+    else {
+      [ic, title] = toolLabel(st);
+      if (st.nom === "passer_ordre" && st.args?.these) body = st.args.these;
+      if (st.nom === "ecrire_notes" && st.args?.contenu) body = st.args.contenu;
+      if (st.nom === "terminer_session" && st.args?.compte_rendu) body = st.args.compte_rendu;
+      if (st.resultat && !["ecrire_notes", "terminer_session", "lire_skill"].includes(st.nom)) {
+        details = `<details><summary>Résultat de l'outil</summary><pre>${esc(st.resultat)}</pre></details>`;
+      }
+    }
+    const kind = st.type === "pensee" ? "think" : st.type === "refus" ? "refus" : st.nom === "passer_ordre" ? "order" : "tool";
+    return `<li class="b-step b-${kind}"><span class="b-ic">${icon(ic)}</span><div class="b-body"><div class="b-title">${esc(title)}<span class="b-time">${esc(hm(st.t))}</span></div>${body ? `<div class="b-text">${md(body)}</div>` : ""}${details}</div></li>`;
+  }).join("")}</ol>`;
 }
-const verdictRow = (v) => `<div class="verdict"><span class="pill ${VERDICT[v.verdict] || ""}">${esc(v.verdict)}</span><span class="mono muted small">${esc(v.id)}</span><span>${esc(v.raison)}</span></div>`;
 
 let lastFocus = null;
 function openDrawer(id) {
-  const a = S.ov.agents.find((x) => x.id === id);
-  const m = META[id] || {};
-  const last = agentLast(id);
+  const a = agentOf(id), m = META[id] || {}, v = S.ov?.comptes?.[id] || {}, b = brainOf(id);
+  const planned = (S.ov?.plan?.ordres || []).filter((o) => o.agent === id);
   lastFocus = document.activeElement;
-  $("#drawer").innerHTML = `<div class="drawer-head">
-      <span class="avatar">${icon(id)}</span>
-      <div><h3>${esc(a.nom)}</h3><div class="chips" style="margin-top:6px">${providerPill(a)}${last.modele ? `<span class="pill mono">${esc(last.modele)}</span>` : ""}</div></div>
+  $("#drawer").innerHTML = `<div class="drawer-head">${avatar(id)}
+      <div><h3>${esc(a.nom)}</h3><div class="chips" style="margin-top:6px">${providerPill(a)}<span class="pill mono">${esc(modelName(b?.modele || a.modele))}</span></div></div>
       <button class="icon-btn" id="drawer-x" aria-label="Fermer">${icon("x")}</button>
     </div>
     <div class="drawer-body">
-      <div><div class="overline sub-h">Stratégie</div><p>${esc(m.desc)}</p></div>
-      ${last.tickers?.length ? `<div><div class="overline sub-h">Titres choisis</div><div class="chips" style="margin-top:0">${last.tickers.map((t) => `<span class="pill tk">${esc(t)}</span>`).join("")}</div>${last.raison ? `<p class="small muted" style="margin-top:8px">${esc(last.raison)}</p>` : ""}</div>` : ""}
-      <div><div class="overline sub-h">Dernière réflexion</div><p>${esc(last.texte || "—")}</p></div>
-      ${(last.avis || []).length ? `<div><div class="overline sub-h">Verdicts</div>${last.avis.map(verdictRow).join("")}</div>` : ""}
-      ${(last.props || []).length ? `<div class="panel" style="margin-top:0"><div class="overline">${id === "gerant" ? "Ordres décidés" : "Propositions"}</div>${last.props.map(propCard).join("")}</div>` : ""}
-      <div><div class="overline sub-h">Notes (sa mémoire entre deux sessions)</div><div class="notes">${esc(S.notes[id] || "Aucune note pour l'instant. Les notes sont écrites après une session réelle, pas en simulation.")}</div></div>
+      <div><div class="overline sub-h">Stratégie · comme ${esc(a.inspire_de)} chez Aywen</div><p>${esc(m.desc)}</p></div>
+      <div class="mini-kpis">
+        <div><span class="overline">Valeur</span><b>${esc(money(v.valeur, 0))}</b></div>
+        <div><span class="overline">Plus-value</span><b class="${tone(v.pl)}">${esc(pct(v.pl_pct))}</b></div>
+        <div><span class="overline">Liquidités</span><b>${esc(money(v.cash, 0))}</b></div>
+      </div>
+      ${(v.positions || []).length ? `<div><div class="overline sub-h">Positions</div><div class="list">${v.positions.map((p) => `<div class="order"><span class="mono"><b>${esc(p.symbole)}</b></span><span class="small muted">${p.qty} × ${esc(money(p.prix_achat, 2))} · stop ${esc(money(p.stop, 2))} · objectif ${esc(money(p.tp, 2))}</span><span class="pill ${p.pl >= 0 ? "pill-sage" : "pill-danger"}">${esc(pct(p.pl_pct))}</span>${p.these ? `<div class="why">${md(p.these)}</div>` : ""}</div>`).join("")}</div></div>` : ""}
+      ${planned.length ? `<div><div class="overline sub-h">Ordres planifiés pour l'ouverture</div><div class="list">${planned.map(planRow).join("")}</div></div>` : ""}
+      <div><div class="overline sub-h">Son cerveau pendant la dernière séance${S.brain ? ` (${esc(MODE[S.brain.mode]?.[0] || "")}, ${esc(fmtDate(S.brain.ts, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))})` : ""}</div>${b ? brain(b.etapes) : '<p class="muted">Pas encore de séance.</p>'}</div>
+      <div><div class="overline sub-h">Ses notes (sa mémoire entre deux séances)</div><div class="notes">${esc(S.notes[id] || "Aucune note pour l'instant. Les notes sont enregistrées lors des séances réelles, pas en simulation.")}</div></div>
     </div>`;
   $("#drawer").classList.add("open");
   $("#drawer").setAttribute("aria-hidden", "false");
@@ -324,91 +421,73 @@ function closeDrawer() {
   lastFocus?.focus?.();
 }
 
+/* ---------- Plan d'ouverture ---------- */
+function actionPill(action) {
+  const a = String(action || "").toLowerCase();
+  const cls = a.startsWith("vend") || a.startsWith("all") ? "pill-danger" : a === "ajuster_stop" ? "pill-sky" : "pill-sage";
+  return `<span class="pill ${cls}">${esc(String(action || "").replace("_", " "))}</span>`;
+}
+
+function planRow(o) {
+  const [lab, cls] = STATUT[o.statut] || [o.statut, ""];
+  const det = o.action === "acheter"
+    ? `${money(o.montant_usd, 0)} · ~${o.qty_estimee} à ${money(o.prix_reference, 2)} · stop -${o.stop_loss_pct} % · objectif +${o.take_profit_pct} %`
+    : `${o.pourcentage ?? 100} % de la position`;
+  return `<div class="order">${avatar(o.agent, true)}${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span><span class="small muted">${esc(det)}</span><span class="pill ${cls}">${esc(lab)}</span>
+    ${o.resultat && o.statut !== "en_attente" ? `<div class="why">${esc(o.resultat)}</div>` : ""}${o.these ? `<details class="why"><summary>Thèse</summary>${md(o.these)}</details>` : ""}</div>`;
+}
+
+function renderPlan(o) {
+  const plan = o.plan || {};
+  const orders = plan.ordres || [];
+  $("#nav-plan").textContent = orders.filter((x) => x.statut === "en_attente").length || "";
+  $("#plan-sub").textContent = plan.date
+    ? `${plan.simulation ? "Simulation · " : ""}Préparé le ${fmtDate(plan.cree_le, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })} · ${plan.execute_le ? `exécuté à ${hm(plan.execute_le)}` : plan.simulation ? "non exécuté (simulation)" : "en attente de l'ouverture de New York"}`
+    : "";
+  $("#plan-card").innerHTML = orders.length ? `<div class="list">${orders.map(planRow).join("")}</div>`
+    : empty("calendar", "Aucun ordre planifié", `Chaque jour de bourse à ${o.limites?.preparation_heure ?? 9} h, les IA préparent leurs ordres pour l'ouverture.`);
+}
+
 /* ---------- Positions ---------- */
 function renderPositions(o) {
   const pos = o.positions || [];
   const box = $("#positions-table");
   if (!pos.length) {
     box.style.margin = "0";
-    box.innerHTML = empty("briefcase", "Aucune position", "Le portefeuille est entièrement en liquidités.");
+    box.innerHTML = empty("briefcase", "Aucune position", "Les 4 sous-comptes sont entièrement en liquidités.");
     return;
   }
   box.style.margin = "";
-  const eq = o.compte?.equity || 1;
-  box.innerHTML = `<table><thead><tr><th>Titre</th><th>Quantité</th><th>Prix d'achat</th><th>Prix</th><th>Valeur</th><th>Poids</th><th>Plus ou moins-value</th><th>Stop, prix, objectif</th></tr></thead><tbody>
+  box.innerHTML = `<table><thead><tr><th>IA</th><th>Titre</th><th>Quantité</th><th>Prix d'achat</th><th>Prix</th><th>Valeur</th><th>Plus ou moins-value</th><th>Stop, prix, objectif</th></tr></thead><tbody>
     ${pos.map((p) => {
-      let range = '<span class="muted small">Pas de sortie programmée</span>';
+      let range = '<span class="muted small">—</span>';
       if (p.stop && p.tp && p.tp > p.stop) {
         const f = (v) => Math.max(0, Math.min(100, ((v - p.stop) / (p.tp - p.stop)) * 100));
         range = `<div class="range"><i class="en" style="left:${f(p.prix_achat)}%"></i><i class="mk" style="left:${f(p.prix)}%"></i></div>
           <div class="range-labels"><span>${esc(money(p.stop, 2))}</span><span>${esc(money(p.tp, 2))}</span></div>`;
-      } else if (p.stop) range = `<span class="muted small">Stop ${esc(money(p.stop, 2))}</span>`;
-      return `<tr><td><div class="sym"><span class="logo-s">${esc(p.symbole.slice(0, 4))}</span>${esc(p.symbole)}</div></td>
-        <td>${esc(p.qty)}</td><td>${esc(money(p.prix_achat, 2))}</td><td>${esc(money(p.prix, 2))}</td>
-        <td>${esc(money(p.valeur, 0))}</td><td>${((p.valeur / eq) * 100).toFixed(1).replace(".", ",")} %</td>
+      }
+      return `<tr><td><div class="sym">${avatar(p.agent, true)}${esc(agentOf(p.agent).nom.replace("Analyste ", ""))}</div></td>
+        <td><div class="sym"><span class="logo-s">${esc(p.symbole.slice(0, 4))}</span>${esc(p.symbole)}${p.en_attente ? ' <span class="pill pill-peach">en attente</span>' : ""}</div></td>
+        <td>${esc(p.qty)}</td><td>${esc(money(p.prix_achat, 2))}</td><td>${esc(money(p.prix, 2))}</td><td>${esc(money(p.valeur, 0))}</td>
         <td><span class="pill ${p.pl >= 0 ? "pill-sage" : "pill-danger"}">${esc(money(p.pl, 0))} · ${esc(pct(p.pl_pct, 1))}</span></td><td>${range}</td></tr>`;
     }).join("")}</tbody></table>`;
 }
 
-/* ---------- Session en direct ---------- */
-function renderLive() {
-  const L = S.live;
-  if (!L) return;
-  const r = L.runner, etat = L.etat || {};
-  const running = r.running || (etat.running && Date.now() - new Date(etat.maj) < 10 * 60e3);
-  const idx = STEPS.findIndex(([k]) => k === etat.etape);
-  const finished = etat.etape === "termine";
-  $("#stepper").innerHTML = STEPS.map(([k, label], i) => {
-    let c = "", ic = `${i + 1}`;
-    if ((running && i < idx) || (!running && finished && (r.code === 0 || STATIC))) { c = "done"; ic = icon("check", ""); }
-    else if (running && i === idx) { c = "active"; ic = ""; }
-    const who = running && i === idx && etat.agent ? `<span class="who">${esc(S.ov?.agents.find((a) => a.id === etat.agent)?.nom || etat.agent)}</span>` : "";
-    return `<li class="step ${c}"><span class="ic">${ic}</span>${esc(label)}${who}</li>`;
-  }).join("");
-  if (STATIC) {
-    $("#console").textContent = "Les sessions tournent automatiquement sur GitHub Actions, du lundi au vendredi vers 17 h 05 et 20 h 35 (heure de Paris). Le détail de chaque session est dans l'historique.";
-    $("#live-status").innerHTML = etat.maj ? `Dernière : ${esc(fmtDate(etat.maj, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))}` : "En veille";
-    return renderAgents();
-  }
-  $("#live-status").innerHTML = running
-    ? `<span class="pill pill-coral"><i class="dot run"></i>${r.mode === "reel" ? "Session réelle" : r.mode === "demo" ? "Démo" : "Simulation"} en cours</span>`
-    : r.code === 0 ? `<span class="pill pill-sage">${icon("check")}Terminée</span>`
-    : r.code ? `<span class="pill pill-danger">Erreur (code ${esc(r.code)})</span>` : "En veille";
-  if (r.logs.length) {
-    const con = $("#console");
-    const stick = con.scrollTop + con.clientHeight >= con.scrollHeight - 30;
-    con.innerHTML = r.logs.map((l) => {
-      const c = /erreur|error|échec|traceback/i.test(l) ? "err" : /terminé|simulé|envoyé/i.test(l) ? "ok" : "";
-      return `<span class="${c}">${esc(l)}</span>`;
-    }).join("\n");
-    if (stick) con.scrollTop = con.scrollHeight;
-  }
-  $("#btn-sim").disabled = running;
-  $("#btn-real").disabled = running;
-  if (S.wasRunning && !running) {
-    toast(r.code === 0 ? "Session terminée" : "La session s'est arrêtée avec une erreur", r.code === 0 ? "check" : "alert");
-    refreshAll(true);
-  }
-  S.wasRunning = running;
-  renderAgents();
-}
-
 /* ---------- Historique ---------- */
-const simPill = (sim) => sim ? '<span class="pill pill-sky">Simulation</span>' : '<span class="pill pill-sage">Réelle</span>';
+const modePill = (m) => `<span class="pill ${MODE[m]?.[1] || ""}">${esc(MODE[m]?.[0] || m || "Séance")}</span>`;
 
 function renderSessions() {
   const list = S.sessions;
-  $("#sess-count").textContent = list.length ? `${list.length} session${list.length > 1 ? "s" : ""}` : "";
+  $("#sess-count").textContent = list.length ? `${list.length} séance${list.length > 1 ? "s" : ""}` : "";
   $("#nav-sess").textContent = list.length || "";
   if (!list.length) {
     $("#sess-list").innerHTML = "";
-    $("#detail").innerHTML = empty("clock", "Aucune session pour l'instant", "Lancez une simulation : chaque session apparaîtra ici avec le raisonnement complet des 6 agents.");
+    $("#detail").innerHTML = empty("clock", "Aucune séance pour l'instant", "Lancez une simulation : chaque séance apparaîtra ici avec le cerveau complet des 4 IA.");
     return;
   }
   $("#sess-list").innerHTML = list.map((s) => `<button class="sess ${S.current?.nom === s.nom ? "sel" : ""}" data-n="${esc(s.nom)}">
-      <div class="t"><span>${esc(s.quand || s.nom)}</span>${simPill(s.simulation)}</div>
-      <div class="s">${esc(s.synthese || "Pas de décision.")}</div>
-      <div class="m"><span class="pill">${s.propositions} prop.</span><span class="pill">${s.ordres} ordre${s.ordres > 1 ? "s" : ""}</span>${s.rejets ? `<span class="pill pill-danger">${s.rejets} rejeté${s.rejets > 1 ? "s" : ""}</span>` : ""}</div>
+      <div class="t"><span>${esc(s.quand || s.nom)}</span></div>
+      <div class="m">${modePill(s.mode)}${s.simulation ? '<span class="pill">Simulation</span>' : ""}<span class="pill">${s.ordres} ordre${s.ordres > 1 ? "s" : ""}</span>${s.erreurs ? `<span class="pill pill-danger">${s.erreurs} erreur${s.erreurs > 1 ? "s" : ""}</span>` : ""}</div>
     </button>`).join("");
   $$(".sess").forEach((b) => (b.onclick = () => loadSession(b.dataset.n)));
 }
@@ -424,52 +503,32 @@ async function loadSession(nom) {
 function renderDetail() {
   const d = S.current;
   if (!d) return;
-  const pv = d.portefeuille || {};
-  const order = (o, ok) => {
-    const st = !ok ? ["pill-danger", "Rejeté"] : o.statut === "simulé" ? ["pill-sky", "Simulé"] : o.statut === "erreur" ? ["pill-danger", "Erreur"] : ["pill-sage", "Envoyé"];
-    const det = [o.qty ? `${o.qty} actions` : null, o.montant ? money(o.montant, 0) : null,
-      o.stop_loss ? `stop ${money(o.stop_loss, 2)}` : null, o.take_profit ? `objectif ${money(o.take_profit, 2)}` : null].filter(Boolean).join(" · ");
-    const why = !ok ? o.raison_rejet : o.erreur || o.justification;
-    return `<div class="order">${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span><span class="muted small">${esc(det)}</span><span class="pill ${st[0]}">${st[1]}</span>${why ? `<div class="why">${esc(why)}</div>` : ""}</div>`;
-  };
-  const orders = (d.ordres || []).map((o) => order(o, true)).concat((d.rejets || []).map((o) => order(o, false))).join("")
-    || `<div class="empty-line">Aucun ordre : l'équipe a choisi de ne rien faire.</div>`;
-  const tabs = ["qualite", "equilibre", "sentiment", "contrarien", "critique"];
-  if (!tabs.includes(S.tab)) S.tab = "qualite";
-  const nameOf = (id) => S.ov?.agents.find((a) => a.id === id)?.nom || id;
-  const tok = Object.entries(d.tokens || {}).sort();
-  const maxTok = Math.max(1, ...tok.map(([, v]) => v));
-  $("#detail").innerHTML = `
-    <div class="detail-head"><h3>Session du ${esc(d.quand)}</h3>${simPill(d.simulation)}
-      <span class="right">Valeur ${esc(money(pv.valeur_totale, 0))} · cash ${esc(pv.cash_pct)} %</span></div>
-    <div class="synth"><div class="who">${icon("gerant")}Décision du gérant${d.modeles?.["gerant:gerant"] ? `<span class="mono muted" style="font-weight:400">${esc(d.modeles["gerant:gerant"])}</span>` : ""}</div>
-      <p>${esc(d.decision?.synthese || "—")}</p></div>
-    <div><div class="overline sub-h">Ordres</div><div class="list">${orders}</div></div>
-    <div>
-      <div class="tabs" role="tablist">${tabs.map((t) => `<button class="tab ${S.tab === t ? "on" : ""}" role="tab" aria-selected="${S.tab === t}" data-t="${t}">${esc(nameOf(t).replace("Analyste ", ""))}</button>`).join("")}</div>
-      <div class="panel" id="tab-panel"></div>
-    </div>
-    ${tok.length ? `<div><div class="overline sub-h">Consommation des clés (gratuite)</div><div class="tokens">${tok.map(([k, v]) => `<div class="tok"><span class="mono">${esc(k)}</span><div class="bar"><i class="${k.startsWith("gemini") ? "gemini" : "groq"}" style="width:${(v / maxTok) * 100}%"></i></div><span class="muted">${v.toLocaleString("fr-FR")} tokens · ${d.appels?.[k] || 0} appels</span></div>`).join("")}</div></div>` : ""}`;
-  $$(".tab").forEach((b) => (b.onclick = () => { S.tab = b.dataset.t; renderDetail(); }));
-  const last = agentLast(S.tab, d);
-  const panel = $("#tab-panel");
-  if (S.tab === "critique") {
-    panel.innerHTML = (last.avis || []).length
-      ? `<div>${last.avis.map(verdictRow).join("")}</div>${last.texte ? `<p class="analysis"><b>Risques du portefeuille :</b> ${esc(last.texte)}</p>` : ""}`
-      : '<p class="analysis muted">Le critique n\'a pas été sollicité (aucune proposition).</p>';
-  } else {
-    panel.innerHTML = `
-      ${last.tickers?.length ? `<div class="chips" style="margin-top:0">${last.tickers.map((t) => `<span class="pill tk">${esc(t)}</span>`).join("")}</div>${last.raison ? `<p class="small muted" style="margin:0">${esc(last.raison)}</p>` : ""}` : ""}
-      <p class="analysis">${esc(last.texte || "Pas de réponse pour cet agent.")}</p>
-      ${(last.props || []).map(propCard).join("") || '<p class="analysis muted">Aucune proposition : rien ne méritait d\'agir selon sa stratégie.</p>'}
-      ${last.modele ? `<div class="mono muted small">${esc(last.modele)}</div>` : ""}`;
+  const head = `<div class="detail-head"><h3>Séance du ${esc(d.quand)}</h3>${modePill(d.mode)}${d.simulation ? '<span class="pill">Simulation</span>' : ""}</div>`;
+  if (d.mode === "ouverture") {
+    $("#detail").innerHTML = `${head}<div><div class="overline sub-h">Ordres planifiés exécutés à l'ouverture</div>
+      <div class="list">${(d.executions || []).map(planRow).join("") || '<div class="empty-line">Aucun ordre à exécuter.</div>'}</div></div>`;
+    return;
   }
+  const ids = Object.keys(d.agents || {});
+  if (!ids.includes(S.tab)) S.tab = ids[0];
+  const r = d.agents[S.tab] || {};
+  const tok = Object.entries(d.cles || {}).sort();
+  const maxTok = Math.max(1, ...tok.map(([, v]) => v.tokens || v.appels || 0));
+  $("#detail").innerHTML = `${head}
+    <div class="tabs" role="tablist">${ids.map((t) => `<button class="tab ${S.tab === t ? "on" : ""}" role="tab" aria-selected="${S.tab === t}" data-t="${esc(t)}">${esc(agentOf(t).nom.replace("Analyste ", ""))}</button>`).join("")}</div>
+    <div class="panel">
+      <div class="synth"><div class="who">${icon(S.tab)}Compte rendu<span class="mono muted" style="font-weight:400">${esc(modelName(r.modele))}</span></div><p>${md(r.compte_rendu || "—")}</p></div>
+      ${r.erreur ? `<div class="banner err">${icon("alert")}<span>${esc(r.erreur)}</span></div>` : ""}
+      <div class="small muted">${r.outils || 0} appels d'outils · ${Math.round((r.duree_s || 0) / 60)} min · ${(r.tokens || 0).toLocaleString("fr-FR")} tokens · valeur ${esc(money(r.valeur_avant, 0))} → ${esc(money(r.valeur_apres, 0))}</div>
+      ${(r.ordres || []).length ? `<div><div class="overline sub-h">Ordres</div><div class="list">${r.ordres.map((o) => `<div class="order">${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span><span class="small muted">${esc(o.resultat || "")}</span></div>`).join("")}</div></div>` : ""}
+      <div><div class="overline sub-h">Son cerveau, étape par étape</div>${brain(r.etapes)}</div>
+    </div>
+    ${tok.length ? `<div><div class="overline sub-h">Consommation des clés (gratuite)</div><div class="tokens">${tok.map(([k, v]) => `<div class="tok"><span class="mono">${esc(k)}</span><div class="bar"><i class="${k.startsWith("gemini") ? "gemini" : "groq"}" style="width:${((v.tokens || v.appels || 0) / maxTok) * 100}%"></i></div><span class="muted">${(v.tokens || 0).toLocaleString("fr-FR")} tokens · ${v.appels || 0} appels</span></div>`).join("")}</div></div>` : ""}`;
+  $$(".tab").forEach((b) => (b.onclick = () => { S.tab = b.dataset.t; renderDetail(); }));
 }
 
-/* ---------- Navigation : élément actif selon la section visible ---------- */
-function setActive(id) {
-  $$(".nav-item, .tabbar a").forEach((a) => a.classList.toggle("active", a.dataset.s === id));
-}
+/* ---------- Navigation ---------- */
+function setActive(id) { $$(".nav-item, .tabbar a").forEach((a) => a.classList.toggle("active", a.dataset.s === id)); }
 const io = new IntersectionObserver((entries) => {
   const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
   if (vis) setActive(vis.target.id);
@@ -482,14 +541,14 @@ async function refreshAll(force = false) {
   try {
     const [ov, sessions, notes] = await Promise.all([api("/api/overview"), api("/api/sessions"), api("/api/notes")]);
     S.ov = ov; S.notes = notes; S.sessions = sessions;
-    renderHeader(ov); renderKpis(ov); renderChart(ov.historique); renderPositions(ov);
-    if (sessions.length && (force || !S.latest || S.latest.nom !== sessions[0].nom)) {
-      S.latest = await api(`/api/session?nom=${encodeURIComponent(sessions[0].nom)}`);
-      if (force || !S.current) S.current = S.latest;
-    }
-    renderAgents(); renderSessions(); renderDetail();
+    const lastBrain = sessions.find((s) => s.mode !== "ouverture");
+    if (lastBrain && (force || S.brain?.nom !== lastBrain.nom)) S.brain = await api(`/api/session?nom=${encodeURIComponent(lastBrain.nom)}`);
+    if (sessions.length && (force || !S.current)) S.current = await api(`/api/session?nom=${encodeURIComponent(sessions[0].nom)}`);
+    renderHeader(ov); renderBand(ov); renderLeaderboard(ov); renderChart(ov); renderPlan(ov); renderPositions(ov);
+    renderDay(); renderAgents(); renderSessions(); renderDetail();
   } catch (e) {
-    toast("Impossible de joindre le serveur du tableau de bord", "alert");
+    console.error(e);
+    toast("Impossible de charger les données du tableau de bord", "alert");
   }
 }
 
@@ -498,14 +557,15 @@ async function pollLive() {
     S.live = await api("/api/state");
     renderLive();
   } catch { /* serveur arrêté */ }
-  if (!STATIC) setTimeout(pollLive, S.wasRunning ? 1200 : 3000);
+  if (!STATIC) setTimeout(pollLive, S.wasRunning ? 1500 : 3000);
 }
 
 async function run(mode) {
   const r = await api("/api/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode }) });
   if (!r.ok) return toast(r.erreur || "Lancement impossible", "alert");
-  toast(mode === "reel" ? "Session réelle lancée" : "Simulation lancée : l'équipe se met au travail", "spark");
+  toast(mode === "reel" ? "Séance réelle lancée" : "Simulation lancée : les 4 IA se mettent au travail", "spark");
   S.wasRunning = true;
+  $("#console").hidden = false;
   $("#console").textContent = "Démarrage…";
 }
 
@@ -514,9 +574,11 @@ $("#btn-sim").onclick = () => {
   run("simulation");
 };
 $("#btn-real").onclick = () => {
-  $("#modal-text").textContent = S.ov?.paper
-    ? "Les agents vont envoyer de vrais ordres sur votre compte Alpaca paper (argent virtuel). La session ne tourne que si la bourse de New York est ouverte."
-    : "Attention : compte en argent réel. Les agents vont envoyer de vrais ordres avec votre argent.";
+  const open = S.ov?.horloge?.is_open;
+  $("#modal-text").textContent = (open
+    ? "La bourse est ouverte : les 4 IA vont faire une séance de suivi et leurs ordres seront exécutés immédiatement"
+    : "La bourse est fermée : les 4 IA vont préparer leurs ordres, exécutés automatiquement à l'ouverture")
+    + (S.ov?.paper ? " sur votre compte Alpaca paper (argent virtuel)." : ", AVEC VOTRE ARGENT RÉEL.");
   $("#modal").classList.add("open");
   $("#modal-no").focus();
 };
@@ -526,7 +588,7 @@ $("#modal-yes").onclick = () => { closeModal(); run("reel"); };
 $("#scrim").onclick = closeDrawer;
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closeModal(); } });
 let rz;
-window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => S.ov && renderChart(S.ov.historique), 150); });
+window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => S.ov && renderChart(S.ov), 150); });
 
 applyThemeButton();
 refreshAll();

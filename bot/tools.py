@@ -1,10 +1,11 @@
-"""Outils d'analyse (équivalents gratuits de ceux d'Aywen) : indicateurs graphiques,
-données fondamentales (yfinance) et sentiment Reddit. Tout est calculé par le code
-pour éviter les erreurs de calcul des IA (dates, pourcentages)."""
+"""Outils d'analyse (équivalents gratuits de ceux d'Aywen) : indicateurs graphiques, screener,
+données fondamentales (yfinance) et sentiment Reddit. Tout est calculé par le code pour éviter
+les erreurs de calcul des IA (dates, pourcentages)."""
 import datetime as dt
 import logging
 import math
 import statistics
+import threading
 
 import requests
 
@@ -48,7 +49,44 @@ def indicators(bars: list[dict]) -> dict:
         "plus_haut_52s": _r(max(year)), "plus_bas_52s": _r(min(year)),
         "ecart_plus_haut_pct": _r((last / max(year) - 1) * 100, 1),
         "volume_vs_moy20": _r(vols[-1] / vol20, 1) if vol20 else None,
+        "perf_1j_pct": perf(1),
     }
+
+
+def price_history(bars: list[dict]) -> dict:
+    """Ce que l'IA voit d'un historique : indicateurs + cours résumés (hebdo sur 1 an, quotidien sur 20 j)."""
+    out = indicators(bars)
+    if len(bars) >= 20:
+        weekly = [round(b["c"], 2) for b in bars[-252:][::-5]][::-1]
+        out["cours_hebdo_1an"] = weekly
+        out["cours_20_derniers_jours"] = [round(b["c"], 2) for b in bars[-20:]]
+        out["date_dernier_cours"] = str(bars[-1].get("t", ""))[:10]
+    return out
+
+
+SCREENS = {
+    "hausse_semaine": ("perf_5j_pct", True), "baisse_semaine": ("perf_5j_pct", False),
+    "hausse_mois": ("perf_1m_pct", True), "baisse_mois": ("perf_1m_pct", False),
+    "hausse_jour": ("perf_1j_pct", True), "baisse_jour": ("perf_1j_pct", False),
+    "loin_du_plus_haut": ("ecart_plus_haut_pct", False), "proche_du_plus_haut": ("ecart_plus_haut_pct", True),
+    "rsi_survendu": ("rsi14", False), "rsi_surachete": ("rsi14", True),
+    "volume_inhabituel": ("volume_vs_moy20", True),
+}
+
+
+def screen(bars_by_sym: dict, critere: str, limite: int, only: set | None = None) -> list[dict]:
+    key, desc = SCREENS[critere]
+    rows = []
+    for sym, bars in bars_by_sym.items():
+        if only is not None and sym not in only:
+            continue
+        ind = indicators(bars)
+        if ind.get(key) is None:
+            continue
+        rows.append({"s": sym, "prix": ind["prix"], key: ind[key], "perf_1m_pct": ind.get("perf_1m_pct"),
+                     "rsi14": ind.get("rsi14"), "ecart_plus_haut_pct": ind.get("ecart_plus_haut_pct")})
+    rows.sort(key=lambda r: r[key], reverse=desc)
+    return rows[:limite]
 
 
 def _big(x):
@@ -109,10 +147,16 @@ def fundamentals(symbol: str, today: dt.date) -> dict | None:
 
 
 _REDDIT: dict | None = None
+_REDDIT_LOCK = threading.Lock()
 
 
 def reddit_trending() -> dict:
     """Mentions Reddit des dernières 24 h (r/wallstreetbets, r/stocks…) via ApeWisdom, gratuit et sans clé."""
+    with _REDDIT_LOCK:
+        return _load_reddit()
+
+
+def _load_reddit() -> dict:
     global _REDDIT
     if _REDDIT is None:
         _REDDIT = {}

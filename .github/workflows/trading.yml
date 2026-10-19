@@ -1,22 +1,29 @@
-# Hébergement gratuit : GitHub Actions lance 2 sessions par jour ouvré pendant la séance
-# de New York (comme les 2 sessions quotidiennes d'Aywen), recommite la mémoire, puis publie
-# le tableau de bord en ligne :
+# Les 4 IA (comme dans la vidéo d'Aywen) travaillent automatiquement chaque jour de bourse :
+#   - 9 h (Paris)        PRÉPARATION : elles décident quoi acheter, ordres planifiés pour l'ouverture
+#   - 15 h 30 (Paris)    OUVERTURE   : le programme exécute les ordres planifiés dès l'ouverture de New York
+#   - fin d'après-midi   SUIVI       : bourse ouverte, elles font le point et agissent en direct
+# La mémoire (notes, sous-comptes, plan) est recommitée, puis le tableau de bord est publié :
 #   - dépôt PUBLIC  -> GitHub Pages (Settings > Pages > Source : « GitHub Actions »)
-#   - dépôt PRIVÉ   -> Cloudflare Pages (variable CLOUDFLARE_PROJECT + secrets
-#                      CLOUDFLARE_API_TOKEN et CLOUDFLARE_ACCOUNT_ID, voir le README)
+#   - dépôt PRIVÉ   -> Cloudflare Pages (variable CLOUDFLARE_PROJECT + secrets, voir le README)
 name: Bot IA trading
 
 on:
   schedule:
-    # Heures UTC, du lundi au vendredi. 15:05 UTC ≈ 17h05 Paris (après l'ouverture de NY),
-    # 18:35 UTC ≈ 20h35 Paris. Valable toute l'année malgré les changements d'heure.
-    # (GitHub peut retarder un cron de quelques minutes.)
-    - cron: "5 15 * * 1-5"
-    - cron: "35 18 * * 1-5"
+    # Heures UTC, du lundi au vendredi (GitHub peut retarder un déclenchement de quelques minutes).
+    - cron: "0 7 * * 1-5"    # préparation : 9 h à Paris en heure d'été (en hiver il est 8 h : ignoré)
+    - cron: "0 8 * * 1-5"    # préparation : 9 h à Paris en heure d'hiver (en été il est 10 h : déjà fait)
+    - cron: "20 13 * * 1-5"  # ouverture : attend l'ouverture de New York (13 h 30 ou 14 h 30 UTC)
+    - cron: "45 14 * * 1-5"  # ouverture : secours si le déclenchement précédent a été perdu
+    - cron: "30 17 * * 1-5"  # suivi : 19 h 30 à Paris en été, 18 h 30 en hiver
   workflow_dispatch:
     inputs:
+      mode:
+        description: "Séance à lancer"
+        type: choice
+        options: [preparation, suivi, ouverture]
+        default: preparation
       dry_run:
-        description: "Simulation (aucun ordre envoyé)"
+        description: "Simulation (aucun ordre envoyé, rien d'enregistré)"
         type: boolean
         default: true
 
@@ -30,7 +37,7 @@ concurrency:
 jobs:
   session:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +48,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Session de trading
+      - name: Séance des IA
         env:
           GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
@@ -53,9 +60,21 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           ALPACA_PAPER: "true"
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
-        run: python main.py ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+          SCHEDULE: ${{ github.event.schedule }}
+          MANUAL_MODE: ${{ inputs.mode }}
+        run: |
+          case "$SCHEDULE" in
+            "0 7 * * 1-5"|"0 8 * * 1-5") MODE=preparation ;;
+            "20 13 * * 1-5"|"45 14 * * 1-5") MODE=ouverture ;;
+            "30 17 * * 1-5") MODE=suivi ;;
+            *) MODE="${MANUAL_MODE:-preparation}" ;;
+          esac
+          ARGS="--mode $MODE"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then ARGS="$ARGS --force"; fi
+          echo "Séance : $ARGS"
+          python main.py $ARGS
 
-      - name: Sauvegarder la mémoire des agents
+      - name: Sauvegarder la mémoire des IA
         if: always()
         run: |
           git config user.name "bot-ia-trading"
@@ -64,7 +83,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Rien à sauvegarder."
           else
-            git commit -m "Mémoire : session du $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git commit -m "Mémoire : séance du $(date -u +'%Y-%m-%d %H:%M') UTC"
             git pull --rebase
             git push
           fi

@@ -9,3 +9,4 @@ site/
 .env.*
 !.env.example
 .claude/
+memoire/plan_simulation.json

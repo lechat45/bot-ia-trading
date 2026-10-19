@@ -1,157 +1,108 @@
-"""Garde-fous codés en dur : chaque ordre décidé par les IA passe ici avant Alpaca.
-Les IA ne peuvent pas contourner ces règles (elles reprennent les skills d'Aywen)."""
+"""Garde-fous codés en dur, appliqués au sous-compte de chaque IA avant tout ordre.
+
+Ils reprennent les règles des skills d'Aywen (stop obligatoire et jamais abaissé, taille de
+position limitée, pas d'aller-retour…). L'IA ne peut pas les contourner : un ordre refusé lui
+est renvoyé avec la raison, pour qu'elle corrige si elle le souhaite.
+"""
 import datetime as dt
 import math
 import re
-from dataclasses import dataclass, field
 
 SYMBOL_RE = re.compile(r"^[A-Z]{1,5}(\.[A-Z])?$")
 
 
-@dataclass
-class Context:
-    equity: float
-    cash: float
-    positions: dict  # sym -> {"qty": float, "avg": float, "price": float, "value": float}
-    prices: dict  # sym -> dernier prix
-    exits: dict  # sym -> {"stops": [(id, prix)], "tps": [(id, prix)]}
-    journal: list = field(default_factory=list)  # exécutions récentes
-
-    def current_stop(self, sym):
-        stops = self.exits.get(sym, {}).get("stops", [])
-        return max((p for _, p in stops), default=None)
+def clean_symbol(s) -> str:
+    return str(s or "").upper().strip().lstrip("$")
 
 
-def _executed(journal, sym, actions, since: dt.datetime):
-    return any(e.get("type") == "execution" and e.get("symbole") == sym
-               and e.get("action") in actions and e.get("statut") == "envoyé"
+def _num(v, default=None):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return default
+
+
+def _done(journal, aid, sym, actions, since: dt.datetime) -> bool:
+    return any(e.get("type") == "execution" and e.get("agent") == aid and e.get("symbole") == sym
+               and e.get("action") in actions and e.get("statut") in ("exécuté", "envoyé")
                and e.get("ts", "") >= since.isoformat() for e in journal)
 
 
-def validate(orders: list[dict], ctx: Context, cfg) -> tuple[list[dict], list[dict]]:
-    ok, rejected = [], []
-    seen: set[str] = set()
-    cash_left = ctx.cash
-    cash_floor = ctx.equity * cfg.min_cash_pct / 100
-    n_positions = len(ctx.positions)
+def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pct, tp_pct,
+              journal: list, reserved: float = 0.0, clamp: bool = False):
+    """Renvoie (ok, message, détails). clamp=True réduit le montant aux limites au lieu de refuser
+    (utilisé à l'ouverture, quand le prix a un peu bougé depuis le matin)."""
+    if not SYMBOL_RE.match(sym):
+        return False, f"symbole « {sym} » invalide", {}
+    if not price:
+        return False, f"prix de {sym} introuvable (titre non coté aux États-Unis ?)", {}
+    if price < cfg.min_price:
+        return False, f"prix {price:.2f} $ < {cfg.min_price:g} $ : penny stock interdit", {}
+    sl, tp, amount = _num(sl_pct), _num(tp_pct), _num(montant)
+    if sl is None or tp is None:
+        return False, "stop_loss_pct et take_profit_pct sont obligatoires", {}
+    if not cfg.min_stop_distance_pct <= sl <= cfg.max_stop_distance_pct:
+        return False, (f"stop_loss_pct doit être entre {cfg.min_stop_distance_pct:g} et "
+                       f"{cfg.max_stop_distance_pct:g} % (reçu {sl:g})"), {}
+    if tp <= 0 or tp / sl < cfg.min_reward_risk:
+        return False, (f"ratio gain/perte {tp / sl if sl else 0:.2f} < {cfg.min_reward_risk:g} : "
+                       f"take_profit_pct doit valoir au moins {sl * cfg.min_reward_risk:.1f}"), {}
     now = dt.datetime.now(dt.timezone.utc)
-    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    if _done(journal, aid, sym, ("vendre", "alleger"), now - dt.timedelta(days=cfg.anti_churn_days)):
+        return False, f"{sym} vendu il y a moins de {cfg.anti_churn_days} jours : pas d'aller-retour", {}
+    positions = {p["symbole"]: p for p in val["positions"]}
+    if sym not in positions and len(positions) >= cfg.max_positions:
+        return False, f"déjà {cfg.max_positions} positions : vendez-en une avant d'en ouvrir une autre", {}
+    existing = positions.get(sym, {}).get("valeur", 0.0)
+    max_line = val["valeur"] * cfg.max_position_pct / 100 - existing
+    cash_free = val["cash"] - reserved - val["valeur"] * cfg.min_cash_pct / 100
+    limit = min(max_line, cash_free)
+    if amount is None or amount <= 0:
+        return False, f"montant_usd manquant (maximum possible : {max(0, limit):.0f} $)", {}
+    if amount > limit + 0.01:
+        if not clamp:
+            why = "limite par titre" if max_line < cash_free else "liquidités disponibles (après réserve et ordres planifiés)"
+            return False, f"montant trop élevé : maximum {max(0, limit):.0f} $ ({why})", {}
+        amount = limit
+    qty = math.floor(amount / price) if amount > 0 else 0
+    if qty < 1:
+        return False, f"montant insuffisant pour acheter 1 action à {price:.2f} $", {}
+    return True, "ok", {"qty": qty, "montant": round(qty * price, 2), "prix_ref": round(price, 2),
+                        "stop": round(price * (1 - sl / 100), 2), "tp": round(price * (1 + tp / 100), 2),
+                        "stop_loss_pct": sl, "take_profit_pct": tp}
 
-    for o in orders if isinstance(orders, list) else []:
-        if not isinstance(o, dict):
-            continue
-        action = str(o.get("action", "")).lower().strip()
-        sym = str(o.get("symbole", "")).upper().strip()
 
-        def reject(reason):
-            rejected.append({**o, "raison_rejet": reason})
+def check_sell(cfg, aid, val: dict, sym: str, pourcentage, journal: list):
+    positions = {p["symbole"]: p for p in val["positions"]}
+    pos = positions.get(sym)
+    if not pos:
+        return False, f"vous ne détenez pas {sym}", {}
+    if pos.get("en_attente"):
+        return False, f"l'achat de {sym} n'est pas encore exécuté", {}
+    today = dt.datetime.now(dt.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    if _done(journal, aid, sym, ("acheter",), today):
+        return False, f"{sym} acheté aujourd'hui : pas d'aller-retour dans la journée", {}
+    pct = _num(pourcentage, 100.0)
+    pct = max(1.0, min(100.0, pct))
+    qty = pos["qty"] if pct >= 100 else math.floor(pos["qty"] * pct / 100)
+    if qty < 1:
+        return False, "quantité à vendre nulle", {}
+    return True, "ok", {"qty": qty, "pourcentage": pct}
 
-        if len(ok) >= cfg.max_orders:
-            reject(f"maximum {cfg.max_orders} ordres par session")
-            continue
-        if not SYMBOL_RE.match(sym):
-            reject("symbole invalide")
-            continue
-        if sym in seen:
-            reject("un seul ordre par titre et par session")
-            continue
-        price = ctx.prices.get(sym)
 
-        if action in ("acheter", "renforcer"):
-            if not price:
-                reject("prix inconnu")
-                continue
-            if price < cfg.min_price:
-                reject(f"prix < {cfg.min_price} $ (penny stock)")
-                continue
-            try:
-                stop, tp = float(o["stop_loss"]), float(o["take_profit"])
-            except (KeyError, TypeError, ValueError):
-                reject("stop_loss et take_profit obligatoires")
-                continue
-            if not stop < price < tp:
-                reject(f"il faut stop < prix ({price}) < take profit")
-                continue
-            dist = (price - stop) / price * 100
-            if dist > cfg.max_stop_distance_pct:
-                reject(f"stop trop loin ({dist:.1f} % > {cfg.max_stop_distance_pct} %)")
-                continue
-            if dist < cfg.min_stop_distance_pct:
-                reject(f"stop trop proche ({dist:.1f} %), le bruit le déclencherait")
-                continue
-            rr = (tp - price) / (price - stop)
-            if rr < cfg.min_reward_risk:
-                reject(f"ratio gain/perte {rr:.2f} < {cfg.min_reward_risk}")
-                continue
-            if _executed(ctx.journal, sym, ("vendre", "alleger"), now - dt.timedelta(days=cfg.anti_churn_days)):
-                reject(f"titre vendu il y a moins de {cfg.anti_churn_days} j (anti aller-retour)")
-                continue
-            held = sym in ctx.positions
-            if not held and n_positions >= cfg.max_positions:
-                reject(f"déjà {cfg.max_positions} positions")
-                continue
-            try:
-                weight = float(o.get("poids_pct", 0))
-            except (TypeError, ValueError):
-                weight = 0
-            weight = max(0.0, min(weight, cfg.max_position_pct))
-            existing = ctx.positions.get(sym, {}).get("value", 0.0)
-            amount = min(ctx.equity * weight / 100,
-                         ctx.equity * cfg.max_position_pct / 100 - existing,
-                         cash_left - cash_floor)
-            qty = math.floor(amount / price) if amount > 0 else 0
-            if qty < 1:
-                reject("montant insuffisant (limite par ligne, cash minimum ou poids nul)")
-                continue
-            cash_left -= qty * price
-            if not held:
-                n_positions += 1
-            ok.append({**o, "action": "acheter", "symbole": sym, "qty": qty,
-                       "stop_loss": round(stop, 2), "take_profit": round(tp, 2),
-                       "prix_ref": price, "montant": round(qty * price, 2)})
-
-        elif action in ("vendre", "alleger"):
-            pos = ctx.positions.get(sym)
-            if not pos:
-                reject("aucune position sur ce titre")
-                continue
-            if _executed(ctx.journal, sym, ("acheter",), today_start):
-                reject("acheté aujourd'hui : pas d'aller-retour dans la journée")
-                continue
-            if action == "vendre":
-                qty = pos["qty"]
-            else:
-                try:
-                    pct = float(o.get("pourcentage", 50))
-                except (TypeError, ValueError):
-                    pct = 50
-                qty = math.floor(pos["qty"] * max(10, min(pct, 90)) / 100)
-                if qty < 1:
-                    reject("position trop petite pour être allégée")
-                    continue
-            ok.append({**o, "action": action, "symbole": sym, "qty": qty})
-
-        elif action == "ajuster_stop":
-            pos = ctx.positions.get(sym)
-            if not pos:
-                reject("aucune position sur ce titre")
-                continue
-            try:
-                new = float(o["stop_loss"])
-            except (KeyError, TypeError, ValueError):
-                reject("nouveau stop_loss manquant")
-                continue
-            cur = ctx.current_stop(sym)
-            if cur is not None and new <= cur:
-                reject(f"un stop ne se descend jamais (actuel {cur}, demandé {new})")
-                continue
-            if price and new >= price:
-                reject("stop au-dessus du prix actuel")
-                continue
-            ok.append({**o, "action": action, "symbole": sym, "stop_loss": round(new, 2),
-                       "qty": math.floor(pos["qty"])})
-        else:
-            reject(f"action inconnue « {action} »")
-            continue
-        seen.add(sym)
-    return ok, rejected
+def check_stop(cfg, val: dict, sym: str, new_stop, price: float | None):
+    positions = {p["symbole"]: p for p in val["positions"]}
+    pos = positions.get(sym)
+    if not pos:
+        return False, f"vous ne détenez pas {sym}", {}
+    if pos.get("en_attente"):
+        return False, f"l'achat de {sym} n'est pas encore exécuté", {}
+    new = _num(new_stop)
+    if new is None or new <= 0:
+        return False, "nouveau_stop invalide", {}
+    cur = pos.get("stop")
+    if cur is not None and new <= cur:
+        return False, f"un stop ne se descend jamais (actuel {cur:.2f} $, demandé {new:.2f} $)", {}
+    if price and new >= price:
+        return False, f"le stop doit rester sous le prix actuel ({price:.2f} $)", {}
+    return True, "ok", {"stop": round(new, 2)}
