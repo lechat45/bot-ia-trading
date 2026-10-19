@@ -38,11 +38,11 @@ class Config:
     paper: bool
     live_refused: bool  # ALPACA_PAPER=false demandé sans la phrase de confirmation
     dry_run: bool
-    # Limites appliquées par le code au SOUS-COMPTE de chaque IA (elle ne peut pas les contourner)
-    max_position_pct: float = 25.0  # % max du sous-compte sur un même titre
-    min_cash_pct: float = 5.0  # % du sous-compte toujours gardé en liquidités
-    max_positions: int = 8
-    max_orders: int = 5  # ordres max par IA et par séance
+    # Limites appliquées par le code au compte de l'équipe (les IA ne peuvent pas les contourner)
+    max_position_pct: float = 15.0  # % max du compte sur un même titre
+    min_cash_pct: float = 5.0  # % du compte toujours gardé en liquidités
+    max_positions: int = 10
+    max_orders: int = 5  # ordres max du gérant par séance
     max_stop_distance_pct: float = 15.0
     min_stop_distance_pct: float = 1.0
     min_reward_risk: float = 1.5  # gain visé / perte max
@@ -51,8 +51,11 @@ class Config:
     max_gap_pct: float = 5.0  # ordre planifié annulé si l'ouverture s'écarte trop du prix du matin
     # Séances
     preparation_heure: int = 9  # heure de Paris de la séance de préparation
-    max_steps_preparation: int = 14  # appels d'outils max par IA
-    max_steps_suivi: int = 9
+    # Appels d'outils max par IA et par séance (les clés gratuites limitent le débit)
+    max_steps_analyste: int = 10
+    max_steps_analyste_suivi: int = 6
+    max_steps_critique: int = 6
+    max_steps_gerant: int = 12
     max_web_searches: int = 3  # recherches Google par IA et par séance
 
     @classmethod
@@ -67,16 +70,18 @@ class Config:
             paper=not (want_live and confirmed),
             live_refused=want_live and not confirmed,
             dry_run=_bool("DRY_RUN", False),
-            max_position_pct=_float("MAX_POSITION_PCT", 25.0),
+            max_position_pct=_float("MAX_POSITION_PCT", 15.0),
             min_cash_pct=_float("MIN_CASH_PCT", 5.0),
-            max_positions=int(_float("MAX_POSITIONS", 8)),
+            max_positions=int(_float("MAX_POSITIONS", 10)),
             max_orders=int(_float("MAX_ORDERS_PER_SESSION", 5)),
             max_stop_distance_pct=_float("MAX_STOP_DISTANCE_PCT", 15.0),
             min_reward_risk=_float("MIN_REWARD_RISK", 1.5),
             max_gap_pct=_float("MAX_GAP_PCT", 5.0),
             preparation_heure=int(_float("PREPARATION_HEURE", 9)),
-            max_steps_preparation=int(_float("MAX_STEPS_PREPARATION", 14)),
-            max_steps_suivi=int(_float("MAX_STEPS_SUIVI", 9)),
+            max_steps_analyste=int(_float("MAX_STEPS_ANALYSTE", 10)),
+            max_steps_analyste_suivi=int(_float("MAX_STEPS_ANALYSTE_SUIVI", 6)),
+            max_steps_critique=int(_float("MAX_STEPS_CRITIQUE", 6)),
+            max_steps_gerant=int(_float("MAX_STEPS_GERANT", 12)),
             max_web_searches=int(_float("MAX_WEB_SEARCHES", 3)),
         )
 

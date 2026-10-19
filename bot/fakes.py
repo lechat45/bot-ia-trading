@@ -4,6 +4,7 @@ Les fausses IA suivent la routine d'Aywen avec de vrais appels d'outils, y compr
 volontairement mauvais pour vérifier que les garde-fous le refusent."""
 import datetime as dt
 import random
+import re
 import uuid
 from collections import defaultdict
 
@@ -130,27 +131,45 @@ class FakeRouter:
         self.usage[agent.id]["tokens"] += sum(len(str(m)) for m in messages) // 4
         self.usage[agent.id]["appels"] += 1
         self.slots[f"{agent.provider}#{agent.key_index + 1}"]["appels"] += 1
-        sym = {"qualite": "AAPL", "equilibre": "KO", "sentiment": "NVDA", "contrarien": "ASML"}[agent.id]
 
         def call(name, **args):
             return {"id": f"c{n}-{name}", "name": name, "args": args}
 
-        script = [
-            ("Je relis mes notes puis je fais le point sur mon portefeuille.",
-             [call("consulter_portefeuille"), call("screener", critere="baisse_semaine", limite=5)]),
-            (f"{sym} ressort du screener, je regarde son historique et son actualité.",
-             [call("historique_prix", symbole=sym), call("actualites", symbole=sym, limite=3)]),
-            ("Je vérifie le sentiment et une date précise.",
-             [call("sentiment_reseaux", symbole=sym), call("recherche_web", question=f"Date des résultats de {sym}")]),
-            ("Je relis ma fiche sur le risque avant de passer un ordre.", [call("lire_skill", nom="gestion-du-risque")]),
-            ("Ma thèse est prête.",
-             [call("passer_ordre", action="acheter", symbole=sym, montant_usd=4000, stop_loss_pct=7,
-                   take_profit_pct=15, these=f"Thèse factice sur {sym}."),
-              call("passer_ordre", action="acheter", symbole="MSFT", montant_usd=99000, stop_loss_pct=30,
-                   take_profit_pct=10, these="Ordre volontairement mauvais (test des garde-fous).")]),
-            ("Je mets mes notes à jour.", [call("ecrire_notes", contenu=f"Positions : {sym} (thèse factice).")]),
-            ("", [call("terminer_session", compte_rendu=f"Séance factice : position sur {sym}.")]),
-        ]
+        opening = messages[0]["text"]
+        if agent.role == "critique":
+            ids = sorted(set(re.findall(r'"id":"([a-z]+-\d+)"', opening)))
+            script = [("Je vérifie les propositions une à une.",
+                       [call("historique_prix", symbole="AAPL")]),
+                      ("Voici mes verdicts.", [call("donner_avis", id=i, verdict="ok" if k % 2 == 0 else "reserve",
+                                                    raison="test") for k, i in enumerate(ids)]),
+                      ("", [call("terminer_session", compte_rendu=f"{len(ids)} propositions contrôlées.")])]
+        elif agent.role == "gerant":
+            script = [("Je fais le point sur le compte et les propositions.", [call("consulter_portefeuille")]),
+                      ("Je retiens la proposition Qualité sur AAPL.",
+                       [call("passer_ordre", action="acheter", symbole="AAPL", montant_usd=10000, stop_loss_pct=7,
+                             take_profit_pct=15, these="Thèse factice retenue.", source="qualite-1"),
+                        call("passer_ordre", action="acheter", symbole="MSFT", montant_usd=99000, stop_loss_pct=30,
+                             take_profit_pct=10, these="Ordre volontairement mauvais (test des garde-fous).")]),
+                      ("J'écris le journal de bord.", [call("ecrire_notes", contenu="Journal : AAPL planifié.")]),
+                      ("", [call("terminer_session", compte_rendu="Décision factice : AAPL retenu.")])]
+        else:
+            sym = {"qualite": "AAPL", "equilibre": "KO", "sentiment": "NVDA", "contrarien": "ASML"}[agent.id]
+            script = [
+                ("Je relis mes notes puis je fais le point sur le portefeuille.",
+                 [call("consulter_portefeuille"), call("screener", critere="baisse_semaine", limite=5)]),
+                (f"{sym} ressort du screener, je regarde son historique et son actualité.",
+                 [call("historique_prix", symbole=sym), call("actualites", symbole=sym, limite=3)]),
+                ("Je vérifie le sentiment et une date précise.",
+                 [call("sentiment_reseaux", symbole=sym), call("recherche_web", question=f"Date des résultats de {sym}")]),
+                ("Je relis ma fiche sur le risque.", [call("lire_skill", nom="gestion-du-risque")]),
+                ("Ma thèse est prête, je la propose au gérant.",
+                 [call("proposer_ordre", action="acheter", symbole=sym, montant_usd=8000, stop_loss_pct=7,
+                       take_profit_pct=15, these=f"Thèse factice sur {sym}.", confiance="moyen"),
+                  call("proposer_ordre", action="acheter", symbole="MSFT", montant_usd=5000, stop_loss_pct=30,
+                       take_profit_pct=10, these="Proposition volontairement mauvaise (test des garde-fous).")]),
+                ("Je mets mes notes à jour.", [call("ecrire_notes", contenu=f"Idée : {sym} (thèse factice).")]),
+                ("", [call("terminer_session", compte_rendu=f"Séance factice : proposition sur {sym}.")]),
+            ]
         allowed = {t["name"] for t in tools}
         if "screener" not in allowed:  # fin de séance : seuls les outils pour agir et conclure sont proposés
             wrote = any(c["name"] == "ecrire_notes" for m in messages if m["role"] == "assistant" for c in m["calls"])

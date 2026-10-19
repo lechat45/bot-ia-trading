@@ -1,12 +1,12 @@
-"""Lance une séance des 4 IA (GitHub Actions s'en charge automatiquement chaque jour de bourse).
+"""Lance une séance de l'équipe de 6 IA (GitHub Actions s'en charge automatiquement chaque jour de bourse).
 
-    python main.py --mode preparation   9 h : les IA décident quoi acheter à l'ouverture (ordres planifiés)
+    python main.py --mode preparation   9 h : l'équipe décide quoi acheter à l'ouverture (ordres planifiés)
     python main.py --mode ouverture     attend l'ouverture de New York puis exécute les ordres planifiés
-    python main.py --mode suivi         bourse ouverte : les IA font le point et agissent en direct
+    python main.py --mode suivi         bourse ouverte : l'équipe fait le point et agit en direct
     python main.py --mode auto          préparation si la bourse est fermée, suivi si elle est ouverte
 
 Options :
-    --dry-run   simulation : les IA travaillent mais aucun ordre n'est envoyé et rien n'est enregistré
+    --dry-run   simulation : l'équipe travaille mais aucun ordre n'est envoyé et rien n'est enregistré
     --force     ignore les vérifications d'horaire (utile pour tester à n'importe quelle heure)
     --offline   test complet sans clé ni réseau (fausses données, fausses IA)
 """

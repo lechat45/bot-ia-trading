@@ -491,3 +491,5 @@ details pre { margin: 6px 0 0; padding: 10px; border-radius: 8px; background: va
 .content, .section, .detail, .panel, .drawer-body, .brain, .leaderboard, .live, .day, .tokens { grid-template-columns: minmax(0, 1fr); }
 .drawer-head > div, .b-body, .order > *, .lb-name { min-width: 0; }
 .b-text, .why, .notes, .synth p, .analysis { overflow-wrap: anywhere; }
+
+.clamp { display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }

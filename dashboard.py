@@ -20,7 +20,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from bot import memory
-from bot.agents import AGENTS
+from bot.agents import ACCOUNT, AGENTS
 from bot.comptes import PATH as COMPTES_PATH
 from bot.comptes import Comptes
 from bot.config import Config
@@ -93,32 +93,27 @@ _cache: dict = {}
 
 def _agent(a):
     keys = cfg.gemini_keys if a.provider == "gemini" else cfg.groq_keys
-    return {"id": a.id, "nom": a.nom, "provider": a.provider, "cle": a.key_index + 1, "modele": a.models[0],
-            "strategie": a.strategie, "inspire_de": a.inspire_de,
+    return {"id": a.id, "nom": a.nom, "role": a.role, "provider": a.provider, "cle": a.key_index + 1,
+            "modele": a.models[0], "strategie": a.strategie, "inspire_de": a.inspire_de,
             "cle_configuree": DEMO or a.key_index < len(keys)}
 
 
-def _comptes(equity: float, prices: dict) -> tuple[dict, list]:
-    """Valeur de chaque sous-compte et positions attribuées à chaque IA."""
-    ids = [a.id for a in AGENTS]
+def _compte(equity: float, prices: dict) -> dict:
+    """Valeur du compte de l'équipe et positions (avec leur thèse, leur stop et leur objectif)."""
     if COMPTES_PATH.exists():
         c = Comptes(json.loads(COMPTES_PATH.read_text(encoding="utf-8")), persist=False)
         demarre = True
     else:
-        c, demarre = Comptes.load(ids, equity or 100_000, persist=False), False
+        c, demarre = Comptes.load([ACCOUNT], equity or 100_000, persist=False), False
     missing = [s for s in c.symbols() if s not in prices]
     if missing:
         try:
             prices = {**prices, **broker.latest_prices(missing)}
         except Exception:
             pass
-    vals, positions = {}, []
-    for aid in ids:
-        v = c.valuation(aid, prices)
-        v["demarre"] = demarre
-        vals[aid] = v
-        positions += [{**p, "agent": aid} for p in v["positions"]]
-    return vals, positions
+    v = c.valuation(ACCOUNT, prices)
+    v["demarre"] = demarre
+    return v
 
 
 def overview() -> dict:
@@ -137,7 +132,8 @@ def overview() -> dict:
         out["compte"] = {k: float(acct.get(k) or 0) for k in ("equity", "cash", "last_equity", "buying_power")}
         out["horloge"] = broker.clock()
         prices = {p["symbol"]: float(p["current_price"]) for p in broker.positions()}
-        out["comptes"], out["positions"] = _comptes(out["compte"]["equity"], prices)
+        out["equipe"] = _compte(out["compte"]["equity"], prices)
+        out["positions"] = out["equipe"]["positions"]
         h = broker.portfolio_history("1M", "1D")
         out["historique"] = [{"t": t, "v": v} for t, v in zip(h.get("timestamp") or [], h.get("equity") or [])
                              if v]  # Alpaca renvoie 0 avant le premier dépôt
@@ -154,14 +150,14 @@ def sessions() -> list:
             d = json.loads(p.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        if "agents" not in d and "executions" not in d:
-            continue  # ancien format (avant la refonte « comme Aywen »)
+        if "propositions" not in d:
+            continue  # ancien format
         ag = d.get("agents") or {}
         rows.append({"nom": d.get("nom", p.stem), "quand": d.get("quand"), "mode": d.get("mode"),
-                     "simulation": d.get("simulation"),
+                     "simulation": d.get("simulation"), "propositions": len(d.get("propositions") or []),
                      "ordres": sum(len(r.get("ordres") or []) for r in ag.values()) + len(d.get("executions") or []),
                      "erreurs": sum(1 for r in ag.values() if r.get("erreur")),
-                     "resume": {aid: (r.get("compte_rendu") or "")[:160] for aid, r in ag.items()}})
+                     "decision": (d.get("decision") or "")[:200]})
     return rows
 
 

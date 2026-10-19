@@ -1,8 +1,11 @@
 """Les outils des IA, comme dans la vidéo d'Aywen : Actualité, Screener, Données boursières,
 Navigateur web, Réseaux sociaux, Notes et Broker — plus la lecture des skills.
 
-L'IA décide seule lesquels appeler et quand. Chaque appel est exécuté ici, journalisé (pour le
-« cerveau » affiché dans le tableau de bord) et son résultat est renvoyé à l'IA.
+Chaque IA de l'équipe décide seule lesquels appeler et quand. Selon son rôle, elle a en plus :
+  - analyste : proposer_ordre (une idée argumentée, vérifiée par les garde-fous) ;
+  - critique : donner_avis (ok, réserve ou rejet sur chaque proposition) ;
+  - gérant   : passer_ordre, annuler_ordre, ajuster_stop (le broker, sur le compte de l'équipe).
+Chaque appel est exécuté ici, journalisé (le « cerveau » du tableau de bord) et renvoyé à l'IA.
 """
 import datetime as dt
 import json
@@ -28,7 +31,7 @@ SKILL_INFO = {
     "sentiment-reseaux": "utiliser Reddit et les réseaux sans se faire piéger",
     "gestion-du-risque": "taille de position, corrélations, comportements à éviter",
     "stop-loss-take-profit": "placer et gérer stop loss et objectif de gain",
-    "execution-des-ordres": "utiliser passer_ordre, ordres planifiés à l'ouverture",
+    "execution-des-ordres": "proposer et passer des ordres, ordres planifiés à l'ouverture",
     "notes-et-memoire": "structure des notes entre deux séances",
 }
 SCREEN_CHOICES = list(tools.SCREENS) + ["plus_actives", "tendances_reddit", "europe_adr"]
@@ -46,19 +49,29 @@ def _num(v):
         return None
 
 
+def _now():
+    return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+
+
 # ---------------------------------------------------------------------- déclarations des outils
-def declarations(market_open: bool) -> list[dict]:
+def declarations(role: str, market_open: bool) -> list[dict]:
     S = {"type": "string"}
-    order_desc = ("Passe un ordre sur TON sous-compte. "
-                  + ("La bourse est OUVERTE : exécution immédiate." if market_open else
-                     "La bourse est FERMÉE : l'ordre est PLANIFIÉ et sera exécuté automatiquement à l'ouverture "
-                     "de New York (15h30 heure de Paris), au prix d'ouverture."))
-    return [
+    N = {"type": "number"}
+    order_props = {
+        "action": {"type": "string", "enum": ["acheter", "vendre"]},
+        "symbole": S,
+        "montant_usd": {"type": "number", "description": "achat : montant à investir en dollars"},
+        "pourcentage": {"type": "number", "description": "vente : % de la position à vendre (100 = tout)"},
+        "stop_loss_pct": {"type": "number", "description": "achat : stop loss en % sous le prix d'achat"},
+        "take_profit_pct": {"type": "number", "description": "achat : objectif de gain en % au-dessus du prix d'achat"},
+        "these": {"type": "string", "description": "thèse : arguments datés, risques, invalidation, horizon"},
+    }
+    research = [
         {"name": "lire_skill", "description": "Lit un de tes skills (fiche de savoir-faire) avant d'utiliser un outil.",
          "parameters": {"type": "object", "properties": {"nom": {"type": "string", "enum": list(SKILL_INFO)}},
                         "required": ["nom"]}},
         {"name": "consulter_portefeuille",
-         "description": "Ton sous-compte : liquidités, positions (prix d'achat, plus-value, stop, objectif), ordres planifiés, limites.",
+         "description": "Le compte de l'équipe : liquidités, positions (prix d'achat, plus-value, stop, objectif), ordres planifiés, limites.",
          "parameters": {"type": "object", "properties": {}}},
         {"name": "screener",
          "description": ("Filtre les actions selon un critère. Univers : ~170 grandes valeurs US et européennes cotées à "
@@ -68,7 +81,7 @@ def declarations(market_open: bool) -> list[dict]:
              "limite": {"type": "integer", "description": "nombre de résultats (défaut 10, max 20)"}},
              "required": ["critere"]}},
         {"name": "historique_prix",
-         "description": "Historique du cours d'une action : performances, moyennes mobiles, RSI, ATR, plus haut/bas 52 semaines, cours hebdo sur 1 an.",
+         "description": "Historique du cours : performances, moyennes mobiles, RSI, ATR, plus haut/bas 52 semaines, cours hebdo sur 1 an.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
         {"name": "donnees_financieres",
          "description": "Santé de l'entreprise : secteur, capitalisation, PER, marges, croissance, dette, flux de trésorerie, date des prochains résultats (avec le nombre de jours).",
@@ -77,38 +90,52 @@ def declarations(market_open: bool) -> list[dict]:
          "description": "Fil d'actualité financière en direct (multi-sources). Sans symbole : les dernières actualités du marché.",
          "parameters": {"type": "object", "properties": {"symbole": S, "limite": {"type": "integer"}}}},
         {"name": "recherche_web",
-         "description": "Recherche Google pour une question précise (dirigeant, date d'un événement, déclaration…). Budget limité par séance : pose des questions précises.",
+         "description": "Recherche Google pour une question précise (dirigeant, date d'un événement, déclaration…). Budget limité par séance.",
          "parameters": {"type": "object", "properties": {"question": S}, "required": ["question"]}},
         {"name": "sentiment_reseaux",
          "description": "Humeur des réseaux sur une action : mentions Reddit (r/wallstreetbets, r/stocks…) sur 24 h et évolution.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
         {"name": "ecrire_notes",
-         "description": "Réécrit ENTIÈREMENT tes notes (ta seule mémoire entre deux séances) : positions et thèses, calendrier daté, liste de surveillance, leçons.",
+         "description": "Réécrit ENTIÈREMENT tes notes (ta seule mémoire entre deux séances).",
          "parameters": {"type": "object", "properties": {"contenu": S}, "required": ["contenu"]}},
-        {"name": "passer_ordre", "description": order_desc,
-         "parameters": {"type": "object", "properties": {
-             "action": {"type": "string", "enum": ["acheter", "vendre"]},
-             "symbole": S,
-             "montant_usd": {"type": "number", "description": "achat : montant à investir en dollars"},
-             "pourcentage": {"type": "number", "description": "vente : % de la position à vendre (100 = tout)"},
-             "stop_loss_pct": {"type": "number", "description": "achat : stop loss en % sous le prix d'achat"},
-             "take_profit_pct": {"type": "number", "description": "achat : objectif de gain en % au-dessus du prix d'achat"},
-             "these": {"type": "string", "description": "ta thèse : arguments datés, risques, invalidation, horizon, confiance"}},
-             "required": ["action", "symbole", "these"]}},
-        {"name": "annuler_ordre", "description": "Annule un ordre planifié (pas encore exécuté) sur ce titre.",
-         "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
-        {"name": "ajuster_stop", "description": "Remonte le stop loss d'une position (jamais le descendre).",
-         "parameters": {"type": "object", "properties": {"symbole": S, "nouveau_stop": {"type": "number"}},
-                        "required": ["symbole", "nouveau_stop"]}},
-        {"name": "terminer_session",
-         "description": "Termine ta séance avec ton compte rendu : décisions prises et pourquoi, ce qu'il faut surveiller.",
-         "parameters": {"type": "object", "properties": {"compte_rendu": S}, "required": ["compte_rendu"]}},
     ]
+    end = [{"name": "terminer_session", "description": "Termine ta séance avec ton compte rendu.",
+            "parameters": {"type": "object", "properties": {"compte_rendu": S}, "required": ["compte_rendu"]}}]
+    if role == "analyste":
+        extra = [{"name": "proposer_ordre",
+                  "description": ("Propose un ordre au gérant de l'équipe (c'est lui qui décide). Les garde-fous vérifient "
+                                  "la proposition tout de suite et te renvoient la raison si elle est refusée."),
+                  "parameters": {"type": "object", "properties": {
+                      **order_props, "confiance": {"type": "string", "enum": ["faible", "moyen", "eleve"]}},
+                      "required": ["action", "symbole", "these"]}}]
+    elif role == "critique":
+        extra = [{"name": "donner_avis", "description": "Donne ton verdict sur une proposition des analystes.",
+                  "parameters": {"type": "object", "properties": {
+                      "id": {"type": "string", "description": "identifiant de la proposition, ex. qualite-1"},
+                      "verdict": {"type": "string", "enum": ["ok", "reserve", "rejet"]},
+                      "raison": S}, "required": ["id", "verdict", "raison"]}}]
+    else:  # gérant : le broker
+        order_desc = ("Passe un ordre sur le compte de l'équipe. "
+                      + ("La bourse est OUVERTE : exécution immédiate." if market_open else
+                         "La bourse est FERMÉE : l'ordre est PLANIFIÉ et exécuté automatiquement à l'ouverture de "
+                         "New York (15h30 heure de Paris), au prix d'ouverture."))
+        extra = [
+            {"name": "passer_ordre", "description": order_desc,
+             "parameters": {"type": "object", "properties": {
+                 **order_props, "source": {"type": "string", "description": "id de la proposition retenue (ex. qualite-1), si c'en est une"}},
+                 "required": ["action", "symbole", "these"]}},
+            {"name": "annuler_ordre", "description": "Annule un ordre planifié (pas encore exécuté) sur ce titre.",
+             "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
+            {"name": "ajuster_stop", "description": "Remonte le stop loss d'une position (jamais le descendre).",
+             "parameters": {"type": "object", "properties": {"symbole": S, "nouveau_stop": N},
+                            "required": ["symbole", "nouveau_stop"]}},
+        ]
+    return research + extra + end
 
 
 # ---------------------------------------------------------------------- données partagées
 class Market:
-    """Données de marché partagées par les 4 IA d'une séance (téléchargées une seule fois)."""
+    """Données de marché partagées par toute l'équipe pendant une séance (téléchargées une seule fois)."""
 
     def __init__(self, alpaca, offline: bool, today: dt.date):
         self.alpaca, self.offline, self.today = alpaca, offline, today
@@ -172,23 +199,27 @@ class Market:
 class AgentEnv:
     def __init__(self, session, agent):
         self.s, self.a = session, agent
+        self.acct = session.account  # le compte unique de l'équipe
         self.steps: list[dict] = []
-        self.orders: list[dict] = []
+        self.orders: list[dict] = []  # ordres passés (gérant)
+        self.proposals: list[dict] = []  # propositions (analyste)
+        self.avis: list[dict] = []  # verdicts (critique)
         self.tool_calls = 0
         self.web_left = session.cfg.max_web_searches
         self.done = False
         self.compte_rendu = ""
 
     def log(self, kind, **kw):
-        self.steps.append({"t": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "type": kind, **kw})
+        self.steps.append({"t": _now(), "type": kind, **kw})
 
     def run(self, name: str, args: dict) -> str:
         self.tool_calls += 1
         short = ", ".join(f"{v}" for v in list((args or {}).values())[:2] if not isinstance(v, (dict, list)))[:60]
         memory.state_agent(self.a.id, statut="outil", action=f"{name}({short})", etapes=self.tool_calls)
-        fn = getattr(self, f"t_{name}", None)
+        allowed = {d["name"] for d in declarations(self.a.role, self.s.market_open)}
+        fn = getattr(self, f"t_{name}", None) if name in allowed else None
         try:
-            out = fn(**(args or {})) if fn else {"erreur": f"outil inconnu « {name} »"}
+            out = fn(**(args or {})) if fn else {"erreur": f"outil « {name} » indisponible pour ton rôle"}
         except TypeError as e:
             out = {"erreur": f"paramètres invalides : {e}"}
         except Exception as e:  # un outil en panne ne doit pas arrêter la séance
@@ -207,25 +238,26 @@ class AgentEnv:
     # -------------------------------------------------- portefeuille
     def valuation(self):
         c = self.s.comptes
-        held = list(c.agent(self.a.id)["positions"])
-        return c.valuation(self.a.id, self.s.market.prices(held))
+        held = list(c.agent(self.acct)["positions"])
+        return c.valuation(self.acct, self.s.market.prices(held))
 
     def planned(self):
-        return [o for o in self.s.plan.get("ordres", []) if o["agent"] == self.a.id and o["statut"] == "en_attente"]
+        return [o for o in self.s.plan.get("ordres", []) if o.get("compte") == self.acct and o["statut"] == "en_attente"]
+
+    def reserved(self):
+        return sum(o.get("montant_usd", 0) for o in self.planned() if o["action"] == "acheter")
 
     def t_consulter_portefeuille(self):
         v = self.valuation()
         cfg = self.s.cfg
-        reserved = sum(o.get("montant_usd", 0) for o in self.planned() if o["action"] == "acheter")
         return {
             **v,
             "ordres_planifies_pour_ouverture": [{k: o.get(k) for k in ("action", "symbole", "montant_usd", "pourcentage",
                                                                        "stop_loss_pct", "take_profit_pct")} for o in self.planned()],
             "limites": {
                 "max_par_titre_usd": round(v["valeur"] * cfg.max_position_pct / 100, 0),
-                "liquidites_utilisables_usd": round(max(0, v["cash"] - reserved - v["valeur"] * cfg.min_cash_pct / 100), 0),
+                "liquidites_utilisables_usd": round(max(0, v["cash"] - self.reserved() - v["valeur"] * cfg.min_cash_pct / 100), 0),
                 "positions_max": cfg.max_positions,
-                "ordres_restants_cette_seance": cfg.max_orders - len(self.orders),
                 "stop_loss_pct": f"entre {cfg.min_stop_distance_pct:g} et {cfg.max_stop_distance_pct:g}",
                 "ratio_gain_perte_min": cfg.min_reward_risk,
             },
@@ -239,8 +271,8 @@ class AgentEnv:
             rows = self.s.alpaca.most_actives(40)
             syms = [r["symbol"] for r in rows if SYMBOL_RE.match(r["symbol"])]
             px = mk.prices(syms)
-            return [{"s": s, "prix": round(px[s], 2), "volume": r.get("volume")} for r in rows
-                    for s in [r["symbol"]] if px.get(s, 0) >= mn][:limite]
+            return [{"s": r["symbol"], "prix": round(px[r["symbol"]], 2), "volume": r.get("volume")} for r in rows
+                    if px.get(r["symbol"], 0) >= mn][:limite]
         if critere == "tendances_reddit":
             data = sorted(tools.reddit_trending().values(), key=lambda x: x.get("rank", 999)) if not mk.offline else []
             return [{"s": x["ticker"], "nom": x.get("name"), "mentions_24h": x.get("mentions"),
@@ -323,71 +355,95 @@ class AgentEnv:
         return {"ok": True, "caracteres": len(contenu[:memory.MAX_NOTES]),
                 "info": "notes enregistrées" if not self.s.dry_run else "notes gardées (simulation : non enregistrées)"}
 
-    # -------------------------------------------------- broker
+    # -------------------------------------------------- analyste : proposer
+    def _check(self, action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct, clamp=False):
+        val = self.valuation()
+        if action == "acheter":
+            return check_buy(self.s.cfg, self.acct, val, sym, self.s.market.price(sym), montant_usd, stop_loss_pct,
+                             take_profit_pct, self.s.journal, reserved=self.reserved(), clamp=clamp)
+        if action in ("vendre", "alleger"):
+            return check_sell(self.s.cfg, self.acct, val, sym, pourcentage, self.s.journal)
+        return False, "action inconnue : acheter ou vendre", {}
+
+    def t_proposer_ordre(self, action="", symbole="", montant_usd=None, pourcentage=None, stop_loss_pct=None,
+                         take_profit_pct=None, these="", confiance=""):
+        sym, action = clean_symbol(symbole), str(action).lower().strip()
+        if len(self.proposals) >= 3:
+            return {"refuse": "3 propositions maximum par séance : garde les meilleures idées"}
+        if any(p["symbole"] == sym for p in self.proposals):
+            return {"refuse": "tu as déjà proposé ce titre"}
+        # Les montants sont vérifiés comme pour un vrai ordre, mais ramenés aux limites plutôt que refusés :
+        # c'est le gérant qui décidera de la taille finale.
+        ok, msg, d = self._check(action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct, clamp=True)
+        if not ok:
+            self.log("refus", symbole=sym, raison=msg)
+            return {"refuse": msg}
+        pid = f"{self.a.id}-{len(self.proposals) + 1}"
+        p = {"id": pid, "auteur": self.a.id, "action": action, "symbole": sym, "these": these[:1500],
+             "confiance": confiance, **{k: d.get(k) for k in ("montant", "qty", "prix_ref", "stop_loss_pct",
+                                                              "take_profit_pct", "pourcentage") if d.get(k) is not None}}
+        self.proposals.append(p)
+        self.s.add_proposal(p)
+        return {"ok": True, "id": pid, "message": f"Proposition {pid} transmise au critique puis au gérant."}
+
+    # -------------------------------------------------- critique : avis
+    def t_donner_avis(self, id="", verdict="", raison=""):
+        if not any(p["id"] == id for p in self.s.proposals):
+            return {"erreur": f"proposition « {id} » inconnue ; identifiants : {', '.join(p['id'] for p in self.s.proposals)}"}
+        v = {"id": id, "verdict": str(verdict).lower(), "raison": raison[:800]}
+        self.avis = [a for a in self.avis if a["id"] != id] + [v]
+        self.s.set_avis(v)
+        return {"ok": True}
+
+    # -------------------------------------------------- gérant : broker
     def t_passer_ordre(self, action="", symbole="", montant_usd=None, pourcentage=None,
-                       stop_loss_pct=None, take_profit_pct=None, these=""):
+                       stop_loss_pct=None, take_profit_pct=None, these="", source=""):
         cfg, sym, action = self.s.cfg, clean_symbol(symbole), str(action).lower().strip()
         if len(self.orders) >= cfg.max_orders:
             return {"refuse": f"maximum {cfg.max_orders} ordres par séance atteint"}
         if any(o["symbole"] == sym for o in self.orders):
             return {"refuse": "un seul ordre par titre et par séance"}
-        val = self.valuation()
-        journal = self.s.journal
-        record = {"action": action, "symbole": sym, "these": these[:1500]}
+        ok, msg, d = self._check(action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct)
+        if not ok:
+            self.log("refus", symbole=sym, raison=msg)
+            return {"refuse": msg}
+        record = {"action": action, "symbole": sym, "these": these[:1500], "source": source}
+        if not self.s.market_open:
+            o = {"compte": self.acct, "agent": self.a.id, "action": action, "symbole": sym, "source": source,
+                 "these": these[:1500], "statut": "en_attente", "cree_le": _now(),
+                 "prix_reference": d.get("prix_ref") or round(self.s.market.price(sym) or 0, 2)}
+            if action == "acheter":
+                o.update(montant_usd=d["montant"], qty_estimee=d["qty"], stop_loss_pct=d["stop_loss_pct"],
+                         take_profit_pct=d["take_profit_pct"])
+                msg = (f"Achat planifié : ~{d['qty']} {sym} (~{d['montant']:.0f} $ au prix de référence {d['prix_ref']} $). "
+                       f"Exécution automatique à l'ouverture de New York ; stop à -{d['stop_loss_pct']:g} % et objectif à "
+                       f"+{d['take_profit_pct']:g} % du prix d'exécution. Annulé si l'ouverture s'écarte de plus de "
+                       f"{cfg.max_gap_pct:g} % de {d['prix_ref']} $.")
+            else:
+                o.update(pourcentage=d["pourcentage"], qty_estimee=d["qty"])
+                msg = f"Vente de {d['qty']} {sym} planifiée pour l'ouverture."
+            self.s.add_plan(o)
+            self.orders.append({**record, **o, "resultat": "planifié pour l'ouverture"})
+            return {"planifie": True, "message": msg}
         if action == "acheter":
-            price = self.s.market.price(sym)
-            reserved = sum(o.get("montant_usd", 0) for o in self.planned() if o["action"] == "acheter")
-            ok, msg, d = check_buy(cfg, self.a.id, val, sym, price, montant_usd, stop_loss_pct, take_profit_pct,
-                                   journal, reserved=reserved)
-            if not ok:
-                self.log("refus", symbole=sym, raison=msg)
-                return {"refuse": msg}
-            if not self.s.market_open:
-                o = {"agent": self.a.id, "action": "acheter", "symbole": sym, "montant_usd": d["montant"],
-                     "qty_estimee": d["qty"], "prix_reference": d["prix_ref"], "stop_loss_pct": d["stop_loss_pct"],
-                     "take_profit_pct": d["take_profit_pct"], "these": these[:1500], "statut": "en_attente",
-                     "cree_le": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
-                self.s.add_plan(o)
-                self.orders.append({**record, **o, "resultat": "planifié pour l'ouverture"})
-                return {"planifie": True, "message": (
-                    f"Achat planifié : ~{d['qty']} {sym} (~{d['montant']:.0f} $ au prix de référence {d['prix_ref']} $). "
-                    f"Exécution automatique à l'ouverture de New York ; stop à -{d['stop_loss_pct']:g} % et objectif à "
-                    f"+{d['take_profit_pct']:g} % du prix d'exécution. Annulé si l'ouverture s'écarte de plus de "
-                    f"{cfg.max_gap_pct:g} % de {d['prix_ref']} $.")}
-            r = self.s.broker.buy(self.a.id, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"], these[:1500])
-            self.orders.append({**record, **d, "resultat": r["message"], "ok": r["ok"]})
-            return r
-        if action in ("vendre", "alleger"):
-            ok, msg, d = check_sell(cfg, self.a.id, val, sym, pourcentage, journal)
-            if not ok:
-                self.log("refus", symbole=sym, raison=msg)
-                return {"refuse": msg}
-            if not self.s.market_open:
-                o = {"agent": self.a.id, "action": "vendre", "symbole": sym, "pourcentage": d["pourcentage"],
-                     "qty_estimee": d["qty"], "prix_reference": round(self.s.market.price(sym) or 0, 2),
-                     "these": these[:1500], "statut": "en_attente",
-                     "cree_le": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
-                self.s.add_plan(o)
-                self.orders.append({**record, **o, "resultat": "planifié pour l'ouverture"})
-                return {"planifie": True, "message": f"Vente de {d['qty']} {sym} planifiée pour l'ouverture."}
-            r = self.s.broker.sell(self.a.id, sym, d["qty"], these)
-            self.orders.append({**record, **d, "resultat": r["message"], "ok": r["ok"]})
-            return r
-        return {"refuse": "action inconnue : acheter ou vendre"}
+            r = self.s.broker.buy(self.acct, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"], these[:1500])
+        else:
+            r = self.s.broker.sell(self.acct, sym, d["qty"], these)
+        self.orders.append({**record, **d, "resultat": r["message"], "ok": r["ok"]})
+        return r
 
     def t_annuler_ordre(self, symbole=""):
         sym = clean_symbol(symbole)
-        n = self.s.cancel_plan(self.a.id, sym)
+        n = self.s.cancel_plan(self.acct, sym)
         return {"ok": bool(n), "message": f"{n} ordre(s) planifié(s) annulé(s) sur {sym}" if n else "aucun ordre planifié sur ce titre"}
 
     def t_ajuster_stop(self, symbole="", nouveau_stop=None):
         sym = clean_symbol(symbole)
-        val = self.valuation()
-        ok, msg, d = check_stop(self.s.cfg, val, sym, nouveau_stop, self.s.market.price(sym))
+        ok, msg, d = check_stop(self.s.cfg, self.valuation(), sym, nouveau_stop, self.s.market.price(sym))
         if not ok:
             self.log("refus", symbole=sym, raison=msg)
             return {"refuse": msg}
-        r = self.s.broker.adjust_stop(self.a.id, sym, d["stop"])
+        r = self.s.broker.adjust_stop(self.acct, sym, d["stop"])
         self.orders.append({"action": "ajuster_stop", "symbole": sym, "stop": d["stop"], "resultat": r["message"],
                             "ok": r["ok"]})
         return r
@@ -395,4 +451,4 @@ class AgentEnv:
     def t_terminer_session(self, compte_rendu=""):
         self.done = True
         self.compte_rendu = compte_rendu.strip()
-        return {"ok": True, "message": "Séance terminée. À la prochaine séance !"}
+        return {"ok": True, "message": "Séance terminée."}

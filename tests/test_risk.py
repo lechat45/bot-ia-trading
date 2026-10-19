@@ -24,7 +24,7 @@ def cfg():
                   live_refused=False, dry_run=False)
 
 
-def val(cash=25_000, positions=()):
+def val(cash=100_000, positions=()):
     invested = sum(p["valeur"] for p in positions)
     return {"cash": cash, "valeur": cash + invested, "positions": list(positions)}
 
@@ -38,10 +38,10 @@ def test_achat_valide():
 
 
 def test_limite_par_titre_et_clamp():
-    ok, msg, _ = check_buy(cfg(), "a", val(), "AAPL", 200, 9000, 7, 15, [])
-    assert not ok and "maximum 6250" in msg
-    ok, _, d = check_buy(cfg(), "a", val(), "AAPL", 200, 9000, 7, 15, [], clamp=True)
-    assert ok and d["qty"] == 31
+    ok, msg, _ = check_buy(cfg(), "a", val(), "AAPL", 200, 20000, 7, 15, [])
+    assert not ok and "maximum 15000" in msg  # 15 % du compte de l'équipe
+    ok, _, d = check_buy(cfg(), "a", val(), "AAPL", 200, 20000, 7, 15, [], clamp=True)
+    assert ok and d["qty"] == 75
 
 
 def test_stop_et_ratio():
