@@ -345,19 +345,22 @@ class Router:
     def web_search(self, question: str, who: str = "web"):
         gem = self.providers["gemini"]
         order = [RELAY_KEY] + [i for i in range(len(gem.keys)) if i != RELAY_KEY]
-        last = None
-        for ki in [k for k in order if k < len(gem.keys)]:
-            for model in DEFAULT_MODELS["gemini"][:3]:
-                try:
-                    if model not in gem.available(gem.keys[ki]):
-                        continue
-                    text, sources, tokens = gem.search(gem.keys[ki], model, question)
-                    self._record(who, "gemini", ki, tokens)
-                    return {"reponse": text[:1800], "sources": sources}
-                except RateLimited as e:
-                    last = e
-                    if e.wait <= 30:
-                        time.sleep(e.wait + 1)
-                except (LLMError, requests.RequestException) as e:
-                    last = e
-        return {"erreur": f"recherche indisponible ({str(last)[:120]})"}
+        limited = False
+        for attempt in range(2):  # 2e tour après une pause si toutes les clés étaient limitées
+            for ki in [k for k in order if k < len(gem.keys)]:
+                for model in DEFAULT_MODELS["gemini"][:3]:
+                    try:
+                        if model not in gem.available(gem.keys[ki]):
+                            continue
+                        text, sources, tokens = gem.search(gem.keys[ki], model, question)
+                        self._record(who, "gemini", ki, tokens)
+                        return {"reponse": text[:1800], "sources": sources}
+                    except RateLimited:
+                        limited = True
+                    except (LLMError, requests.RequestException) as e:
+                        log.info("recherche web : %s", e)
+            if not limited:
+                break
+            time.sleep(35)
+        why = "le quota gratuit de Gemini est atteint pour le moment" if limited else "le service ne répond pas"
+        return {"erreur": f"Recherche web indisponible : {why}. Note l'information comme inconnue et avance."}

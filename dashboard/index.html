@@ -38,29 +38,29 @@
   </header>
 
   <div class="shell">
-    <nav class="sidenav" aria-label="Sections">
-      <a class="nav-item active" href="#vue" data-s="vue"><span class="js-ic" data-ic="home"></span>Vue d'ensemble</a>
-      <a class="nav-item" href="#ia" data-s="ia"><span class="js-ic" data-ic="users"></span>L'équipe<span class="count">6</span></a>
-      <a class="nav-item" href="#plan" data-s="plan"><span class="js-ic" data-ic="calendar"></span>Plan d'ouverture<span class="count" id="nav-plan"></span></a>
-      <a class="nav-item" href="#positions" data-s="positions"><span class="js-ic" data-ic="briefcase"></span>Positions<span class="count" id="nav-pos"></span></a>
-      <a class="nav-item" href="#historique" data-s="historique"><span class="js-ic" data-ic="clock"></span>Historique<span class="count" id="nav-sess"></span></a>
+    <nav class="sidenav" aria-label="Pages">
+      <a class="nav-item active" href="#accueil" data-p="accueil"><span class="js-ic" data-ic="home"></span>Accueil</a>
+      <a class="nav-item" href="#ia" data-p="ia"><span class="js-ic" data-ic="users"></span>Les IA<span class="count">6</span></a>
+      <a class="nav-item" href="#journal" data-p="journal"><span class="js-ic" data-ic="list"></span>Journal</a>
+      <a class="nav-item" href="#bureau" data-p="bureau"><span class="js-ic" data-ic="desktop"></span>Bureau</a>
       <div class="nav-foot" id="nav-foot"></div>
     </nav>
 
     <main class="content" id="main">
-      <section class="section" id="vue">
+      <div id="banner" class="banner" hidden></div>
+
+      <!-- ============ Page 1 : Accueil, les chiffres ============ -->
+      <section class="page" id="page-accueil" data-page="accueil">
         <div class="page-head">
           <div>
             <div class="overline">6 IA en équipe · fonctions d'Aywen</div>
-            <h1>Vue d'ensemble</h1>
+            <h1>Accueil</h1>
           </div>
           <div class="status-mobile">
             <span class="js-mode pill">…</span>
             <span class="js-market market"><i class="dot"></i><span>Marché…</span></span>
           </div>
         </div>
-
-        <div id="banner" class="banner" hidden></div>
 
         <div class="band">
           <svg class="band-curves" viewBox="0 0 560 280" aria-hidden="true">
@@ -95,11 +95,11 @@
         <div class="row-2">
           <div class="card">
             <div class="card-head">
-              <span class="ic-box js-ic" data-ic="gerant"></span>
-              <h2>Dernière décision de l'équipe</h2>
-              <span class="right" id="decision-when"></span>
+              <span class="ic-box js-ic" data-ic="chart"></span>
+              <h2>Évolution du compte</h2>
+              <span class="right">30 derniers jours</span>
             </div>
-            <div id="decision"></div>
+            <div id="chart"></div>
           </div>
           <div class="card">
             <div class="card-head">
@@ -115,56 +115,77 @@
 
         <div class="card">
           <div class="card-head">
-            <span class="ic-box js-ic" data-ic="chart"></span>
-            <h2>Évolution du compte</h2>
-            <span class="right" id="chart-legend"></span>
+            <span class="ic-box js-ic" data-ic="briefcase"></span>
+            <h2>Positions</h2>
+            <span class="right">Stop loss, prix actuel et objectif de gain</span>
           </div>
-          <div id="chart"></div>
-        </div>
-      </section>
-
-      <section class="section" id="ia">
-        <div class="section-head">
-          <h2>L'équipe</h2>
-          <span class="muted">4 analystes proposent, le critique contrôle, le gérant décide. Cliquez sur une IA pour voir son cerveau.</span>
-        </div>
-        <div class="agents" id="agents"></div>
-      </section>
-
-      <section class="section" id="plan">
-        <div class="section-head"><h2>Plan d'ouverture</h2><span class="muted" id="plan-sub"></span></div>
-        <div class="card" id="plan-card"></div>
-      </section>
-
-      <section class="section" id="positions">
-        <div class="section-head"><h2>Positions</h2><span class="muted">Stop loss, prix actuel et objectif de gain</span></div>
-        <div class="card">
           <div class="table-wrap" id="positions-table"></div>
         </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="calendar"></span>
+            <h2>Plan d'ouverture</h2>
+            <span class="right" id="plan-sub"></span>
+          </div>
+          <div id="plan-card"></div>
+        </div>
       </section>
 
-      <section class="section" id="historique">
-        <div class="section-head"><h2>Historique des séances</h2><span class="muted" id="sess-count"></span></div>
+      <!-- ============ Page 2 : les IA et leur réflexion ============ -->
+      <section class="page" id="page-ia" data-page="ia" hidden>
+        <div class="page-head">
+          <div>
+            <div class="overline">4 analystes, un critique, un gérant</div>
+            <h1>Les IA</h1>
+          </div>
+          <label class="field"><span class="small muted">Séance</span><select class="js-session select"></select></label>
+        </div>
+        <div class="ia-layout">
+          <div class="ia-list" id="ia-list"></div>
+          <div class="card ia-panel" id="ia-panel"></div>
+        </div>
+      </section>
+
+      <!-- ============ Page 3 : le journal (outils et réflexions) ============ -->
+      <section class="page" id="page-journal" data-page="journal" hidden>
+        <div class="page-head">
+          <div>
+            <div class="overline">Chaque outil utilisé et chaque réflexion</div>
+            <h1>Journal</h1>
+          </div>
+          <label class="field"><span class="small muted">Séance</span><select class="js-session select"></select></label>
+        </div>
         <div class="card">
-          <div class="history">
-            <div class="sess-list" id="sess-list"></div>
-            <div class="detail" id="detail"></div>
+          <div class="filters" id="j-agents"></div>
+          <div class="filters" id="j-types"></div>
+          <div class="usage" id="j-usage"></div>
+        </div>
+        <div class="card"><div id="j-timeline"></div></div>
+      </section>
+
+      <!-- ============ Page 4 : le bureau façon Windows ============ -->
+      <section class="page page-desk" id="page-bureau" data-page="bureau" hidden>
+        <div class="desktop" id="desktop">
+          <div class="desk-icons" id="desk-icons"></div>
+          <div class="desk-windows" id="desk-windows"></div>
+          <div class="desk-hint" id="desk-hint">Ouvrez une icône pour voir ce que les IA ont lu pendant la séance.</div>
+          <div class="taskbar">
+            <label class="tb-session"><span class="js-ic" data-ic="clock"></span><select id="desk-scope" class="select" aria-label="Séances affichées"></select></label>
+            <div class="tb-apps" id="tb-apps"></div>
+            <div class="tb-clock" id="tb-clock"></div>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <nav class="tabbar" aria-label="Sections">
-    <a class="active" href="#vue" data-s="vue"><span class="js-ic" data-ic="home"></span>Accueil</a>
-    <a href="#ia" data-s="ia"><span class="js-ic" data-ic="users"></span>Équipe</a>
-    <a href="#plan" data-s="plan"><span class="js-ic" data-ic="calendar"></span>Plan</a>
-    <a href="#positions" data-s="positions"><span class="js-ic" data-ic="briefcase"></span>Positions</a>
-    <a href="#historique" data-s="historique"><span class="js-ic" data-ic="clock"></span>Séances</a>
+  <nav class="tabbar" aria-label="Pages">
+    <a class="active" href="#accueil" data-p="accueil"><span class="js-ic" data-ic="home"></span>Accueil</a>
+    <a href="#ia" data-p="ia"><span class="js-ic" data-ic="users"></span>Les IA</a>
+    <a href="#journal" data-p="journal"><span class="js-ic" data-ic="list"></span>Journal</a>
+    <a href="#bureau" data-p="bureau"><span class="js-ic" data-ic="desktop"></span>Bureau</a>
   </nav>
-
-  <div class="scrim" id="scrim"></div>
-  <aside class="drawer" id="drawer" aria-hidden="true"></aside>
 
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-box">

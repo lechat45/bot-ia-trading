@@ -1,6 +1,6 @@
 "use strict";
 
-/* ---------- Utilitaires ---------- */
+/* ====================================================================== Utilitaires */
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
@@ -12,9 +12,12 @@ const num = (v) => (v === null || v === undefined || v === "" || isNaN(+v) ? nul
 const money = (v, d = 0) => num(v) === null ? "—" : `${new Intl.NumberFormat("fr-FR", {
   minimumFractionDigits: d, maximumFractionDigits: d }).format(v)} $`;
 const pct = (v, d = 2) => num(v) === null ? "—" : `${v > 0 ? "+" : ""}${(+v).toFixed(d).replace(".", ",")} %`;
+const nb = (v, d = 1) => num(v) === null ? "—" : (+v).toLocaleString("fr-FR", { maximumFractionDigits: d });
 const tone = (v) => (v > 0 ? "up" : v < 0 ? "down" : "muted");
 const fmtDate = (d, opt) => new Date(d).toLocaleString("fr-FR", { timeZone: "Europe/Paris", ...opt });
 const hm = (d) => fmtDate(d, { hour: "2-digit", minute: "2-digit" });
+const dayHm = (d) => fmtDate(d, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+const tryJSON = (s) => { try { return JSON.parse(s); } catch { return null; } };
 
 // En ligne (GitHub Pages), pas de serveur : on lit les fichiers générés par build_site.py.
 const STATIC = !!window.STATIC_SITE;
@@ -25,10 +28,12 @@ function staticPath(p) {
 }
 const api = (p, opt) => fetch(STATIC ? `${staticPath(p)}?v=${Date.now()}` : p, opt).then((r) => r.json());
 
-/* ---------- Icônes Flow : grille 24 px, trait 1,6 px, bouts arrondis ---------- */
+/* ====================================================================== Icônes Flow (trait 1,6 px) */
 const P = {
   home: '<path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/>',
   users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><path d="M15.5 5.6a3 3 0 0 1 0 5.8M17.5 14.6c1.6.6 2.7 2 3 4.4"/>',
+  list: '<path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9"/><circle cx="4.8" cy="12" r=".9"/><circle cx="4.8" cy="17.5" r=".9"/>',
+  desktop: '<rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M9 20h6M12 16.5V20"/>',
   briefcase: '<rect x="3.5" y="7" width="17" height="12.5" rx="2"/><path d="M8.5 7V5.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17"/>',
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   calendar: '<rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
@@ -38,6 +43,8 @@ const P = {
   moon: '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  minus: '<path d="M6 12h12"/>',
+  square: '<rect x="6" y="6" width="12" height="12" rx="1.5"/>',
   up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
   down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
@@ -53,6 +60,7 @@ const P = {
   chat: '<path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4 3.5v-3.5h0.5a2 2 0 0 1-2-2z"/>',
   shield: '<path d="M12 3.5 5 6v5.5c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9V6z"/>',
   send: '<path d="M20 4 3.5 11l6.5 2.5L12.5 20z"/><path d="m10 13.5 4-4"/>',
+  note: '<path d="M5 4.5h14v10l-5 5H5z"/><path d="M14 19.5v-5h5M8.5 9h7M8.5 12h4"/>',
   // Les IA
   qualite: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4M8.5 11h5M11 8.5v5"/>',
   equilibre: '<path d="M12 4v16M7 20h10M5 7.5h14"/><path d="m5 7.5-2.5 6a2.5 2.5 0 0 0 5 0zM19 7.5l-2.5 6a2.5 2.5 0 0 0 5 0z"/>',
@@ -84,7 +92,11 @@ const STATUT = { en_attente: ["En attente", "pill-peach"], execute: ["Exécuté"
   rejete: ["Refusé", "pill-danger"], erreur: ["Erreur", "pill-danger"] };
 const VERDICT = { ok: ["ok", "pill-sage"], reserve: ["réserve", "pill-peach"], rejet: ["rejet", "pill-danger"] };
 
-const S = { ov: null, sessions: [], brain: null, current: null, notes: {}, live: null, wasRunning: false, tab: null };
+const S = {
+  ov: null, sessions: [], notes: {}, live: null, wasRunning: false, page: "accueil",
+  sel: null, cache: {}, iaSel: "gerant", jAgent: "tous", jType: "tout",
+  deskScope: "last", deskData: [], wins: {}, z: 20,
+};
 
 function toast(msg, ic = "info") {
   const t = $("#toast");
@@ -97,12 +109,20 @@ const empty = (ic, title, sub) =>
   `<div class="empty"><span class="ic-box">${icon(ic)}</span><b>${esc(title)}</b><span class="small">${esc(sub)}</span></div>`;
 const agentOf = (id) => S.ov?.agents.find((a) => a.id === id) || { id, nom: id, provider: "", cle: "", role: "" };
 const shortName = (id) => agentOf(id).nom.replace("Analyste ", "");
-const avatar = (id, small) => `<span class="avatar${small ? " sm" : ""}" style="--c:${META[id]?.color || "var(--coral)"}">${icon(id)}</span>`;
+const avatar = (id, small) => `<span class="avatar${small ? " sm" : ""}" style="--c:${META[id]?.color || "var(--coral)"}" title="${esc(agentOf(id).nom)}">${icon(id)}</span>`;
 const providerPill = (a) => `<span class="pill ${a.provider === "gemini" ? "pill-sky" : "pill-peach"}">${a.provider === "gemini" ? "Gemini" : "Groq"} · clé ${a.cle}</span>`;
 const modelName = (m) => String(m || "").replace(/^(gemini|groq)#\d:/, "").replace("openai/", "").replace("qwen/", "");
 const verdictPill = (v) => v ? `<span class="pill ${VERDICT[v.verdict]?.[1] || ""}">critique : ${esc(VERDICT[v.verdict]?.[0] || v.verdict)}</span>` : '<span class="pill">pas d\'avis</span>';
+const modePill = (m) => `<span class="pill ${MODE[m]?.[1] || ""}">${esc(MODE[m]?.[0] || m || "Séance")}</span>`;
+const sessLabel = (s) => `${MODE[s.mode]?.[0] || "Séance"} du ${s.quand || s.nom}${s.simulation ? " (simulation)" : ""}`;
 
-/* ---------- Thème ---------- */
+function actionPill(action) {
+  const a = String(action || "").toLowerCase();
+  const cls = a.startsWith("vend") || a.startsWith("all") ? "pill-danger" : a === "ajuster_stop" ? "pill-sky" : "pill-sage";
+  return `<span class="pill ${cls}">${esc(String(action || "").replace("_", " "))}</span>`;
+}
+
+/* ====================================================================== Thème */
 function applyThemeButton() {
   const dark = document.documentElement.dataset.theme === "dark";
   $("#theme-btn").innerHTML = icon(dark ? "sun" : "moon");
@@ -116,7 +136,29 @@ $("#theme-btn").onclick = () => {
   applyThemeButton();
 };
 
-/* ---------- En-tête ---------- */
+/* ====================================================================== Navigation entre les 4 pages */
+const PAGES = ["accueil", "ia", "journal", "bureau"];
+function route() {
+  const p = location.hash.slice(1).split("?")[0];
+  S.page = PAGES.includes(p) ? p : "accueil";
+  $$(".page").forEach((s) => (s.hidden = s.dataset.page !== S.page));
+  $$(".nav-item, .tabbar a").forEach((a) => a.classList.toggle("active", a.dataset.p === S.page));
+  document.body.classList.toggle("on-desk", S.page === "bureau");
+  window.scrollTo(0, 0);
+  renderPage();
+}
+function go(page) { if (location.hash !== `#${page}`) location.hash = page; else route(); }
+window.addEventListener("hashchange", route);
+
+function renderPage() {
+  if (!S.ov) return;
+  if (S.page === "accueil") { renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov); }
+  if (S.page === "ia") { renderIAList(); renderIAPanel(); }
+  if (S.page === "journal") renderJournal();
+  if (S.page === "bureau") renderDesktop();
+}
+
+/* ====================================================================== En-tête */
 function relTime(iso) {
   const ms = new Date(iso) - Date.now();
   if (isNaN(ms)) return "";
@@ -153,7 +195,7 @@ function renderHeader(o) {
     <div class="row"><span>Écart max à l'ouverture</span><span>${esc(L.max_gap_pct)} %</span></div>`;
 }
 
-/* ---------- Bandeau ---------- */
+/* ====================================================================== Page 1 : Accueil */
 function renderBand(o) {
   const a = o.compte;
   if (!a) return;
@@ -175,35 +217,50 @@ function renderBand(o) {
   $("#k-pos").textContent = `${pos.length}`;
   $("#k-pos-sub").innerHTML = pos.length ? `Latent : <span class="${tone(pl)}">${esc(money(pl, 0))}</span> · max ${esc(o.limites.max_positions)}`
     : `${((cash / total) * 100).toFixed(0)} % en liquidités`;
-  $("#nav-pos").textContent = pos.length || "";
 }
 
-/* ---------- Dernière décision de l'équipe ---------- */
-function proposalRow(p) {
-  const det = p.action === "acheter"
-    ? `${money(p.montant, 0)} · stop -${p.stop_loss_pct} % · objectif +${p.take_profit_pct} %`
-    : `${p.pourcentage ?? 100} % de la position`;
-  return `<div class="order">${avatar(p.auteur, true)}${actionPill(p.action)}<span class="mono"><b>${esc(p.symbole)}</b></span><span class="small muted">${esc(det)}</span>
-    ${verdictPill(p.avis)}${p.retenue ? `<span class="pill pill-coral">${icon("check")}retenue</span>` : ""}
-    <details class="why"><summary>Thèse de ${esc(shortName(p.auteur))}${p.confiance ? ` · confiance ${esc(p.confiance)}` : ""}</summary>${md(p.these)}${p.avis?.raison ? `<br><br><b>Critique :</b> ${md(p.avis.raison)}` : ""}</details></div>`;
+function smoothPath(pts) {
+  if (pts.length < 2) return "";
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+  }
+  return d;
 }
 
-function renderDecision() {
-  const d = S.brain;
-  if (!d) {
-    $("#decision").innerHTML = empty("gerant", "Pas encore de séance", "Lancez une simulation pour voir l'équipe proposer, contrôler et décider.");
-    $("#decision-when").textContent = "";
+function renderChart(o) {
+  const box = $("#chart");
+  let pts = (o.historique || []).map((p) => ({ t: p.t * 1000, v: p.v }));
+  if (pts.length < 2) pts = (o.historique_ia || []).map((r) => ({ t: new Date(r.date).getTime(), v: r.valeur }));
+  if (pts.length < 2) {
+    box.innerHTML = empty("chart", "Pas encore d'historique", "La courbe apparaîtra après les premières séances.");
     return;
   }
-  $("#decision-when").innerHTML = `${MODE[d.mode] ? `<span class="pill ${MODE[d.mode][1]}">${esc(MODE[d.mode][0])}</span>` : ""}${d.simulation ? '<span class="pill">Simulation</span>' : ""}${esc(fmtDate(d.ts, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))}`;
-  const props = d.propositions || [];
-  $("#decision").innerHTML = `
-    <div class="synth"><div class="who">${icon("gerant")}Le gérant</div><p class="clamp">${md(d.decision || "—")}</p></div>
-    <div class="sub-h overline" style="margin-top:16px">Propositions des analystes (${props.length})</div>
-    ${props.length ? `<div class="list">${props.map(proposalRow).join("")}</div>` : '<p class="muted small">Aucune proposition à cette séance.</p>'}`;
+  const W = box.clientWidth || 700, H = box.clientHeight || 260, L = 70, R = 12, T = 12, B = 28;
+  const t0 = pts[0].t, t1 = pts[pts.length - 1].t;
+  let lo = Math.min(...pts.map((p) => p.v)), hi = Math.max(...pts.map((p) => p.v));
+  const pad = (hi - lo) * 0.15 || hi * 0.01 || 1;
+  lo -= pad; hi += pad;
+  const x = (t) => L + ((t - t0) / ((t1 - t0) || 1)) * (W - L - R);
+  const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+  let grid = "";
+  for (let k = 0; k <= 4; k++) {
+    const v = lo + ((hi - lo) * k) / 4;
+    grid += `<line class="c-grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="c-label" x="${L - 10}" y="${y(v) + 4}" text-anchor="end">${esc(money(v, 0))}</text>`;
+  }
+  for (let k = 0; k < 4; k++) {
+    const t = t0 + ((t1 - t0) * k) / 3;
+    grid += `<text class="c-label" x="${x(t)}" y="${H - 6}" text-anchor="${k === 0 ? "start" : k === 3 ? "end" : "middle"}">${esc(fmtDate(t, { day: "numeric", month: "short" }))}</text>`;
+  }
+  const xy = pts.map((p) => [x(p.t), y(p.v)]);
+  const last = xy[xy.length - 1];
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Évolution de la valeur du compte">
+    <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="c-stop-a"/><stop offset="1" class="c-stop-b"/></linearGradient></defs>
+    ${grid}<path d="${smoothPath(xy)} L${last[0]},${H - B} L${xy[0][0]},${H - B} Z" fill="url(#area)"/>
+    <path class="c-line" d="${smoothPath(xy)}"/><circle class="c-dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/></svg>`;
 }
 
-/* ---------- Journée de bourse ---------- */
 function todayParis(d) { return fmtDate(d, { year: "numeric", month: "2-digit", day: "2-digit" }); }
 
 function renderDay() {
@@ -236,239 +293,6 @@ function renderDay() {
   }).join("");
 }
 
-function renderLive() {
-  const L = S.live;
-  if (!L) return;
-  const r = L.runner || {}, etat = L.etat || {};
-  const running = r.running || (etat.running && Date.now() - new Date(etat.maj) < 10 * 60e3);
-  const agents = etat.agents || {};
-  $("#live").innerHTML = running ? Object.entries(agents).map(([id, st]) => {
-    const label = st.statut === "reflechit" ? `<span class="typing"><i></i><i></i><i></i></span>réfléchit…`
-      : st.statut === "outil" ? esc(st.action) : st.statut === "termine" ? `${icon("check")}${esc(st.action || "terminé")}`
-      : st.statut === "erreur" ? `<span class="down">erreur</span>` : "attend son tour";
-    return `<div class="live-row">${avatar(id, true)}<b>${esc(shortName(id))}</b><span class="live-act">${label}</span><span class="small muted">${st.etapes || 0} outils</span></div>`;
-  }).join("") : "";
-  const st = $("#live-status");
-  st.innerHTML = running ? `<span class="pill pill-coral"><i class="dot run"></i>${esc(MODE[etat.mode]?.[0] || "Séance")}${etat.simulation ? " (simulation)" : ""} en cours</span>`
-    : r.code === 0 ? `<span class="pill pill-sage">${icon("check")}Terminée</span>`
-    : r.code ? `<span class="pill pill-danger">Erreur (code ${esc(r.code)})</span>` : "En veille";
-  const con = $("#console");
-  if (!STATIC && (r.logs || []).length) {
-    con.hidden = false;
-    const stick = con.scrollTop + con.clientHeight >= con.scrollHeight - 30;
-    con.innerHTML = r.logs.map((l) => `<span class="${/erreur|error|échec|traceback/i.test(l) ? "err" : /exécuté|terminée|planifié/i.test(l) ? "ok" : ""}">${esc(l)}</span>`).join("\n");
-    if (stick) con.scrollTop = con.scrollHeight;
-  }
-  $("#btn-sim").disabled = !STATIC && running;
-  $("#btn-real").disabled = running;
-  if (S.wasRunning && !running) {
-    toast(r.code === 0 || r.code == null ? "Séance terminée" : "La séance s'est arrêtée avec une erreur", r.code ? "alert" : "check");
-    refreshAll(true);
-  }
-  S.wasRunning = running;
-  renderDay();
-  renderAgents();
-}
-
-/* ---------- Graphique ---------- */
-function smoothPath(pts) {
-  if (pts.length < 2) return "";
-  let d = `M${pts[0][0]},${pts[0][1]}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
-    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
-  }
-  return d;
-}
-
-function renderChart(o) {
-  const box = $("#chart");
-  let pts = (o.historique || []).map((p) => ({ t: p.t * 1000, v: p.v }));
-  if (pts.length < 2) pts = (o.historique_ia || []).map((r) => ({ t: new Date(r.date).getTime(), v: r.valeur }));
-  $("#chart-legend").textContent = "30 derniers jours";
-  if (pts.length < 2) {
-    box.innerHTML = empty("chart", "Pas encore d'historique", "La courbe apparaîtra après les premières séances.");
-    return;
-  }
-  const W = box.clientWidth || 700, H = box.clientHeight || 260, L = 70, R = 12, T = 12, B = 28;
-  const t0 = pts[0].t, t1 = pts[pts.length - 1].t;
-  let lo = Math.min(...pts.map((p) => p.v)), hi = Math.max(...pts.map((p) => p.v));
-  const pad = (hi - lo) * 0.15 || hi * 0.01 || 1;
-  lo -= pad; hi += pad;
-  const x = (t) => L + ((t - t0) / ((t1 - t0) || 1)) * (W - L - R);
-  const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
-  let grid = "";
-  for (let k = 0; k <= 4; k++) {
-    const v = lo + ((hi - lo) * k) / 4;
-    grid += `<line class="c-grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="c-label" x="${L - 10}" y="${y(v) + 4}" text-anchor="end">${esc(money(v, 0))}</text>`;
-  }
-  for (let k = 0; k < 4; k++) {
-    const t = t0 + ((t1 - t0) * k) / 3;
-    grid += `<text class="c-label" x="${x(t)}" y="${H - 6}" text-anchor="${k === 0 ? "start" : k === 3 ? "end" : "middle"}">${esc(fmtDate(t, { day: "numeric", month: "short" }))}</text>`;
-  }
-  const xy = pts.map((p) => [x(p.t), y(p.v)]);
-  const last = xy[xy.length - 1];
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Évolution de la valeur du compte">
-    <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="c-stop-a"/><stop offset="1" class="c-stop-b"/></linearGradient></defs>
-    ${grid}<path d="${smoothPath(xy)} L${last[0]},${H - B} L${xy[0][0]},${H - B} Z" fill="url(#area)"/>
-    <path class="c-line" d="${smoothPath(xy)}"/><circle class="c-dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/></svg>`;
-}
-
-/* ---------- L'équipe ---------- */
-function brainOf(id) { return S.brain?.agents?.[id] || null; }
-
-function stats(b) {
-  if (!b) return "";
-  const out = [];
-  if (b.propositions?.length) out.push(`${b.propositions.length} proposition${b.propositions.length > 1 ? "s" : ""}`);
-  if (b.avis?.length) out.push(`${b.avis.length} avis`);
-  if (b.ordres?.length) out.push(`${b.ordres.length} ordre${b.ordres.length > 1 ? "s" : ""}`);
-  return out.map((s) => `<span class="pill pill-coral">${esc(s)}</span>`).join("");
-}
-
-function renderAgents() {
-  const o = S.ov;
-  if (!o) return;
-  const etat = S.live?.etat || {}, running = S.live?.runner?.running || etat.running;
-  $("#agents").innerHTML = o.agents.map((a) => {
-    const m = META[a.id] || {}, b = brainOf(a.id);
-    const st = etat.agents?.[a.id] || {};
-    const thinking = running && ["reflechit", "outil"].includes(st.statut);
-    const status = thinking
-      ? `<span class="typing"><i></i><i></i><i></i></span><span style="color:var(--coral-soft);font-weight:600">${esc(st.statut === "outil" ? st.action : "réfléchit…")}</span>`
-      : !a.cle_configuree ? `<span class="pill pill-peach">${icon("key")}Clé manquante, relais par une autre</span>`
-      : `<i class="dot"></i>${b ? `Dernière séance : ${esc(MODE[S.brain.mode]?.[0] || "")} du ${esc(fmtDate(S.brain.ts, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))}` : "En veille"}`;
-    return `<article class="card agent ${thinking ? "thinking" : ""}" data-id="${esc(a.id)}" tabindex="0" role="button" aria-label="Voir le cerveau de ${esc(a.nom)}">
-      <div class="agent-top">${avatar(a.id)}<div><h3>${esc(a.nom)}</h3><div class="tag">${esc(m.tag)}</div></div></div>
-      <div class="chips">${providerPill(a)}<span class="pill mono">${esc(modelName(b?.modele || a.modele))}</span>${stats(b)}</div>
-      <p class="excerpt">${esc(plain(b?.compte_rendu) || "Pas encore de séance : lancez une simulation pour voir son raisonnement.")}</p>
-      <div class="agent-status">${status}</div>
-    </article>`;
-  }).join("");
-  $$(".agent").forEach((el) => {
-    el.onclick = () => openDrawer(el.dataset.id);
-    el.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDrawer(el.dataset.id); } };
-  });
-}
-
-/* ---------- Le « cerveau » : chaque réflexion et chaque outil ---------- */
-function toolLabel(st) {
-  const a = st.args || {};
-  const L = {
-    consulter_portefeuille: ["briefcase", "Consulte le portefeuille"],
-    screener: ["filter", `Screener : ${String(a.critere || "").replaceAll("_", " ")}`],
-    historique_prix: ["chart", `Historique du cours : ${a.symbole || ""}`],
-    donnees_financieres: ["doc", `Données financières : ${a.symbole || ""}`],
-    actualites: ["news", `Actualités : ${a.symbole || "marché"}`],
-    recherche_web: ["search", `Recherche web : « ${a.question || ""} »`],
-    sentiment_reseaux: ["users", `Sentiment des réseaux : ${a.symbole || ""}`],
-    ecrire_notes: ["edit", "Met à jour ses notes"],
-    proposer_ordre: ["send", `Propose : ${a.action || ""} ${a.symbole || ""}${a.montant_usd ? ` pour ${money(a.montant_usd, 0)}` : ""}`],
-    donner_avis: ["shield", `Avis sur ${a.id || ""} : ${a.verdict || ""}`],
-    passer_ordre: ["wallet", `Ordre : ${a.action || ""} ${a.symbole || ""}${a.montant_usd ? ` pour ${money(a.montant_usd, 0)}` : ""}${a.stop_loss_pct ? ` · stop -${a.stop_loss_pct} % · objectif +${a.take_profit_pct} %` : ""}`],
-    annuler_ordre: ["x", `Annule l'ordre planifié sur ${a.symbole || ""}`],
-    ajuster_stop: ["shield", `Remonte le stop de ${a.symbole || ""} à ${money(a.nouveau_stop, 2)}`],
-    lire_skill: ["book", `Lit le skill « ${a.nom || ""} »`],
-    terminer_session: ["check", "Termine la séance"],
-  };
-  return L[st.nom] || ["spark", st.nom];
-}
-
-function brain(steps) {
-  if (!steps?.length) return '<p class="muted">Aucune étape enregistrée.</p>';
-  return `<ol class="brain">${steps.map((st) => {
-    let ic, title, body = "", details = "";
-    if (st.type === "pensee") { ic = "chat"; title = "Réflexion"; body = st.texte; }
-    else if (st.type === "notes") { ic = "book"; title = "Relit ses notes"; body = st.texte; }
-    else if (st.type === "refus") { ic = "alert"; title = `Refusé par les garde-fous (${st.symbole || ""})`; body = st.raison; }
-    else {
-      [ic, title] = toolLabel(st);
-      const a = st.args || {};
-      body = { passer_ordre: a.these, proposer_ordre: a.these, donner_avis: a.raison, ecrire_notes: a.contenu,
-        terminer_session: a.compte_rendu }[st.nom] || "";
-      if (st.resultat && !["ecrire_notes", "terminer_session", "lire_skill", "donner_avis"].includes(st.nom)) {
-        details = `<details><summary>Résultat de l'outil</summary><pre>${esc(st.resultat)}</pre></details>`;
-      }
-    }
-    const kind = st.type === "pensee" ? "think" : st.type === "refus" ? "refus"
-      : ["passer_ordre", "proposer_ordre", "donner_avis"].includes(st.nom) ? "order" : "tool";
-    return `<li class="b-step b-${kind}"><span class="b-ic">${icon(ic)}</span><div class="b-body"><div class="b-title">${esc(title)}<span class="b-time">${esc(hm(st.t))}</span></div>${body ? `<div class="b-text">${md(body)}</div>` : ""}${details}</div></li>`;
-  }).join("")}</ol>`;
-}
-
-function agentWork(id, b) {
-  if (!b) return "";
-  let html = "";
-  if (b.propositions?.length) {
-    const all = (S.brain?.propositions || []).filter((p) => p.auteur === id);
-    html += `<div><div class="overline sub-h">Ses propositions</div><div class="list">${(all.length ? all : b.propositions).map(proposalRow).join("")}</div></div>`;
-  }
-  if (b.avis?.length) {
-    html += `<div><div class="overline sub-h">Ses avis</div><div class="list">${b.avis.map((v) => `<div class="order"><span class="pill ${VERDICT[v.verdict]?.[1] || ""}">${esc(VERDICT[v.verdict]?.[0] || v.verdict)}</span><span class="mono small">${esc(v.id)}</span><div class="why">${md(v.raison)}</div></div>`).join("")}</div></div>`;
-  }
-  if (b.ordres?.length) {
-    html += `<div><div class="overline sub-h">Ses ordres</div><div class="list">${b.ordres.map((o) => `<div class="order">${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span>${o.source ? `<span class="pill mono">${esc(o.source)}</span>` : ""}<span class="small muted">${esc(o.resultat || "")}</span></div>`).join("")}</div></div>`;
-  }
-  return html;
-}
-
-let lastFocus = null;
-function openDrawer(id) {
-  const a = agentOf(id), m = META[id] || {}, b = brainOf(id);
-  lastFocus = document.activeElement;
-  $("#drawer").innerHTML = `<div class="drawer-head">${avatar(id)}
-      <div><h3>${esc(a.nom)}</h3><div class="chips" style="margin-top:6px"><span class="pill">${esc(ROLE[a.role] || "")}</span>${providerPill(a)}<span class="pill mono">${esc(modelName(b?.modele || a.modele))}</span></div></div>
-      <button class="icon-btn" id="drawer-x" aria-label="Fermer">${icon("x")}</button>
-    </div>
-    <div class="drawer-body">
-      <div><div class="overline sub-h">Son rôle</div><p>${esc(m.desc)}</p></div>
-      ${b ? `<div class="synth"><div class="who">${icon(id)}Compte rendu de la dernière séance</div><p>${md(b.compte_rendu || "—")}</p></div>` : ""}
-      ${agentWork(id, b)}
-      <div><div class="overline sub-h">Son cerveau pendant la dernière séance${S.brain ? ` (${esc(MODE[S.brain.mode]?.[0] || "")}, ${esc(fmtDate(S.brain.ts, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))})` : ""}</div>${b ? brain(b.etapes) : '<p class="muted">Pas encore de séance.</p>'}</div>
-      <div><div class="overline sub-h">${id === "gerant" ? "Journal de bord de l'équipe" : "Ses notes"} (sa mémoire entre deux séances)</div><div class="notes">${esc(S.notes[id] || "Aucune note pour l'instant. Les notes sont enregistrées lors des séances réelles, pas en simulation.")}</div></div>
-    </div>`;
-  $("#drawer").classList.add("open");
-  $("#drawer").setAttribute("aria-hidden", "false");
-  $("#scrim").classList.add("open");
-  $("#drawer-x").onclick = closeDrawer;
-  $("#drawer-x").focus();
-}
-function closeDrawer() {
-  if (!$("#drawer").classList.contains("open")) return;
-  $("#drawer").classList.remove("open");
-  $("#drawer").setAttribute("aria-hidden", "true");
-  $("#scrim").classList.remove("open");
-  lastFocus?.focus?.();
-}
-
-/* ---------- Plan d'ouverture ---------- */
-function actionPill(action) {
-  const a = String(action || "").toLowerCase();
-  const cls = a.startsWith("vend") || a.startsWith("all") ? "pill-danger" : a === "ajuster_stop" ? "pill-sky" : "pill-sage";
-  return `<span class="pill ${cls}">${esc(String(action || "").replace("_", " "))}</span>`;
-}
-
-function planRow(o) {
-  const [lab, cls] = STATUT[o.statut] || [o.statut, ""];
-  const det = o.action === "acheter"
-    ? `${money(o.montant_usd, 0)} · ~${o.qty_estimee} à ${money(o.prix_reference, 2)} · stop -${o.stop_loss_pct} % · objectif +${o.take_profit_pct} %`
-    : `${o.pourcentage ?? 100} % de la position`;
-  return `<div class="order">${avatar(o.agent || "gerant", true)}${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span><span class="small muted">${esc(det)}</span>${o.source ? `<span class="pill mono">${esc(o.source)}</span>` : ""}<span class="pill ${cls}">${esc(lab)}</span>
-    ${o.resultat && o.statut !== "en_attente" ? `<div class="why">${esc(o.resultat)}</div>` : ""}${o.these ? `<details class="why"><summary>Thèse</summary>${md(o.these)}</details>` : ""}</div>`;
-}
-
-function renderPlan(o) {
-  const plan = o.plan || {};
-  const orders = plan.ordres || [];
-  $("#nav-plan").textContent = orders.filter((x) => x.statut === "en_attente").length || "";
-  $("#plan-sub").textContent = plan.date
-    ? `${plan.simulation ? "Simulation · " : ""}Préparé le ${fmtDate(plan.cree_le, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })} · ${plan.execute_le ? `exécuté à ${hm(plan.execute_le)}` : plan.simulation ? "non exécuté (simulation)" : "en attente de l'ouverture de New York"}`
-    : "";
-  $("#plan-card").innerHTML = orders.length ? `<div class="list">${orders.map(planRow).join("")}</div>`
-    : empty("calendar", "Aucun ordre planifié", `Chaque jour de bourse à ${o.limites?.preparation_heure ?? 9} h, l'équipe prépare les ordres de l'ouverture.`);
-}
-
-/* ---------- Positions ---------- */
 function renderPositions(o) {
   const pos = o.positions || [];
   const box = $("#positions-table");
@@ -494,85 +318,533 @@ function renderPositions(o) {
     }).join("")}</tbody></table>`;
 }
 
-/* ---------- Historique ---------- */
-const modePill = (m) => `<span class="pill ${MODE[m]?.[1] || ""}">${esc(MODE[m]?.[0] || m || "Séance")}</span>`;
+function planRow(o) {
+  const [lab, cls] = STATUT[o.statut] || [o.statut, ""];
+  const det = o.action === "acheter"
+    ? `${money(o.montant_usd, 0)} · ~${o.qty_estimee} à ${money(o.prix_reference, 2)} · stop -${o.stop_loss_pct} % · objectif +${o.take_profit_pct} %`
+    : `${o.pourcentage ?? 100} % de la position`;
+  return `<div class="order">${avatar(o.agent || "gerant", true)}${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span><span class="small muted">${esc(det)}</span>${o.source ? `<span class="pill mono">${esc(o.source)}</span>` : ""}<span class="pill ${cls}">${esc(lab)}</span>
+    ${o.resultat && o.statut !== "en_attente" ? `<div class="why">${esc(o.resultat)}</div>` : ""}${o.these ? `<details class="why"><summary>Thèse</summary>${md(o.these)}</details>` : ""}</div>`;
+}
 
-function renderSessions() {
-  const list = S.sessions;
-  $("#sess-count").textContent = list.length ? `${list.length} séance${list.length > 1 ? "s" : ""}` : "";
-  $("#nav-sess").textContent = list.length || "";
-  if (!list.length) {
-    $("#sess-list").innerHTML = "";
-    $("#detail").innerHTML = empty("clock", "Aucune séance pour l'instant", "Lancez une simulation : chaque séance apparaîtra ici avec le cerveau complet des 6 IA.");
+function renderPlan(o) {
+  const plan = o.plan || {};
+  const orders = plan.ordres || [];
+  $("#plan-sub").textContent = plan.date
+    ? `${plan.simulation ? "Simulation · " : ""}préparé le ${dayHm(plan.cree_le)} · ${plan.execute_le ? `exécuté à ${hm(plan.execute_le)}` : plan.simulation ? "non exécuté" : "en attente de l'ouverture"}`
+    : "";
+  $("#plan-card").innerHTML = orders.length ? `<div class="list">${orders.map(planRow).join("")}</div>`
+    : empty("calendar", "Aucun ordre planifié", `Chaque jour de bourse à ${o.limites?.preparation_heure ?? 9} h, l'équipe prépare les ordres de l'ouverture.`);
+}
+
+/* ====================================================================== Direct (séance en cours) */
+function renderLive() {
+  const L = S.live;
+  if (!L) return;
+  const r = L.runner || {}, etat = L.etat || {};
+  const running = r.running || (etat.running && Date.now() - new Date(etat.maj) < 10 * 60e3);
+  const agents = etat.agents || {};
+  $("#live").innerHTML = running ? Object.entries(agents).map(([id, st]) => {
+    const label = st.statut === "reflechit" ? `<span class="typing"><i></i><i></i><i></i></span>réfléchit…`
+      : st.statut === "outil" ? esc(st.action) : st.statut === "termine" ? `${icon("check")}${esc(st.action || "terminé")}`
+      : st.statut === "erreur" ? `<span class="down">erreur</span>` : "attend son tour";
+    return `<div class="live-row">${avatar(id, true)}<b>${esc(shortName(id))}</b><span class="live-act">${label}</span><span class="small muted">${st.etapes || 0} outils</span></div>`;
+  }).join("") : "";
+  $("#live-status").innerHTML = running ? `<span class="pill pill-coral"><i class="dot run"></i>${esc(MODE[etat.mode]?.[0] || "Séance")}${etat.simulation ? " (simulation)" : ""} en cours</span>`
+    : r.code === 0 ? `<span class="pill pill-sage">${icon("check")}Terminée</span>`
+    : r.code ? `<span class="pill pill-danger">Erreur (code ${esc(r.code)})</span>` : "En veille";
+  const con = $("#console");
+  if (!STATIC && (r.logs || []).length) {
+    con.hidden = false;
+    const stick = con.scrollTop + con.clientHeight >= con.scrollHeight - 30;
+    con.innerHTML = r.logs.map((l) => `<span class="${/erreur|error|échec|traceback/i.test(l) ? "err" : /exécuté|terminée|planifié/i.test(l) ? "ok" : ""}">${esc(l)}</span>`).join("\n");
+    if (stick) con.scrollTop = con.scrollHeight;
+  }
+  $("#btn-sim").disabled = !STATIC && running;
+  $("#btn-real").disabled = running;
+  if (S.wasRunning && !running) {
+    toast(r.code === 0 || r.code == null ? "Séance terminée" : "La séance s'est arrêtée avec une erreur", r.code ? "alert" : "check");
+    refreshAll(true);
+  }
+  S.wasRunning = running;
+  if (S.page === "accueil") renderDay();
+  if (S.page === "ia") renderIAList();
+}
+
+/* ====================================================================== Séances (partagées par les pages 2, 3 et 4) */
+const brainSessions = () => S.sessions.filter((s) => s.mode !== "ouverture");
+
+async function getSession(nom) {
+  if (!S.cache[nom]) S.cache[nom] = await api(`/api/session?nom=${encodeURIComponent(nom)}`);
+  return S.cache[nom];
+}
+
+function fillSessionSelects() {
+  const list = brainSessions();
+  const opts = list.map((s) => `<option value="${esc(s.nom)}">${esc(sessLabel(s))}</option>`).join("")
+    || '<option value="">Aucune séance</option>';
+  $$(".js-session").forEach((sel) => { sel.innerHTML = opts; if (S.sel) sel.value = S.sel.nom; });
+  const scope = $("#desk-scope");
+  scope.innerHTML = `<option value="last">Dernière séance</option><option value="last5">5 dernières séances</option>`
+    + list.map((s) => `<option value="${esc(s.nom)}">${esc(sessLabel(s))}</option>`).join("");
+  scope.value = S.deskScope;
+}
+
+$$(".js-session").forEach((sel) => sel.addEventListener("change", async () => {
+  if (!sel.value) return;
+  S.sel = await getSession(sel.value);
+  $$(".js-session").forEach((x) => (x.value = sel.value));
+  renderPage();
+}));
+
+/* ====================================================================== Le « cerveau » : réflexions et outils */
+function toolLabel(st) {
+  const a = st.args || {};
+  const L = {
+    consulter_portefeuille: ["briefcase", "Consulte le portefeuille"],
+    screener: ["filter", `Screener : ${String(a.critere || "").replaceAll("_", " ")}`],
+    historique_prix: ["chart", `Historique du cours : ${a.symbole || ""}`],
+    donnees_financieres: ["doc", `Données financières : ${a.symbole || ""}`],
+    actualites: ["news", `Actualités : ${a.symbole || "marché"}`],
+    recherche_web: ["search", `Recherche web : « ${a.question || ""} »`],
+    sentiment_reseaux: ["chat", `Sentiment des réseaux : ${a.symbole || ""}`],
+    ecrire_notes: ["edit", "Met à jour ses notes"],
+    proposer_ordre: ["send", `Propose : ${a.action || ""} ${a.symbole || ""}${a.montant_usd ? ` pour ${money(a.montant_usd, 0)}` : ""}`],
+    donner_avis: ["shield", `Avis sur ${a.id || ""} : ${a.verdict || ""}`],
+    passer_ordre: ["wallet", `Ordre : ${a.action || ""} ${a.symbole || ""}${a.montant_usd ? ` pour ${money(a.montant_usd, 0)}` : ""}${a.stop_loss_pct ? ` · stop -${a.stop_loss_pct} % · objectif +${a.take_profit_pct} %` : ""}`],
+    annuler_ordre: ["x", `Annule l'ordre planifié sur ${a.symbole || ""}`],
+    ajuster_stop: ["shield", `Remonte le stop de ${a.symbole || ""} à ${money(a.nouveau_stop, 2)}`],
+    lire_skill: ["book", `Lit le skill « ${a.nom || ""} »`],
+    terminer_session: ["check", "Termine la séance"],
+  };
+  return L[st.nom] || ["spark", st.nom];
+}
+
+function stepKind(st) {
+  if (st.type === "pensee") return "think";
+  if (st.type === "refus") return "refus";
+  if (["passer_ordre", "proposer_ordre", "donner_avis", "ajuster_stop", "annuler_ordre"].includes(st.nom)) return "order";
+  return "tool";
+}
+
+function brainItem(st, who) {
+  let ic, title, body = "", details = "";
+  if (st.type === "pensee") { ic = "chat"; title = "Réflexion"; body = st.texte; }
+  else if (st.type === "notes") { ic = "book"; title = "Relit ses notes"; body = st.texte; }
+  else if (st.type === "refus") { ic = "alert"; title = `Refusé par les garde-fous (${st.symbole || ""})`; body = st.raison; }
+  else {
+    [ic, title] = toolLabel(st);
+    const a = st.args || {};
+    body = { passer_ordre: a.these, proposer_ordre: a.these, donner_avis: a.raison, ecrire_notes: a.contenu,
+      terminer_session: a.compte_rendu }[st.nom] || "";
+    if (st.resultat && !["ecrire_notes", "terminer_session", "lire_skill", "donner_avis"].includes(st.nom)) {
+      const full = st.donnees ? JSON.stringify(st.donnees, null, 1) : st.resultat;
+      details = `<details><summary>Résultat de l'outil</summary><pre>${esc(full)}</pre></details>`;
+    }
+  }
+  return `<li class="b-step b-${stepKind(st)}"><span class="b-ic">${icon(ic)}</span><div class="b-body"><div class="b-title"><span>${who ? `${avatar(who, true)}<span class="b-who">${esc(shortName(who))}</span>` : ""}${esc(title)}</span><span class="b-time">${esc(hm(st.t))}</span></div>${body ? `<div class="b-text">${md(body)}</div>` : ""}${details}</div></li>`;
+}
+
+/* ====================================================================== Page 2 : les IA */
+function stats(b) {
+  if (!b) return "";
+  const out = [];
+  if (b.propositions?.length) out.push(`${b.propositions.length} proposition${b.propositions.length > 1 ? "s" : ""}`);
+  if (b.avis?.length) out.push(`${b.avis.length} avis`);
+  if (b.ordres?.length) out.push(`${b.ordres.length} ordre${b.ordres.length > 1 ? "s" : ""}`);
+  return out.map((s) => `<span class="pill pill-coral">${esc(s)}</span>`).join("");
+}
+
+function renderIAList() {
+  const o = S.ov;
+  if (!o) return;
+  const etat = S.live?.etat || {}, running = S.live?.runner?.running || etat.running;
+  $("#ia-list").innerHTML = o.agents.map((a) => {
+    const b = S.sel?.agents?.[a.id];
+    const st = etat.agents?.[a.id] || {};
+    const thinking = running && ["reflechit", "outil"].includes(st.statut);
+    const status = thinking
+      ? `<span class="typing"><i></i><i></i><i></i></span><span class="live-txt">${esc(st.statut === "outil" ? st.action : "réfléchit…")}</span>`
+      : !a.cle_configuree ? `<span class="pill pill-peach">${icon("key")}clé manquante</span>`
+      : b ? `${b.outils || 0} outils · ${Math.max(1, Math.round((b.duree_s || 0) / 60))} min` : "pas dans cette séance";
+    return `<button class="ia-item ${S.iaSel === a.id ? "sel" : ""} ${thinking ? "thinking" : ""}" data-id="${esc(a.id)}">
+      ${avatar(a.id)}<span class="ia-item-body"><b>${esc(a.nom)}</b><span class="small muted">${esc(ROLE[a.role] || "")} · ${esc(modelName(b?.modele || a.modele))}</span>
+      <span class="ia-item-status small">${status}</span><span class="chips">${stats(b)}</span></span></button>`;
+  }).join("");
+  $$(".ia-item").forEach((el) => (el.onclick = () => { S.iaSel = el.dataset.id; renderIAList(); renderIAPanel(); }));
+  $(".ia-item.sel")?.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
+
+function proposalRow(p) {
+  const det = p.action === "acheter"
+    ? `${money(p.montant, 0)} · stop -${p.stop_loss_pct} % · objectif +${p.take_profit_pct} %`
+    : `${p.pourcentage ?? 100} % de la position`;
+  return `<div class="order">${avatar(p.auteur, true)}${actionPill(p.action)}<span class="mono"><b>${esc(p.symbole)}</b></span><span class="small muted">${esc(det)}</span>
+    ${verdictPill(p.avis)}${p.retenue ? `<span class="pill pill-coral">${icon("check")}achetée</span>` : ""}
+    <details class="why"><summary>Thèse de ${esc(shortName(p.auteur))}${p.confiance ? ` · confiance ${esc(p.confiance)}` : ""}</summary>${md(p.these)}${p.avis?.raison ? `<br><br><b>Critique :</b> ${md(p.avis.raison)}` : ""}</details></div>`;
+}
+
+function orderRow(o) {
+  const ok = o.ok !== false;
+  return `<div class="order">${actionPill(o.action)}<span class="mono"><b>${esc(o.symbole)}</b></span>${o.source ? `<span class="pill mono">${esc(o.source)}</span>` : ""}<span class="pill ${ok ? "pill-sage" : "pill-danger"}">${esc(o.resultat && o.resultat.startsWith("planifié") ? "planifié" : ok ? "exécuté" : "échec")}</span><div class="why">${esc(o.resultat || "")}</div>${o.these ? `<details class="why"><summary>Thèse</summary>${md(o.these)}</details>` : ""}</div>`;
+}
+
+function renderIAPanel() {
+  const box = $("#ia-panel");
+  const id = S.iaSel, a = agentOf(id), m = META[id] || {};
+  const d = S.sel, b = d?.agents?.[id];
+  const head = `<div class="ia-panel-head">${avatar(id)}<div><h2>${esc(a.nom)}</h2><div class="chips" style="margin-top:6px"><span class="pill">${esc(ROLE[a.role] || "")}</span>${providerPill(a)}<span class="pill mono">${esc(modelName(b?.modele || a.modele))}</span></div></div></div>
+    <p class="muted small" style="margin:12px 0 0">${esc(m.desc)}</p>`;
+  if (!d || !b) {
+    box.innerHTML = head + empty(id, "Pas de réflexion pour cette séance", d ? "Cette IA n'a pas été sollicitée (par exemple, le critique n'intervient que s'il y a des propositions)." : "Lancez une simulation pour voir l'équipe au travail.");
     return;
   }
-  $("#sess-list").innerHTML = list.map((s) => `<button class="sess ${S.current?.nom === s.nom ? "sel" : ""}" data-n="${esc(s.nom)}">
-      <div class="t"><span>${esc(s.quand || s.nom)}</span></div>
-      <div class="s">${esc(plain(s.decision) || "")}</div>
-      <div class="m">${modePill(s.mode)}${s.simulation ? '<span class="pill">Simulation</span>' : ""}${s.propositions ? `<span class="pill">${s.propositions} prop.</span>` : ""}<span class="pill">${s.ordres} ordre${s.ordres > 1 ? "s" : ""}</span>${s.erreurs ? `<span class="pill pill-danger">${s.erreurs} erreur${s.erreurs > 1 ? "s" : ""}</span>` : ""}</div>
-    </button>`).join("");
-  $$(".sess").forEach((b) => (b.onclick = () => loadSession(b.dataset.n)));
+  let actions = "";
+  if (a.role === "gerant") {
+    actions = `<div><div class="overline sub-h">Actions achetées ou vendues (${(b.ordres || []).length})</div>${(b.ordres || []).length ? `<div class="list">${b.ordres.map(orderRow).join("")}</div>` : '<p class="muted small">Aucun ordre à cette séance : le gérant a choisi de ne rien faire.</p>'}</div>
+      <div><div class="overline sub-h">Propositions examinées (${(d.propositions || []).length})</div>${(d.propositions || []).length ? `<div class="list">${d.propositions.map(proposalRow).join("")}</div>` : '<p class="muted small">Aucune proposition.</p>'}</div>`;
+  } else if (a.role === "analyste") {
+    const mine = (d.propositions || []).filter((p) => p.auteur === id);
+    actions = `<div><div class="overline sub-h">Ses propositions d'achat ou de vente (${mine.length})</div>${mine.length ? `<div class="list">${mine.map(proposalRow).join("")}</div>` : '<p class="muted small">Aucune proposition : rien ne méritait d\'agir selon sa stratégie.</p>'}</div>`;
+  } else {
+    actions = `<div><div class="overline sub-h">Ses avis (${(b.avis || []).length})</div>${(b.avis || []).length ? `<div class="list">${b.avis.map((v) => `<div class="order"><span class="pill ${VERDICT[v.verdict]?.[1] || ""}">${esc(VERDICT[v.verdict]?.[0] || v.verdict)}</span><span class="mono small">${esc(v.id)}</span><div class="why">${md(v.raison)}</div></div>`).join("")}</div>` : '<p class="muted small">Aucun avis.</p>'}</div>`;
+  }
+  box.innerHTML = `${head}
+    <div class="ia-meta small muted">${esc(sessLabel(d))} · ${b.outils || 0} appels d'outils · ${Math.max(1, Math.round((b.duree_s || 0) / 60))} min · ${(b.tokens || 0).toLocaleString("fr-FR")} tokens</div>
+    ${b.erreur ? `<div class="banner err">${icon("alert")}<span>${esc(b.erreur)}</span></div>` : ""}
+    <div class="synth"><div class="who">${icon(id)}Résumé de sa réflexion</div><p>${md(b.compte_rendu || "—")}</p></div>
+    ${actions}
+    <div class="row-btns">
+      <button class="btn" id="ia-to-journal">${icon("list")}Voir son journal détaillé</button>
+      <button class="btn" id="ia-to-notes">${icon("note")}Ouvrir ses notes</button>
+    </div>`;
+  $("#ia-to-journal").onclick = () => { S.jAgent = id; go("journal"); };
+  $("#ia-to-notes").onclick = () => { go("bureau"); setTimeout(() => openApp("notes", { agent: id }), 60); };
 }
 
-async function loadSession(nom) {
-  const d = await api(`/api/session?nom=${encodeURIComponent(nom)}`);
-  if (d.erreur) return toast(d.erreur, "alert");
-  S.current = d;
-  renderSessions();
-  renderDetail();
-}
+/* ====================================================================== Page 3 : le journal */
+const TYPES = [["tout", "Tout"], ["think", "Réflexions"], ["tool", "Outils"], ["order", "Ordres et avis"], ["refus", "Refus"]];
 
-function renderDetail() {
-  const d = S.current;
-  if (!d) return;
-  const head = `<div class="detail-head"><h3>Séance du ${esc(d.quand)}</h3>${modePill(d.mode)}${d.simulation ? '<span class="pill">Simulation</span>' : ""}<span class="right">valeur ${esc(money(d.valeur_avant, 0))} → ${esc(money(d.compte?.valeur, 0))}</span></div>`;
-  if (d.mode === "ouverture") {
-    $("#detail").innerHTML = `${head}<div><div class="overline sub-h">Ordres planifiés exécutés à l'ouverture</div>
-      <div class="list">${(d.executions || []).map(planRow).join("") || '<div class="empty-line">Aucun ordre à exécuter.</div>'}</div></div>`;
+function renderJournal() {
+  const d = S.sel;
+  const ids = d ? Object.keys(d.agents || {}) : [];
+  if (S.jAgent !== "tous" && !ids.includes(S.jAgent)) S.jAgent = "tous";
+  $("#j-agents").innerHTML = `<span class="overline">IA</span>` + [["tous", "Toutes"], ...ids.map((i) => [i, shortName(i)])].map(([k, l]) =>
+    `<button class="chip-btn ${S.jAgent === k ? "on" : ""}" data-a="${esc(k)}">${k !== "tous" ? avatar(k, true) : ""}${esc(l)}</button>`).join("");
+  $("#j-types").innerHTML = `<span class="overline">Type</span>` + TYPES.map(([k, l]) =>
+    `<button class="chip-btn ${S.jType === k ? "on" : ""}" data-t="${k}">${esc(l)}</button>`).join("");
+  $$("#j-agents .chip-btn").forEach((b) => (b.onclick = () => { S.jAgent = b.dataset.a; renderJournal(); }));
+  $$("#j-types .chip-btn").forEach((b) => (b.onclick = () => { S.jType = b.dataset.t; renderJournal(); }));
+  if (!d) {
+    $("#j-usage").innerHTML = "";
+    $("#j-timeline").innerHTML = empty("list", "Aucune séance", "Lancez une simulation pour remplir le journal.");
     return;
   }
-  const ids = Object.keys(d.agents || {});
-  if (!ids.includes(S.tab)) S.tab = ids.includes("gerant") ? "gerant" : ids[0];
-  const r = d.agents[S.tab] || {};
-  const tok = Object.entries(d.cles || {}).sort();
-  const maxTok = Math.max(1, ...tok.map(([, v]) => v.tokens || v.appels || 0));
-  const props = d.propositions || [];
-  $("#detail").innerHTML = `${head}
-    <div class="synth"><div class="who">${icon("gerant")}Décision du gérant</div><p>${md(d.decision || "—")}</p></div>
-    <div><div class="overline sub-h">Propositions des analystes (${props.length})</div>${props.length ? `<div class="list">${props.map(proposalRow).join("")}</div>` : '<p class="muted small">Aucune proposition.</p>'}</div>
-    <div>
-      <div class="tabs" role="tablist">${ids.map((t) => `<button class="tab ${S.tab === t ? "on" : ""}" role="tab" aria-selected="${S.tab === t}" data-t="${esc(t)}">${esc(shortName(t))}</button>`).join("")}</div>
-      <div class="panel">
-        <div class="small muted">${esc(ROLE[r.role] || "")} · ${esc(modelName(r.modele))} · ${r.outils || 0} appels d'outils · ${Math.round((r.duree_s || 0) / 60)} min · ${(r.tokens || 0).toLocaleString("fr-FR")} tokens</div>
-        ${r.erreur ? `<div class="banner err">${icon("alert")}<span>${esc(r.erreur)}</span></div>` : ""}
-        ${S.tab !== "gerant" ? `<div class="synth"><div class="who">${icon(S.tab)}Compte rendu</div><p>${md(r.compte_rendu || "—")}</p></div>` : ""}
-        ${agentWork(S.tab, r)}
-        <div><div class="overline sub-h">Son cerveau, étape par étape</div>${brain(r.etapes)}</div>
-      </div>
-    </div>
-    ${tok.length ? `<div><div class="overline sub-h">Consommation des clés (gratuite)</div><div class="tokens">${tok.map(([k, v]) => `<div class="tok"><span class="mono">${esc(k)}</span><div class="bar"><i class="${k.startsWith("gemini") ? "gemini" : "groq"}" style="width:${((v.tokens || v.appels || 0) / maxTok) * 100}%"></i></div><span class="muted">${(v.tokens || 0).toLocaleString("fr-FR")} tokens · ${v.appels || 0} appels</span></div>`).join("")}</div></div>` : ""}`;
-  $$(".tab").forEach((b) => (b.onclick = () => { S.tab = b.dataset.t; renderDetail(); }));
+  const agents = S.jAgent === "tous" ? ids : [S.jAgent];
+  // Outils utilisés par chaque IA
+  $("#j-usage").innerHTML = agents.map((aid) => {
+    const count = {};
+    (d.agents[aid].etapes || []).filter((s) => s.type === "outil").forEach((s) => (count[s.nom] = (count[s.nom] || 0) + 1));
+    const chips = Object.entries(count).sort((x, y) => y[1] - x[1]).map(([n, c]) =>
+      `<span class="pill">${icon(toolLabel({ nom: n })[0])}${esc(n.replaceAll("_", " "))} × ${c}</span>`).join("");
+    return `<div class="usage-row">${avatar(aid, true)}<b>${esc(shortName(aid))}</b><span class="chips" style="margin:0">${chips || '<span class="muted small">aucun outil</span>'}</span></div>`;
+  }).join("");
+  const steps = agents.flatMap((aid) => (d.agents[aid].etapes || []).map((s) => ({ ...s, _a: aid })))
+    .filter((s) => S.jType === "tout" || stepKind(s) === S.jType)
+    .sort((x, y) => String(x.t).localeCompare(String(y.t)));
+  $("#j-timeline").innerHTML = steps.length
+    ? `<ol class="brain">${steps.map((s) => brainItem(s, S.jAgent === "tous" ? s._a : null)).join("")}</ol>`
+    : empty("list", "Rien à afficher", "Aucune étape de ce type pour cette sélection.");
 }
 
-/* ---------- Navigation ---------- */
-function setActive(id) { $$(".nav-item, .tabbar a").forEach((a) => a.classList.toggle("active", a.dataset.s === id)); }
-const io = new IntersectionObserver((entries) => {
-  const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-  if (vis) setActive(vis.target.id);
-}, { rootMargin: "-80px 0px -55% 0px" });
-$$(".section").forEach((s) => io.observe(s));
-$$(".js-ic").forEach((el) => (el.innerHTML = icon(el.dataset.ic)));
+/* ====================================================================== Page 4 : le bureau façon Windows */
+const APPS = [
+  { id: "notes", nom: "Notes", ic: "note", color: "var(--peach)", sub: "Les notes de chaque IA" },
+  { id: "recherches", nom: "Recherches web", ic: "search", color: "var(--sky)", sub: "Ses recherches Google" },
+  { id: "actualites", nom: "Actualités", ic: "news", color: "var(--coral)", sub: "Les articles qu'elle a lus" },
+  { id: "bourse", nom: "Bourse", ic: "chart", color: "var(--sage)", sub: "Les cours et chiffres consultés" },
+  { id: "screener", nom: "Screener", ic: "filter", color: "var(--plum)", sub: "Ses filtres d'actions" },
+  { id: "reddit", nom: "Reddit", ic: "chat", color: "var(--coral-deep)", sub: "L'humeur des réseaux vue" },
+];
+const appOf = (id) => APPS.find((a) => a.id === id);
 
-/* ---------- Chargement ---------- */
+async function loadDeskData() {
+  const list = brainSessions();
+  let names = [];
+  if (S.deskScope === "last") names = list.slice(0, 1).map((s) => s.nom);
+  else if (S.deskScope === "last5") names = list.slice(0, 5).map((s) => s.nom);
+  else names = [S.deskScope];
+  const sessions = await Promise.all(names.map(getSession));
+  S.deskData = sessions.flatMap((d) => Object.entries(d.agents || {}).flatMap(([aid, r]) =>
+    (r.etapes || []).filter((s) => s.type === "outil").map((s) => ({
+      sess: d.quand, ts: s.t, agent: aid, nom: s.nom, args: s.args || {}, d: s.donnees ?? tryJSON(s.resultat), raw: s.resultat,
+    }))));
+  S.deskSessions = sessions;
+}
+
+function renderDesktop() {
+  fillSessionSelects();
+  $("#desk-icons").innerHTML = APPS.map((a) => `<button class="desk-icon" data-app="${a.id}" title="${esc(a.sub)}">
+    <span class="desk-tile" style="--c:${a.color}">${icon(a.ic)}</span><span class="desk-label">${esc(a.nom)}</span></button>`).join("");
+  $$(".desk-icon").forEach((b) => (b.onclick = () => openApp(b.dataset.app)));
+  renderTaskbar();
+  tickClock();
+  loadDeskData().then(() => Object.keys(S.wins).forEach(renderWin));
+}
+
+$("#desk-scope").addEventListener("change", async (e) => {
+  S.deskScope = e.target.value;
+  await loadDeskData();
+  Object.keys(S.wins).forEach(renderWin);
+});
+
+function tickClock() {
+  const el = $("#tb-clock");
+  if (el) el.innerHTML = `<b>${esc(hm(new Date()))}</b><span>${esc(fmtDate(new Date(), { day: "2-digit", month: "2-digit", year: "numeric" }))}</span>`;
+}
+setInterval(tickClock, 30000);
+
+function renderTaskbar() {
+  $("#tb-apps").innerHTML = APPS.map((a) => {
+    const w = S.wins[a.id];
+    return `<button class="tb-app ${w ? "open" : ""} ${w && !w.min && w.el.classList.contains("focus") ? "active" : ""}" data-app="${a.id}" title="${esc(a.nom)}" aria-label="${esc(a.nom)}"><span style="color:${a.color}">${icon(a.ic)}</span></button>`;
+  }).join("");
+  $$(".tb-app").forEach((b) => (b.onclick = () => {
+    const w = S.wins[b.dataset.app];
+    if (!w) return openApp(b.dataset.app);
+    if (w.min || !w.el.classList.contains("focus")) { w.min = false; w.el.classList.remove("min"); focusWin(b.dataset.app); }
+    else { w.min = true; w.el.classList.add("min"); w.el.classList.remove("focus"); renderTaskbar(); }
+  }));
+  $("#desk-hint").hidden = Object.keys(S.wins).length > 0;
+}
+
+function focusWin(id) {
+  Object.values(S.wins).forEach((w) => w.el.classList.remove("focus"));
+  const w = S.wins[id];
+  w.el.style.zIndex = ++S.z;
+  w.el.classList.add("focus");
+  renderTaskbar();
+}
+
+function openApp(id, opts = {}) {
+  const app = appOf(id);
+  if (!app) return;
+  if (S.wins[id]) {
+    const w = S.wins[id];
+    Object.assign(w.state, opts);
+    w.min = false;
+    w.el.classList.remove("min");
+    focusWin(id);
+    renderWin(id);
+    return;
+  }
+  const desk = $("#desktop");
+  const n = Object.keys(S.wins).length;
+  const el = document.createElement("div");
+  el.className = "win";
+  el.setAttribute("role", "dialog");
+  el.setAttribute("aria-label", app.nom);
+  const dw = desk.clientWidth || 900, dh = desk.clientHeight || 600;
+  const W = Math.max(340, Math.min(720, dw - 40)), H = Math.max(260, Math.min(480, dh - 90));
+  el.style.width = `${W}px`;
+  el.style.height = `${H}px`;
+  el.style.left = `${Math.min(130 + n * 28, Math.max(0, dw - W - 10))}px`;
+  el.style.top = `${Math.min(24 + n * 28, Math.max(0, dh - H - 60))}px`;
+  el.innerHTML = `<div class="win-title"><span class="win-ic" style="color:${app.color}">${icon(app.ic)}</span><span class="win-name">${esc(app.nom)}</span>
+    <span class="win-ctrls"><button class="win-btn" data-act="min" aria-label="Réduire">${icon("minus")}</button><button class="win-btn" data-act="max" aria-label="Agrandir">${icon("square")}</button><button class="win-btn close" data-act="close" aria-label="Fermer">${icon("x")}</button></span></div>
+    <div class="win-tools"></div><div class="win-body"></div>`;
+  $("#desk-windows").appendChild(el);
+  S.wins[id] = { el, state: { agent: "tous", q: "", ...opts }, min: false };
+  el.addEventListener("pointerdown", () => focusWin(id));
+  $$(".win-btn", el).forEach((b) => (b.onclick = (e) => {
+    e.stopPropagation();
+    const act = b.dataset.act;
+    if (act === "close") { el.remove(); delete S.wins[id]; renderTaskbar(); }
+    if (act === "min") { S.wins[id].min = true; el.classList.add("min"); el.classList.remove("focus"); renderTaskbar(); }
+    if (act === "max") el.classList.toggle("max");
+  }));
+  dragWin(el, $(".win-title", el));
+  $(".win-title", el).addEventListener("dblclick", () => el.classList.toggle("max"));
+  renderWinTools(id);
+  focusWin(id);
+  renderWin(id);
+}
+
+function dragWin(el, handle) {
+  handle.addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".win-btn") || el.classList.contains("max") || window.innerWidth < 900) return;
+    const desk = $("#desktop").getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY, ox = el.offsetLeft, oy = el.offsetTop;
+    handle.setPointerCapture(e.pointerId);
+    const move = (ev) => {
+      el.style.left = `${Math.max(-el.offsetWidth + 120, Math.min(desk.width - 120, ox + ev.clientX - sx))}px`;
+      el.style.top = `${Math.max(0, Math.min(desk.height - 90, oy + ev.clientY - sy))}px`;
+    };
+    const up = () => { handle.removeEventListener("pointermove", move); handle.removeEventListener("pointerup", up); };
+    handle.addEventListener("pointermove", move);
+    handle.addEventListener("pointerup", up);
+  });
+}
+
+function renderWinTools(id) {
+  const w = S.wins[id];
+  const ids = S.ov?.agents.map((a) => a.id) || [];
+  const tools = $(".win-tools", w.el);
+  tools.innerHTML = `<label class="win-search">${icon("search")}<input type="search" placeholder="Rechercher (symbole, mot…)" value="${esc(w.state.q)}" aria-label="Rechercher"></label>
+    <select class="select" aria-label="IA"><option value="tous">Toutes les IA</option>${ids.map((a) => `<option value="${a}">${esc(agentOf(a).nom)}</option>`).join("")}</select>`;
+  const sel = $("select", tools);
+  sel.value = w.state.agent;
+  sel.onchange = () => { w.state.agent = sel.value; renderWin(id); };
+  $("input", tools).oninput = (e) => { w.state.q = e.target.value; renderWin(id); };
+}
+
+function renderWin(id) {
+  const w = S.wins[id];
+  if (!w) return;
+  const sel = $(".win-tools select", w.el);
+  if (sel) sel.value = w.state.agent;
+  const items = S.deskData.filter((x) => w.state.agent === "tous" || x.agent === w.state.agent);
+  const q = w.state.q.trim().toLowerCase();
+  const body = $(".win-body", w.el);
+  body.innerHTML = (APP_RENDER[id] || (() => ""))(items, q, w);
+  $$("[data-pick]", body).forEach((b) => (b.onclick = () => { w.state.pick = b.dataset.pick; renderWin(id); }));
+}
+
+const match = (q, ...txt) => !q || txt.some((t) => String(t ?? "").toLowerCase().includes(q));
+const readers = (set) => [...set].map((a) => avatar(a, true)).join("");
+
+function sparkline(vals) {
+  const v = (vals || []).filter((x) => num(x) !== null);
+  if (v.length < 2) return "";
+  const W = 260, H = 56, lo = Math.min(...v), hi = Math.max(...v) || 1;
+  const pts = v.map((y, i) => [(i / (v.length - 1)) * W, H - 4 - ((y - lo) / ((hi - lo) || 1)) * (H - 8)]);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="c-line" d="${smoothPath(pts)}"/></svg>`;
+}
+
+const APP_RENDER = {
+  notes(items, q, w) {
+    const ids = S.ov?.agents.map((a) => a.id) || [];
+    const pick = w.state.agent !== "tous" ? w.state.agent : w.state.pick || "gerant";
+    const fromSession = [...items].reverse().find((x) => x.agent === pick && x.nom === "ecrire_notes");
+    const saved = S.notes[pick];
+    const text = saved || fromSession?.args?.contenu || "";
+    const src = saved ? "Notes enregistrées (sa mémoire pour la prochaine séance)"
+      : fromSession ? `Notes écrites pendant la séance du ${fromSession.sess} (simulation : non enregistrées)` : "";
+    return `<div class="app-split"><div class="app-side">${ids.map((a) => `<button class="side-item ${a === pick ? "sel" : ""}" data-pick="${a}">${avatar(a, true)}${esc(shortName(a))}</button>`).join("")}</div>
+      <div class="app-main">${text ? `<div class="small muted" style="margin-bottom:8px">${esc(src)}</div><div class="notes">${q ? esc(text).replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), (m) => `<mark>${m}</mark>`) : esc(text)}</div>`
+        : empty("note", "Pas encore de notes", "Cette IA n'a pas encore écrit de notes.")}</div></div>`;
+  },
+
+  recherches(items, q) {
+    const rows = items.filter((x) => x.nom === "recherche_web" && match(q, x.args.question, x.d?.reponse));
+    if (!rows.length) return empty("search", "Aucune recherche", "Les IA n'ont pas fait de recherche web dans cette sélection.");
+    return rows.reverse().map((x) => `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<b>« ${esc(x.args.question)} »</b><span class="b-time">${esc(dayHm(x.ts))}</span></div>
+      <div class="b-text">${md(x.d?.reponse || x.d?.erreur || x.raw || "")}</div>
+      ${(x.d?.sources || []).length ? `<div class="chips">${x.d.sources.map((s) => `<span class="pill">${esc(s)}</span>`).join("")}</div>` : ""}</div>`).join("");
+  },
+
+  actualites(items, q) {
+    const map = new Map();
+    items.filter((x) => x.nom === "actualites" && Array.isArray(x.d)).forEach((x) => x.d.forEach((n) => {
+      const k = n.titre;
+      if (!map.has(k)) map.set(k, { ...n, lecteurs: new Set() });
+      map.get(k).lecteurs.add(x.agent);
+    }));
+    const rows = [...map.values()].filter((n) => match(q, n.titre, n.resume, (n.symboles || []).join(" ")))
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    if (!rows.length) return empty("news", "Aucun article", "Les IA n'ont pas lu d'actualités dans cette sélection.");
+    return `<div class="small muted" style="margin-bottom:8px">${rows.length} article${rows.length > 1 ? "s" : ""} lu${rows.length > 1 ? "s" : ""}</div>` + rows.map((n) => `<div class="app-card">
+      <div class="app-card-h"><span class="mono small muted">${esc(n.date)}</span>${n.source ? `<span class="pill">${esc(n.source)}</span>` : ""}<span class="readers">lu par ${readers(n.lecteurs)}</span></div>
+      <b>${esc(n.titre)}</b>${n.resume ? `<div class="b-text">${esc(n.resume)}</div>` : ""}
+      ${(n.symboles || []).length ? `<div class="chips">${n.symboles.map((s) => `<span class="pill tk">${esc(s)}</span>`).join("")}</div>` : ""}</div>`).join("");
+  },
+
+  bourse(items, q, w) {
+    const by = new Map();
+    items.filter((x) => ["historique_prix", "donnees_financieres"].includes(x.nom) && x.d && !x.d.erreur).forEach((x) => {
+      const s = String(x.args.symbole || "").toUpperCase();
+      if (!by.has(s)) by.set(s, { s, lecteurs: new Set() });
+      const e = by.get(s);
+      e.lecteurs.add(x.agent);
+      if (x.nom === "historique_prix") e.h = x.d; else e.f = x.d;
+    });
+    const list = [...by.values()].filter((e) => match(q, e.s, e.f?.nom, e.f?.secteur)).sort((a, b) => a.s.localeCompare(b.s));
+    if (!list.length) return empty("chart", "Aucune donnée boursière", "Les IA n'ont pas consulté de cours dans cette sélection (ou la recherche ne trouve rien).");
+    const pick = list.find((e) => e.s === w.state.pick) || list[0];
+    const h = pick.h || {}, f = pick.f || {};
+    const kv = (rows) => `<div class="kv">${rows.filter(([, v]) => v !== undefined && v !== null && v !== "" && v !== "—").map(([k, v]) => `<div><span>${esc(k)}</span><b>${v}</b></div>`).join("")}</div>`;
+    const p = (v) => `<span class="${tone(v)}">${esc(pct(v, 1))}</span>`;
+    return `<div class="app-split"><div class="app-side">${list.map((e) => `<button class="side-item ${e === pick ? "sel" : ""}" data-pick="${esc(e.s)}"><span class="mono"><b>${esc(e.s)}</b></span><span class="readers">${readers(e.lecteurs)}</span></button>`).join("")}</div>
+      <div class="app-main">
+        <div class="app-card-h"><h3 class="mono">${esc(pick.s)}</h3><span class="muted">${esc(f.nom || "")}</span><span class="readers">consulté par ${readers(pick.lecteurs)}</span></div>
+        ${f.secteur ? `<div class="chips" style="margin-top:6px"><span class="pill">${esc(f.secteur)}</span>${f.industrie ? `<span class="pill">${esc(f.industrie)}</span>` : ""}${f.jours_avant_resultats != null ? `<span class="pill pill-peach">résultats dans ${esc(f.jours_avant_resultats)} j (${esc(f.prochains_resultats)})</span>` : ""}</div>` : ""}
+        ${h.prix ? `<div class="price-line"><b>${esc(money(h.dernier_prix || h.prix, 2))}</b>${sparkline(h.cours_hebdo_1an)}</div>` : ""}
+        ${h.prix ? `<div class="overline sub-h">Graphique</div>${kv([["5 jours", p(h.perf_5j_pct)], ["1 mois", p(h.perf_1m_pct)], ["3 mois", p(h.perf_3m_pct)], ["1 an", p(h.perf_1an_pct)], ["RSI 14", esc(nb(h.rsi14, 0))], ["ATR 14", esc(money(h.atr14, 2))], ["Moyenne 20 j", esc(money(h.sma20, 2))], ["Moyenne 50 j", esc(money(h.sma50, 2))], ["Moyenne 200 j", esc(money(h.sma200, 2))], ["Plus haut 52 s", esc(money(h.plus_haut_52s, 2))], ["Plus bas 52 s", esc(money(h.plus_bas_52s, 2))], ["Volume / moyenne", esc(nb(h.volume_vs_moy20))], ["Marché (SPY) 1 mois", h.marche_SPY ? p(h.marche_SPY.perf_1m_pct) : null]])}` : ""}
+        ${pick.f ? `<div class="overline sub-h">Données financières</div>${kv([["Capitalisation", esc(f.capitalisation)], ["PER", esc(nb(f.per))], ["PER attendu", esc(nb(f.per_attendu))], ["Marge nette", f.marge_nette_pct != null ? esc(`${nb(f.marge_nette_pct)} %`) : null], ["Marge opérationnelle", f.marge_op_pct != null ? esc(`${nb(f.marge_op_pct)} %`) : null], ["Croissance du CA", f.croissance_ca_pct != null ? p(f.croissance_ca_pct) : null], ["Croissance des bénéfices", f.croissance_benef_pct != null ? p(f.croissance_benef_pct) : null], ["ROE", f.roe_pct != null ? esc(`${nb(f.roe_pct)} %`) : null], ["Dette / fonds propres", esc(nb(f.dette_sur_fp, 0))], ["Flux de trésorerie libre", esc(f.flux_tresorerie_libre)], ["Dividende", f.rendement_dividende_pct != null ? esc(`${nb(f.rendement_dividende_pct, 2)} %`) : null], ["Objectif des analystes", esc(money(f.objectif_analystes, 2))], ["Avis des analystes", esc(f.avis_analystes)]])}` : ""}
+      </div></div>`;
+  },
+
+  screener(items, q, w) {
+    const runs = items.filter((x) => x.nom === "screener" && Array.isArray(x.d));
+    if (!runs.length) return empty("filter", "Aucun screener", "Les IA n'ont pas utilisé le screener dans cette sélection.");
+    const key = (x, i) => `${x.ts}-${x.agent}-${i}`;
+    const pick = runs.find((x, i) => key(x, i) === w.state.pick) || runs[0];
+    const rows = pick.d.filter((r) => match(q, r.s, r.nom));
+    const cols = [...new Set(rows.flatMap((r) => Object.keys(r)))].filter((c) => c !== "s");
+    const label = { prix: "Prix", var_pct: "Variation", perf_5j_pct: "5 jours", perf_1m_pct: "1 mois", perf_1j_pct: "1 jour", rsi14: "RSI", ecart_plus_haut_pct: "Sous le plus haut", volume_vs_moy20: "Volume / moy.", volume: "Volume", nom: "Nom", mentions_24h: "Mentions 24 h", mentions_veille: "Veille" };
+    const cell = (c, v) => /pct$/.test(c) ? `<span class="${tone(v)}">${esc(pct(v, 1))}</span>` : c === "prix" ? esc(money(v, 2)) : esc(typeof v === "number" ? nb(v) : v);
+    return `<div class="app-split"><div class="app-side">${runs.map((x, i) => `<button class="side-item ${x === pick ? "sel" : ""}" data-pick="${esc(key(x, i))}">${avatar(x.agent, true)}<span><b>${esc(String(x.args.critere || "").replaceAll("_", " "))}</b><span class="small muted">${esc(hm(x.ts))}</span></span></button>`).join("")}</div>
+      <div class="app-main"><div class="app-card-h"><b>${esc(String(pick.args.critere || "").replaceAll("_", " "))}</b><span class="readers">par ${avatar(pick.agent, true)}</span><span class="b-time">${esc(dayHm(pick.ts))}</span></div>
+      <div class="table-wrap" style="margin:8px 0 0"><table><thead><tr><th>Titre</th>${cols.map((c) => `<th>${esc(label[c] || c)}</th>`).join("")}</tr></thead>
+      <tbody>${rows.map((r) => `<tr><td class="mono"><b>${esc(r.s)}</b></td>${cols.map((c) => `<td>${cell(c, r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div></div>`;
+  },
+
+  reddit(items, q) {
+    const trend = [...items].reverse().find((x) => x.nom === "screener" && x.args.critere === "tendances_reddit" && Array.isArray(x.d));
+    const checked = new Map();
+    items.filter((x) => x.nom === "sentiment_reseaux" && x.d).forEach((x) => {
+      const s = x.d.symbole || String(x.args.symbole || "").toUpperCase();
+      if (!checked.has(s)) checked.set(s, { ...x.d, lecteurs: new Set() });
+      checked.get(s).lecteurs.add(x.agent);
+    });
+    const list = [...checked.values()].filter((c) => match(q, c.symbole));
+    let html = "";
+    if (trend) {
+      const rows = trend.d.filter((r) => match(q, r.s, r.nom));
+      html += `<div class="overline sub-h">Les plus discutées sur Reddit (vu par ${avatar(trend.agent, true)} à ${esc(hm(trend.ts))})</div>
+        <div class="table-wrap" style="margin:0 0 16px"><table><thead><tr><th>Titre</th><th>Nom</th><th>Mentions 24 h</th><th>La veille</th><th>Évolution</th></tr></thead><tbody>
+        ${rows.map((r) => { const dv = (r.mentions_24h || 0) - (r.mentions_veille || 0); return `<tr><td class="mono"><b>${esc(r.s)}</b></td><td>${esc(String(r.nom || "").replace(/&amp;/g, "&"))}</td><td>${esc(r.mentions_24h)}</td><td>${esc(r.mentions_veille)}</td><td class="${tone(dv)}">${dv > 0 ? "+" : ""}${esc(dv)}</td></tr>`; }).join("")}</tbody></table></div>`;
+    }
+    if (list.length) {
+      html += `<div class="overline sub-h">Actions vérifiées par les IA</div>` + list.map((c) => {
+        const r = typeof c.reddit === "object" ? c.reddit : null;
+        const now = r?.mentions_24h, before = r?.mentions_veille;
+        const max = Math.max(1, now || 0, before || 0);
+        return `<div class="app-card"><div class="app-card-h"><b class="mono">${esc(c.symbole)}</b>${r?.rang ? `<span class="pill pill-coral">rang ${esc(r.rang)}</span>` : ""}<span class="readers">vu par ${readers(c.lecteurs)}</span></div>
+          ${r && typeof now === "number" ? `<div class="bars"><span>Mentions 24 h</span><div class="bar"><i style="width:${(now / max) * 100}%"></i></div><b>${esc(now)}</b><span>La veille</span><div class="bar"><i class="old" style="width:${((before || 0) / max) * 100}%"></i></div><b>${esc(before ?? "—")}</b></div>`
+            : `<div class="small muted">${esc(typeof c.reddit === "string" ? c.reddit : r?.mentions_24h || "pas de données Reddit")}</div>`}
+          <div class="small muted">${r?.upvotes != null ? `${esc(r.upvotes)} votes positifs · ` : ""}${c.articles_3_derniers_jours != null ? `${esc(c.articles_3_derniers_jours)} articles sur 3 jours` : ""}</div></div>`;
+      }).join("");
+    }
+    return html || empty("chat", "Rien sur Reddit", "Les IA n'ont pas regardé Reddit dans cette sélection.");
+  },
+};
+
+/* ====================================================================== Chargement */
 async function refreshAll(force = false) {
   try {
     const [ov, sessions, notes] = await Promise.all([api("/api/overview"), api("/api/sessions"), api("/api/notes")]);
     S.ov = ov; S.notes = notes; S.sessions = sessions;
-    const lastBrain = sessions.find((s) => s.mode !== "ouverture");
-    if (lastBrain && (force || S.brain?.nom !== lastBrain.nom)) S.brain = await api(`/api/session?nom=${encodeURIComponent(lastBrain.nom)}`);
-    if (sessions.length && (force || !S.current)) S.current = await api(`/api/session?nom=${encodeURIComponent(sessions[0].nom)}`);
-    renderHeader(ov); renderBand(ov); renderDecision(); renderChart(ov); renderPlan(ov); renderPositions(ov);
-    renderDay(); renderAgents(); renderSessions(); renderDetail();
+    if (force) S.cache = {};
+    const latest = brainSessions()[0];
+    const changed = force || latest?.nom !== S.lastLatest;
+    S.lastLatest = latest?.nom;
+    if (latest && (changed || !S.sel)) S.sel = await getSession(latest.nom);
+    renderHeader(ov);
+    fillSessionSelects();
+    // Les pages de lecture ne sont redessinées que s'il y a une nouvelle séance (pour ne pas refermer ce qu'on lit).
+    if (S.page === "accueil" || changed) renderPage();
+    if (S.page === "bureau" && force) { await loadDeskData(); Object.keys(S.wins).forEach(renderWin); }
   } catch (e) {
     console.error(e);
     toast("Impossible de charger les données du tableau de bord", "alert");
@@ -594,6 +866,7 @@ async function run(mode) {
   S.wasRunning = true;
   $("#console").hidden = false;
   $("#console").textContent = "Démarrage…";
+  go("accueil");
 }
 
 $("#btn-sim").onclick = () => {
@@ -612,12 +885,13 @@ $("#btn-real").onclick = () => {
 const closeModal = () => $("#modal").classList.remove("open");
 $("#modal-no").onclick = closeModal;
 $("#modal-yes").onclick = () => { closeModal(); run("reel"); };
-$("#scrim").onclick = closeDrawer;
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closeModal(); } });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 let rz;
-window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => S.ov && renderChart(S.ov), 150); });
+window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => S.ov && S.page === "accueil" && renderChart(S.ov), 150); });
 
+$$(".js-ic").forEach((el) => (el.innerHTML = icon(el.dataset.ic)));
 applyThemeButton();
+route();
 refreshAll();
 pollLive();
 setInterval(() => { if (!S.wasRunning) refreshAll(); }, STATIC ? 120000 : 30000);

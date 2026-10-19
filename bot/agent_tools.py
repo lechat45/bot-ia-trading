@@ -226,8 +226,14 @@ class AgentEnv:
             log.exception("outil %s", name)
             out = {"erreur": f"outil indisponible : {str(e)[:150]}"}
         text = out if isinstance(out, str) else _str(out)
-        shown = {k: (v[:400] + "…" if isinstance(v, str) and len(v) > 400 else v) for k, v in (args or {}).items()}
-        self.log("outil", nom=name, args=shown, resultat=text[:600])
+        shown = {k: (v[:4000] + "…" if isinstance(v, str) and len(v) > 4000 else v) for k, v in (args or {}).items()}
+        step = {"nom": name, "args": shown, "resultat": text[:600]}
+        # Le résultat complet est gardé pour le Bureau du tableau de bord (ce que l'IA a lu).
+        if isinstance(out, (dict, list)) and name != "lire_skill":
+            raw = json.dumps(out, ensure_ascii=False, default=str)
+            if len(raw) <= 15000:
+                step["donnees"] = out
+        self.log("outil", **step)
         return text
 
     # -------------------------------------------------- skills

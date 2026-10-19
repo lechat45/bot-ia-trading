@@ -2,6 +2,7 @@
 données fondamentales (yfinance) et sentiment Reddit. Tout est calculé par le code pour éviter
 les erreurs de calcul des IA (dates, pourcentages)."""
 import datetime as dt
+import html
 import logging
 import math
 import statistics
@@ -166,6 +167,7 @@ def _load_reddit() -> dict:
                 if r.status_code != 200:
                     break
                 for x in r.json().get("results", []):
+                    x["name"] = html.unescape(x.get("name") or "")  # ApeWisdom renvoie « S&amp;P 500 »
                     _REDDIT[x["ticker"]] = x
         except Exception as e:
             log.info("tendances Reddit indisponibles : %s", e)
