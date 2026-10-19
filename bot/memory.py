@@ -56,6 +56,16 @@ def write_rappels(rappels: list[dict]) -> None:
     _write(ROOT / "rappels.json", json.dumps(rappels, ensure_ascii=False, indent=1))
 
 
+# ---------------------------------------------------------------------- bilans de la semaine
+def write_bilan(date: str, texte: str) -> None:
+    _write(ROOT / "bilans" / f"{date}.md", texte.strip() + "\n")
+
+
+def read_last_bilan() -> dict:
+    files = sorted((ROOT / "bilans").glob("*.md")) if (ROOT / "bilans").exists() else []
+    return {"date": files[-1].stem, "texte": files[-1].read_text(encoding="utf-8")} if files else {}
+
+
 # ---------------------------------------------------------------------- vérification de l'installation
 def read_installation() -> dict:
     return _read_json(ROOT / "installation.json", {})

@@ -2,6 +2,7 @@
 #   - 9 h (Paris)        PRÉPARATION : l'équipe décide quoi acheter, ordres planifiés pour l'ouverture
 #   - 15 h 30 (Paris)    OUVERTURE   : le programme exécute les ordres planifiés dès l'ouverture de New York
 #   - fin d'après-midi   SUIVI       : bourse ouverte, l'équipe fait le point et agit en direct
+# Des déclenchements de secours rattrapent un horaire oublié par GitHub (sans jamais doubler une séance).
 # La mémoire (notes, registre du compte, plan) est recommitée, puis le tableau de bord est publié :
 #   - dépôt PUBLIC  -> branche gh-pages, servie par GitHub Pages (« Deploy from a branch » : gh-pages, racine)
 #   - dépôt PRIVÉ   -> Cloudflare Pages (variable CLOUDFLARE_PROJECT + secrets, voir le README)
@@ -13,14 +14,16 @@ on:
     - cron: "0 7 * * 1-5"    # préparation : 9 h à Paris en heure d'été (en hiver il est 8 h : ignoré)
     - cron: "0 8 * * 1-5"    # préparation : 9 h à Paris en heure d'hiver (en été il est 10 h : déjà fait)
     - cron: "20 13 * * 1-5"  # ouverture : attend l'ouverture de New York (13 h 30 ou 14 h 30 UTC)
+    - cron: "30 8 * * 1-5"   # préparation : secours (ne fait rien si le plan du jour existe déjà)
     - cron: "45 14 * * 1-5"  # ouverture : secours si le déclenchement précédent a été perdu
     - cron: "30 17 * * 1-5"  # suivi : 19 h 30 à Paris en été, 18 h 30 en hiver
+    - cron: "15 18 * * 1-5"  # suivi : secours (ne fait rien si le suivi du jour a déjà eu lieu)
   workflow_dispatch:
     inputs:
       mode:
-        description: "Séance à lancer"
+        description: "Séance à lancer (verification = tester toute l'installation)"
         type: choice
-        options: [preparation, suivi, ouverture]
+        options: [preparation, suivi, ouverture, verification]
         default: preparation
       dry_run:
         description: "Simulation (aucun ordre envoyé, rien d'enregistré)"
@@ -60,17 +63,21 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           ALPACA_PAPER: "true"
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           SCHEDULE: ${{ github.event.schedule }}
           MANUAL_MODE: ${{ inputs.mode }}
         run: |
           case "$SCHEDULE" in
-            "0 7 * * 1-5"|"0 8 * * 1-5") MODE=preparation ;;
+            "0 7 * * 1-5"|"0 8 * * 1-5"|"30 8 * * 1-5") MODE=preparation ;;
             "20 13 * * 1-5"|"45 14 * * 1-5") MODE=ouverture ;;
-            "30 17 * * 1-5") MODE=suivi ;;
+            "30 17 * * 1-5"|"15 18 * * 1-5") MODE=suivi ;;
             *) MODE="${MANUAL_MODE:-preparation}" ;;
           esac
           ARGS="--mode $MODE"
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then ARGS="$ARGS --force"; fi
+          if [ "$MODE" = "verification" ]; then ARGS="--verifier"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then ARGS="$ARGS --force"; fi
           echo "Séance : $ARGS"
           python main.py $ARGS
 

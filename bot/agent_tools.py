@@ -27,7 +27,7 @@ SKILL_INFO = {
     "fonctionnement-du-marche": "actions, horaires, événements qui font bouger les cours",
     "lecture-graphique": "tendance, moyennes mobiles, RSI, ATR, limites d'un graphique",
     "analyse-fondamentale": "croissance, marges, dette, valorisation, pièges",
-    "actualite-et-catalyseurs": "vérifier une info, dates des catalyseurs",
+    "actualite-et-catalyseurs": "vérifier une info, dates des catalyseurs, rappels",
     "sentiment-reseaux": "utiliser Reddit et les réseaux sans se faire piéger",
     "gestion-du-risque": "taille de position, corrélations, comportements à éviter",
     "stop-loss-take-profit": "placer et gérer stop loss et objectif de gain",
@@ -100,6 +100,12 @@ def declarations(role: str, market_open: bool) -> list[dict]:
          "parameters": {"type": "object", "properties": {"contenu": S}, "required": ["contenu"]}},
     ]
     research += [
+        {"name": "lire_page",
+         "description": ("Navigateur : ouvre une page web précise (article, page de résultats, communiqué) et en lit le "
+                         "texte. Utile pour vérifier une source trouvée avec recherche_web ou citée dans une actualité. "
+                         "Budget limité par séance."),
+         "parameters": {"type": "object", "properties": {"url": {"type": "string", "description": "adresse complète, https://…"}},
+                        "required": ["url"]}},
         {"name": "creer_rappel",
          "description": ("Crée un rappel pour l'équipe sur un événement daté (résultats, annonce, réunion de la Fed…). "
                          "Il sera présenté à toute l'équipe le jour venu, pour décider d'acheter ou de vendre en fonction."),
@@ -220,6 +226,7 @@ class AgentEnv:
         self.avis: list[dict] = []  # verdicts (critique)
         self.tool_calls = 0
         self.web_left = session.cfg.max_web_searches
+        self.pages_left = 4
         self.done = False
         self.compte_rendu = ""
 
@@ -362,8 +369,20 @@ class AgentEnv:
             out["articles_3_derniers_jours"] = sum(1 for n in news if n.get("created_at", "") >= since)
         except AlpacaError:
             pass
+        if not self.s.market.offline and tools.reddit_oauth_configured():
+            out["messages_reddit"] = tools.reddit_posts(sym) or "aucun message récent"
         out["note"] = "X/Twitter n'a pas d'accès gratuit : utilise recherche_web si nécessaire."
         return out
+
+    def t_lire_page(self, url=""):
+        if self.pages_left <= 0:
+            return {"erreur": "budget de pages web épuisé pour cette séance"}
+        if self.s.market.offline:
+            return {"erreur": "navigateur indisponible en test hors-ligne"}
+        self.pages_left -= 1
+        res = tools.read_page(url)
+        res["pages_restantes"] = self.pages_left
+        return res
 
     # -------------------------------------------------- notes
     def t_ecrire_notes(self, contenu=""):

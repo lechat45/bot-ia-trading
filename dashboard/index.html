@@ -92,12 +92,21 @@
           </div>
         </div>
 
+        <div class="card" id="bilan-card" hidden>
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="book"></span>
+            <h2>Bilan de la semaine</h2>
+            <span class="right" id="bilan-date"></span>
+          </div>
+          <div class="b-text" id="bilan-text"></div>
+        </div>
+
         <div class="row-2">
           <div class="card">
             <div class="card-head">
               <span class="ic-box js-ic" data-ic="chart"></span>
               <h2>Évolution du compte</h2>
-              <span class="right">30 derniers jours</span>
+              <span class="right" id="chart-legend">30 derniers jours</span>
             </div>
             <div id="chart"></div>
           </div>
@@ -129,6 +138,25 @@
             <span class="right" id="plan-sub"></span>
           </div>
           <div id="plan-card"></div>
+        </div>
+
+        <div class="row-2">
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="bell"></span>
+              <h2>Rappels de l'équipe</h2>
+              <span class="right" id="rappels-sub"></span>
+            </div>
+            <div id="rappels-card"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="shield"></span>
+              <h2>État du système</h2>
+              <span class="right" id="systeme-sub"></span>
+            </div>
+            <div id="systeme-card"></div>
+          </div>
         </div>
       </section>
 

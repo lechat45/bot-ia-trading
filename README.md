@@ -52,10 +52,13 @@ journée. Un ordre refusé est renvoyé à l'IA avec la raison.
 
 ## Interface (tableau de bord)
 
-Comme le tableau de bord d'Aywen : dernière décision de l'équipe avec les propositions et les
-verdicts du critique, journée de bourse en direct (quelle IA réfléchit, quel outil elle utilise),
-courbe du compte, plan d'ouverture, positions, et l'historique des séances avec le « cerveau » de
-chacune des 6 IA étape par étape.
+4 pages, comme le tableau de bord d'Aywen :
+- **Accueil** : valeur du compte, courbe comparée au S&P 500, journée de bourse en direct,
+  positions, plan d'ouverture, rappels, bilan de la semaine et état de la vérification.
+- **Les IA** : les 6 IA, avec à côté le résumé de leur réflexion et leurs actions.
+- **Journal** : chaque outil utilisé et chaque réflexion, filtrés par IA et par type.
+- **Bureau** façon Windows : des fenêtres Notes, Recherches web (et pages lues), Actualités,
+  Bourse, Screener, Reddit, Ordres (avec plus-values réalisées et stops déclenchés) et Rappels.
 
 ```bash
 python dashboard.py
@@ -97,11 +100,16 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Vérifie tes clés (elles ne sont jamais affichées) :
+Vérifie toute l'installation : clés, compte Alpaca, cours, actualités, Reddit, recherche web,
+navigateur, appel d'outils de chacune des 6 IA et garde-fous. Les clés ne sont jamais affichées.
 
 ```bash
-python check_keys.py
+python main.py --verifier
 ```
+
+Cette vérification se lance aussi **toute seule avant la première séance**, et à chaque séance
+tant qu'elle n'a pas réussi. Si un élément critique ne marche pas, la séance est annulée. Le
+résultat est enregistré dans `memoire/installation.json` et s'affiche sur l'Accueil.
 
 Puis lance une séance de préparation en simulation (`--force` permet de tourner à n'importe quelle heure) :
 
@@ -127,8 +135,27 @@ Le rapport s'ouvre dans `memoire/sessions/`.
 3. Dans l'onglet **Actions**, ouvre « Bot IA trading », puis **Run workflow** (simulation cochée)
    pour un premier essai.
 4. Ensuite, tout tourne seul chaque jour de bourse : préparation à 9 h, exécution à l'ouverture,
-   suivi en fin d'après-midi. Dans **Run workflow**, tu peux aussi lancer une séance à la main
-   (préparation, suivi ou ouverture), en simulation ou non.
+   suivi en fin d'après-midi. Des déclenchements de secours rattrapent un horaire oublié par
+   GitHub, sans jamais faire deux fois la même séance. Dans **Run workflow**, tu peux aussi lancer
+   une séance à la main (préparation, suivi, ouverture ou vérification), en simulation ou non.
+5. Facultatif, dans les mêmes Secrets :
+   - `NTFY_TOPIC` : **notifications sur ton téléphone** à chaque plan du jour, achat, vente, stop
+     déclenché et bilan. Installe l'application gratuite **ntfy**, abonne-toi à un nom de sujet
+     difficile à deviner (par exemple `bot-ia-trading-7f3k9q`) et mets ce nom dans le secret.
+   - `REDDIT_CLIENT_ID` et `REDDIT_CLIENT_SECRET` : les IA **lisent les messages Reddit** (titres et
+     début des messages), pas seulement le nombre de mentions. Crée une application gratuite de type
+     « script » sur https://www.reddit.com/prefs/apps (2 minutes).
+
+### Ce que les IA peuvent faire en plus
+
+- **Rappels** : une IA note un événement daté (résultats, annonce, décision de la Fed) avec ce qu'il
+  faudra vérifier et faire. Le jour venu, il est présenté à toute l'équipe, qui agit en fonction.
+  Les dates de résultats des actions détenues sont ajoutées automatiquement.
+- **Navigateur** : en plus de la recherche Google, une IA peut ouvrir et lire une page précise
+  (article, communiqué, page investisseurs). Les adresses internes sont refusées, et le contenu
+  externe est toujours traité comme une donnée à vérifier, jamais comme une instruction.
+- **Bilan de la semaine** : chaque vendredi soir, le gérant écrit ce qui a marché, ce qui a raté et
+  les leçons. Le bilan s'affiche sur l'Accueil.
 
 ### 4. Le tableau de bord en ligne
 
@@ -169,7 +196,8 @@ mois ; l'attente de l'ouverture en hiver (jusqu'à 70 min par jour) peut alors l
 
 - [main.py](main.py) : lance une séance (`--mode preparation | ouverture | suivi`)
 - [dashboard.py](dashboard.py) et [dashboard/](dashboard/) : l'interface ; [build_site.py](build_site.py) : sa version en ligne
-- [check_keys.py](check_keys.py) : vérifie les clés du `.env` sans les afficher
+- [check_keys.py](check_keys.py) : vérifie les clés du `.env` sans les afficher ; [bot/verification.py](bot/verification.py) : la vérification complète (`python main.py --verifier`)
+- [bot/notify.py](bot/notify.py) : notifications sur le téléphone (ntfy)
 - [bot/agents.py](bot/agents.py) : l'équipe, le déroulé d'une séance et l'exécution à l'ouverture
 - [bot/agent_tools.py](bot/agent_tools.py) : les outils que les IA appellent, selon leur rôle
 - [bot/comptes.py](bot/comptes.py) : le registre du compte (lots, stops et objectifs suivis chez Alpaca)

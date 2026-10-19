@@ -61,6 +61,8 @@ const P = {
   shield: '<path d="M12 3.5 5 6v5.5c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9V6z"/>',
   send: '<path d="M20 4 3.5 11l6.5 2.5L12.5 20z"/><path d="m10 13.5 4-4"/>',
   note: '<path d="M5 4.5h14v10l-5 5H5z"/><path d="M14 19.5v-5h5M8.5 9h7M8.5 12h4"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5z"/>',
   // Les IA
   qualite: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4M8.5 11h5M11 8.5v5"/>',
   equilibre: '<path d="M12 4v16M7 20h10M5 7.5h14"/><path d="m5 7.5-2.5 6a2.5 2.5 0 0 0 5 0zM19 7.5l-2.5 6a2.5 2.5 0 0 0 5 0z"/>',
@@ -152,7 +154,10 @@ window.addEventListener("hashchange", route);
 
 function renderPage() {
   if (!S.ov) return;
-  if (S.page === "accueil") { renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov); }
+  if (S.page === "accueil") {
+    renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov);
+    renderBilan(S.ov); renderRappelsCard(S.ov); renderSysteme(S.ov);
+  }
   if (S.page === "ia") { renderIAList(); renderIAPanel(); }
   if (S.page === "journal") renderJournal();
   if (S.page === "bureau") renderDesktop();
@@ -207,7 +212,10 @@ function renderBand(o) {
   const first = h.find((p) => p.v > 0);
   const perf = first ? (a.equity / first.v - 1) * 100 : 0;
   $("#k-perf").innerHTML = `<span class="${tone(perf)}">${esc(pct(perf))}</span>`;
-  $("#k-perf-sub").textContent = first ? `${money(a.equity - first.v, 0)} depuis le ${fmtDate(first.t * 1000, { day: "numeric", month: "short" })}` : "";
+  const spy = spyPerf(o, first);
+  $("#k-perf-sub").innerHTML = first
+    ? `${esc(money(a.equity - first.v, 0))} depuis le ${esc(fmtDate(first.t * 1000, { day: "numeric", month: "short" }))}${spy !== null ? ` · S&amp;P 500 : <span class="${tone(spy)}">${esc(pct(spy, 1))}</span>` : ""}`
+    : "";
   const e = o.equipe || {};
   const cash = e.cash ?? a.cash, total = e.valeur || a.equity || 1;
   $("#k-cash").textContent = money(cash, 0);
@@ -229,6 +237,15 @@ function smoothPath(pts) {
   return d;
 }
 
+// Performance du S&P 500 (fonds SPY) depuis la même date que le compte.
+function spyPerf(o, first) {
+  const s = (o.spy || []).filter((b) => b.t && b.c);
+  if (!first || s.length < 2) return null;
+  const d0 = new Date(first.t * 1000).toISOString().slice(0, 10);
+  const start = s.find((b) => b.t >= d0) || s[0];
+  return (s[s.length - 1].c / start.c - 1) * 100;
+}
+
 function renderChart(o) {
   const box = $("#chart");
   let pts = (o.historique || []).map((p) => ({ t: p.t * 1000, v: p.v }));
@@ -237,9 +254,19 @@ function renderChart(o) {
     box.innerHTML = empty("chart", "Pas encore d'historique", "La courbe apparaîtra après les premières séances.");
     return;
   }
+  // Le S&P 500 ramené à la même valeur de départ que le compte, pour comparer les deux courbes.
+  const d0 = new Date(pts[0].t).toISOString().slice(0, 10);  // même date de départ que spyPerf()
+  const spyRaw = (o.spy || []).filter((b) => b.t && b.c && b.t >= d0)
+    .map((b) => ({ t: new Date(`${b.t}T21:00:00Z`).getTime(), c: b.c }));
+  const spyPts = spyRaw.length >= 2 ? spyRaw.map((b) => ({ t: b.t, v: (pts[0].v * b.c) / spyRaw[0].c })) : [];
+  $("#chart-legend").innerHTML = spyPts.length
+    ? `<span class="legend"><i style="background:var(--coral)"></i>Compte</span><span class="legend"><i style="background:var(--sky)"></i>S&amp;P 500</span>`
+    : "30 derniers jours";
   const W = box.clientWidth || 700, H = box.clientHeight || 260, L = 70, R = 12, T = 12, B = 28;
-  const t0 = pts[0].t, t1 = pts[pts.length - 1].t;
-  let lo = Math.min(...pts.map((p) => p.v)), hi = Math.max(...pts.map((p) => p.v));
+  const allT = [...pts, ...spyPts].map((p) => p.t);
+  const t0 = Math.min(...allT), t1 = Math.max(...allT);
+  const allV = [...pts, ...spyPts].map((p) => p.v);
+  let lo = Math.min(...allV), hi = Math.max(...allV);
   const pad = (hi - lo) * 0.15 || hi * 0.01 || 1;
   lo -= pad; hi += pad;
   const x = (t) => L + ((t - t0) / ((t1 - t0) || 1)) * (W - L - R);
@@ -255,10 +282,57 @@ function renderChart(o) {
   }
   const xy = pts.map((p) => [x(p.t), y(p.v)]);
   const last = xy[xy.length - 1];
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Évolution de la valeur du compte">
+  const spyXY = spyPts.map((p) => [x(p.t), y(p.v)]);
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Évolution de la valeur du compte comparée au S&P 500">
     <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="c-stop-a"/><stop offset="1" class="c-stop-b"/></linearGradient></defs>
     ${grid}<path d="${smoothPath(xy)} L${last[0]},${H - B} L${xy[0][0]},${H - B} Z" fill="url(#area)"/>
+    ${spyXY.length ? `<path class="c-spy" d="${smoothPath(spyXY)}"/>` : ""}
     <path class="c-line" d="${smoothPath(xy)}"/><circle class="c-dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/></svg>`;
+}
+
+/* ---------- Accueil : bilan, rappels, état du système ---------- */
+function renderBilan(o) {
+  const b = o.bilan || {};
+  $("#bilan-card").hidden = !b.texte;
+  if (!b.texte) return;
+  $("#bilan-date").textContent = `vendredi ${fmtDate(`${b.date}T12:00:00Z`, { day: "numeric", month: "long" })}`;
+  $("#bilan-text").innerHTML = md(b.texte);
+}
+
+function rappelRow(r) {
+  const today = new Date().toLocaleDateString("sv-SE", { timeZone: "America/New_York" });
+  const st = r.statut !== "actif" ? [r.statut === "fait" ? "traité" : "expiré", r.statut === "fait" ? "pill-sage" : ""]
+    : r.date <= today ? ["aujourd'hui", "pill-coral"] : [fmtDate(`${r.date}T12:00:00Z`, { day: "numeric", month: "short" }), "pill-peach"];
+  const who = r.cree_par === "systeme" ? '<span class="pill">automatique</span>' : avatar(r.cree_par, true);
+  return `<div class="order">${who}<span class="pill ${st[1]}">${esc(st[0])}</span>${r.symbole ? `<span class="mono"><b>${esc(r.symbole)}</b></span>` : ""}<b>${esc(r.titre)}</b>
+    ${r.details ? `<div class="why">${md(r.details)}</div>` : ""}${r.note ? `<div class="why"><b>Traité :</b> ${esc(r.note)}</div>` : ""}</div>`;
+}
+
+function allRappels(o) {
+  const map = new Map((o.rappels || []).map((r) => [r.id, r]));
+  (S.sel?.rappels || []).forEach((r) => { if (!map.has(r.id)) map.set(r.id, { ...r, simulation: S.sel.simulation }); });
+  return [...map.values()];
+}
+
+function renderRappelsCard(o) {
+  const actifs = allRappels(o).filter((r) => r.statut === "actif").sort((a, b) => a.date.localeCompare(b.date));
+  $("#rappels-sub").textContent = actifs.length ? `${actifs.length} actif${actifs.length > 1 ? "s" : ""}` : "";
+  $("#rappels-card").innerHTML = actifs.length ? `<div class="list">${actifs.slice(0, 6).map(rappelRow).join("")}</div>`
+    : empty("bell", "Aucun rappel", "Les IA créent des rappels pour les événements datés (résultats, annonces…) ; ceux des actions détenues sont ajoutés automatiquement.");
+}
+
+function renderSysteme(o) {
+  const v = o.installation || {};
+  if (!v.date) {
+    $("#systeme-sub").textContent = "";
+    $("#systeme-card").innerHTML = empty("shield", "Pas encore vérifié", "La vérification complète se lance toute seule avant la première séance (ou avec python main.py --verifier).");
+    return;
+  }
+  $("#systeme-sub").innerHTML = `<span class="pill ${v.ok ? "pill-sage" : "pill-danger"}">${v.ok ? "prêt à trader" : "problème critique"}</span>`;
+  const bad = (v.checks || []).filter((c) => !c.ok);
+  $("#systeme-card").innerHTML = `<p class="small muted" style="margin:0 0 10px">Vérifié le ${esc(dayHm(v.date))} : ${esc(v.reussis)}/${esc(v.total)} tests réussis.</p>
+    <div class="list">${(bad.length ? bad : (v.checks || []).slice(0, 5)).map((c) => `<div class="order"><span class="pill ${c.ok ? "pill-sage" : c.niveau === "critique" ? "pill-danger" : "pill-peach"}">${c.ok ? "ok" : c.niveau === "critique" ? "échec" : "attention"}</span><b>${esc(c.nom)}</b><div class="why">${esc(c.detail)}</div></div>`).join("")}</div>
+    ${bad.length ? "" : '<p class="small muted" style="margin:10px 0 0">Tout fonctionne : clés, broker, données, IA et garde-fous.</p>'}`;
 }
 
 function todayParis(d) { return fmtDate(d, { year: "numeric", month: "2-digit", day: "2-digit" }); }
@@ -415,6 +489,10 @@ function toolLabel(st) {
     annuler_ordre: ["x", `Annule l'ordre planifié sur ${a.symbole || ""}`],
     ajuster_stop: ["shield", `Remonte le stop de ${a.symbole || ""} à ${money(a.nouveau_stop, 2)}`],
     lire_skill: ["book", `Lit le skill « ${a.nom || ""} »`],
+    lire_page: ["globe", `Ouvre la page ${String(a.url || "").replace(/^https?:\/\//, "").slice(0, 60)}`],
+    creer_rappel: ["bell", `Crée un rappel le ${a.date || ""} : ${a.titre || ""}`],
+    voir_rappels: ["bell", "Consulte les rappels"],
+    terminer_rappel: ["check", `Rappel ${a.id || ""} traité`],
     terminer_session: ["check", "Termine la séance"],
   };
   return L[st.nom] || ["spark", st.nom];
@@ -565,6 +643,8 @@ const APPS = [
   { id: "bourse", nom: "Bourse", ic: "chart", color: "var(--sage)", sub: "Les cours et chiffres consultés" },
   { id: "screener", nom: "Screener", ic: "filter", color: "var(--plum)", sub: "Ses filtres d'actions" },
   { id: "reddit", nom: "Reddit", ic: "chat", color: "var(--coral-deep)", sub: "L'humeur des réseaux vue" },
+  { id: "ordres", nom: "Ordres", ic: "wallet", color: "var(--sage)", sub: "Tous les achats et ventes" },
+  { id: "rappels", nom: "Rappels", ic: "bell", color: "var(--peach)", sub: "Les événements à ne pas oublier" },
 ];
 const appOf = (id) => APPS.find((a) => a.id === id);
 
@@ -736,11 +816,41 @@ const APP_RENDER = {
   },
 
   recherches(items, q) {
-    const rows = items.filter((x) => x.nom === "recherche_web" && match(q, x.args.question, x.d?.reponse));
-    if (!rows.length) return empty("search", "Aucune recherche", "Les IA n'ont pas fait de recherche web dans cette sélection.");
-    return rows.reverse().map((x) => `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<b>« ${esc(x.args.question)} »</b><span class="b-time">${esc(dayHm(x.ts))}</span></div>
-      <div class="b-text">${md(x.d?.reponse || x.d?.erreur || x.raw || "")}</div>
-      ${(x.d?.sources || []).length ? `<div class="chips">${x.d.sources.map((s) => `<span class="pill">${esc(s)}</span>`).join("")}</div>` : ""}</div>`).join("");
+    const rows = items.filter((x) => (x.nom === "recherche_web" && match(q, x.args.question, x.d?.reponse))
+      || (x.nom === "lire_page" && match(q, x.args.url, x.d?.titre, x.d?.texte)));
+    if (!rows.length) return empty("search", "Aucune recherche", "Les IA n'ont fait ni recherche web ni lecture de page dans cette sélection.");
+    return rows.reverse().map((x) => x.nom === "lire_page"
+      ? `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<span class="pill pill-sky">${icon("globe")}page lue</span><b>${esc(x.d?.titre || x.args.url)}</b><span class="b-time">${esc(dayHm(x.ts))}</span></div>
+        <div class="small muted mono" style="overflow-wrap:anywhere">${esc(x.d?.url || x.args.url)}</div>
+        <div class="b-text">${x.d?.texte ? esc(x.d.texte.slice(0, 700)) + (x.d.texte.length > 700 ? "…" : "") : esc(x.d?.erreur || "")}</div></div>`
+      : `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<b>« ${esc(x.args.question)} »</b><span class="b-time">${esc(dayHm(x.ts))}</span></div>
+        <div class="b-text">${md(x.d?.reponse || x.d?.erreur || x.raw || "")}</div>
+        ${(x.d?.sources || []).length ? `<div class="chips">${x.d.sources.map((s) => `<span class="pill">${esc(s)}</span>`).join("")}</div>` : ""}</div>`).join("");
+  },
+
+  ordres(items, q) {
+    const rows = (S.ov?.ordres || []).filter((e) => match(q, e.symbole, e.action, e.source)).slice().reverse();
+    if (!rows.length) return empty("wallet", "Aucun ordre pour l'instant", "Les achats et ventes réels (pas les simulations) apparaîtront ici, avec les stops et objectifs déclenchés.");
+    const sells = rows.filter((e) => e.plus_value != null);
+    const pl = sells.reduce((s, e) => s + e.plus_value, 0), wins = sells.filter((e) => e.plus_value > 0).length;
+    const lab = { acheter: "achat", vendre: "vente", alleger: "allègement", ajuster_stop: "stop remonté" };
+    return `<div class="kv"><div><span>Ordres</span><b>${rows.length}</b></div><div><span>Ventes clôturées</span><b>${sells.length}</b></div>
+      <div><span>Plus-value réalisée</span><b class="${tone(pl)}">${esc(money(pl, 0))}</b></div><div><span>Ventes gagnantes</span><b>${sells.length ? `${Math.round((wins / sells.length) * 100)} %` : "—"}</b></div></div>
+      <div class="table-wrap" style="margin:8px 0 0"><table><thead><tr><th>Date</th><th>Ordre</th><th>Titre</th><th>Quantité</th><th>Prix</th><th>Plus-value</th><th>Origine</th><th>Statut</th></tr></thead><tbody>
+      ${rows.map((e) => `<tr><td class="small">${esc(dayHm(e.ts))}</td><td>${actionPill(lab[e.action] || e.action)}</td><td class="mono"><b>${esc(e.symbole)}</b></td>
+        <td>${esc(e.qty ?? "—")}</td><td>${e.prix ? esc(money(e.prix, 2)) : "—"}</td>
+        <td>${e.plus_value != null ? `<span class="${tone(e.plus_value)}">${esc(money(e.plus_value, 2))}</span>` : "—"}</td>
+        <td class="small">${esc(e.source || (e.agent === "alpaca" ? "Alpaca" : "gérant"))}</td>
+        <td><span class="pill ${e.statut === "exécuté" ? "pill-sage" : e.statut === "erreur" ? "pill-danger" : "pill-peach"}">${esc(e.statut)}</span></td></tr>`).join("")}</tbody></table></div>`;
+  },
+
+  rappels(items, q) {
+    const all = allRappels(S.ov || {}).filter((r) => match(q, r.titre, r.symbole, r.details));
+    if (!all.length) return empty("bell", "Aucun rappel", "Les rappels créés par les IA et ceux des dates de résultats apparaîtront ici.");
+    const actifs = all.filter((r) => r.statut === "actif").sort((a, b) => a.date.localeCompare(b.date));
+    const passes = all.filter((r) => r.statut !== "actif").sort((a, b) => b.date.localeCompare(a.date));
+    return `${actifs.length ? `<div class="overline sub-h">À venir (${actifs.length})</div><div class="list">${actifs.map(rappelRow).join("")}</div>` : ""}
+      ${passes.length ? `<div class="overline sub-h" style="margin-top:12px">Traités ou expirés (${passes.length})</div><div class="list">${passes.slice(0, 30).map(rappelRow).join("")}</div>` : ""}`;
   },
 
   actualites(items, q) {

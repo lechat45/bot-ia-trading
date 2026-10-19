@@ -661,3 +661,7 @@ body.on-desk .content { padding: 16px; }
   .side-item { white-space: nowrap; }
   .side-item.sel::before { display: none; }
 }
+
+.c-spy { fill: none; stroke: var(--sky); stroke-width: 1.6; stroke-dasharray: 5 4; opacity: .9; }
+.legend { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; }
+.legend i { width: 12px; height: 3px; border-radius: 3px; display: inline-block; }

@@ -9,7 +9,7 @@ import logging
 import time
 import uuid
 
-from . import memory
+from . import memory, notify
 from .alpaca import AlpacaError
 from .comptes import DEAD, DONE
 
@@ -69,6 +69,8 @@ class Broker:
                    "parent_id": o["id"], **self.comptes.leg_ids(o)}
             self.comptes.add_lot(aid, sym, lot, these)
             self._journal(aid, "acheter", sym, filled, "exécuté", prix=fill, stop=stop, tp=tp)
+            notify.send(f"Achat : {filled} {sym}", f"{filled} {sym} achetées à {fill:.2f} $ (stop {stop:.2f} $, "
+                        f"objectif {tp:.2f} $), soit {filled * fill:,.0f} $.".replace(",", " "))
             return {"ok": True, "message": f"Achat exécuté : {filled} {sym} à {fill:.2f} $ "
                     f"(stop {stop:.2f} $, objectif {tp:.2f} $)", "qty": filled, "prix": fill, "stop": stop, "tp": tp}
         if status in DEAD:
@@ -124,6 +126,8 @@ class Broker:
         pl = self.comptes.remove_qty(aid, sym, qty, price)
         self._journal(aid, "vendre" if qty >= total else "alleger", sym, qty, "exécuté", prix=price,
                       plus_value=round(pl, 2), raison=raison[:200])
+        notify.send(f"Vente : {qty} {sym}", f"{qty} {sym} vendues à {price:.2f} $, plus-value {pl:+.2f} $.",
+                    tags="moneybag")
         # 3. remettre la protection sur ce qui reste
         if total - qty >= 1 and stops:
             self._rearm(aid, sym, total - qty, stops, tps)

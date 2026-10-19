@@ -178,7 +178,16 @@ class Comptes:
                 price = float(o["filled_avg_price"])
                 qty = lot["qty"]
                 pl = self.remove_qty(aid, sym, qty, price)
-                self.event(aid, f"{label} : {qty} {sym} vendues à {price:.2f} $ (plus-value {pl:+.2f} $)")
+                texte = f"{label} : {qty} {sym} vendues à {price:.2f} $ (plus-value {pl:+.2f} $)"
+                self.event(aid, texte)
+                if self.persist:  # trace dans l'historique des ordres (et notification)
+                    from . import memory, notify
+
+                    memory.append_journal([{"type": "execution", "ts": _now(), "agent": "alpaca", "action": "vendre",
+                                            "symbole": sym, "qty": qty, "statut": "exécuté", "prix": price,
+                                            "plus_value": round(pl, 2),
+                                            "source": "stop loss" if leg == "stop_id" else "objectif de gain"}])
+                    notify.send(f"{label} sur {sym}", texte, tags="chart_with_downwards_trend" if leg == "stop_id" else "tada")
                 return
 
     @staticmethod

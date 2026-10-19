@@ -9,6 +9,10 @@ Options :
     --dry-run   simulation : l'équipe travaille mais aucun ordre n'est envoyé et rien n'est enregistré
     --force     ignore les vérifications d'horaire (utile pour tester à n'importe quelle heure)
     --offline   test complet sans clé ni réseau (fausses données, fausses IA)
+    --verifier  vérifie toute l'installation (clés, broker, données, IA, garde-fous) puis s'arrête
+
+Au tout premier lancement (et tant que la vérification n'a pas réussi), la vérification
+complète est faite automatiquement avant la séance.
 """
 import argparse
 import datetime as dt
@@ -48,6 +52,7 @@ def main() -> int:
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--attente-max", type=int, default=100, help="minutes d'attente max de l'ouverture")
+    ap.add_argument("--verifier", action="store_true", help="vérifie toute l'installation puis s'arrête")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)-8s %(message)s",
                         datefmt="%H:%M:%S", stream=sys.stdout)
@@ -69,6 +74,16 @@ def main() -> int:
 
         alpaca, router = Alpaca(cfg.alpaca_key, cfg.alpaca_secret, cfg.paper), Router(cfg)
         dry_run = cfg.dry_run or args.dry_run
+
+    from bot import verification
+
+    if args.verifier:
+        return 0 if verification.run(cfg, alpaca, router, offline=args.offline)["ok"] else 1
+    if not args.offline and not memory.read_installation().get("ok"):
+        log.info("Première utilisation (ou dernière vérification en échec) : vérification complète avant la séance.")
+        if not verification.run(cfg, alpaca, router)["ok"]:
+            log.error("Vérification en échec : séance annulée. Détail dans memoire/installation.json.")
+            return 1
 
     clock = alpaca.clock()
     is_open = bool(clock.get("is_open"))
@@ -107,6 +122,12 @@ def main() -> int:
         elif not is_open:
             log.info("Bourse fermée + --force : simulation au dernier prix connu.")
             dry_run = True
+
+    if mode == "suivi" and is_open and not args.force and not dry_run:
+        today = now.astimezone(PARIS).strftime("%Y-%m-%d")
+        if any((memory.ROOT / "sessions").glob(f"{today}_*_suivi.json")):
+            log.info("La séance de suivi du jour a déjà eu lieu.")
+            return 0
 
     if mode == "suivi" and not is_open:
         if not args.force:

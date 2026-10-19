@@ -126,7 +126,9 @@ def overview() -> dict:
                "min_reward_risk", "max_gap_pct", "preparation_heure")},
            "cles": {"gemini": len(cfg.gemini_keys), "groq": len(cfg.groq_keys), "alpaca": not DEMO},
            "plan": memory.read_plan(simulation=DEMO) or memory.read_plan(simulation=True),
-           "historique_ia": memory.read_history()}
+           "historique_ia": memory.read_history(), "installation": memory.read_installation(),
+           "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(),
+           "ordres": [e for e in memory.recent_journal(120) if e.get("type") == "execution"][-300:]}
     try:
         acct = broker.account()
         out["compte"] = {k: float(acct.get(k) or 0) for k in ("equity", "cash", "last_equity", "buying_power")}
@@ -134,6 +136,11 @@ def overview() -> dict:
         prices = {p["symbol"]: float(p["current_price"]) for p in broker.positions()}
         out["equipe"] = _compte(out["compte"]["equity"], prices)
         out["positions"] = out["equipe"]["positions"]
+        try:  # le S&P 500 (fonds SPY) pour comparer la performance du compte au marché
+            spy = (broker.bars(["SPY"], days=45) or {}).get("SPY") or []
+            out["spy"] = [{"t": str(b.get("t", ""))[:10], "c": b["c"]} for b in spy[-31:]]
+        except Exception:
+            out["spy"] = []
         h = broker.portfolio_history("1M", "1D")
         out["historique"] = [{"t": t, "v": v} for t, v in zip(h.get("timestamp") or [], h.get("equity") or [])
                              if v]  # Alpaca renvoie 0 avant le premier dépôt

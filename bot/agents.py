@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import memory
+from . import memory, notify
 from .agent_tools import SKILL_INFO, AgentEnv, Market, declarations
 from .comptes import Comptes
 from .executor import Broker
@@ -126,6 +126,7 @@ class Session:
         self.proposals: list = []
         self.avis: dict = {}
         self.rappels: list = memory.read_rappels()
+        self.bilan = ""
 
     # ------------------------------------------------------------------ données partagées de la séance
     def add_plan(self, order: dict):
@@ -188,6 +189,10 @@ class Session:
                     memory.state_agent(CRITIQUE.id, statut="termine", action="aucune proposition à contrôler")
                 # 3. le gérant décide
                 self.results[GERANT.id] = self.run_agent(GERANT)
+                # 4. le vendredi soir, le gérant écrit le bilan de la semaine
+                if self.mode == "suivi" and (self.now.astimezone(PARIS).weekday() == 4 or os.getenv("BILAN_FORCE")):
+                    self.bilan = self.weekly_review()
+            self.auto_reminders()
             self.finish()
             return self.results
         finally:
@@ -400,6 +405,55 @@ class Session:
         plan["execute_le"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 
     # ------------------------------------------------------------------ fin de séance
+    def auto_reminders(self):
+        """Pour chaque action détenue, un rappel automatique à la date de ses prochains résultats."""
+        today = dt.date.fromisoformat(self.trading_date)
+        for sym in self.comptes.symbols():
+            f = self.market.fundamentals(sym) or {}
+            date = f.get("prochains_resultats")
+            try:
+                d = dt.date.fromisoformat(str(date))
+            except ValueError:
+                continue
+            if not today <= d <= today + dt.timedelta(days=120):
+                continue
+            if any(r["symbole"] == sym and r["date"] == d.isoformat() and r["statut"] == "actif" for r in self.rappels):
+                continue
+            with self.lock:
+                self.rappels.append({
+                    "id": f"r{len(self.rappels) + 1}-{d.strftime('%m%d')}", "date": d.isoformat(),
+                    "titre": f"Résultats de {sym}", "symbole": sym, "seance": "toutes", "cree_par": "systeme",
+                    "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, "
+                               "puis décider de garder, renforcer ou vendre selon les chiffres.",
+                    "cree_le": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "statut": "actif"})
+
+    def weekly_review(self) -> str:
+        """Bilan de la semaine écrit par le gérant (ce qui a marché, ce qui a raté, les leçons)."""
+        week = memory.recent_journal(7)
+        execs = [e for e in week if e.get("type") == "execution" and e.get("statut") in ("exécuté", "envoyé")]
+        hist = [h for h in memory.read_history() if h["date"] >= (self.now - dt.timedelta(days=7)).isoformat()]
+        val = self.comptes.valuation(ACCOUNT, self.market.prices(self.comptes.symbols()))
+        user = (f"C'est vendredi soir : écris le BILAN DE LA SEMAINE de l'équipe pour l'humain qui suit l'expérience.\n\n"
+                f"VALEUR DU COMPTE : {_dumps(hist[-12:] or 'pas encore d historique')} ; maintenant {val['valeur']:.2f} $ "
+                f"({val['pl_pct']:+.2f} % depuis le départ).\n\nPOSITIONS : {_dumps(val['positions'])}\n\n"
+                f"ORDRES DE LA SEMAINE : {_dumps(execs[-40:]) if execs else 'aucun'}\n\n"
+                f"JOURNAL DE BORD DE L'ÉQUIPE :\n{memory.read_notes(GERANT.id)[:2500]}\n\n"
+                "Rédige en français, en 4 parties courtes : 1. Résultat de la semaine (chiffres) ; 2. Ce qui a marché ; "
+                "3. Ce qui a raté ; 4. Leçons et plan pour la semaine prochaine. Factuel, pas plus de 250 mots, sans conseil "
+                "d'investissement personnalisé.")
+        try:
+            msg, used = self.router.chat(GERANT, "Tu es le gérant d'une équipe d'IA qui gère un compte de paper trading.",
+                                         [{"role": "user", "text": user}], [], label="bilan")
+        except LLMError as e:
+            log.warning("bilan de la semaine impossible : %s", e)
+            return ""
+        texte = (msg.get("text") or "").strip()
+        if texte and not self.dry_run:
+            memory.write_bilan(self.now.astimezone(PARIS).strftime("%Y-%m-%d"), texte)
+            notify.send("Bilan de la semaine", texte[:900], tags="memo")
+        log.info("Bilan de la semaine écrit (%s)", used)
+        return texte
+
     def finish(self):
         prices = self.market.prices(self.comptes.symbols())
         after = self.comptes.valuation(ACCOUNT, prices)
@@ -412,6 +466,12 @@ class Session:
                                     "positions": len(after["positions"])}])
         if not self.dry_run:
             memory.write_rappels(self.rappels)
+            planned = [o for o in self.plan.get("ordres", []) if o.get("statut") == "en_attente"]
+            if self.mode == "preparation" and planned:
+                lignes = [f"{o['action']} {o['symbole']}" + (f" pour {o.get('montant_usd', 0):.0f} $"
+                                                               if o["action"] == "acheter" else "") for o in planned]
+                notify.send(f"Plan du jour : {len(planned)} ordre(s)",
+                            "\n".join(lignes) + "\nExécution à l'ouverture de New York.", tags="calendar")
         if self.mode in ("preparation", "ouverture") and self.plan:
             memory.write_plan(self.plan, simulation=self.dry_run)
         for p in self.proposals:  # chaque proposition garde son verdict et ce que le gérant en a fait
@@ -429,6 +489,7 @@ class Session:
             "plan": self.plan.get("ordres", []) if self.mode == "preparation" else [],
             "compte": after, "valeur_avant": self.before["valeur"],
             "cles": dict(self.router.slots),
+            "bilan": self.bilan,
             "rappels": [r for r in self.rappels if r["statut"] == "actif" or r.get("fait_le", "") >= self.now.isoformat()],
         }
         memory.write_session_json(name, data)
