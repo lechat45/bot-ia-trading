@@ -51,6 +51,15 @@ def _retry_after(resp: requests.Response, default: float) -> float:
         return default
 
 
+def _gemini_wait(resp: requests.Response) -> float:
+    """Temps d'attente annoncé par Gemini. Un quota du JOUR épuisé (« PerDay ») ne revient pas avant des
+    heures, même si la réponse propose de réessayer dans 30 secondes."""
+    if "PerDay" in resp.text:
+        return 3600.0
+    m = re.search(r'"retryDelay":\s*"(\d+(?:\.\d+)?)s"', resp.text)
+    return float(m.group(1)) if m else _retry_after(resp, 30)
+
+
 def _new_id() -> str:
     return "call_" + uuid.uuid4().hex[:10]
 
@@ -112,7 +121,7 @@ class Gemini:
         except requests.Timeout:
             raise ModelUnavailable(f"Gemini {model} : délai dépassé")
         if r.status_code == 429:
-            raise RateLimited(_retry_after(r, 30), r.text)
+            raise RateLimited(_gemini_wait(r), r.text)
         if r.status_code in (404, 500, 503):
             raise ModelUnavailable(f"Gemini {model} {r.status_code}")
         if r.status_code == 400 and ("token" in r.text.lower() and "exceed" in r.text.lower()):
@@ -283,6 +292,18 @@ class Router:
         self._lock = threading.Lock()
         self._searches: dict = {}  # recherches web déjà faites pendant la séance (même question = même réponse)
         self._search_turn = 0  # les recherches tournent sur les 3 clés Gemini
+        # (fournisseur, clé, modèle) -> heure avant laquelle on ne le réessaie pas : un modèle qui demande
+        # d'attendre 30 minutes n'est plus réessayé à chaque tour de chaque IA.
+        self._cool: dict = {}
+
+    def _cool_left(self, prov, ki, model) -> float:
+        with self._lock:
+            return self._cool.get((prov, ki, model), 0.0) - time.time()
+
+    def _cool_down(self, prov, ki, model, seconds: float):
+        with self._lock:
+            key = (prov, ki, model)
+            self._cool[key] = max(self._cool.get(key, 0.0), time.time() + seconds)
 
     def _attempts(self, provider: str, key_index: int, models: list[str]):
         """Ordre d'essai : sa clé, puis la clé relais du même fournisseur, puis l'autre fournisseur."""
@@ -305,11 +326,30 @@ class Router:
 
     def chat(self, agent, system, messages, tools, label=""):
         """Un tour de conversation pour une IA. Renvoie (message assistant, "fournisseur#clé:modèle")."""
+        attempts = self._attempts(agent.provider, agent.key_index, agent.models)
+        for round_ in range(2):
+            try:
+                return self._chat_once(agent, system, messages, tools, label, attempts)
+            except LLMError as e:
+                if isinstance(e, ContextTooLarge) or round_:
+                    raise
+                # Tout est saturé : si un modèle se libère bientôt, on l'attend une fois.
+                wait = min((self._cool_left(p, k, m) for p, k, m in attempts), default=0)
+                if not 0 < wait <= 120:
+                    raise
+                log.info("%s : toutes les clés sont saturées, pause %.0fs", label, wait)
+                time.sleep(wait + random.uniform(1, 3))
+
+    def _chat_once(self, agent, system, messages, tools, label, attempts):
         last = None
         skipped: set = set()
-        for prov_name, ki, model in self._attempts(agent.provider, agent.key_index, agent.models):
+        cooling = 0
+        for prov_name, ki, model in attempts:
             prov = self.providers[prov_name]
             if (prov_name, ki) in skipped:
+                continue
+            if self._cool_left(prov_name, ki, model) > 0:
+                cooling += 1
                 continue
             try:
                 if model not in prov.available(prov.keys[ki]):
@@ -331,9 +371,11 @@ class Router:
                         log.info("%s : %s#%d %s limité, pause %.0fs", label, prov_name, ki + 1, model, e.wait)
                         time.sleep(e.wait + random.uniform(1, 3))
                         continue
+                    self._cool_down(prov_name, ki, model, max(e.wait, 60))
                     break
-                except ModelUnavailable as e:
+                except ModelUnavailable as e:  # surcharge passagère (503) : on le laisse souffler un peu
                     last = e
+                    self._cool_down(prov_name, ki, model, 60)
                     break
                 except (LLMError, requests.RequestException, KeyError, ValueError) as e:
                     last = e
@@ -342,7 +384,7 @@ class Router:
                         continue
                     break
             log.warning("%s : %s#%d %s indisponible (%s), essai suivant", label, prov_name, ki + 1, model, last)
-        raise LLMError(f"{label} : aucune clé ni aucun modèle disponible ({last})")
+        raise LLMError(f"{label} : aucune clé ni aucun modèle disponible ({last or f'{cooling} modèle(s) saturé(s)'})")
 
     def web_search(self, question: str, who: str = "web"):
         gem = self.providers["gemini"]

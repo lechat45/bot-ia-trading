@@ -40,7 +40,7 @@ class Comptes:
             for a in agent_ids:
                 data["agents"][a] = {"capital_depart": part, "cash": part, "positions": {},
                                      "realise": 0.0, "evenements": []}
-            log.info("Sous-comptes créés : %s $ par IA", part)
+            log.info("Registre du compte créé : %s $ (%s)", part, ", ".join(agent_ids))
         for a in agent_ids:  # une IA ajoutée plus tard démarre avec 0 $ (à financer à la main)
             data["agents"].setdefault(a, {"capital_depart": 0.0, "cash": 0.0, "positions": {},
                                           "realise": 0.0, "evenements": []})

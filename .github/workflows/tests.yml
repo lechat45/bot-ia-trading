@@ -35,6 +35,7 @@ jobs:
         run: |
           python tests/test_risk.py
           python tests/test_memoire.py
+          python tests/test_llm.py
 
       - name: Séances complètes hors ligne (préparation, ouverture, suivi)
         run: |

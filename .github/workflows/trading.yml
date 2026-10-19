@@ -10,14 +10,19 @@ name: Bot IA trading
 
 on:
   schedule:
-    # Heures UTC, du lundi au vendredi (GitHub peut retarder un déclenchement de quelques minutes).
-    - cron: "0 7 * * 1-5"    # préparation : 9 h à Paris en heure d'été (en hiver il est 8 h : ignoré)
-    - cron: "0 8 * * 1-5"    # préparation : 9 h à Paris en heure d'hiver (en été il est 10 h : déjà fait)
+    # Heures UTC, du lundi au vendredi. GitHub peut retarder un déclenchement, voire le sauter quand il
+    # est surchargé (surtout aux heures pile) : on évite la minute 0 et chaque séance a des rattrapages.
+    # Une séance déjà faite n'est jamais refaite (le programme vérifie le plan et les séances du jour).
+    - cron: "7 7 * * 1-5"    # préparation : 9 h 07 à Paris en heure d'été (en hiver il est 8 h 07 : ignoré)
+    - cron: "7 8 * * 1-5"    # préparation : 9 h 07 à Paris en heure d'hiver (en été : rattrapage de 10 h 07)
+    - cron: "37 8 * * 1-5"   # préparation : rattrapage
+    - cron: "17 9 * * 1-5"   # préparation : rattrapage (au plus tard 12 h à Paris)
     - cron: "20 13 * * 1-5"  # ouverture : attend l'ouverture de New York (13 h 30 ou 14 h 30 UTC)
-    - cron: "30 8 * * 1-5"   # préparation : secours (ne fait rien si le plan du jour existe déjà)
-    - cron: "45 14 * * 1-5"  # ouverture : secours si le déclenchement précédent a été perdu
+    - cron: "47 14 * * 1-5"  # ouverture : rattrapage si le déclenchement précédent a été perdu
+    - cron: "23 15 * * 1-5"  # ouverture : rattrapage
     - cron: "30 17 * * 1-5"  # suivi : 19 h 30 à Paris en été, 18 h 30 en hiver
-    - cron: "15 18 * * 1-5"  # suivi : secours (ne fait rien si le suivi du jour a déjà eu lieu)
+    - cron: "13 18 * * 1-5"  # suivi : rattrapage
+    - cron: "52 18 * * 1-5"  # suivi : rattrapage (la bourse ferme à 20 h ou 21 h UTC)
   workflow_dispatch:
     inputs:
       mode:
@@ -79,9 +84,9 @@ jobs:
           FORCE: ${{ inputs.force }}
         run: |
           case "$SCHEDULE" in
-            "0 7 * * 1-5"|"0 8 * * 1-5"|"30 8 * * 1-5") MODE=preparation ;;
-            "20 13 * * 1-5"|"45 14 * * 1-5") MODE=ouverture ;;
-            "30 17 * * 1-5"|"15 18 * * 1-5") MODE=suivi ;;
+            "7 7 * * 1-5"|"7 8 * * 1-5"|"37 8 * * 1-5"|"17 9 * * 1-5") MODE=preparation ;;
+            "20 13 * * 1-5"|"47 14 * * 1-5"|"23 15 * * 1-5") MODE=ouverture ;;
+            "30 17 * * 1-5"|"13 18 * * 1-5"|"52 18 * * 1-5") MODE=suivi ;;
             *) MODE="${MANUAL_MODE:-auto}" ;;
           esac
           ARGS="--mode $MODE"
