@@ -1,0 +1,31 @@
+{
+ "cree_le": "2026-10-19T17:33:55+00:00",
+ "capital_total": 100000.0,
+ "agents": {
+  "equipe": {
+   "capital_depart": 100000.0,
+   "cash": 90021.2,
+   "positions": {
+    "AMZN": {
+     "lots": [
+      {
+       "qty": 38,
+       "prix": 262.6,
+       "date": "2026-10-19T17:44:41+00:00",
+       "stop": 249.49,
+       "tp": 288.89,
+       "statut": "ouvert",
+       "parent_id": "d17c1268-cd7e-4808-acf8-fb165b70d4b4",
+       "stop_id": "2d4467f4-1ac1-4842-bff5-ab7001bd55fb",
+       "tp_id": "f2cde9da-59fc-43bf-bd8f-f0851b16101e"
+      }
+     ],
+     "these": "Amazon (AMZN) présente une qualité financière indiscutable : CA +19.6%, BPA +242%, marge nette 17.4%, ROE 30.6%, dette/FP très saine à 46% et FCF positif de 3.2Md$. Le titre surperforme le marché (+5.1% ce jour, +22.5% sur 1 an), au-dessus de sa SMA200 (242.87$) et SMA20 (253.45$). Résultats trimestriels le 29/10/2026 (dans 10 jours, donc >1 jour). Allocation de 10 000 $ (10% du portefeuille). Stop loss à 5% (~249.43$), take profit à 10% (~288.82$, ratio 2.0). Invalidation : clôture sous la SMA20/support 249$. Horizon moyen terme. Confiance élevée."
+    }
+   },
+   "realise": 0.0,
+   "evenements": [],
+   "derniere_seance": "2026-10-19T17:33:55+00:00"
+  }
+ }
+}

@@ -1,0 +1,244 @@
+{
+ "date": "2026-10-19T17:33:55+00:00",
+ "ok": true,
+ "hors_ligne": false,
+ "reussis": 25,
+ "attention": 1,
+ "total": 26,
+ "checks": [
+  {
+   "id": "config",
+   "nom": "Configuration (.env / Secrets)",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "clés présentes, mode paper (argent virtuel)",
+   "duree_s": 0.0
+  },
+  {
+   "id": "alpaca_compte",
+   "nom": "Compte Alpaca",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "compte ACTIVE  valeur 100 000.00 $",
+   "duree_s": 0.4
+  },
+  {
+   "id": "alpaca_horloge",
+   "nom": "Horaires de la bourse",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "bourse ouverte",
+   "duree_s": 0.0
+  },
+  {
+   "id": "cours",
+   "nom": "Cours et historique des actions",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "AAPL : 276 jours d'historique, dernier prix 342.52 $",
+   "duree_s": 0.6
+  },
+  {
+   "id": "actualites",
+   "nom": "Fil d'actualité",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "3 articles, ex. « Wells Fargo Maintains Overweight on Netstreit, Lowers Price  »",
+   "duree_s": 0.0
+  },
+  {
+   "id": "screener",
+   "nom": "Screener du marché",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "5 actions les plus échangées",
+   "duree_s": 0.1
+  },
+  {
+   "id": "financier",
+   "nom": "Données financières (yfinance)",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "AAPL : PER 39.3, résultats 2026-11-02",
+   "duree_s": 1.1
+  },
+  {
+   "id": "reddit",
+   "nom": "Reddit (ApeWisdom)",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "300 actions suivies, n°1 : SPY",
+   "duree_s": 1.4
+  },
+  {
+   "id": "web",
+   "nom": "Recherche web (Google)",
+   "niveau": "utile",
+   "ok": false,
+   "attention": true,
+   "detail": "Recherche web indisponible : le quota gratuit de Gemini est atteint pour le moment. Note l'information comme inconnue et avance.",
+   "duree_s": 74.1
+  },
+  {
+   "id": "page",
+   "nom": "Lecture d'une page web",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "page lue : « Example Domain »",
+   "duree_s": 0.1
+  },
+  {
+   "id": "cle_gemini_1",
+   "nom": "Clé Gemini n°1",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "46 modèles disponibles",
+   "duree_s": 0.0
+  },
+  {
+   "id": "cle_gemini_2",
+   "nom": "Clé Gemini n°2",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "46 modèles disponibles",
+   "duree_s": 0.0
+  },
+  {
+   "id": "cle_gemini_3",
+   "nom": "Clé Gemini n°3",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "46 modèles disponibles",
+   "duree_s": 0.0
+  },
+  {
+   "id": "cle_groq_1",
+   "nom": "Clé Groq n°1",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "11 modèles disponibles",
+   "duree_s": 0.2
+  },
+  {
+   "id": "cle_groq_2",
+   "nom": "Clé Groq n°2",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "11 modèles disponibles",
+   "duree_s": 0.1
+  },
+  {
+   "id": "cle_groq_3",
+   "nom": "Clé Groq n°3",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "11 modèles disponibles",
+   "duree_s": 0.1
+  },
+  {
+   "id": "cles",
+   "nom": "Au moins une clé d'IA valide",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "6 clé(s) valide(s)",
+   "duree_s": 0
+  },
+  {
+   "id": "ia_qualite",
+   "nom": "Analyste Qualité : appel d'outils",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "appel d'outil réussi avec gemini#1:gemini-3.5-flash",
+   "duree_s": 1.1
+  },
+  {
+   "id": "ia_equilibre",
+   "nom": "Analyste Équilibre : appel d'outils",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "appel d'outil réussi avec gemini#2:gemini-3.5-flash",
+   "duree_s": 2.1
+  },
+  {
+   "id": "ia_sentiment",
+   "nom": "Analyste Sentiment : appel d'outils",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "appel d'outil réussi avec groq#1:openai/gpt-oss-120b",
+   "duree_s": 0.5
+  },
+  {
+   "id": "ia_contrarien",
+   "nom": "Analyste Contrarien : appel d'outils",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "appel d'outil réussi avec groq#2:qwen/qwen3.8-27b",
+   "duree_s": 0.3
+  },
+  {
+   "id": "ia_critique",
+   "nom": "Critique : appel d'outils",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "appel d'outil réussi avec groq#3:openai/gpt-oss-20b",
+   "duree_s": 0.3
+  },
+  {
+   "id": "ia_gerant",
+   "nom": "Gérant : appel d'outils",
+   "niveau": "utile",
+   "ok": true,
+   "attention": false,
+   "detail": "appel d'outil réussi avec gemini#3:gemini-3.5-flash",
+   "duree_s": 1.1
+  },
+  {
+   "id": "ia",
+   "nom": "Au moins une IA opérationnelle",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "6/6 IA répondent avec des outils",
+   "duree_s": 0
+  },
+  {
+   "id": "gardefous",
+   "nom": "Garde-fous (stop, tailles, aller-retour)",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "12 tests réussis",
+   "duree_s": 0.1
+  },
+  {
+   "id": "memoire",
+   "nom": "Mémoire des IA",
+   "niveau": "critique",
+   "ok": true,
+   "attention": false,
+   "detail": "dossier memoire/ accessible en écriture",
+   "duree_s": 0.0
+  }
+ ]
+}
