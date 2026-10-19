@@ -105,8 +105,24 @@ def run(cfg, alpaca, router, offline: bool = False) -> dict:
 
         def web():
             r = router.web_search("En une phrase : quelle entreprise fabrique l'iPhone ?", who="verification")
-            return (True, f"réponse : {r['reponse'][:60]}") if r.get("reponse") else (None, r.get("erreur", "pas de réponse"))
+            if r.get("erreur"):
+                return None, r["erreur"]
+            if r.get("moteur", "").startswith("Google (via Gemini)"):
+                return True, f"réponse : {r['reponse'][:60]}"
+            return None, f"Gemini épuisé, recherche assurée par {r.get('moteur')}"
         c.run("web", "Recherche web (Google)", "utile", web)
+
+        def web_secours():
+            r = tools.free_search("Apple iPhone")
+            n = len(r.get("actualites_google") or [])
+            return (True, f"{n} articles de Google Actualités") if n else (None, r.get("erreur", "aucun article"))
+        c.run("web_secours", "Recherche web de secours (sans clé)", "utile", web_secours)
+
+        if tools.tavily_configured():
+            def tavily():
+                r = tools.tavily_search("Which company makes the iPhone?", limit=1)
+                return (True, f"réponse : {r['reponse'][:60]}") if r.get("reponse") or r.get("resultats") else (None, "pas de réponse")
+            c.run("tavily", "Recherche web Tavily", "utile", tavily)
 
         def page():
             r = tools.read_page("https://example.com")

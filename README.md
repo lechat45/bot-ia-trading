@@ -156,6 +156,9 @@ Le rapport s'ouvre dans `memoire/sessions/`.
    - `REDDIT_CLIENT_ID` et `REDDIT_CLIENT_SECRET` : les IA **lisent les messages Reddit** (titres et
      début des messages), pas seulement le nombre de mentions. Crée une application gratuite de type
      « script » sur https://www.reddit.com/prefs/apps (2 minutes).
+   - `TAVILY_API_KEY` : une **recherche web complète de secours** (réponse rédigée et liens) quand le
+     quota de Gemini est épuisé. 1 000 recherches gratuites par mois, sans carte bancaire, sur
+     https://tavily.com. Sans elle, le secours passe par Google Actualités et Wikipédia.
 6. Facultatif : **un déclencheur à l'heure exacte**. GitHub retarde parfois ses horaires, ou en oublie
    un quand il est surchargé. Le service gratuit https://cron-job.org peut lancer les séances à la
    minute près, en plus des horaires de GitHub (une séance déjà faite n'est jamais refaite) :
@@ -188,8 +191,11 @@ Le rapport s'ouvre dans `memoire/sessions/`.
 - **Mémoire longue** : les notes d'une IA sont limitées à 3 500 caractères. Les vraies leçons
   (une erreur à ne pas refaire, une méthode qui marche) vont dans `memoire/lecons.json` avec l'outil
   `noter_lecon` et depuis le bilan du vendredi. Les 6 IA les relisent à chaque séance.
-- **Recherche web économe** : une question déjà posée par l'équipe pendant la séance ne consomme
-  pas de quota, et les recherches tournent sur les 3 clés Gemini.
+- **Recherche web économe, avec secours** : une question déjà posée par l'équipe pendant la séance
+  ne consomme pas de quota, et les recherches tournent sur les 3 clés Gemini. Quand le quota gratuit
+  de Gemini est épuisé, la recherche passe tout de suite à **Tavily** (si tu as mis sa clé), sinon à
+  **Google Actualités et Wikipédia**, sans aucune clé : l'IA reçoit alors les titres, sources et dates
+  des articles au lieu d'une réponse rédigée.
 - **Archivage** : les 60 dernières séances restent lisibles dans `memoire/sessions/`, les plus
   anciennes sont compressées par mois dans `memoire/archives/`.
 

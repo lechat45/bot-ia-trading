@@ -677,3 +677,5 @@ body.on-desk .content { padding: 16px; }
 .check input { width: 16px; height: 16px; margin-top: 1px; accent-color: var(--coral); }
 .hint { font-size: 12px; color: var(--ink-3); line-height: 1.5; margin: 0; }
 .form .select { width: 100%; }
+.search-list { display: grid; gap: 6px; margin-top: 8px; }
+.search-row { display: grid; gap: 2px; padding: 8px 10px; border-radius: 8px; background: var(--surface-3); font-size: 13px; overflow-wrap: anywhere; }

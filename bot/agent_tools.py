@@ -90,7 +90,9 @@ def declarations(role: str, market_open: bool) -> list[dict]:
          "description": "Fil d'actualité financière en direct (multi-sources). Sans symbole : les dernières actualités du marché.",
          "parameters": {"type": "object", "properties": {"symbole": S, "limite": {"type": "integer"}}}},
         {"name": "recherche_web",
-         "description": "Recherche Google pour une question précise (dirigeant, date d'un événement, déclaration…). Budget limité par séance.",
+         "description": ("Recherche Google pour une question précise (dirigeant, date d'un événement, déclaration…). "
+                         "Réponse rédigée et sourcée ; si le quota de Gemini est épuisé, tu reçois à la place les "
+                         "articles de Google Actualités et Wikipédia (pose alors la question en anglais). Budget limité par séance."),
          "parameters": {"type": "object", "properties": {"question": S}, "required": ["question"]}},
         {"name": "sentiment_reseaux",
          "description": "Humeur des réseaux sur une action : mentions Reddit (r/wallstreetbets, r/stocks…) sur 24 h et évolution.",

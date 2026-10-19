@@ -853,6 +853,18 @@ function sparkline(vals) {
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="c-line" d="${smoothPath(pts)}"/></svg>`;
 }
 
+// Résultats d'une recherche web sans réponse rédigée : articles de Tavily, de Google Actualités et de Wikipédia.
+function searchList(d) {
+  if (!d) return "";
+  const line = (t, meta, extra) => `<div class="search-row"><b>${esc(t)}</b>${meta ? `<span class="small muted">${esc(meta)}</span>` : ""}${extra ? `<div class="small muted">${esc(extra)}</div>` : ""}</div>`;
+  const rows = [
+    ...(d.resultats || []).map((r) => line(r.titre, r.url, r.extrait)),
+    ...(d.actualites_google || []).map((n) => line(n.titre, [n.source, n.date && dayHm(n.date.replace(" ", "T") + "Z")].filter(Boolean).join(" · "))),
+    ...(d.wikipedia || []).map((w) => line(`Wikipédia : ${w.titre}`, "", w.extrait)),
+  ];
+  return rows.length ? `<div class="search-list">${rows.slice(0, 10).join("")}</div>` : "";
+}
+
 const APP_RENDER = {
   notes(items, q, w) {
     const ids = S.ov?.agents.map((a) => a.id) || [];
@@ -868,15 +880,17 @@ const APP_RENDER = {
   },
 
   recherches(items, q) {
-    const rows = items.filter((x) => (x.nom === "recherche_web" && match(q, x.args.question, x.d?.reponse))
+    const rows = items.filter((x) => (x.nom === "recherche_web" && match(q, x.args.question, x.d?.reponse,
+      ...(x.d?.actualites_google || []).map((n) => n.titre), ...(x.d?.resultats || []).map((n) => n.titre)))
       || (x.nom === "lire_page" && match(q, x.args.url, x.d?.titre, x.d?.texte)));
     if (!rows.length) return empty("search", "Aucune recherche", "Les IA n'ont fait ni recherche web ni lecture de page dans cette sélection.");
     return rows.reverse().map((x) => x.nom === "lire_page"
       ? `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<span class="pill pill-sky">${icon("globe")}page lue</span><b>${esc(x.d?.titre || x.args.url)}</b><span class="b-time">${esc(dayHm(x.ts))}</span></div>
         <div class="small muted mono" style="overflow-wrap:anywhere">${esc(x.d?.url || x.args.url)}</div>
         <div class="b-text">${x.d?.texte ? esc(x.d.texte.slice(0, 700)) + (x.d.texte.length > 700 ? "…" : "") : esc(x.d?.erreur || "")}</div></div>`
-      : `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<b>« ${esc(x.args.question)} »</b><span class="b-time">${esc(dayHm(x.ts))}</span></div>
-        <div class="b-text">${md(x.d?.reponse || x.d?.erreur || x.raw || "")}</div>
+      : `<div class="app-card"><div class="app-card-h">${avatar(x.agent, true)}<b>« ${esc(x.args.question)} »</b>${x.d?.moteur ? `<span class="pill">${esc(x.d.moteur)}</span>` : ""}<span class="b-time">${esc(dayHm(x.ts))}</span></div>
+        ${x.d?.reponse || x.d?.erreur || (!x.d && x.raw) ? `<div class="b-text">${md(x.d?.reponse || x.d?.erreur || x.raw || "")}</div>` : ""}
+        ${searchList(x.d)}
         ${(x.d?.sources || []).length ? `<div class="chips">${x.d.sources.map((s) => `<span class="pill">${esc(s)}</span>`).join("")}</div>` : ""}</div>`).join("");
   },
 

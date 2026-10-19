@@ -64,6 +64,33 @@ def test_quota_du_jour_gemini():
     assert llm._gemini_wait(jour) == 3600 and llm._gemini_wait(minute) == 17
 
 
+def test_recherche_web_de_secours():
+    from bot import tools
+
+    gm = llm.DEFAULT_MODELS["gemini"]
+
+    class GeminiEpuise(FakeProvider):
+        def search(self, key, model, question):
+            self.calls.append((key, model))
+            raise RateLimited(3600, "PerDay")
+
+    r = router({}, {})
+    r.providers["gemini"] = GeminiEpuise(["g1", "g2", "g3"], gm, {})
+    old_free, old_tav = tools.free_search, tools.tavily_configured
+    tools.tavily_configured = lambda: False
+    tools.free_search = lambda q: {"actualites_google": [{"titre": f"Article sur {q}", "source": "Reuters"}]}
+    try:
+        res = r.web_search("Nvidia earnings date", who="qualite")
+        assert res["moteur"].startswith("Google Actualités") and res["actualites_google"][0]["source"] == "Reuters"
+        n = len(r.providers["gemini"].calls)
+        assert n == 9  # 3 clés x 3 modèles, une seule fois, sans pause
+        res = r.web_search("Nvidia stock news today", who="sentiment")
+        assert len(r.providers["gemini"].calls) == n  # Gemini épuisé n'est plus réessayé
+        assert r.web_search("nvidia EARNINGS date ?", who="gerant").get("cache")  # même question = mémoire
+    finally:
+        tools.free_search, tools.tavily_configured = old_free, old_tav
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_"):

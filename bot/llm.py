@@ -387,34 +387,56 @@ class Router:
         raise LLMError(f"{label} : aucune clé ni aucun modèle disponible ({last or f'{cooling} modèle(s) saturé(s)'})")
 
     def web_search(self, question: str, who: str = "web"):
-        gem = self.providers["gemini"]
+        """Recherche web, du meilleur au plus simple : Google via Gemini (réponse rédigée et sourcée),
+        puis Tavily si une clé est configurée, puis Google Actualités et Wikipédia (sans clé)."""
+        from . import tools  # import tardif : tools n'a pas besoin du routeur
+
         cache_key = " ".join(re.findall(r"\w+", question.lower()))
         with self._lock:
             hit = self._searches.get(cache_key)
             start, self._search_turn = self._search_turn, self._search_turn + 1
         if hit:
             return {**hit, "cache": True, "info": "question déjà posée par l'équipe pendant cette séance : réponse gardée en mémoire"}
+        res, why = self._gemini_search(question, who, start), []
+        if res is None:
+            why.append("Gemini indisponible (quota gratuit atteint ou surcharge)")
+        if res is None and tools.tavily_configured():
+            try:
+                res = {**tools.tavily_search(question), "moteur": "Tavily"}
+            except (ValueError, requests.RequestException) as e:
+                why.append(f"Tavily : {e}"[:80])
+                log.info("recherche web Tavily : %s", e)
+        if res is None:
+            free = tools.free_search(question)
+            if "erreur" not in free:
+                res = {**free, "moteur": "Google Actualités + Wikipédia (sans clé)"}
+            else:
+                why.append(free["erreur"])
+        if res is None:
+            return {"erreur": f"Recherche web indisponible ({' ; '.join(why)}). Note l'information comme inconnue et avance."}
+        with self._lock:
+            self._searches[cache_key] = res
+        return dict(res)
+
+    def _gemini_search(self, question: str, who: str, start: int) -> dict | None:
+        """Recherche Google par l'ancrage de Gemini, en faisant tourner les 3 clés. None si indisponible :
+        un quota épuisé n'est pas réessayé avant la fin de son délai (pas de pause, on passe au secours)."""
+        gem = self.providers["gemini"]
         n = len(gem.keys)
-        order = [(start + i) % n for i in range(n)]
-        limited = False
-        for attempt in range(2):  # 2e tour après une pause si toutes les clés étaient limitées
-            for ki in order:
-                for model in DEFAULT_MODELS["gemini"][:3]:
-                    try:
-                        if model not in gem.available(gem.keys[ki]):
-                            continue
-                        text, sources, tokens = gem.search(gem.keys[ki], model, question)
-                        self._record(who, "gemini", ki, tokens)
-                        res = {"reponse": text[:1800], "sources": sources}
-                        with self._lock:
-                            self._searches[cache_key] = res
-                        return dict(res)
-                    except RateLimited:
-                        limited = True
-                    except (LLMError, requests.RequestException) as e:
-                        log.info("recherche web : %s", e)
-            if not limited:
-                break
-            time.sleep(35)
-        why = "le quota gratuit de Gemini est atteint pour le moment" if limited else "le service ne répond pas"
-        return {"erreur": f"Recherche web indisponible : {why}. Note l'information comme inconnue et avance."}
+        for ki in [(start + i) % n for i in range(n)]:
+            for model in DEFAULT_MODELS["gemini"][:3]:
+                if self._cool_left("gemini-recherche", ki, model) > 0:
+                    continue
+                try:
+                    if model not in gem.available(gem.keys[ki]):
+                        continue
+                    text, sources, tokens = gem.search(gem.keys[ki], model, question)
+                    self._record(who, "gemini", ki, tokens)
+                    return {"reponse": text[:1800], "sources": sources, "moteur": "Google (via Gemini)"}
+                except RateLimited as e:
+                    self._cool_down("gemini-recherche", ki, model, max(e.wait, 60))
+                except ModelUnavailable:
+                    self._cool_down("gemini-recherche", ki, model, 60)
+                except (LLMError, requests.RequestException) as e:
+                    log.info("recherche web : %s", e)
+        return None
