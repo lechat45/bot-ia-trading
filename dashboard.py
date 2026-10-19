@@ -91,11 +91,19 @@ runner = Runner()
 _cache: dict = {}
 
 
+def _key_ok(provider: str, n: int) -> bool:
+    """Une clé est « configurée » si elle est présente ici, ou si la dernière vérification l'a validée."""
+    keys = cfg.gemini_keys if provider == "gemini" else cfg.groq_keys
+    if n <= len(keys):
+        return True
+    checks = memory.read_installation().get("checks") or []
+    return any(c.get("id") == f"cle_{provider}_{n}" and c.get("ok") for c in checks)
+
+
 def _agent(a):
-    keys = cfg.gemini_keys if a.provider == "gemini" else cfg.groq_keys
     return {"id": a.id, "nom": a.nom, "role": a.role, "provider": a.provider, "cle": a.key_index + 1,
             "modele": a.models[0], "strategie": a.strategie, "inspire_de": a.inspire_de,
-            "cle_configuree": DEMO or a.key_index < len(keys)}
+            "cle_configuree": DEMO or _key_ok(a.provider, a.key_index + 1)}
 
 
 def _compte(equity: float, prices: dict) -> dict:
@@ -124,7 +132,8 @@ def overview() -> dict:
            "limites": {k: getattr(cfg, k) for k in (
                "max_position_pct", "min_cash_pct", "max_positions", "max_orders", "max_stop_distance_pct",
                "min_reward_risk", "max_gap_pct", "preparation_heure")},
-           "cles": {"gemini": len(cfg.gemini_keys), "groq": len(cfg.groq_keys), "alpaca": not DEMO},
+           "cles": {"gemini": sum(_key_ok("gemini", n) for n in (1, 2, 3)),
+                    "groq": sum(_key_ok("groq", n) for n in (1, 2, 3)), "alpaca": not DEMO},
            "plan": memory.read_plan(simulation=DEMO) or memory.read_plan(simulation=True),
            "historique_ia": memory.read_history(), "installation": memory.read_installation(),
            "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(),
