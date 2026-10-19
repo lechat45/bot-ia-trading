@@ -99,6 +99,20 @@ def declarations(role: str, market_open: bool) -> list[dict]:
          "description": "Réécrit ENTIÈREMENT tes notes (ta seule mémoire entre deux séances).",
          "parameters": {"type": "object", "properties": {"contenu": S}, "required": ["contenu"]}},
     ]
+    research += [
+        {"name": "creer_rappel",
+         "description": ("Crée un rappel pour l'équipe sur un événement daté (résultats, annonce, réunion de la Fed…). "
+                         "Il sera présenté à toute l'équipe le jour venu, pour décider d'acheter ou de vendre en fonction."),
+         "parameters": {"type": "object", "properties": {
+             "date": {"type": "string", "description": "date du rappel, format AAAA-MM-JJ"},
+             "titre": S, "details": {"type": "string", "description": "ce qu'il faudra vérifier et faire ce jour-là"},
+             "symbole": S, "seance": {"type": "string", "enum": ["preparation", "suivi", "toutes"]}},
+             "required": ["date", "titre"]}},
+        {"name": "voir_rappels", "description": "Liste les rappels actifs de l'équipe.",
+         "parameters": {"type": "object", "properties": {}}},
+        {"name": "terminer_rappel", "description": "Marque un rappel comme traité, avec ce qui a été fait.",
+         "parameters": {"type": "object", "properties": {"id": S, "note": S}, "required": ["id"]}},
+    ]
     end = [{"name": "terminer_session", "description": "Termine ta séance avec ton compte rendu.",
             "parameters": {"type": "object", "properties": {"compte_rendu": S}, "required": ["compte_rendu"]}}]
     if role == "analyste":
@@ -453,6 +467,41 @@ class AgentEnv:
         self.orders.append({"action": "ajuster_stop", "symbole": sym, "stop": d["stop"], "resultat": r["message"],
                             "ok": r["ok"]})
         return r
+
+    # -------------------------------------------------- rappels
+    def t_creer_rappel(self, date="", titre="", details="", symbole="", seance="toutes"):
+        txt = str(date).strip()
+        try:
+            d = (dt.date.fromisoformat(txt) if "-" in txt else dt.datetime.strptime(txt, "%d/%m/%Y").date())
+        except ValueError:
+            return {"refuse": "date invalide : utilise le format AAAA-MM-JJ"}
+        today = dt.datetime.now(dt.timezone.utc).date()
+        if not today <= d <= today + dt.timedelta(days=180):
+            return {"refuse": "la date doit être comprise entre aujourd'hui et dans 180 jours"}
+        if not str(titre).strip():
+            return {"refuse": "titre obligatoire"}
+        with self.s.lock:
+            actifs = [r for r in self.s.rappels if r["statut"] == "actif"]
+            if len(actifs) >= 30:
+                return {"refuse": "30 rappels actifs maximum : termine ceux qui sont traités"}
+            rid = f"r{len(self.s.rappels) + 1}-{d.strftime('%m%d')}"
+            r = {"id": rid, "date": d.isoformat(), "titre": str(titre)[:200], "details": str(details)[:1000],
+                 "symbole": clean_symbol(symbole) if symbole else "", "seance": seance if seance in ("preparation", "suivi") else "toutes",
+                 "cree_par": self.a.id, "cree_le": _now(), "statut": "actif"}
+            self.s.rappels.append(r)
+        return {"ok": True, "id": rid, "message": f"Rappel {rid} créé pour le {d.isoformat()} : il sera présenté à l'équipe ce jour-là."}
+
+    def t_voir_rappels(self):
+        actifs = sorted((r for r in self.s.rappels if r["statut"] == "actif"), key=lambda r: r["date"])
+        return actifs or {"info": "aucun rappel actif"}
+
+    def t_terminer_rappel(self, id="", note=""):
+        with self.s.lock:
+            for r in self.s.rappels:
+                if r["id"] == id and r["statut"] == "actif":
+                    r.update(statut="fait", note=str(note)[:500], fait_par=self.a.id, fait_le=_now())
+                    return {"ok": True}
+        return {"erreur": f"rappel « {id} » introuvable ou déjà traité"}
 
     def t_terminer_session(self, compte_rendu=""):
         self.done = True

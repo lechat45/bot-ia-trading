@@ -125,6 +125,7 @@ class Session:
         self.executions: list = []
         self.proposals: list = []
         self.avis: dict = {}
+        self.rappels: list = memory.read_rappels()
 
     # ------------------------------------------------------------------ données partagées de la séance
     def add_plan(self, order: dict):
@@ -164,6 +165,10 @@ class Session:
             self.market = Market(self.alpaca, self.offline, self.now.astimezone(NY).date())
             self.journal = memory.recent_journal(10)
             self.before = self.comptes.valuation(ACCOUNT, {})
+            limit = (dt.date.fromisoformat(self.trading_date) - dt.timedelta(days=3)).isoformat()
+            for r in self.rappels:  # un rappel non traité 3 jours après sa date expire
+                if r["statut"] == "actif" and r["date"] < limit:
+                    r["statut"] = "expire"
 
             if self.mode == "ouverture":
                 self.plan = memory.read_plan(simulation=self.offline)
@@ -234,6 +239,7 @@ class Session:
     def opening(self, a: Agent) -> str:
         notes = memory.read_notes(a.id) or "(aucune note : c'est ta toute première séance)"
         txt = f"Nouvelle séance : {MODES[self.mode]}.\n\nTES NOTES (écrites lors de ta dernière séance) :\n{notes}\n\n"
+        txt += self.reminders_text()
         if a.role == "gerant":
             acct = self.comptes.agent(ACCOUNT)
             events = self.comptes.take_events(ACCOUNT, acct.get("derniere_seance"))
@@ -252,6 +258,27 @@ class Session:
         else:
             txt += "Applique ta routine de séance avec tes outils."
         return txt
+
+    def reminders_text(self) -> str:
+        """Rappels de l'équipe : ceux du jour (à traiter) et ceux des 7 prochains jours."""
+        today = self.trading_date
+        soon = (dt.date.fromisoformat(today) + dt.timedelta(days=7)).isoformat()
+        actifs = [r for r in self.rappels if r["statut"] == "actif"]
+        due = [r for r in actifs if r["date"] <= today and r["seance"] in ("toutes", self.mode)]
+        nxt = [r for r in actifs if today < r["date"] <= soon]
+
+        def line(r):
+            sym = f"{r['symbole']} : " if r["symbole"] else ""
+            det = f" — {r['details']}" if r["details"] else ""
+            return f"- [{r['id']}] {r['date']} {sym}{r['titre']}{det} (créé par {r['cree_par']})"
+
+        out = ""
+        if due:
+            out += ("RAPPELS DU JOUR (à traiter maintenant : vérifie l'événement, agis en fonction, puis "
+                    "terminer_rappel) :\n" + "\n".join(line(r) for r in due) + "\n\n")
+        if nxt:
+            out += "RAPPELS DES 7 PROCHAINS JOURS :\n" + "\n".join(line(r) for r in nxt) + "\n\n"
+        return out
 
     def _missing(self, a: Agent) -> str:
         if a.role != "critique":
@@ -383,6 +410,8 @@ class Session:
             memory.append_history([{"date": self.now.isoformat(timespec="minutes"), "agent": ACCOUNT,
                                     "valeur": after["valeur"], "cash": after["cash"],
                                     "positions": len(after["positions"])}])
+        if not self.dry_run:
+            memory.write_rappels(self.rappels)
         if self.mode in ("preparation", "ouverture") and self.plan:
             memory.write_plan(self.plan, simulation=self.dry_run)
         for p in self.proposals:  # chaque proposition garde son verdict et ce que le gérant en a fait
@@ -400,6 +429,7 @@ class Session:
             "plan": self.plan.get("ordres", []) if self.mode == "preparation" else [],
             "compte": after, "valeur_avant": self.before["valeur"],
             "cles": dict(self.router.slots),
+            "rappels": [r for r in self.rappels if r["statut"] == "actif" or r.get("fait_le", "") >= self.now.isoformat()],
         }
         memory.write_session_json(name, data)
         report = self.report(data)

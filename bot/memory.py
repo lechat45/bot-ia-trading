@@ -46,6 +46,25 @@ def write_plan(plan: dict, simulation: bool = False) -> None:
     _write(plan_path(simulation), json.dumps(plan, ensure_ascii=False, indent=1))
 
 
+# ---------------------------------------------------------------------- rappels
+def read_rappels() -> list[dict]:
+    """Rappels créés par les IA (un événement daté à ne pas oublier : résultats, annonce, réunion…)."""
+    return _read_json(ROOT / "rappels.json", [])
+
+
+def write_rappels(rappels: list[dict]) -> None:
+    _write(ROOT / "rappels.json", json.dumps(rappels, ensure_ascii=False, indent=1))
+
+
+# ---------------------------------------------------------------------- vérification de l'installation
+def read_installation() -> dict:
+    return _read_json(ROOT / "installation.json", {})
+
+
+def write_installation(data: dict) -> None:
+    _write(ROOT / "installation.json", json.dumps(data, ensure_ascii=False, indent=1))
+
+
 # ---------------------------------------------------------------------- journal
 def append_journal(entries: list[dict]) -> None:
     if not entries:
