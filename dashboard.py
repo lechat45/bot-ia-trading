@@ -124,6 +124,106 @@ def _compte(equity: float, prices: dict) -> dict:
     return v
 
 
+def _propositions() -> list[dict]:
+    """Propositions d'achat des analystes (séances réelles), une seule par analyste, titre et jour."""
+    rows = list(memory.read_propositions())
+    for p in sorted((MEM / "sessions").glob("*.json"), key=lambda p: p.stem):  # séances d'avant ce registre
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if d.get("simulation") or d.get("hors_ligne"):
+            continue
+        rows += [{"date": d.get("date_bourse"), **x, "verdict": (x.get("avis") or {}).get("verdict")}
+                 for x in d.get("propositions") or []]
+    seen, out = set(), []
+    for r in rows:
+        key = (r.get("auteur"), r.get("symbole"), r.get("date"))
+        if r.get("action") == "acheter" and r.get("prix_ref") and key not in seen:
+            seen.add(key)
+            out.append(r)
+    return out
+
+
+def classement() -> dict:
+    """Ce qu'auraient rapporté les idées de chaque analyste depuis qu'il les a proposées (au prix du jour
+    de la proposition), qu'elles aient été achetées ou non, et la justesse des avis du critique."""
+    props = _propositions()
+    if not props:
+        return {"analystes": [], "propositions": 0}
+    try:
+        prices = broker.latest_prices(sorted({p["symbole"] for p in props}))
+    except Exception:
+        prices = {}
+    for p in props:
+        px = prices.get(p["symbole"])
+        p["rendement"] = round((px / p["prix_ref"] - 1) * 100, 2) if px else None
+    mean = lambda xs: round(sum(xs) / len(xs), 2) if xs else None  # noqa: E731
+    rows = []
+    for a in (x for x in AGENTS if x.role == "analyste"):
+        mine = [p for p in props if p.get("auteur") == a.id and p["rendement"] is not None]
+        r = [p["rendement"] for p in mine]
+        best = max(mine, key=lambda p: p["rendement"], default=None)
+        worst = min(mine, key=lambda p: p["rendement"], default=None)
+        rows.append({"id": a.id, "propositions": len(mine), "retenues": sum(1 for p in mine if p.get("retenue")),
+                     "rendement_moyen": mean(r), "reussite_pct": round(100 * sum(x > 0 for x in r) / len(r)) if r else None,
+                     "moyenne_retenues": mean([p["rendement"] for p in mine if p.get("retenue")]),
+                     "moyenne_ecartees": mean([p["rendement"] for p in mine if not p.get("retenue")]),
+                     "meilleure": best and {"symbole": best["symbole"], "rendement": best["rendement"]},
+                     "pire": worst and {"symbole": worst["symbole"], "rendement": worst["rendement"]}})
+    rows.sort(key=lambda x: (x["rendement_moyen"] is None, -(x["rendement_moyen"] or 0)))
+    judged = [p for p in props if p["rendement"] is not None and p.get("verdict") in ("ok", "rejet")]
+    right = sum(1 for p in judged if (p["verdict"] == "ok") == (p["rendement"] > 0))
+    return {"analystes": rows, "propositions": len(props), "depuis": min(p.get("date") or "" for p in props),
+            "critique": {"avis": len(judged), "justes_pct": round(100 * right / len(judged)) if judged else None}}
+
+
+def performance(spy: list) -> dict:
+    """Statistiques du compte : plus forte baisse, ventes gagnantes, performance comparée au S&P 500."""
+    out = {}
+    try:
+        h = broker.portfolio_history("1A", "1D")
+        eq = [(t, v) for t, v in zip(h.get("timestamp") or [], h.get("equity") or []) if v]
+    except Exception:
+        eq = []
+    if COMPTES_PATH.exists():  # on compte depuis la création du compte de l'équipe
+        start = json.loads(COMPTES_PATH.read_text(encoding="utf-8")).get("cree_le", "")[:10]
+        kept = [(t, v) for t, v in eq if time.strftime("%Y-%m-%d", time.gmtime(t)) >= start]
+        eq = kept if len(kept) >= 2 else eq[-2:]
+    if len(eq) >= 2:
+        peak, dd = eq[0][1], 0.0
+        for _, v in eq:
+            peak = max(peak, v)
+            dd = min(dd, (v / peak - 1) * 100)
+        d0 = time.strftime("%Y-%m-%d", time.gmtime(eq[0][0]))
+        out.update(debut=d0, drawdown_max_pct=round(dd, 2), perf_pct=round((eq[-1][1] / eq[0][1] - 1) * 100, 2))
+        s = [b for b in spy if b["t"] >= d0]
+        if len(s) >= 2:
+            out["spy_pct"] = round((s[-1]["c"] / s[0]["c"] - 1) * 100, 2)
+    sells = [e for e in memory.recent_journal(3650) if e.get("type") == "execution" and e.get("statut") == "exécuté"
+             and e.get("action") in ("vendre", "alleger") and e.get("plus_value") is not None]
+    gains = [e["plus_value"] for e in sells if e["plus_value"] > 0]
+    losses = [e["plus_value"] for e in sells if e["plus_value"] <= 0]
+    out.update(ventes=len(sells), gagnantes=len(gains),
+               reussite_pct=round(100 * len(gains) / len(sells)) if sells else None,
+               gain_moyen=round(sum(gains) / len(gains), 2) if gains else None,
+               perte_moyenne=round(sum(losses) / len(losses), 2) if losses else None,
+               realise=round(sum(gains) + sum(losses), 2))
+    return out
+
+
+def alertes() -> dict:
+    """Frein d'urgence et écarts avec Alpaca relevés lors de la dernière séance réelle."""
+    for p in sorted((MEM / "sessions").glob("*.json"), key=lambda p: p.stem, reverse=True):
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not d.get("simulation"):
+            return {"quand": d.get("quand"), "frein": d.get("frein"), "ecarts": d.get("ecarts") or []}
+    return {}
+
+
 def overview() -> dict:
     hit = _cache.get("overview")
     if hit and time.time() - hit[0] < 15 and not runner.running:
@@ -136,7 +236,8 @@ def overview() -> dict:
                     "groq": sum(_key_ok("groq", n) for n in (1, 2, 3)), "alpaca": not DEMO},
            "plan": memory.read_plan(simulation=DEMO) or memory.read_plan(simulation=True),
            "historique_ia": memory.read_history(), "installation": memory.read_installation(),
-           "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(),
+           "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(), "lecons": memory.read_lecons(),
+           "alertes": alertes(),
            "ordres": [e for e in memory.recent_journal(120) if e.get("type") == "execution"][-300:]}
     try:
         acct = broker.account()
@@ -146,10 +247,13 @@ def overview() -> dict:
         out["equipe"] = _compte(out["compte"]["equity"], prices)
         out["positions"] = out["equipe"]["positions"]
         try:  # le S&P 500 (fonds SPY) pour comparer la performance du compte au marché
-            spy = (broker.bars(["SPY"], days=45) or {}).get("SPY") or []
-            out["spy"] = [{"t": str(b.get("t", ""))[:10], "c": b["c"]} for b in spy[-31:]]
+            spy = [{"t": str(b.get("t", ""))[:10], "c": b["c"]}
+                   for b in (broker.bars(["SPY"], days=400) or {}).get("SPY") or []]
         except Exception:
-            out["spy"] = []
+            spy = []
+        out["spy"] = spy[-31:]
+        out["stats"] = performance(spy)
+        out["classement"] = classement()
         h = broker.portfolio_history("1M", "1D")
         out["historique"] = [{"t": t, "v": v} for t, v in zip(h.get("timestamp") or [], h.get("equity") or [])
                              if v]  # Alpaca renvoie 0 avant le premier dépôt
@@ -161,7 +265,8 @@ def overview() -> dict:
 
 def sessions() -> list:
     rows = []
-    for p in sorted((MEM / "sessions").glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:60]:
+    # le nom d'une séance commence par sa date (la date des fichiers est fausse après un clone Git)
+    for p in sorted((MEM / "sessions").glob("*.json"), key=lambda p: p.stem, reverse=True)[:60]:
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):

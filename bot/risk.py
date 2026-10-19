@@ -29,11 +29,21 @@ def _done(journal, aid, sym, actions, since: dt.datetime) -> bool:
 
 
 def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pct, tp_pct,
-              journal: list, reserved: float = 0.0, clamp: bool = False):
+              journal: list, reserved: float = 0.0, clamp: bool = False, frein: str | None = None,
+              secteur: str | None = None, secteur_valeur: float = 0.0, jours_resultats=None):
     """Renvoie (ok, message, détails). clamp=True réduit le montant aux limites au lieu de refuser
-    (utilisé à l'ouverture, quand le prix a un peu bougé depuis le matin)."""
+    (utilisé à l'ouverture, quand le prix a un peu bougé depuis le matin).
+    frein : raison du frein d'urgence s'il est actif (aucun achat). secteur / secteur_valeur :
+    secteur du titre et valeur déjà investie (ou planifiée) dans ce secteur. jours_resultats :
+    nombre de jours avant la publication des résultats du titre."""
+    if frein:
+        return False, f"frein d'urgence actif : {frein}. Aucun achat tant qu'il est actif (les ventes restent possibles)", {}
     if not SYMBOL_RE.match(sym):
         return False, f"symbole « {sym} » invalide", {}
+    jr = _num(jours_resultats)
+    if jr is not None and 0 <= jr <= cfg.earnings_blackout_days:
+        return False, (f"{sym} publie ses résultats dans {jr:g} jour(s) : pas d'achat juste avant les résultats "
+                       "(crée un rappel et décide après la publication)"), {}
     if not price:
         return False, f"prix de {sym} introuvable (titre non coté aux États-Unis ?)", {}
     if price < cfg.min_price:
@@ -56,12 +66,15 @@ def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pc
     existing = positions.get(sym, {}).get("valeur", 0.0)
     max_line = val["valeur"] * cfg.max_position_pct / 100 - existing
     cash_free = val["cash"] - reserved - val["valeur"] * cfg.min_cash_pct / 100
-    limit = min(max_line, cash_free)
+    max_sector = (val["valeur"] * cfg.max_sector_pct / 100 - secteur_valeur) if secteur else float("inf")
+    limit = min(max_line, cash_free, max_sector)
     if amount is None or amount <= 0:
         return False, f"montant_usd manquant (maximum possible : {max(0, limit):.0f} $)", {}
     if amount > limit + 0.01:
         if not clamp:
-            why = "limite par titre" if max_line < cash_free else "liquidités disponibles (après réserve et ordres planifiés)"
+            why = ("limite par titre" if limit == max_line else
+                   f"limite de {cfg.max_sector_pct:g} % par secteur ({secteur})" if limit == max_sector else
+                   "liquidités disponibles (après réserve et ordres planifiés)")
             return False, f"montant trop élevé : maximum {max(0, limit):.0f} $ ({why})", {}
         amount = limit
     qty = math.floor(amount / price) if amount > 0 else 0

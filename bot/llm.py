@@ -281,6 +281,8 @@ class Router:
         self.usage = defaultdict(lambda: {"tokens": 0, "appels": 0})  # par IA
         self.slots = defaultdict(lambda: {"tokens": 0, "appels": 0})  # par clé
         self._lock = threading.Lock()
+        self._searches: dict = {}  # recherches web déjà faites pendant la séance (même question = même réponse)
+        self._search_turn = 0  # les recherches tournent sur les 3 clés Gemini
 
     def _attempts(self, provider: str, key_index: int, models: list[str]):
         """Ordre d'essai : sa clé, puis la clé relais du même fournisseur, puis l'autre fournisseur."""
@@ -344,17 +346,27 @@ class Router:
 
     def web_search(self, question: str, who: str = "web"):
         gem = self.providers["gemini"]
-        order = [RELAY_KEY] + [i for i in range(len(gem.keys)) if i != RELAY_KEY]
+        cache_key = " ".join(re.findall(r"\w+", question.lower()))
+        with self._lock:
+            hit = self._searches.get(cache_key)
+            start, self._search_turn = self._search_turn, self._search_turn + 1
+        if hit:
+            return {**hit, "cache": True, "info": "question déjà posée par l'équipe pendant cette séance : réponse gardée en mémoire"}
+        n = len(gem.keys)
+        order = [(start + i) % n for i in range(n)]
         limited = False
         for attempt in range(2):  # 2e tour après une pause si toutes les clés étaient limitées
-            for ki in [k for k in order if k < len(gem.keys)]:
+            for ki in order:
                 for model in DEFAULT_MODELS["gemini"][:3]:
                     try:
                         if model not in gem.available(gem.keys[ki]):
                             continue
                         text, sources, tokens = gem.search(gem.keys[ki], model, question)
                         self._record(who, "gemini", ki, tokens)
-                        return {"reponse": text[:1800], "sources": sources}
+                        res = {"reponse": text[:1800], "sources": sources}
+                        with self._lock:
+                            self._searches[cache_key] = res
+                        return dict(res)
                     except RateLimited:
                         limited = True
                     except (LLMError, requests.RequestException) as e:

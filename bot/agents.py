@@ -127,6 +127,10 @@ class Session:
         self.avis: dict = {}
         self.rappels: list = memory.read_rappels()
         self.bilan = ""
+        self.frein: str | None = None  # raison du frein d'urgence (aucun achat) s'il est actif
+        self.ecarts: list = []  # différences entre le registre de l'équipe et les positions Alpaca
+        self.lecons: list = memory.read_lecons()  # mémoire longue de l'équipe
+        self.new_lecons: list = []
 
     # ------------------------------------------------------------------ données partagées de la séance
     def add_plan(self, order: dict):
@@ -150,6 +154,52 @@ class Session:
         with self.lock:
             self.avis[v["id"]] = v
 
+    def add_lecon(self, l: dict):
+        with self.lock:
+            self.new_lecons.append(l)
+
+    def buy_context(self, sym: str, val: dict, planned: list) -> dict:
+        """Ce dont les garde-fous ont besoin pour un achat : frein d'urgence, secteur du titre (et ce qui
+        est déjà investi ou planifié dans ce secteur) et nombre de jours avant ses résultats."""
+        f = self.market.fundamentals(sym) or {}
+        secteur = f.get("secteur")
+        ctx = {"frein": self.frein, "secteur": secteur, "jours_resultats": f.get("jours_avant_resultats")}
+        if secteur:
+            def same(s):
+                return (self.market.fundamentals(s) or {}).get("secteur") == secteur
+            ctx["secteur_valeur"] = (sum(p["valeur"] for p in val["positions"] if same(p["symbole"]))
+                                     + sum(o.get("montant_usd") or 0 for o in planned
+                                           if o["action"] == "acheter" and same(o["symbole"])))
+        return ctx
+
+    def check_ledger(self):
+        """Compare le registre de l'équipe aux positions réelles chez Alpaca et signale les écarts."""
+        try:
+            real = {p["symbol"]: int(float(p["qty"])) for p in self.alpaca.positions()}
+        except Exception as e:
+            log.warning("contrôle du registre impossible : %s", e)
+            return
+        self.ecarts = self.comptes.reconcile(real)
+        if self.ecarts:
+            texte = "; ".join(self.ecarts)
+            log.warning("Écarts registre / Alpaca : %s", texte)
+            self.comptes.event(ACCOUNT, f"Écart entre le registre et Alpaca : {texte}")
+            if not self.dry_run:
+                notify.send("Écart avec Alpaca", texte[:900], tags="warning")
+
+    def emergency_brake(self, equity: float, last_equity: float) -> str | None:
+        """Frein d'urgence : plus aucun achat si le compte chute trop vite (les ventes restent possibles)."""
+        cfg = self.cfg
+        if last_equity > 0 and (day := (equity / last_equity - 1) * 100) <= -cfg.frein_jour_pct:
+            return f"le compte a perdu {-day:.1f} % depuis la clôture précédente (seuil {cfg.frein_jour_pct:g} %)"
+        try:  # valeur du compte 5 séances plus tôt
+            eq = [v for v in (self.alpaca.portfolio_history("1M", "1D").get("equity") or []) if v]
+        except Exception:
+            eq = []
+        if len(eq) >= 6 and (week := (equity / eq[-6] - 1) * 100) <= -cfg.frein_semaine_pct:
+            return f"le compte a perdu {-week:.1f} % en une semaine (seuil {cfg.frein_semaine_pct:g} %)"
+        return None
+
     # ------------------------------------------------------------------ séance
     def run(self) -> dict:
         memory.state_start(self.mode, self.dry_run, [a.id for a in AGENTS])
@@ -159,9 +209,19 @@ class Session:
             nxt = clock.get("next_open")
             self.trading_date = (self.now.astimezone(NY).date().isoformat() if self.market_open or not nxt
                                  else dt.datetime.fromisoformat(nxt.replace("Z", "+00:00")).astimezone(NY).date().isoformat())
-            equity = float(self.alpaca.account()["equity"])
+            account = self.alpaca.account()
+            equity = float(account["equity"])
             self.comptes = Comptes.load([ACCOUNT], equity, persist=not self.dry_run)
             self.comptes.sync(self.alpaca)
+            if not self.offline:
+                self.check_ledger()
+            self.frein = self.emergency_brake(equity, float(account.get("last_equity") or 0))
+            if self.frein:
+                log.warning("Frein d'urgence : %s", self.frein)
+                self.comptes.event(ACCOUNT, f"Frein d'urgence actif : {self.frein}")
+                if not self.dry_run:
+                    notify.send("Frein d'urgence", f"Aucun achat pendant cette séance : {self.frein}.",
+                                tags="rotating_light", priorite="high")
             self.broker = Broker(self.alpaca, self.comptes, self.dry_run)
             self.market = Market(self.alpaca, self.offline, self.now.astimezone(NY).date())
             self.journal = memory.recent_journal(10)
@@ -238,12 +298,20 @@ class Session:
             f"max par séance ; stop loss obligatoire entre {cfg.min_stop_distance_pct:g} et {cfg.max_stop_distance_pct:g} % ; "
             f"objectif de gain ≥ {cfg.min_reward_risk:g} × le stop ; pas d'action sous {cfg.min_price:g} $ ; un stop ne "
             f"se descend jamais ; pas de rachat d'un titre vendu il y a moins de {cfg.anti_churn_days} jours ; "
+            f"{cfg.max_sector_pct:g} % max du compte dans un même secteur ; pas d'achat d'un titre qui publie ses "
+            f"résultats dans {cfg.earnings_blackout_days} jour(s) ou moins ; frein d'urgence (plus aucun achat) si le "
+            f"compte perd {cfg.frein_jour_pct:g} % en un jour ou {cfg.frein_semaine_pct:g} % en une semaine ; "
             f"{cfg.max_web_searches} recherches web par IA et par séance. Réponds en français."
+            + (f"\n\nFREIN D'URGENCE ACTIF : {self.frein}. Aucun achat n'est possible pendant cette séance : "
+               "concentre-toi sur la protection du compte (thèses cassées, stops, ventes)." if self.frein else "")
         )
 
     def opening(self, a: Agent) -> str:
         notes = memory.read_notes(a.id) or "(aucune note : c'est ta toute première séance)"
         txt = f"Nouvelle séance : {MODES[self.mode]}.\n\nTES NOTES (écrites lors de ta dernière séance) :\n{notes}\n\n"
+        if self.lecons:
+            txt += ("LEÇONS APPRISES PAR L'ÉQUIPE (mémoire longue, à respecter) :\n"
+                    + "\n".join(f"- {l['texte']}" for l in self.lecons[-15:]) + "\n\n")
         txt += self.reminders_text()
         if a.role == "gerant":
             acct = self.comptes.agent(ACCOUNT)
@@ -301,7 +369,7 @@ class Session:
         max_steps = self.max_steps(a)
         budget = 14000 if a.provider == "groq" else 60000
         keep = {"passer_ordre", "annuler_ordre", "ajuster_stop", "proposer_ordre", "donner_avis",
-                "ecrire_notes", "terminer_session"}
+                "ecrire_notes", "noter_lecon", "terminer_session"}
         final_tools = [t for t in tools if t["name"] in keep]  # en fin de séance : agir et conclure
         nudged, reminded, final, final_turns, error, used = False, False, False, 0, None, ""
         while not env.done:
@@ -382,11 +450,13 @@ class Session:
                                                        f"{ref:.2f} $ ({gap:+.1f} %)")
                 else:
                     ok, msg, d = check_buy(cfg, acct, val, sym, price, o["montant_usd"], o["stop_loss_pct"],
-                                           o["take_profit_pct"], self.journal, clamp=True)
+                                           o["take_profit_pct"], self.journal, clamp=True,
+                                           **self.buy_context(sym, val, []))
                     if not ok:
                         o.update(statut="rejete", resultat=msg)
                     else:
-                        r = self.broker.buy(acct, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"], o.get("these", ""))
+                        r = self.broker.buy(acct, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"],
+                                            o.get("these", ""), source=o.get("source", ""))
                         o.update(statut="execute" if r["ok"] else "erreur", resultat=r["message"],
                                  prix_execution=r.get("prix"), qty=r.get("qty"))
             else:
@@ -394,7 +464,7 @@ class Session:
                 if not ok:
                     o.update(statut="rejete", resultat=msg)
                 else:
-                    r = self.broker.sell(acct, sym, d["qty"], o.get("these", ""))
+                    r = self.broker.sell(acct, sym, d["qty"], o.get("these", ""), source=o.get("source", ""))
                     o.update(statut="execute" if r["ok"] else "erreur", resultat=r["message"],
                              prix_execution=r.get("prix"), qty=r.get("qty"))
             o["traite_le"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
@@ -440,7 +510,8 @@ class Session:
                 f"JOURNAL DE BORD DE L'ÉQUIPE :\n{memory.read_notes(GERANT.id)[:2500]}\n\n"
                 "Rédige en français, en 4 parties courtes : 1. Résultat de la semaine (chiffres) ; 2. Ce qui a marché ; "
                 "3. Ce qui a raté ; 4. Leçons et plan pour la semaine prochaine. Factuel, pas plus de 250 mots, sans conseil "
-                "d'investissement personnalisé.")
+                "d'investissement personnalisé. Termine par 1 à 3 lignes qui commencent par « LEÇON : », chacune une règle "
+                "concrète et durable pour l'équipe : elles rejoindront la mémoire longue lue par les 6 IA.")
         try:
             msg, used = self.router.chat(GERANT, "Tu es le gérant d'une équipe d'IA qui gère un compte de paper trading.",
                                          [{"role": "user", "text": user}], [], label="bilan")
@@ -448,6 +519,8 @@ class Session:
             log.warning("bilan de la semaine impossible : %s", e)
             return ""
         texte = (msg.get("text") or "").strip()
+        for l in memory.lecons_du_bilan(texte):
+            self.add_lecon({"date": self.trading_date, "auteur": "bilan", "texte": l})
         if texte and not self.dry_run:
             memory.write_bilan(self.now.astimezone(PARIS).strftime("%Y-%m-%d"), texte)
             notify.send("Bilan de la semaine", texte[:900], tags="memo")
@@ -466,6 +539,10 @@ class Session:
                                     "positions": len(after["positions"])}])
         if not self.dry_run:
             memory.write_rappels(self.rappels)
+            memory.add_lecons(self.new_lecons)
+            n = memory.archive_sessions()
+            if n:
+                log.info("%d ancienne(s) séance(s) rangée(s) dans memoire/archives/", n)
             planned = [o for o in self.plan.get("ordres", []) if o.get("statut") == "en_attente"]
             if self.mode == "preparation" and planned:
                 lignes = [f"{o['action']} {o['symbole']}" + (f" pour {o.get('montant_usd', 0):.0f} $"
@@ -476,11 +553,17 @@ class Session:
             memory.write_plan(self.plan, simulation=self.dry_run)
         for p in self.proposals:  # chaque proposition garde son verdict et ce que le gérant en a fait
             p["avis"] = self.avis.get(p["id"])
-            p["retenue"] = any(o.get("source") == p["id"] for o in self.results.get(GERANT.id, {}).get("ordres", []))
+            p["retenue"] = any(o.get("source") == p["id"] or (o.get("symbole"), o.get("action")) == (p["symbole"], p["action"])
+                               for o in self.results.get(GERANT.id, {}).get("ordres", []))
+        if not self.dry_run:
+            memory.append_propositions([
+                {"date": self.trading_date, "seance": self.mode, **{k: p.get(k) for k in (
+                    "id", "auteur", "action", "symbole", "prix_ref", "montant", "stop_loss_pct", "take_profit_pct",
+                    "confiance", "retenue")}, "verdict": (p.get("avis") or {}).get("verdict")} for p in self.proposals])
         name = self.now.astimezone(PARIS).strftime("%Y-%m-%d_%H%M") + f"_{self.mode}" + ("_simulation" if self.dry_run else "")
         data = {
             "nom": name, "quand": self.when, "ts": self.now.isoformat(), "mode": self.mode,
-            "simulation": self.dry_run, "marche_ouvert": self.market_open, "date_bourse": self.trading_date,
+            "simulation": self.dry_run, "hors_ligne": self.offline, "marche_ouvert": self.market_open, "date_bourse": self.trading_date,
             "agents": {aid: {**r, "tokens": self.router.usage[aid]["tokens"], "appels": self.router.usage[aid]["appels"]}
                        for aid, r in self.results.items()},
             "propositions": self.proposals,
@@ -490,6 +573,9 @@ class Session:
             "compte": after, "valeur_avant": self.before["valeur"],
             "cles": dict(self.router.slots),
             "bilan": self.bilan,
+            "frein": self.frein,
+            "lecons": self.new_lecons,
+            "ecarts": self.ecarts,
             "rappels": [r for r in self.rappels if r["statut"] == "actif" or r.get("fait_le", "") >= self.now.isoformat()],
         }
         memory.write_session_json(name, data)
@@ -507,6 +593,10 @@ class Session:
              f"Compte paper Alpaca{' · SIMULATION (aucun ordre envoyé)' if self.dry_run else ''} · "
              f"valeur {v['valeur']:.2f} $ ({v['pl_pct']:+.2f} %) · liquidités {v['cash']:.2f} $ · "
              f"positions : {', '.join(p['symbole'] for p in v['positions']) or 'aucune'}", ""]
+        if self.frein:
+            L += [f"**Frein d'urgence actif** : {self.frein} (aucun achat).", ""]
+        if self.ecarts:
+            L += ["**Écarts entre le registre et Alpaca** : " + " ; ".join(self.ecarts), ""]
         if self.executions:
             L += ["## Ordres planifiés exécutés à l'ouverture", ""]
             L += [f"- {o['action']} {o['symbole']} : {o['statut']} ({o.get('resultat', '')})" for o in self.executions]

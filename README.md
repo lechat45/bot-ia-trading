@@ -48,14 +48,25 @@ Tout est enregistré : c'est le « cerveau » de chaque IA, visible dans le tabl
 de liquidités gardées, 10 positions au plus, 5 ordres par séance, stop loss obligatoire entre 1 et
 15 %, objectif de gain au moins 1,5 fois le stop, pas d'action sous 5 $, **un stop ne se descend
 jamais**, pas de rachat d'un titre vendu il y a moins de 2 jours, pas d'aller-retour dans la
-journée. Un ordre refusé est renvoyé à l'IA avec la raison.
+journée, **35 % maximum du compte dans un même secteur**, **pas d'achat la veille ou le jour des
+résultats** d'une entreprise. Un ordre refusé est renvoyé à l'IA avec la raison.
+
+**Frein d'urgence** : si le compte perd 3 % en un jour ou 7 % en une semaine, plus aucun achat
+n'est possible pendant la séance. Les ventes et les stops restent permis, et tu reçois une
+notification. **Contrôle du registre** : à chaque séance, le registre du programme est comparé aux
+positions réelles chez Alpaca (un achat fait à la main sur le compte, par exemple) ; un écart
+s'affiche sur l'Accueil. Les seuils se règlent dans `.env` (`MAX_SECTOR_PCT`, `FREIN_JOUR_PCT`,
+`FREIN_SEMAINE_PCT`).
 
 ## Interface (tableau de bord)
 
 4 pages, comme le tableau de bord d'Aywen :
 - **Accueil** : valeur du compte, courbe comparée au S&P 500, journée de bourse en direct,
-  positions, plan d'ouverture, rappels, bilan de la semaine et état de la vérification.
-- **Les IA** : les 6 IA, avec à côté le résumé de leur réflexion et leurs actions.
+  positions, plan d'ouverture, statistiques (plus forte baisse, ventes gagnantes, gain et perte
+  moyens, écart avec le S&P 500), leçons de l'équipe, rappels, bilan de la semaine et état du système.
+- **Les IA** : les 6 IA, avec à côté le résumé de leur réflexion et leurs actions, et le
+  **classement des analystes** : ce qu'aurait rapporté chacune de leurs idées depuis qu'elle a été
+  proposée, achetée ou non, et la part des avis du critique confirmés par la suite.
 - **Journal** : chaque outil utilisé et chaque réflexion, filtrés par IA et par type.
 - **Bureau** façon Windows : des fenêtres Notes, Recherches web (et pages lues), Actualités,
   Bourse, Screener, Reddit, Ordres (avec plus-values réalisées et stops déclenchés) et Rappels.
@@ -145,6 +156,24 @@ Le rapport s'ouvre dans `memoire/sessions/`.
    - `REDDIT_CLIENT_ID` et `REDDIT_CLIENT_SECRET` : les IA **lisent les messages Reddit** (titres et
      début des messages), pas seulement le nombre de mentions. Crée une application gratuite de type
      « script » sur https://www.reddit.com/prefs/apps (2 minutes).
+6. Facultatif : **un déclencheur à l'heure exacte**. GitHub retarde parfois ses horaires, ou en oublie
+   un quand il est surchargé. Le service gratuit https://cron-job.org peut lancer les séances à la
+   minute près, en plus des horaires de GitHub (une séance déjà faite n'est jamais refaite) :
+   1. Crée un jeton GitHub à accès précis (**Settings → Developer settings → Fine-grained tokens**),
+      limité à ce dépôt, avec la permission **Actions : Read and write**. C'est le même type de jeton
+      que celui du bouton « Forcer le lancement ».
+   2. Sur cron-job.org, crée 3 tâches, du lundi au vendredi, fuseau **Europe/Paris** : 9 h 00
+      (`preparation`), 14 h 25 (`ouverture` : la séance attend l'ouverture de New York) et 18 h 30
+      (`suivi`). Pour chacune :
+      - adresse : `https://api.github.com/repos/<ton-pseudo>/<nom-du-depot>/actions/workflows/trading.yml/dispatches`
+      - méthode **POST**, en-têtes `Authorization: Bearer <ton jeton>` et `Accept: application/vnd.github+json`
+      - corps : `{"ref":"main","inputs":{"mode":"preparation","dry_run":"false","force":"false"}}`
+        (remplace `preparation` par `ouverture` ou `suivi`).
+   3. `"force":"false"` est indispensable : la séance respecte alors les horaires et ne refait jamais
+      une séance déjà faite. Une réponse **204** veut dire que la séance est lancée.
+7. À chaque envoi de code sur GitHub, le workflow **Tests** vérifie tout le programme sans clé
+   (garde-fous, mémoire, séances complètes avec de fausses IA, site). Un code cassé est repéré
+   avant la séance suivante.
 
 ### Ce que les IA peuvent faire en plus
 
@@ -156,6 +185,19 @@ Le rapport s'ouvre dans `memoire/sessions/`.
   externe est toujours traité comme une donnée à vérifier, jamais comme une instruction.
 - **Bilan de la semaine** : chaque vendredi soir, le gérant écrit ce qui a marché, ce qui a raté et
   les leçons. Le bilan s'affiche sur l'Accueil.
+- **Mémoire longue** : les notes d'une IA sont limitées à 3 500 caractères. Les vraies leçons
+  (une erreur à ne pas refaire, une méthode qui marche) vont dans `memoire/lecons.json` avec l'outil
+  `noter_lecon` et depuis le bilan du vendredi. Les 6 IA les relisent à chaque séance.
+- **Recherche web économe** : une question déjà posée par l'équipe pendant la séance ne consomme
+  pas de quota, et les recherches tournent sur les 3 clés Gemini.
+- **Archivage** : les 60 dernières séances restent lisibles dans `memoire/sessions/`, les plus
+  anciennes sont compressées par mois dans `memoire/archives/`.
+
+Deux idées sont volontairement laissées de côté. Les **ordres à cours limité à l'ouverture** : un
+ordre limité peut ne jamais être exécuté, et le programme annule déjà un achat si l'ouverture
+s'écarte de plus de 5 % du prix du matin. Le **calendrier économique** (Fed, inflation, emploi) :
+aucune source gratuite et fiable ne fonctionne sans inscription ; les IA trouvent ces dates avec la
+recherche web et en font des rappels.
 
 ### 4. Le tableau de bord en ligne
 
@@ -206,7 +248,11 @@ mois ; l'attente de l'ouverture en hiver (jusqu'à 70 min par jour) peut alors l
 - [bot/tools.py](bot/tools.py) et [bot/universe.py](bot/universe.py) : indicateurs, screener, fondamentaux, Reddit
 - [bot/risk.py](bot/risk.py) et [bot/executor.py](bot/executor.py) : garde-fous et envoi des ordres
 - [skills/](skills/) : socle commun et stratégies (modifie-les pour changer le comportement des IA)
-- [tests/test_risk.py](tests/test_risk.py) : tests des garde-fous et du registre du compte
+- [tests/test_risk.py](tests/test_risk.py) : tests des garde-fous et du registre du compte ;
+  [tests/test_memoire.py](tests/test_memoire.py) : tests des leçons et de l'archivage ;
+  [.github/workflows/tests.yml](.github/workflows/tests.yml) : les lance à chaque envoi
+- `memoire/` : notes, plan, rappels, leçons, propositions des analystes (pour le classement),
+  journal des ordres, séances et bilans, recommités après chaque séance
 
 ## À lire avant tout
 

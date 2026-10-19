@@ -29,6 +29,10 @@ on:
         description: "Simulation (aucun ordre envoyé, rien d'enregistré)"
         type: boolean
         default: true
+      force:
+        description: "Forcer (ignorer l'horaire et les séances déjà faites) ; décoché pour un déclencheur externe"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -42,7 +46,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
+      # La DERNIÈRE version de la branche (et non celle du déclenchement) : une séance mise en attente
+      # derrière une autre repart ainsi de la mémoire que celle-ci vient d'enregistrer (plan déjà exécuté…).
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - uses: actions/setup-python@v5
         with:
@@ -68,6 +76,7 @@ jobs:
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           SCHEDULE: ${{ github.event.schedule }}
           MANUAL_MODE: ${{ inputs.mode }}
+          FORCE: ${{ inputs.force }}
         run: |
           case "$SCHEDULE" in
             "0 7 * * 1-5"|"0 8 * * 1-5"|"30 8 * * 1-5") MODE=preparation ;;
@@ -77,7 +86,7 @@ jobs:
           esac
           ARGS="--mode $MODE"
           if [ "$MODE" = "verification" ]; then ARGS="--verifier"
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then ARGS="$ARGS --force"; fi
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$FORCE" != "false" ]; then ARGS="$ARGS --force"; fi
           echo "Séance : $ARGS"
           python main.py $ARGS
 

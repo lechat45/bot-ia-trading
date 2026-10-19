@@ -49,6 +49,10 @@ class Config:
     anti_churn_days: int = 2  # pas de rachat d'un titre vendu il y a moins de N jours
     min_price: float = 5.0  # pas de penny stocks
     max_gap_pct: float = 5.0  # ordre planifié annulé si l'ouverture s'écarte trop du prix du matin
+    max_sector_pct: float = 35.0  # % max du compte dans un même secteur (tech, énergie…)
+    earnings_blackout_days: int = 1  # pas d'achat si les résultats tombent dans 0 ou 1 jour
+    frein_jour_pct: float = 3.0  # frein d'urgence : plus d'achat si le compte perd 3 % en un jour…
+    frein_semaine_pct: float = 7.0  # … ou 7 % sur 7 jours
     # Séances
     preparation_heure: int = 9  # heure de Paris de la séance de préparation
     # Appels d'outils max par IA et par séance (les clés gratuites limitent le débit)
@@ -77,6 +81,9 @@ class Config:
             max_stop_distance_pct=_float("MAX_STOP_DISTANCE_PCT", 15.0),
             min_reward_risk=_float("MIN_REWARD_RISK", 1.5),
             max_gap_pct=_float("MAX_GAP_PCT", 5.0),
+            max_sector_pct=_float("MAX_SECTOR_PCT", 35.0),
+            frein_jour_pct=_float("FREIN_JOUR_PCT", 3.0),
+            frein_semaine_pct=_float("FREIN_SEMAINE_PCT", 7.0),
             preparation_heure=int(_float("PREPARATION_HEURE", 9)),
             max_steps_analyste=int(_float("MAX_STEPS_ANALYSTE", 10)),
             max_steps_analyste_suivi=int(_float("MAX_STEPS_ANALYSTE_SUIVI", 6)),

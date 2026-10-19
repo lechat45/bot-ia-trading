@@ -46,7 +46,7 @@ class Broker:
                                     "symbole": sym, "qty": qty, "statut": statut, **extra}])
 
     # ------------------------------------------------------------------ achat
-    def buy(self, aid, sym, qty, sl_pct, tp_pct, these="") -> dict:
+    def buy(self, aid, sym, qty, sl_pct, tp_pct, these="", source="") -> dict:
         price = self.price(sym)
         if not price:
             return {"ok": False, "message": f"prix de {sym} indisponible"}
@@ -60,7 +60,7 @@ class Broker:
             o = self.alpaca.submit_bracket(sym, qty, stop, tp, client_id=f"{aid}-{sym}-{uuid.uuid4().hex[:8]}")
             o = self._wait(o["id"])
         except AlpacaError as e:
-            self._journal(aid, "acheter", sym, qty, "erreur", erreur=str(e)[:200])
+            self._journal(aid, "acheter", sym, qty, "erreur", erreur=str(e)[:200], source=source)
             return {"ok": False, "message": f"Alpaca a refusé l'ordre : {e}"}
         status = o.get("status")
         if status in DONE:
@@ -68,7 +68,7 @@ class Broker:
             lot = {"qty": filled, "prix": fill, "date": _now(), "stop": stop, "tp": tp, "statut": "ouvert",
                    "parent_id": o["id"], **self.comptes.leg_ids(o)}
             self.comptes.add_lot(aid, sym, lot, these)
-            self._journal(aid, "acheter", sym, filled, "exécuté", prix=fill, stop=stop, tp=tp)
+            self._journal(aid, "acheter", sym, filled, "exécuté", prix=fill, stop=stop, tp=tp, source=source)
             notify.send(f"Achat : {filled} {sym}", f"{filled} {sym} achetées à {fill:.2f} $ (stop {stop:.2f} $, "
                         f"objectif {tp:.2f} $), soit {filled * fill:,.0f} $.".replace(",", " "))
             return {"ok": True, "message": f"Achat exécuté : {filled} {sym} à {fill:.2f} $ "
@@ -79,12 +79,12 @@ class Broker:
         # Pas encore exécuté (marché fermé ou lent) : on réserve le cash, la synchro finira le travail.
         self.comptes.add_lot(aid, sym, {"qty": qty, "prix": price, "date": _now(), "stop": stop, "tp": tp,
                                         "statut": "en_attente", "parent_id": o["id"]}, these)
-        self._journal(aid, "acheter", sym, qty, "envoyé")
+        self._journal(aid, "acheter", sym, qty, "envoyé", source=source)
         return {"ok": True, "message": f"Ordre d'achat de {qty} {sym} envoyé, en attente d'exécution",
                 "qty": qty, "prix": price, "stop": stop, "tp": tp}
 
     # ------------------------------------------------------------------ vente
-    def sell(self, aid, sym, qty, raison="") -> dict:
+    def sell(self, aid, sym, qty, raison="", source="") -> dict:
         pos = self.comptes.agent(aid)["positions"].get(sym)
         if not pos:
             return {"ok": False, "message": f"pas de position {sym}"}
@@ -125,7 +125,7 @@ class Broker:
         price = float(o["filled_avg_price"])
         pl = self.comptes.remove_qty(aid, sym, qty, price)
         self._journal(aid, "vendre" if qty >= total else "alleger", sym, qty, "exécuté", prix=price,
-                      plus_value=round(pl, 2), raison=raison[:200])
+                      plus_value=round(pl, 2), raison=raison[:200], source=source)
         notify.send(f"Vente : {qty} {sym}", f"{qty} {sym} vendues à {price:.2f} $, plus-value {pl:+.2f} $.",
                     tags="moneybag")
         # 3. remettre la protection sur ce qui reste

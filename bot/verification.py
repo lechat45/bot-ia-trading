@@ -46,7 +46,8 @@ def run(cfg, alpaca, router, offline: bool = False) -> dict:
     today = dt.datetime.now(dt.timezone.utc).date()
 
     # ------------------------------------------------------------- configuration et broker
-    c.run("config", "Configuration (.env / Secrets)", "critique", lambda: (
+    # hors ligne, le broker et les IA sont simulés : des clés absentes ne bloquent pas le test
+    c.run("config", "Configuration (.env / Secrets)", "utile" if offline else "critique", lambda: (
         (not cfg.problems(), "clés présentes, mode " + ("paper (argent virtuel)" if cfg.paper else "ARGENT RÉEL"))
         if not cfg.problems() else (False, " ; ".join(cfg.problems()))))
 

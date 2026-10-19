@@ -156,9 +156,9 @@ function renderPage() {
   if (!S.ov) return;
   if (S.page === "accueil") {
     renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov);
-    renderBilan(S.ov); renderRappelsCard(S.ov); renderSysteme(S.ov);
+    renderBilan(S.ov); renderStats(S.ov); renderLecons(S.ov); renderRappelsCard(S.ov); renderSysteme(S.ov);
   }
-  if (S.page === "ia") { renderIAList(); renderIAPanel(); }
+  if (S.page === "ia") { renderIAList(); renderIAPanel(); renderRanking(S.ov); }
   if (S.page === "journal") renderJournal();
   if (S.page === "bureau") renderDesktop();
 }
@@ -300,6 +300,54 @@ function renderBilan(o) {
   $("#bilan-text").innerHTML = md(b.texte);
 }
 
+const kvBox = (rows) => `<div class="kv">${rows.map(([k, v, cls]) => `<div><span>${esc(k)}</span><b class="${cls || ""}">${esc(v)}</b></div>`).join("")}</div>`;
+
+function renderStats(o) {
+  const s = o.stats || {};
+  $("#stats-sub").textContent = s.debut ? `depuis le ${fmtDate(`${s.debut}T12:00:00Z`, { day: "numeric", month: "long" })}` : "";
+  if (!s.debut && !s.ventes) {
+    $("#stats-card").innerHTML = empty("chart", "Pas encore de statistiques", "Elles apparaîtront après les premières séances.");
+    return;
+  }
+  const ecart = num(s.perf_pct) !== null && num(s.spy_pct) !== null ? s.perf_pct - s.spy_pct : null;
+  $("#stats-card").innerHTML = kvBox([
+    ["Performance du compte", pct(s.perf_pct), tone(s.perf_pct)],
+    ["S&P 500 sur la période", pct(s.spy_pct), tone(s.spy_pct)],
+    ["Écart avec le marché", ecart === null ? "—" : pct(ecart), tone(ecart)],
+    ["Plus forte baisse", pct(s.drawdown_max_pct), s.drawdown_max_pct < 0 ? "down" : ""],
+    ["Ventes clôturées", nb(s.ventes, 0)],
+    ["Ventes gagnantes", s.reussite_pct === null || s.reussite_pct === undefined ? "—" : `${s.gagnantes} (${s.reussite_pct} %)`],
+    ["Gain moyen", money(s.gain_moyen, 0), tone(s.gain_moyen)],
+    ["Perte moyenne", money(s.perte_moyenne, 0), tone(s.perte_moyenne)],
+    ["Plus-values réalisées", money(s.realise, 0), tone(s.realise)],
+  ]) + '<p class="small muted" style="margin:10px 0 0">La plus forte baisse mesure la chute maximale du compte depuis son plus haut.</p>';
+}
+
+function renderLecons(o) {
+  const l = (o.lecons || []).slice().reverse();
+  $("#lecons-sub").textContent = l.length ? `${l.length} leçon${l.length > 1 ? "s" : ""}` : "";
+  $("#lecons-card").innerHTML = l.length
+    ? `<div class="list">${l.slice(0, 8).map((x) => `<div class="order">${x.auteur === "bilan" ? '<span class="pill">bilan</span>' : avatar(x.auteur, true)}<span class="small muted">${esc(fmtDate(`${x.date}T12:00:00Z`, { day: "numeric", month: "short" }))}</span><div class="why">${esc(x.texte)}</div></div>`).join("")}</div>`
+    : empty("book", "Aucune leçon pour l'instant", "Les IA notent ici les règles tirées de leurs erreurs et de leurs réussites. Elles les relisent à chaque séance.");
+}
+
+function renderRanking(o) {
+  const c = o.classement || {};
+  const rows = (c.analystes || []).filter((r) => r.propositions);
+  $("#rank-sub").textContent = c.propositions ? `${c.propositions} idée${c.propositions > 1 ? "s" : ""} d'achat depuis le ${fmtDate(`${c.depuis}T12:00:00Z`, { day: "numeric", month: "short" })}` : "";
+  if (!rows.length) {
+    $("#rank-card").innerHTML = empty("spark", "Pas encore de classement", "Après les premières séances réelles, on mesure ce qu'aurait rapporté chaque idée des analystes depuis qu'elle a été proposée, achetée ou non.");
+    return;
+  }
+  const cell = (v) => `<span class="${tone(v)}">${esc(pct(v, 1))}</span>`;
+  const crit = c.critique || {};
+  $("#rank-card").innerHTML = `<div class="table-wrap"><table class="tbl-tight"><thead><tr><th>Analyste</th><th>Idées</th><th>Achetées</th><th>Rendement moyen</th><th>Gagnantes</th><th>Moy. achetées</th><th>Moy. écartées</th><th>Meilleure · pire</th></tr></thead><tbody>
+    ${rows.map((r, i) => `<tr><td><span style="display:inline-flex;align-items:center;gap:8px">${avatar(r.id, true)}<b>${i + 1}. ${esc(shortName(r.id))}</b></span></td><td>${r.propositions}</td><td>${r.retenues}</td><td>${cell(r.rendement_moyen)}</td><td>${r.reussite_pct ?? "—"} %</td><td>${cell(r.moyenne_retenues)}</td><td>${cell(r.moyenne_ecartees)}</td>
+      <td class="mono" style="white-space:nowrap">${r.meilleure ? `${esc(r.meilleure.symbole)} ${cell(r.meilleure.rendement)}` : "—"}${r.pire && r.pire.symbole !== r.meilleure?.symbole ? ` · ${esc(r.pire.symbole)} ${cell(r.pire.rendement)}` : ""}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p class="small muted" style="margin:10px 0 0">Rendement mesuré depuis le prix du jour de la proposition, jusqu'au dernier cours.${crit.avis ? ` Avis du critique confirmés par la suite : ${crit.justes_pct} % (${crit.avis} avis « ok » ou « rejet »).` : ""}</p>`;
+}
+
 function rappelRow(r) {
   const today = new Date().toLocaleDateString("sv-SE", { timeZone: "America/New_York" });
   const st = r.statut !== "actif" ? [r.statut === "fait" ? "traité" : "expiré", r.statut === "fait" ? "pill-sage" : ""]
@@ -331,7 +379,10 @@ function renderSysteme(o) {
   }
   $("#systeme-sub").innerHTML = `<span class="pill ${v.ok ? "pill-sage" : "pill-danger"}">${v.ok ? "prêt à trader" : "problème critique"}</span>`;
   const bad = (v.checks || []).filter((c) => !c.ok);
-  $("#systeme-card").innerHTML = `<p class="small muted" style="margin:0 0 10px">Vérifié le ${esc(dayHm(v.date))} : ${esc(v.reussis)}/${esc(v.total)} tests réussis.</p>
+  const al = o.alertes || {};
+  const alerts = (al.frein ? `<div class="banner err" style="margin:0 0 10px">${icon("alert")}<span><b>Frein d'urgence</b> à la séance du ${esc(al.quand)} : ${esc(al.frein)}. Aucun achat tant que la perte dépasse le seuil.</span></div>` : "")
+    + ((al.ecarts || []).length ? `<div class="banner warn" style="margin:0 0 10px">${icon("alert")}<span><b>Écart avec Alpaca</b> : ${esc(al.ecarts.join(" ; "))}. Vérifiez les positions sur le site d'Alpaca.</span></div>` : "");
+  $("#systeme-card").innerHTML = alerts + `<p class="small muted" style="margin:0 0 10px">Vérifié le ${esc(dayHm(v.date))} : ${esc(v.reussis)}/${esc(v.total)} tests réussis.</p>
     <div class="list">${(bad.length ? bad : (v.checks || []).slice(0, 5)).map((c) => `<div class="order"><span class="pill ${c.ok ? "pill-sage" : c.niveau === "critique" ? "pill-danger" : "pill-peach"}">${c.ok ? "ok" : c.niveau === "critique" ? "échec" : "attention"}</span><b>${esc(c.nom)}</b><div class="why">${esc(c.detail)}</div></div>`).join("")}</div>
     ${bad.length ? "" : '<p class="small muted" style="margin:10px 0 0">Tout fonctionne : clés, broker, données, IA et garde-fous.</p>'}`;
 }

@@ -73,6 +73,38 @@ def test_vente_et_stop():
     assert check_stop(cfg(), val(positions=[XOM]), "XOM", 104, 110)[0]
 
 
+def test_frein_d_urgence():
+    ok, msg, _ = check_buy(cfg(), "a", val(), "AAPL", 200, 4000, 7, 15, [], frein="perte de 3,5 % aujourd'hui")
+    assert not ok and "frein" in msg
+    assert check_sell(cfg(), "a", val(positions=[XOM]), "XOM", 100, [])[0]  # les ventes restent possibles
+
+
+def test_limite_par_secteur():
+    # 35 % du compte (35 000 $) par secteur : 30 000 $ déjà dans la tech, il reste 5 000 $
+    ok, msg, _ = check_buy(cfg(), "a", val(), "AAPL", 200, 8000, 7, 15, [], secteur="Technology", secteur_valeur=30000)
+    assert not ok and "secteur" in msg and "maximum 5000" in msg
+    ok, _, d = check_buy(cfg(), "a", val(), "AAPL", 200, 8000, 7, 15, [], clamp=True, secteur="Technology",
+                         secteur_valeur=30000)
+    assert ok and d["qty"] == 25
+    assert check_buy(cfg(), "a", val(), "AAPL", 200, 8000, 7, 15, [], secteur=None, secteur_valeur=30000)[0]
+
+
+def test_pas_d_achat_avant_les_resultats():
+    assert "résultats" in check_buy(cfg(), "a", val(), "AAPL", 200, 4000, 7, 15, [], jours_resultats=1)[1]
+    assert "résultats" in check_buy(cfg(), "a", val(), "AAPL", 200, 4000, 7, 15, [], jours_resultats=0)[1]
+    assert check_buy(cfg(), "a", val(), "AAPL", 200, 4000, 7, 15, [], jours_resultats=5)[0]
+    assert check_buy(cfg(), "a", val(), "AAPL", 200, 4000, 7, 15, [], jours_resultats="inconnue")[0]
+
+
+def test_controle_du_registre():
+    c = Comptes.load(["equipe"], 100_000, persist=False)
+    c.add_lot("equipe", "AAPL", {"qty": 10, "prix": 200, "statut": "ouvert"}, "")
+    c.add_lot("equipe", "MSFT", {"qty": 5, "prix": 400, "statut": "en_attente"}, "")
+    assert c.reconcile({"AAPL": 10}) == []  # l'achat en attente n'est pas compté
+    ecarts = c.reconcile({"AAPL": 7, "TSLA": 3})
+    assert ecarts == ["AAPL : 10 au registre, 7 chez Alpaca", "TSLA : 0 au registre, 3 chez Alpaca"]
+
+
 def test_sous_comptes_parcours_complet():
     alpaca = FakeAlpaca(open_=True)
     c = Comptes.load(["a", "b"], 50_000, persist=False)

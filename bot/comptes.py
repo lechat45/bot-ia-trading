@@ -130,6 +130,20 @@ class Comptes:
                 del a["positions"][sym]
             return pl
 
+    def reconcile(self, real: dict) -> list[str]:
+        """Écarts entre les quantités du registre (lots exécutés) et les positions réelles Alpaca
+        ({symbole: quantité}). Un achat encore en attente n'est pas compté."""
+        mine: dict = {}
+        for a in self.data["agents"].values():
+            for sym, pos in a["positions"].items():
+                mine[sym] = mine.get(sym, 0) + sum(l["qty"] for l in pos["lots"] if l.get("statut") != "en_attente")
+        out = []
+        for sym in sorted(set(mine) | set(real)):
+            m, r = mine.get(sym, 0), real.get(sym, 0)
+            if m != r:
+                out.append(f"{sym} : {m} au registre, {r} chez Alpaca")
+        return out
+
     # ------------------------------------------------------------------ synchronisation Alpaca
     @staticmethod
     def _follow(alpaca, order_id):

@@ -1,0 +1,49 @@
+# Teste tout le programme à chaque envoi sur GitHub, sans clé et sans réseau (fausses IA, faux broker) :
+# un code cassé est repéré avant la séance suivante des IA.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["memoire/**", "**.md"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Compilation de tout le code
+        run: python -m compileall -q bot main.py dashboard.py build_site.py tests
+
+      - name: Garde-fous, registre et mémoire
+        run: |
+          python tests/test_risk.py
+          python tests/test_memoire.py
+
+      - name: Séances complètes hors ligne (préparation, ouverture, suivi)
+        run: |
+          python main.py --offline --mode preparation --force
+          python main.py --offline --mode ouverture --force
+          python main.py --offline --mode suivi --force
+
+      - name: Vérification de l'installation hors ligne
+        run: python main.py --offline --verifier
+
+      - name: Construction du tableau de bord
+        run: python build_site.py

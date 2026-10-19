@@ -98,6 +98,11 @@ def declarations(role: str, market_open: bool) -> list[dict]:
         {"name": "ecrire_notes",
          "description": "Réécrit ENTIÈREMENT tes notes (ta seule mémoire entre deux séances).",
          "parameters": {"type": "object", "properties": {"contenu": S}, "required": ["contenu"]}},
+        {"name": "noter_lecon",
+         "description": ("Ajoute une LEÇON durable à la mémoire longue de l'équipe (lue par les 6 IA à chaque séance) : "
+                         "une règle concrète tirée d'une erreur ou d'une réussite. 2 par séance au maximum."),
+         "parameters": {"type": "object", "properties": {"lecon": {"type": "string", "description": "une phrase, 300 caractères max"}},
+                        "required": ["lecon"]}},
     ]
     research += [
         {"name": "lire_page",
@@ -227,6 +232,7 @@ class AgentEnv:
         self.tool_calls = 0
         self.web_left = session.cfg.max_web_searches
         self.pages_left = 4
+        self.lecons_left = 2
         self.done = False
         self.compte_rendu = ""
 
@@ -285,6 +291,8 @@ class AgentEnv:
                 "max_par_titre_usd": round(v["valeur"] * cfg.max_position_pct / 100, 0),
                 "liquidites_utilisables_usd": round(max(0, v["cash"] - self.reserved() - v["valeur"] * cfg.min_cash_pct / 100), 0),
                 "positions_max": cfg.max_positions,
+                "max_par_secteur_pct": cfg.max_sector_pct,
+                "frein_d_urgence": self.s.frein or "inactif",
                 "stop_loss_pct": f"entre {cfg.min_stop_distance_pct:g} et {cfg.max_stop_distance_pct:g}",
                 "ratio_gain_perte_min": cfg.min_reward_risk,
             },
@@ -355,6 +363,8 @@ class AgentEnv:
             return {"erreur": "budget de recherches web épuisé pour cette séance : note l'information comme inconnue"}
         self.web_left -= 1
         res = self.s.router.web_search(question, who=self.a.id)
+        if res.pop("cache", False):  # réponse déjà connue de l'équipe : ne compte pas dans le budget
+            self.web_left += 1
         res["recherches_restantes"] = self.web_left
         return res
 
@@ -394,12 +404,24 @@ class AgentEnv:
         return {"ok": True, "caracteres": len(contenu[:memory.MAX_NOTES]),
                 "info": "notes enregistrées" if not self.s.dry_run else "notes gardées (simulation : non enregistrées)"}
 
+    def t_noter_lecon(self, lecon=""):
+        texte = " ".join(str(lecon).split())
+        if len(texte) < 15:
+            return {"refuse": "leçon trop courte : écris une règle concrète et réutilisable"}
+        if self.lecons_left <= 0:
+            return {"refuse": "2 leçons maximum par séance"}
+        self.lecons_left -= 1
+        self.s.add_lecon({"date": self.s.trading_date, "auteur": self.a.id, "texte": texte[:300]})
+        return {"ok": True, "info": "leçon ajoutée à la mémoire de l'équipe" if not self.s.dry_run
+                else "leçon gardée (simulation : non enregistrée)"}
+
     # -------------------------------------------------- analyste : proposer
     def _check(self, action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct, clamp=False):
         val = self.valuation()
         if action == "acheter":
+            ctx = self.s.buy_context(sym, val, self.planned())
             return check_buy(self.s.cfg, self.acct, val, sym, self.s.market.price(sym), montant_usd, stop_loss_pct,
-                             take_profit_pct, self.s.journal, reserved=self.reserved(), clamp=clamp)
+                             take_profit_pct, self.s.journal, reserved=self.reserved(), clamp=clamp, **ctx)
         if action in ("vendre", "alleger"):
             return check_sell(self.s.cfg, self.acct, val, sym, pourcentage, self.s.journal)
         return False, "action inconnue : acheter ou vendre", {}
@@ -465,9 +487,10 @@ class AgentEnv:
             self.orders.append({**record, **o, "resultat": "planifié pour l'ouverture"})
             return {"planifie": True, "message": msg}
         if action == "acheter":
-            r = self.s.broker.buy(self.acct, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"], these[:1500])
+            r = self.s.broker.buy(self.acct, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"], these[:1500],
+                                  source=source)
         else:
-            r = self.s.broker.sell(self.acct, sym, d["qty"], these)
+            r = self.s.broker.sell(self.acct, sym, d["qty"], these, source=source)
         self.orders.append({**record, **d, "resultat": r["message"], "ok": r["ok"]})
         return r
 
