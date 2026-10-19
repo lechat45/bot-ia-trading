@@ -18,18 +18,19 @@ import datetime as dt
 import json
 import logging
 import os
+import re
 import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import memory, notify
+from . import memory, notify, tools
 from .agent_tools import SKILL_INFO, AgentEnv, Market, declarations
 from .comptes import Comptes
 from .executor import Broker
 from .llm import ContextTooLarge, LLMError
-from .risk import check_buy, check_sell
+from .risk import check_buy, check_sell, trailing_stop
 
 log = logging.getLogger("seance")
 SKILLS = Path(__file__).resolve().parent.parent / "skills"
@@ -65,6 +66,13 @@ AGENTS = [
 ANALYSTES = [a for a in AGENTS if a.role == "analyste"]
 CRITIQUE = next(a for a in AGENTS if a.role == "critique")
 GERANT = next(a for a in AGENTS if a.role == "gerant")
+# Repères du résumé du marché (fonds cotés suivis gratuitement chez Alpaca)
+BRIEF_INDICES = [("SPY", "S&P 500"), ("QQQ", "Nasdaq 100"), ("IWM", "petites capitalisations"), ("DIA", "Dow Jones")]
+BRIEF_MACRO = [("TLT", "obligations US à 20 ans"), ("GLD", "or"), ("USO", "pétrole"), ("UUP", "dollar")]
+BRIEF_SECTEURS = [("XLK", "technologie"), ("XLC", "communication"), ("XLY", "consommation cyclique"),
+                  ("XLP", "consommation de base"), ("XLF", "finance"), ("XLV", "santé"), ("XLI", "industrie"),
+                  ("XLE", "énergie"), ("XLB", "matériaux"), ("XLU", "services publics"), ("XLRE", "immobilier")]
+ANALYST_NOTE = re.compile(r"\b(Maintains|Reiterates|Upgrades|Downgrades|Initiates|Assumes|Price Target)\b", re.I)
 MODES = {
     "preparation": "Préparation (bourse fermée, ordres planifiés pour l'ouverture)",
     "ouverture": "Ouverture (exécution des ordres planifiés)",
@@ -112,9 +120,10 @@ def compact(messages: list[dict], budget: int, keep_last: int = 3) -> None:
 
 
 class Session:
-    def __init__(self, cfg, alpaca, router, mode: str, dry_run: bool, offline: bool = False):
+    def __init__(self, cfg, alpaca, router, mode: str, dry_run: bool, offline: bool = False, complet: bool = False):
         self.cfg, self.alpaca, self.router = cfg, alpaca, router
         self.mode, self.dry_run, self.offline = mode, dry_run, offline
+        self.complet = complet  # séance lancée à la main : toute l'équipe, même en suivi calme
         self.account = ACCOUNT
         self.now = dt.datetime.now(dt.timezone.utc)
         self.when = self.now.astimezone(PARIS).strftime("%Y-%m-%d %H:%M (Paris)")
@@ -131,6 +140,10 @@ class Session:
         self.ecarts: list = []  # différences entre le registre de l'équipe et les positions Alpaca
         self.lecons: list = memory.read_lecons()  # mémoire longue de l'équipe
         self.new_lecons: list = []
+        self.brief = ""  # résumé du marché préparé par le programme, donné aux 6 IA
+        self.stops_suiveurs: list = []
+        self.allegee: str | None = None  # séance de suivi allégée (le gérant seul) et pourquoi
+        self.suivi_raisons: list = []
 
     # ------------------------------------------------------------------ données partagées de la séance
     def add_plan(self, order: dict):
@@ -200,6 +213,124 @@ class Session:
             return f"le compte a perdu {-week:.1f} % en une semaine (seuil {cfg.frein_semaine_pct:g} %)"
         return None
 
+    def apply_trailing_stops(self):
+        """Stop suiveur codé (pas une décision d'IA) : remonte le stop des positions en gain."""
+        val = self.comptes.valuation(ACCOUNT, self.market.prices(self.comptes.symbols()))
+        for p in val["positions"]:
+            new = trailing_stop(self.cfg, p)
+            if new is None:
+                continue
+            r = self.broker.adjust_stop(ACCOUNT, p["symbole"], new, source="stop suiveur")
+            texte = (f"Stop suiveur sur {p['symbole']} : {p['stop'] or 0:.2f} $ → {new:.2f} $ "
+                     f"(cours {p['prix']:.2f} $, achat {p['prix_achat']:.2f} $)")
+            self.stops_suiveurs.append({"symbole": p["symbole"], "ancien": p["stop"], "nouveau": new,
+                                        "ok": r["ok"], "message": r["message"]})
+            if not r["ok"]:
+                log.warning("stop suiveur %s : %s", p["symbole"], r["message"])
+                continue
+            log.info(texte)
+            self.comptes.event(ACCOUNT, texte)
+            if not self.dry_run and (p["stop"] or 0) < p["prix_achat"] <= new:
+                notify.send(f"{p['symbole']} protégée", f"{texte}. Cette position ne peut plus perdre d'argent.",
+                            tags="shield")
+
+    def _moves(self, sym: str) -> dict | None:
+        """Variation d'un titre depuis la dernière clôture, sur 5 et sur 21 séances."""
+        bars = self.market.bars([sym]).get(sym) or []
+        today = self.now.astimezone(NY).date().isoformat()
+        past = [b for b in bars if str(b.get("t", ""))[:10] < today]
+        if len(past) < 22:
+            return None
+        live = self.market.price(sym) or past[-1]["c"]
+        k = 0 if self.market_open else 1  # bourse fermée : la dernière clôture est la séance du jour
+        return {"jour": (live / past[-1]["c"] - 1) * 100, "semaine": (live / past[-5 - k]["c"] - 1) * 100,
+                "mois": (live / past[-21 - k]["c"] - 1) * 100}
+
+    def market_brief(self) -> str:
+        """Résumé du marché préparé par le programme et donné aux 6 IA : indices, taux et matières premières,
+        secteurs, positions du compte et grands titres. Il leur évite de dépenser des appels d'outils."""
+        try:
+            self.market.bars([s for s, _ in BRIEF_INDICES + BRIEF_MACRO + BRIEF_SECTEURS])
+            fmt = lambda v: f"{v:+.1f} %".replace(".", ",")  # noqa: E731
+
+            def line(items):
+                out = []
+                for sym, name in items:
+                    m = self._moves(sym)
+                    if m:
+                        out.append(f"{name} ({sym}) {fmt(m['jour'])} · 5 séances {fmt(m['semaine'])} · 1 mois {fmt(m['mois'])}")
+                return " ; ".join(out)
+
+            L = []
+            if idx := line(BRIEF_INDICES):
+                L.append(f"- Indices : {idx}")
+            if mac := line(BRIEF_MACRO):
+                L.append(f"- Taux, matières premières et dollar : {mac}")
+            sect = [(name, sym, m["semaine"]) for sym, name in BRIEF_SECTEURS if (m := self._moves(sym))]
+            if sect:
+                sect.sort(key=lambda x: x[2], reverse=True)
+                top = ", ".join(f"{n} ({s}) {fmt(v)}" for n, s, v in sect[:3])
+                bottom = ", ".join(f"{n} ({s}) {fmt(v)}" for n, s, v in sect[-3:][::-1])
+                L.append(f"- Secteurs sur 5 séances : les plus forts {top} ; les plus faibles {bottom}")
+            val = self.comptes.valuation(ACCOUNT, self.market.prices(self.comptes.symbols()))
+            pos = []
+            for p in val["positions"]:
+                m = self._moves(p["symbole"])
+                stop = f", stop à {(1 - p['stop'] / p['prix']) * 100:.1f} % sous le cours".replace(".", ",") if p.get("stop") and p["prix"] else ""
+                jour = f"{fmt(m['jour'])} aujourd'hui, " if m else ""
+                pos.append(f"{p['symbole']} {jour}{fmt(p['pl_pct'])} depuis l'achat{stop}")
+            L.append("- Positions du compte : " + ("; ".join(pos) if pos else "aucune"))
+            heads = []
+            if not self.offline:
+                try:  # la une Économie de Google Actualités
+                    heads += [(n["date"][5:], n["source"], n["titre"]) for n in tools.google_news_top(5)]
+                except Exception as e:
+                    log.info("une de Google Actualités indisponible : %s", e)
+            try:  # le fil Benzinga d'Alpaca, sans les simples changements de note des analystes
+                news = [n for n in self.alpaca.news(None, limit=50) if not ANALYST_NOTE.search(n.get("headline") or "")]
+            except Exception:
+                news = []
+            heads += [(str(n.get("created_at", ""))[5:16].replace("T", " "), n.get("source", ""), n.get("headline") or "")
+                      for n in news[:4]]
+            if heads:
+                L.append("- Grands titres de l'actualité financière (heure UTC) :")
+                L += [f"  - {when} · {src} · {title[:150]}" for when, src, title in heads]
+            if not L:
+                return ""
+            return ("RÉSUMÉ DU MARCHÉ (préparé par le programme au début de la séance ; variations depuis la dernière "
+                    "clôture, sur 5 et sur 21 séances) :\n" + "\n".join(L) + "\n\n")
+        except Exception as e:  # le résumé est un plus : il ne doit jamais bloquer la séance
+            log.warning("résumé du marché indisponible : %s", e)
+            return ""
+
+    def suivi_reasons(self) -> list[str]:
+        """Ce qui justifie de réveiller toute l'équipe en séance de suivi. Sans raison, la séance est allégée :
+        le gérant seul vérifie les positions, ce qui économise les quotas gratuits des IA."""
+        cfg = self.cfg
+        if cfg.suivi_complet or self.complet:
+            return ["séance complète demandée"]
+        out = []
+        due = [r for r in self.rappels if r["statut"] == "actif" and r["date"] <= self.trading_date
+               and r["seance"] in ("toutes", "suivi")]
+        if due:
+            out.append(f"{len(due)} rappel(s) à traiter aujourd'hui")
+        events = self.comptes.take_events(ACCOUNT, self.comptes.agent(ACCOUNT).get("derniere_seance"))
+        hits = [e for e in events if any(k in e for k in ("Stop loss déclenché", "Objectif de gain atteint",
+                                                          "non exécuté", "Écart entre le registre"))]
+        if hits:
+            out.append("événement sur le compte : " + " ; ".join(hits)[:200])
+        spy = self._moves("SPY")
+        if spy and abs(spy["jour"]) >= cfg.suivi_marche_pct:
+            out.append(f"S&P 500 {spy['jour']:+.1f} % aujourd'hui")
+        val = self.comptes.valuation(ACCOUNT, self.market.prices(self.comptes.symbols()))
+        for p in val["positions"]:
+            m = self._moves(p["symbole"])
+            if m and abs(m["jour"]) >= cfg.suivi_mouvement_pct:
+                out.append(f"{p['symbole']} {m['jour']:+.1f} % aujourd'hui")
+            if p.get("stop") and p["prix"] and (p["prix"] / p["stop"] - 1) * 100 <= 2:
+                out.append(f"{p['symbole']} à moins de 2 % de son stop")
+        return out
+
     # ------------------------------------------------------------------ séance
     def run(self) -> dict:
         memory.state_start(self.mode, self.dry_run, [a.id for a in AGENTS])
@@ -230,6 +361,8 @@ class Session:
             for r in self.rappels:  # un rappel non traité 3 jours après sa date expire
                 if r["statut"] == "actif" and r["date"] < limit:
                     r["statut"] = "expire"
+            if self.market_open:  # cours de la séance régulière uniquement
+                self.apply_trailing_stops()
 
             if self.mode == "ouverture":
                 self.plan = memory.read_plan(simulation=self.offline)
@@ -238,15 +371,26 @@ class Session:
                 if self.mode == "preparation":
                     self.plan = {"date": self.trading_date, "cree_le": self.now.isoformat(timespec="seconds"),
                                  "simulation": self.dry_run, "ordres": []}
-                # 1. les analystes cherchent en parallèle
-                with cf.ThreadPoolExecutor(max_workers=len(ANALYSTES)) as pool:
-                    for a, res in zip(ANALYSTES, pool.map(self.run_agent, ANALYSTES)):
-                        self.results[a.id] = res
-                # 2. le critique contrôle les propositions
-                if self.proposals:
-                    self.results[CRITIQUE.id] = self.run_agent(CRITIQUE)
+                self.brief = self.market_brief()
+                if self.mode == "suivi":
+                    self.suivi_raisons = self.suivi_reasons()
+                    if not self.suivi_raisons:
+                        self.allegee = ("rien de notable depuis ce matin : pas de rappel du jour, pas d'événement sur "
+                                        "le compte, marché et positions calmes")
+                        log.info("Séance de suivi allégée : %s", self.allegee)
+                if self.allegee:
+                    for a in ANALYSTES + [CRITIQUE]:
+                        memory.state_agent(a.id, statut="termine", action="séance allégée : pas sollicité")
                 else:
-                    memory.state_agent(CRITIQUE.id, statut="termine", action="aucune proposition à contrôler")
+                    # 1. les analystes cherchent en parallèle
+                    with cf.ThreadPoolExecutor(max_workers=len(ANALYSTES)) as pool:
+                        for a, res in zip(ANALYSTES, pool.map(self.run_agent, ANALYSTES)):
+                            self.results[a.id] = res
+                    # 2. le critique contrôle les propositions
+                    if self.proposals:
+                        self.results[CRITIQUE.id] = self.run_agent(CRITIQUE)
+                    else:
+                        memory.state_agent(CRITIQUE.id, statut="termine", action="aucune proposition à contrôler")
                 # 3. le gérant décide
                 self.results[GERANT.id] = self.run_agent(GERANT)
                 # 4. le vendredi soir, le gérant écrit le bilan de la semaine
@@ -265,7 +409,7 @@ class Session:
             return c.max_steps_analyste if self.mode == "preparation" else c.max_steps_analyste_suivi
         if a.role == "critique":  # chaque avis compte comme un appel : un de plus par proposition
             return c.max_steps_critique + len(self.proposals)
-        return c.max_steps_gerant
+        return c.max_steps_gerant_leger if self.allegee else c.max_steps_gerant
 
     def system_prompt(self, a: Agent) -> str:
         cfg = self.cfg
@@ -298,7 +442,10 @@ class Session:
             f"max par séance ; stop loss obligatoire entre {cfg.min_stop_distance_pct:g} et {cfg.max_stop_distance_pct:g} % ; "
             f"objectif de gain ≥ {cfg.min_reward_risk:g} × le stop ; pas d'action sous {cfg.min_price:g} $ ; un stop ne "
             f"se descend jamais ; pas de rachat d'un titre vendu il y a moins de {cfg.anti_churn_days} jours ; "
-            f"{cfg.max_sector_pct:g} % max du compte dans un même secteur ; pas d'achat d'un titre qui publie ses "
+            + (f"stop suiveur automatique (le code s'en charge) : à +{cfg.stop_suiveur_pct:g} % le stop remonte au prix "
+               f"d'achat, à +{2 * cfg.stop_suiveur_pct:g} % il suit le cours à {cfg.stop_suiveur_distance_pct:g} % en "
+               "dessous ; " if cfg.stop_suiveur_pct > 0 else "")
+            + f"{cfg.max_sector_pct:g} % max du compte dans un même secteur ; pas d'achat d'un titre qui publie ses "
             f"résultats dans {cfg.earnings_blackout_days} jour(s) ou moins ; frein d'urgence (plus aucun achat) si le "
             f"compte perd {cfg.frein_jour_pct:g} % en un jour ou {cfg.frein_semaine_pct:g} % en une semaine ; "
             f"{cfg.max_web_searches} recherches web par IA et par séance. Réponds en français."
@@ -309,6 +456,7 @@ class Session:
     def opening(self, a: Agent) -> str:
         notes = memory.read_notes(a.id) or "(aucune note : c'est ta toute première séance)"
         txt = f"Nouvelle séance : {MODES[self.mode]}.\n\nTES NOTES (écrites lors de ta dernière séance) :\n{notes}\n\n"
+        txt += self.brief
         if self.lecons:
             txt += ("LEÇONS APPRISES PAR L'ÉQUIPE (mémoire longue, à respecter) :\n"
                     + "\n".join(f"- {l['texte']}" for l in self.lecons[-15:]) + "\n\n")
@@ -318,6 +466,11 @@ class Session:
             events = self.comptes.take_events(ACCOUNT, acct.get("derniere_seance"))
             txt += ("CE QUI S'EST PASSÉ SUR LE COMPTE DEPUIS LA DERNIÈRE SÉANCE :\n"
                     + ("\n".join(f"- {e}" for e in events) or "- rien de particulier") + "\n\n")
+            if self.allegee:
+                return txt + (f"SÉANCE DE SUIVI ALLÉGÉE ({self.allegee}) : les analystes et le critique ne sont pas "
+                              "sollicités, pour économiser les quotas des IA. Vérifie les positions (thèse, actualité, "
+                              "stop) avec tes outils et agis si c'est justifié ; tu peux aussi saisir une occasion "
+                              "évidente. Mets à jour le journal de bord de l'équipe avec ecrire_notes, puis termine.")
             txt += (f"PROPOSITIONS DES ANALYSTES :\n{_dumps(self.proposals) if self.proposals else 'aucune'}\n\n"
                     f"AVIS DU CRITIQUE :\n{_dumps(list(self.avis.values())) if self.avis else 'aucun'}\n\n"
                     f"COMPTES RENDUS DES ANALYSTES :\n"
@@ -575,6 +728,10 @@ class Session:
             "bilan": self.bilan,
             "frein": self.frein,
             "lecons": self.new_lecons,
+            "resume_marche": self.brief,
+            "stops_suiveurs": self.stops_suiveurs,
+            "allegee": self.allegee,
+            "suivi_raisons": self.suivi_raisons,
             "ecarts": self.ecarts,
             "rappels": [r for r in self.rappels if r["statut"] == "actif" or r.get("fait_le", "") >= self.now.isoformat()],
         }
@@ -595,6 +752,11 @@ class Session:
              f"positions : {', '.join(p['symbole'] for p in v['positions']) or 'aucune'}", ""]
         if self.frein:
             L += [f"**Frein d'urgence actif** : {self.frein} (aucun achat).", ""]
+        if self.allegee:
+            L += [f"**Séance de suivi allégée** : {self.allegee}. Le gérant a vérifié seul les positions.", ""]
+        if self.stops_suiveurs:
+            L += ["**Stops suiveurs** : " + " ; ".join(f"{x['symbole']} {x['ancien'] or 0:.2f} → {x['nouveau']:.2f} $"
+                                                     + ("" if x["ok"] else " (refusé)") for x in self.stops_suiveurs), ""]
         if self.ecarts:
             L += ["**Écarts entre le registre et Alpaca** : " + " ; ".join(self.ecarts), ""]
         if self.executions:

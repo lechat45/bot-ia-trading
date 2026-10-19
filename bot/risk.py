@@ -119,3 +119,22 @@ def check_stop(cfg, val: dict, sym: str, new_stop, price: float | None):
     if price and new >= price:
         return False, f"le stop doit rester sous le prix actuel ({price:.2f} $)", {}
     return True, "ok", {"stop": round(new, 2)}
+
+
+def trailing_stop(cfg, pos: dict) -> float | None:
+    """Stop suiveur codé en dur : quand une position gagne stop_suiveur_pct, son stop remonte au prix
+    d'achat (elle ne peut plus perdre) ; au double, il suit le cours à stop_suiveur_distance_pct en
+    dessous. Renvoie le nouveau stop s'il est plus haut que l'actuel, sinon None (un stop ne descend jamais)."""
+    entry, price, cur = _num(pos.get("prix_achat")), _num(pos.get("prix")), _num(pos.get("stop"))
+    if cfg.stop_suiveur_pct <= 0 or pos.get("en_attente") or not entry or not price:
+        return None
+    gain = (price / entry - 1) * 100
+    if gain < cfg.stop_suiveur_pct:
+        return None
+    target = entry
+    if gain >= 2 * cfg.stop_suiveur_pct:
+        target = max(target, price * (1 - cfg.stop_suiveur_distance_pct / 100))
+    target = round(target, 2)
+    if (cur is not None and target <= cur + 0.01) or target >= price:
+        return None
+    return target

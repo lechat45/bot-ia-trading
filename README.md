@@ -42,6 +42,17 @@ travaillent ensemble sur un seul compte** Alpaca paper (argent virtuel), gratuit
 3. **Gérant** : relit le journal de l'équipe, ce qui s'est passé sur le compte, les propositions et
    les avis, vérifie si besoin, puis passe les ordres (`passer_ordre`), met à jour le journal et conclut.
 
+Au début de chaque séance, le programme prépare un **résumé du marché** donné aux 6 IA : indices,
+taux, or, pétrole et dollar, secteurs les plus forts et les plus faibles, positions du compte et
+grands titres (la une Économie de Google Actualités et le fil d'Alpaca). Les IA démarrent informées,
+sans dépenser d'appels d'outils.
+
+**Séance de suivi allégée** : le soir, si rien de notable ne s'est passé depuis le matin (pas de
+rappel du jour, pas de stop ni d'objectif déclenché, S&P 500 et positions calmes), seul le gérant
+vérifie les positions. Les analystes et le critique ne sont réveillés que si un événement le justifie,
+ce qui économise les quotas gratuits des IA. Une séance lancée à la main reste complète
+(`SUIVI_COMPLET=true` pour toujours faire travailler toute l'équipe).
+
 Tout est enregistré : c'est le « cerveau » de chaque IA, visible dans le tableau de bord.
 
 **Garde-fous codés en dur** ([bot/risk.py](bot/risk.py)) : 15 % maximum du compte par titre, 5 %
@@ -50,6 +61,12 @@ de liquidités gardées, 10 positions au plus, 5 ordres par séance, stop loss o
 jamais**, pas de rachat d'un titre vendu il y a moins de 2 jours, pas d'aller-retour dans la
 journée, **35 % maximum du compte dans un même secteur**, **pas d'achat la veille ou le jour des
 résultats** d'une entreprise. Un ordre refusé est renvoyé à l'IA avec la raison.
+
+**Stop suiveur automatique** : quand une position gagne 5 %, son stop remonte à son prix d'achat
+(elle ne peut plus perdre d'argent, et tu reçois une notification) ; à +10 %, il suit le cours à 5 %
+en dessous. C'est une règle du code, appliquée à chaque séance quand la bourse est ouverte, sans
+attendre une décision d'IA. Réglages : `STOP_SUIVEUR_PCT` (0 pour le désactiver) et
+`STOP_SUIVEUR_DISTANCE_PCT`.
 
 **Frein d'urgence** : si le compte perd 3 % en un jour ou 7 % en une semaine, plus aucun achat
 n'est possible pendant la séance. Les ventes et les stops restent permis, et tu reçois une
@@ -218,6 +235,9 @@ Après chaque session, GitHub Actions génère une version en ligne de l'interfa
 - Le site est republié après chaque séance des IA, et dès qu'une modification de l'interface
   arrive sur `main` (workflow « Publier le site », qui ne lance pas les IA).
 - Adresse du site : `https://<ton-pseudo>.github.io/<nom-du-depot>/`
+- Si une séance n'a pas eu lieu (GitHub saute parfois ses horaires), le site affiche une bannière
+  « Séance manquée », calculée par ton navigateur, même si plus rien ne tourne. Avec `NTFY_TOPIC`,
+  la séance suivante te prévient aussi sur ton téléphone (une seule fois par jour).
 - Avantage : minutes GitHub Actions illimitées.
 - Inconvénient : tout le monde peut voir le code, les trades, les notes des agents et le site.
   Les clés restent secrètes dans les Secrets.

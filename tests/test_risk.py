@@ -12,7 +12,7 @@ from bot.comptes import Comptes  # noqa: E402
 from bot.config import Config  # noqa: E402
 from bot.executor import Broker  # noqa: E402
 from bot.fakes import PRICES, FakeAlpaca  # noqa: E402
-from bot.risk import check_buy, check_sell, check_stop  # noqa: E402
+from bot.risk import check_buy, check_sell, check_stop, trailing_stop  # noqa: E402
 
 TMP = Path(tempfile.mkdtemp())
 memory.ROOT = TMP  # les tests n'écrivent jamais dans la vraie mémoire
@@ -103,6 +103,18 @@ def test_controle_du_registre():
     assert c.reconcile({"AAPL": 10}) == []  # l'achat en attente n'est pas compté
     ecarts = c.reconcile({"AAPL": 7, "TSLA": 3})
     assert ecarts == ["AAPL : 10 au registre, 7 chez Alpaca", "TSLA : 0 au registre, 3 chez Alpaca"]
+
+
+def test_stop_suiveur():
+    pos = lambda prix, stop: {"prix_achat": 200.0, "prix": prix, "stop": stop, "en_attente": False}  # noqa: E731
+    assert trailing_stop(cfg(), pos(209, 190)) is None  # +4,5 % : rien ne bouge
+    assert trailing_stop(cfg(), pos(210, 190)) == 200  # +5 % : le stop remonte au prix d'achat
+    assert trailing_stop(cfg(), pos(220, 200)) == 209  # +10 % : il suit le cours à 5 % en dessous
+    assert trailing_stop(cfg(), pos(215, 209)) is None  # un stop ne descend jamais
+    assert trailing_stop(cfg(), {**pos(230, 190), "en_attente": True}) is None
+    c = cfg()
+    c.stop_suiveur_pct = 0  # désactivé
+    assert trailing_stop(c, pos(230, 190)) is None
 
 
 def test_sous_comptes_parcours_complet():

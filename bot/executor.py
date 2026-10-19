@@ -158,7 +158,7 @@ class Broker:
             self.comptes.event(aid, f"ATTENTION : {sym} n'a plus de stop loss ({e})")
 
     # ------------------------------------------------------------------ stop
-    def adjust_stop(self, aid, sym, new_stop) -> dict:
+    def adjust_stop(self, aid, sym, new_stop, source="") -> dict:
         pos = self.comptes.agent(aid)["positions"].get(sym)
         if not pos:
             return {"ok": False, "message": f"pas de position {sym}"}
@@ -178,5 +178,5 @@ class Broker:
                 return {"ok": False, "message": f"Alpaca a refusé la modification : {e}"}
         if not done:
             return {"ok": False, "message": "aucun stop modifiable sur cette position"}
-        self._journal(aid, "ajuster_stop", sym, None, "exécuté", stop=new_stop)
+        self._journal(aid, "ajuster_stop", sym, None, "exécuté", stop=new_stop, source=source)
         return {"ok": True, "message": f"Stop de {sym} remonté à {new_stop:.2f} $"}

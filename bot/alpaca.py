@@ -36,6 +36,10 @@ class Alpaca:
     def clock(self):
         return self._req("GET", f"{self.base}/v2/clock")
 
+    def calendar(self, start: str, end: str) -> list:
+        """Jours de bourse de New York entre deux dates (AAAA-MM-JJ), jours fériés exclus."""
+        return self._req("GET", f"{self.base}/v2/calendar", params={"start": start, "end": end})
+
     def positions(self):
         return self._req("GET", f"{self.base}/v2/positions")
 

@@ -367,30 +367,45 @@ def _rss_date(s: str) -> str:
         return ""
 
 
+def _rss_items(content: bytes, out: list, limit: int) -> None:
+    """Ajoute à out les articles d'un flux RSS de Google Actualités (sans doublon, au plus limit)."""
+    import xml.etree.ElementTree as ET
+
+    for it in ET.fromstring(content).iter("item"):
+        src = it.find("source")
+        source = (src.text or "").strip() if src is not None else ""
+        title = html.unescape(it.findtext("title") or "").strip()
+        if source and title.endswith(f" - {source}"):
+            title = title[: -len(source) - 3]
+        if title and not any(o["titre"] == title for o in out):
+            out.append({"date": _rss_date(it.findtext("pubDate") or ""), "titre": title, "source": source,
+                        "site": src.get("url", "") if src is not None else ""})
+        if len(out) >= limit:
+            return
+
+
 def google_news(question: str, limit: int = 8) -> list[dict]:
     """Google Actualités (flux RSS public de Google News) : les articles qui répondent à la question,
     en anglais (actions américaines) puis en français si besoin."""
-    import xml.etree.ElementTree as ET
-
     out: list[dict] = []
     for hl, gl, ceid in (("en-US", "US", "US:en"), ("fr", "FR", "FR:fr")):
         r = requests.get("https://news.google.com/rss/search", timeout=15, headers={"User-Agent": SEARCH_UA},
                          params={"q": question[:300], "hl": hl, "gl": gl, "ceid": ceid})
         r.raise_for_status()
-        for it in ET.fromstring(r.content).iter("item"):
-            src = it.find("source")
-            source = (src.text or "").strip() if src is not None else ""
-            title = html.unescape(it.findtext("title") or "").strip()
-            if source and title.endswith(f" - {source}"):
-                title = title[: -len(source) - 3]
-            if title and not any(o["titre"] == title for o in out):
-                out.append({"date": _rss_date(it.findtext("pubDate") or ""), "titre": title, "source": source,
-                            "site": src.get("url", "") if src is not None else ""})
-            if len(out) >= limit:
-                break
+        _rss_items(r.content, out, limit)
         if len(out) >= 3:
             break
     return sorted(out, key=lambda o: o["date"], reverse=True)  # les plus récents d'abord
+
+
+def google_news_top(limit: int = 6) -> list[dict]:
+    """La une « Économie » de Google Actualités (États-Unis), sans clé."""
+    r = requests.get("https://news.google.com/rss/headlines/section/topic/BUSINESS", timeout=15,
+                     headers={"User-Agent": SEARCH_UA}, params={"hl": "en-US", "gl": "US", "ceid": "US:en"})
+    r.raise_for_status()
+    out: list[dict] = []
+    _rss_items(r.content, out, limit)
+    return out
 
 
 def wikipedia(question: str, limit: int = 2) -> list[dict]:

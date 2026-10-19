@@ -33,6 +33,28 @@ def _ny_date(iso: str | None):
     return dt.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(NY).date() if iso else None
 
 
+def check_missed(clock, mode: str, now: dt.datetime) -> None:
+    """Prévient sur le téléphone si une séance du jour n'a pas eu lieu (GitHub saute parfois ses horaires) :
+    à l'ouverture ou au suivi, il doit exister un plan préparé ce matin, et au suivi il doit être exécuté."""
+    from bot import notify
+
+    if mode not in ("ouverture", "suivi"):
+        return
+    today = now.astimezone(NY).date()
+    if not (clock.get("is_open") or _ny_date(clock.get("next_open")) == today):
+        return  # pas un jour de bourse
+    plan = memory.read_plan()
+    missed = None
+    if plan.get("date") != today.isoformat():
+        missed = ("preparation", "La préparation de ce matin n'a pas eu lieu : aucun ordre planifié pour l'ouverture.")
+    elif mode == "suivi" and not plan.get("execute_le") and any(o.get("statut") == "en_attente" for o in plan.get("ordres", [])):
+        missed = ("ouverture", "Les ordres planifiés ce matin n'ont pas été exécutés à l'ouverture.")
+    if missed and memory.alert_once(today.isoformat(), missed[0]):
+        log.warning(missed[1])
+        notify.send("Séance manquée", missed[1] + " Tu peux la lancer avec le bouton « Forcer le lancement » du site.",
+                    tags="warning", priorite="high")
+
+
 def wait_for_open(alpaca, max_minutes: int) -> bool:
     end = time.time() + max_minutes * 60
     while True:
@@ -92,6 +114,9 @@ def main() -> int:
     log.info("Séance %s — %s%s — %d clé(s) Gemini, %d clé(s) Groq", mode, "PAPER" if cfg.paper else "ARGENT RÉEL",
              " / SIMULATION" if dry_run else "", len(cfg.gemini_keys), len(cfg.groq_keys))
 
+    if not args.offline and not dry_run:
+        check_missed(clock, mode, now)
+
     if mode == "preparation" and not args.force:
         paris = now.astimezone(PARIS)
         h = paris.hour + paris.minute / 60
@@ -136,7 +161,7 @@ def main() -> int:
         log.info("Bourse fermée + --force : passage en simulation.")
         dry_run = True
 
-    results = Session(cfg, alpaca, router, mode, dry_run, offline=args.offline).run()
+    results = Session(cfg, alpaca, router, mode, dry_run, offline=args.offline, complet=args.force).run()
     log.info("Séance terminée (%d IA).", len(results))
     return 0
 

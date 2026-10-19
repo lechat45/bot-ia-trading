@@ -220,8 +220,21 @@ def alertes() -> dict:
         except (OSError, json.JSONDecodeError):
             continue
         if not d.get("simulation"):
-            return {"quand": d.get("quand"), "frein": d.get("frein"), "ecarts": d.get("ecarts") or []}
+            return {"quand": d.get("quand"), "ts": d.get("ts"), "mode": d.get("mode"), "frein": d.get("frein"),
+                    "ecarts": d.get("ecarts") or []}
     return {}
+
+
+def trading_days() -> list[str]:
+    """Jours de bourse de New York autour d'aujourd'hui : le site en ligne s'en sert pour repérer une séance
+    manquée (il est calculé à la publication, mais vérifié par le navigateur à l'heure où on le regarde)."""
+    today = time.gmtime()
+    start = time.strftime("%Y-%m-%d", time.gmtime(time.mktime(today) - 10 * 86400))
+    end = time.strftime("%Y-%m-%d", time.gmtime(time.mktime(today) + 20 * 86400))
+    try:
+        return [d["date"] for d in broker.calendar(start, end)]
+    except Exception:
+        return []
 
 
 def overview() -> dict:
@@ -237,7 +250,7 @@ def overview() -> dict:
            "plan": memory.read_plan(simulation=DEMO) or memory.read_plan(simulation=True),
            "historique_ia": memory.read_history(), "installation": memory.read_installation(),
            "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(), "lecons": memory.read_lecons(),
-           "alertes": alertes(),
+           "alertes": alertes(), "jours_bourse": trading_days(),
            "ordres": [e for e in memory.recent_journal(120) if e.get("type") == "execution"][-300:]}
     try:
         acct = broker.account()

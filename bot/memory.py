@@ -127,6 +127,20 @@ def read_propositions() -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------------- alertes (une seule fois par jour)
+def alert_once(date: str, kind: str) -> bool:
+    """True la première fois qu'une alerte (kind) est levée pour ce jour : évite de prévenir à chaque
+    rattrapage. Les 14 derniers jours sont gardés dans memoire/alertes.json."""
+    with _lock:
+        data = _read_json(ROOT / "alertes.json", {})
+        if kind in data.get(date, []):
+            return False
+        data.setdefault(date, []).append(kind)
+        data = dict(sorted(data.items())[-14:])
+        _write(ROOT / "alertes.json", json.dumps(data, ensure_ascii=False, indent=1))
+        return True
+
+
 # ---------------------------------------------------------------------- vérification de l'installation
 def read_installation() -> dict:
     return _read_json(ROOT / "installation.json", {})

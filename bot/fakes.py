@@ -26,6 +26,14 @@ class FakeAlpaca:
         return {"is_open": self.open, "next_close": (now + dt.timedelta(hours=3)).isoformat(),
                 "next_open": (now + dt.timedelta(hours=6)).isoformat()}
 
+    def calendar(self, start, end):
+        d, out = dt.date.fromisoformat(start), []
+        while d <= dt.date.fromisoformat(end):
+            if d.weekday() < 5:
+                out.append({"date": d.isoformat(), "open": "09:30", "close": "16:00"})
+            d += dt.timedelta(days=1)
+        return out
+
     def positions(self):
         return []
 

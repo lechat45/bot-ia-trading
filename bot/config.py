@@ -53,6 +53,9 @@ class Config:
     earnings_blackout_days: int = 1  # pas d'achat si les résultats tombent dans 0 ou 1 jour
     frein_jour_pct: float = 3.0  # frein d'urgence : plus d'achat si le compte perd 3 % en un jour…
     frein_semaine_pct: float = 7.0  # … ou 7 % sur 7 jours
+    # Stop suiveur codé : à +5 % le stop remonte au prix d'achat, à +10 % il suit le cours à 5 % en dessous
+    stop_suiveur_pct: float = 5.0  # 0 = désactivé
+    stop_suiveur_distance_pct: float = 5.0
     # Séances
     preparation_heure: int = 9  # heure de Paris de la séance de préparation
     # Appels d'outils max par IA et par séance (les clés gratuites limitent le débit)
@@ -60,6 +63,10 @@ class Config:
     max_steps_analyste_suivi: int = 6
     max_steps_critique: int = 6
     max_steps_gerant: int = 12
+    max_steps_gerant_leger: int = 8  # séance de suivi allégée (rien de notable : le gérant seul)
+    suivi_complet: bool = False  # True : toute l'équipe à chaque suivi, même sans événement
+    suivi_mouvement_pct: float = 4.0  # une position qui bouge de 4 % dans la journée réveille l'équipe
+    suivi_marche_pct: float = 1.5  # … de même si le S&P 500 bouge de 1,5 %
     max_web_searches: int = 3  # recherches Google par IA et par séance
 
     @classmethod
@@ -84,6 +91,9 @@ class Config:
             max_sector_pct=_float("MAX_SECTOR_PCT", 35.0),
             frein_jour_pct=_float("FREIN_JOUR_PCT", 3.0),
             frein_semaine_pct=_float("FREIN_SEMAINE_PCT", 7.0),
+            stop_suiveur_pct=_float("STOP_SUIVEUR_PCT", 5.0),
+            stop_suiveur_distance_pct=_float("STOP_SUIVEUR_DISTANCE_PCT", 5.0),
+            suivi_complet=_bool("SUIVI_COMPLET", False),
             preparation_heure=int(_float("PREPARATION_HEURE", 9)),
             max_steps_analyste=int(_float("MAX_STEPS_ANALYSTE", 10)),
             max_steps_analyste_suivi=int(_float("MAX_STEPS_ANALYSTE_SUIVI", 6)),

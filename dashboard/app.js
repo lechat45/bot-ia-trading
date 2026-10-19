@@ -188,7 +188,9 @@ function renderHeader(o) {
 
   const ban = $("#banner");
   const show = (kind, ic, html) => { ban.className = `banner ${kind}`; ban.innerHTML = `${icon(ic)}<span>${html}</span>`; ban.hidden = false; };
+  const missed = STATIC ? missedSession(o) : "";
   if (o.erreur) show("err", "alert", `Alpaca ne répond pas : ${esc(o.erreur)}`);
+  else if (missed) show("warn", "alert", `<b>Séance manquée</b> : ${esc(missed)} GitHub saute parfois ses horaires : lancez la séance avec « Forcer le lancement », ou branchez cron-job.org (README, étape 6).`);
   else if (STATIC) show("info", "info", `Version en ligne, mise à jour après chaque séance. Dernière mise à jour : ${esc(fmtDate(o.genere_le, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }))}.`);
   else if (o.demo) show("warn", "info", "Mode démo : aucune clé Alpaca dans le fichier .env, les chiffres affichés sont factices.");
   else ban.hidden = true;
@@ -199,6 +201,23 @@ function renderHeader(o) {
     <div class="row"><span>Clés Groq</span><span class="pill ${k.groq >= 3 || o.demo ? "pill-sage" : "pill-peach"}">${o.demo ? "démo" : `${k.groq}/3`}</span></div>
     <div class="row"><span>Max par titre</span><span>${esc(L.max_position_pct)} %</span></div>
     <div class="row"><span>Écart max à l'ouverture</span><span>${esc(L.max_gap_pct)} %</span></div>`;
+}
+
+// Calculé par le navigateur à l'heure où l'on regarde le site : si plus rien ne tourne sur GitHub,
+// le site n'est plus republié, mais l'alerte apparaît quand même.
+function missedSession(o) {
+  const now = new Date();
+  const nyToday = now.toLocaleDateString("sv-SE", { timeZone: "America/New_York" });
+  const parisH = +now.toLocaleString("en-GB", { timeZone: "Europe/Paris", hour: "2-digit", hour12: false });
+  const days = o.jours_bourse || [];
+  const nyDay = new Date(`${nyToday}T12:00:00Z`).getUTCDay();
+  const trading = days.length ? days.includes(nyToday) : nyDay > 0 && nyDay < 6;
+  if (trading && parisH >= 12 && o.plan?.date !== nyToday) return "la préparation de ce matin n'a pas eu lieu (aucun plan pour aujourd'hui).";
+  const last = o.alertes?.ts ? new Date(o.alertes.ts) : null;
+  const before = days.filter((d) => d < nyToday);
+  if (last && before.length >= 2 && last.toLocaleDateString("sv-SE", { timeZone: "America/New_York" }) < before[before.length - 2])
+    return `aucune séance depuis le ${dayHm(last)}.`;
+  return "";
 }
 
 /* ====================================================================== Page 1 : Accueil */
@@ -626,7 +645,9 @@ function renderIAPanel() {
   const head = `<div class="ia-panel-head">${avatar(id)}<div><h2>${esc(a.nom)}</h2><div class="chips" style="margin-top:6px"><span class="pill">${esc(ROLE[a.role] || "")}</span>${providerPill(a)}<span class="pill mono">${esc(modelName(b?.modele || a.modele))}</span></div></div></div>
     <p class="muted small" style="margin:12px 0 0">${esc(m.desc)}</p>`;
   if (!d || !b) {
-    box.innerHTML = head + empty(id, "Pas de réflexion pour cette séance", d ? "Cette IA n'a pas été sollicitée (par exemple, le critique n'intervient que s'il y a des propositions)." : "Lancez une simulation pour voir l'équipe au travail.");
+    box.innerHTML = head + empty(id, "Pas de réflexion pour cette séance", !d ? "Lancez une simulation pour voir l'équipe au travail."
+      : d.allegee ? `Séance de suivi allégée (${d.allegee}) : seul le gérant a vérifié les positions, pour économiser les quotas des IA.`
+      : "Cette IA n'a pas été sollicitée (par exemple, le critique n'intervient que s'il y a des propositions).");
     return;
   }
   let actions = "";
@@ -643,7 +664,9 @@ function renderIAPanel() {
     <div class="ia-meta small muted">${esc(sessLabel(d))} · ${b.outils || 0} appels d'outils · ${Math.max(1, Math.round((b.duree_s || 0) / 60))} min · ${(b.tokens || 0).toLocaleString("fr-FR")} tokens</div>
     ${b.erreur ? `<div class="banner err">${icon("alert")}<span>${esc(b.erreur)}</span></div>` : ""}
     <div class="synth"><div class="who">${icon(id)}Résumé de sa réflexion</div><p>${md(b.compte_rendu || "—")}</p></div>
+    ${d.allegee && a.role === "gerant" ? `<div class="banner info">${icon("info")}<span>Séance de suivi allégée : ${esc(d.allegee)}. Les analystes et le critique n'ont pas été sollicités.</span></div>` : ""}
     ${actions}
+    ${d.resume_marche ? `<details class="why"><summary>Résumé du marché reçu par les IA au début de la séance</summary><div class="notes" style="margin-top:8px">${esc(d.resume_marche.trim())}</div></details>` : ""}
     <div class="row-btns">
       <button class="btn" id="ia-to-journal">${icon("list")}Voir son journal détaillé</button>
       <button class="btn" id="ia-to-notes">${icon("note")}Ouvrir ses notes</button>
