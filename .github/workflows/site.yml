@@ -5,7 +5,7 @@ name: Publier le site
 on:
   push:
     branches: [main]
-    paths: ["dashboard/**", "dashboard.py", "build_site.py", "bot/**"]
+    paths: ["dashboard/**", "dashboard.py", "build_site.py", "bot/**", ".github/workflows/site.yml"]
   workflow_dispatch:
 
 permissions:
