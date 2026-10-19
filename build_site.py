@@ -37,6 +37,7 @@ def main():
     ov = d.overview()
     repo = os.getenv("GITHUB_REPOSITORY")
     ov["genere_le"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    ov["depot"] = repo  # « propriétaire/nom », pour le bouton « Forcer le lancement »
     ov["actions_url"] = (f"{os.getenv('GITHUB_SERVER_URL', 'https://github.com')}/{repo}"
                          "/actions/workflows/trading.yml") if repo else None
     dump(OUT / "data" / "overview.json", ov)

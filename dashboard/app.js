@@ -181,8 +181,9 @@ function renderHeader(o) {
       ? `Bourse de New York ouverte · ferme ${esc(relTime(h.next_close))}`
       : `Bourse fermée · ouvre ${esc(relTime(h.next_open))}`}</span>`;
   });
-  $("#btn-sim span").textContent = STATIC ? "Lancer sur GitHub" : o.demo ? "Lancer une démo" : "Lancer une simulation";
-  $("#btn-sim").hidden = STATIC && !o.actions_url;
+  $("#btn-sim span").textContent = STATIC ? "Forcer le lancement" : o.demo ? "Lancer une démo" : "Lancer une simulation";
+  $("#btn-sim").hidden = STATIC && !o.depot;
+  $$(".js-depot").forEach((el) => (el.textContent = o.depot || "bot-ia-trading"));
   $("#btn-real").hidden = !!o.demo || STATIC;
 
   const ban = $("#banner");
@@ -979,8 +980,93 @@ async function run(mode) {
   go("accueil");
 }
 
+/* ====================================================================== Forcer le lancement (site en ligne)
+   Le site public ne contient aucune clé : le jeton GitHub (limité à ce dépôt, permission Actions)
+   est saisi une fois et reste dans ce navigateur. Il sert uniquement à lancer le workflow. */
+const TOKEN_KEY = "bot_ia_github_token";
+const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch { return ""; } };
+const setToken = (t) => { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch { /* stockage indisponible */ } };
+
+function gh(path, opt = {}) {
+  const tok = getToken();
+  return fetch(`https://api.github.com/repos/${S.ov.depot}${path}`, {
+    ...opt,
+    headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28",
+      ...(tok ? { Authorization: `Bearer ${tok}` } : {}), ...(opt.headers || {}) },
+  });
+}
+
+function openForce() {
+  const has = !!getToken();
+  $("#force-token-field").hidden = has;
+  $("#force-token-saved").hidden = !has;
+  $("#force-error").hidden = true;
+  $("#force-token").value = "";
+  $("#force-modal").classList.add("open");
+  $("#force-mode").focus();
+}
+const closeForce = () => $("#force-modal").classList.remove("open");
+$("#force-no").onclick = closeForce;
+$("#force-forget").onclick = (e) => { e.preventDefault(); setToken(""); openForce(); };
+
+$("#force-yes").onclick = async () => {
+  const err = (m) => { const b = $("#force-error"); b.innerHTML = `${icon("alert")}<span>${esc(m)}</span>`; b.hidden = false; };
+  const typed = $("#force-token").value.trim();
+  if (typed) setToken(typed);
+  if (!getToken()) return err("Colle d'abord ton jeton GitHub.");
+  const mode = $("#force-mode").value, sim = $("#force-sim").checked;
+  $("#force-yes").disabled = true;
+  try {
+    const since = Date.now();
+    const r = await gh("/actions/workflows/trading.yml/dispatches", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ref: "main", inputs: { mode, dry_run: String(sim) } }),
+    });
+    if (r.status === 401) { setToken(""); return err("Jeton refusé par GitHub (invalide ou expiré). Colle un nouveau jeton."); }
+    if (r.status === 403 || r.status === 404) { setToken(""); return err("Ce jeton n'a pas le droit de lancer le workflow : donne-lui l'accès à ce dépôt avec la permission « Actions : lecture et écriture »."); }
+    if (r.status !== 204) return err(`GitHub a répondu ${r.status}. Réessaie dans un instant.`);
+    closeForce();
+    toast(`Lancement demandé à GitHub : ${mode === "auto" ? "séance automatique" : mode}${sim ? " (simulation)" : ""}`, "spark");
+    watchRun(since);
+  } catch (e) {
+    err("Impossible de joindre GitHub (connexion ?).");
+  } finally {
+    $("#force-yes").disabled = false;
+  }
+};
+
+async function watchRun(since) {
+  S.ghRun = { status: "queued" };
+  renderGhRun();
+  for (let i = 0; i < 400; i++) {  // environ 1 heure au maximum
+    await new Promise((res) => setTimeout(res, 9000));
+    try {
+      const r = await gh("/actions/workflows/trading.yml/runs?event=workflow_dispatch&per_page=5");
+      const runs = (await r.json()).workflow_runs || [];
+      const run = runs.find((x) => new Date(x.created_at).getTime() >= since - 90e3);
+      if (!run) continue;
+      S.ghRun = { status: run.status, conclusion: run.conclusion, url: run.html_url };
+      renderGhRun();
+      if (run.status === "completed") {
+        toast(run.conclusion === "success" ? "Séance terminée sur GitHub : le site se met à jour dans une minute" : `Séance terminée sur GitHub (${run.conclusion})`, run.conclusion === "success" ? "check" : "alert");
+        setTimeout(() => refreshAll(true), 75000);
+        return;
+      }
+    } catch { /* réseau : on réessaie */ }
+  }
+}
+
+function renderGhRun() {
+  const g = S.ghRun;
+  if (!g || !STATIC) return;
+  const label = g.status === "completed"
+    ? `<span class="pill ${g.conclusion === "success" ? "pill-sage" : "pill-danger"}">${icon(g.conclusion === "success" ? "check" : "alert")}séance terminée</span>`
+    : `<span class="pill pill-coral"><i class="dot run"></i>${g.status === "in_progress" ? "séance en cours sur GitHub" : "en attente sur GitHub"}</span>`;
+  $("#live-status").innerHTML = g.url ? `<a href="${esc(g.url)}" target="_blank" rel="noopener" style="text-decoration:none">${label}</a>` : label;
+}
+
 $("#btn-sim").onclick = () => {
-  if (STATIC) return S.ov?.actions_url && window.open(S.ov.actions_url, "_blank", "noopener");
+  if (STATIC) return openForce();
   run("simulation");
 };
 $("#btn-real").onclick = () => {
@@ -995,7 +1081,7 @@ $("#btn-real").onclick = () => {
 const closeModal = () => $("#modal").classList.remove("open");
 $("#modal-no").onclick = closeModal;
 $("#modal-yes").onclick = () => { closeModal(); run("reel"); };
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); closeForce(); } });
 let rz;
 window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => S.ov && S.page === "accueil" && renderChart(S.ov), 150); });
 

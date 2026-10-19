@@ -227,6 +227,38 @@
       </div>
     </div>
   </div>
+  <div class="modal" id="force-modal" role="dialog" aria-modal="true" aria-labelledby="force-title">
+    <div class="modal-box">
+      <div class="body">
+        <h3 id="force-title">Forcer le lancement des IA</h3>
+        <p>La séance démarre tout de suite sur GitHub, même en dehors des horaires prévus.</p>
+        <div class="form">
+          <label class="field"><span class="label">Séance</span>
+            <select class="select" id="force-mode">
+              <option value="auto">Automatique : préparation si la bourse est fermée, suivi si elle est ouverte</option>
+              <option value="preparation">Préparation (ordres planifiés pour l'ouverture)</option>
+              <option value="suivi">Suivi (ordres immédiats, bourse ouverte)</option>
+              <option value="ouverture">Ouverture (exécuter le plan du jour)</option>
+              <option value="verification">Vérification de l'installation</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" id="force-sim"><span>Simulation : aucun ordre envoyé, rien d'enregistré</span></label>
+          <label class="field" id="force-token-field"><span class="label">Jeton GitHub (demandé une seule fois)</span>
+            <input class="input" type="password" id="force-token" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+            <span class="hint">Il reste dans ce navigateur, n'est jamais publié et ne sert qu'à lancer le workflow.
+              <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un jeton</a> :
+              accès au seul dépôt <b class="js-depot">bot-ia-trading</b>, permission <b>Actions : lecture et écriture</b>.</span>
+          </label>
+          <p class="hint" id="force-token-saved" hidden>Jeton enregistré dans ce navigateur. <a href="#" id="force-forget">L'oublier</a></p>
+          <div class="banner err" id="force-error" hidden></div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" id="force-no">Annuler</button>
+        <button class="btn btn-primary" id="force-yes">Lancer maintenant</button>
+      </div>
+    </div>
+  </div>
   <div class="toast" id="toast" role="status"></div>
 
   <script src="app.js"></script>

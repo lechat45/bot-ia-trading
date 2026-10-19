@@ -21,10 +21,10 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Séance à lancer (verification = tester toute l'installation)"
+        description: "Séance à lancer (auto = préparation si la bourse est fermée, suivi si elle est ouverte ; verification = tester l installation)"
         type: choice
-        options: [preparation, suivi, ouverture, verification]
-        default: preparation
+        options: [auto, preparation, suivi, ouverture, verification]
+        default: auto
       dry_run:
         description: "Simulation (aucun ordre envoyé, rien d'enregistré)"
         type: boolean
@@ -73,7 +73,7 @@ jobs:
             "0 7 * * 1-5"|"0 8 * * 1-5"|"30 8 * * 1-5") MODE=preparation ;;
             "20 13 * * 1-5"|"45 14 * * 1-5") MODE=ouverture ;;
             "30 17 * * 1-5"|"15 18 * * 1-5") MODE=suivi ;;
-            *) MODE="${MANUAL_MODE:-preparation}" ;;
+            *) MODE="${MANUAL_MODE:-auto}" ;;
           esac
           ARGS="--mode $MODE"
           if [ "$MODE" = "verification" ]; then ARGS="--verifier"
