@@ -5,11 +5,11 @@ name: Publier le site
 on:
   push:
     branches: [main]
-    paths: ["dashboard/**", "dashboard.py", "build_site.py", "bot/**", ".github/workflows/site.yml"]
+    paths: ["dashboard/**", "dashboard.py", "build_site.py", "bot/**", ".github/workflows/site.yml", ".github/publier-gh-pages.sh"]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: site
@@ -36,21 +36,8 @@ jobs:
           ALPACA_PAPER: "true"
         run: python build_site.py
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-  # Dépôt public : publication sur GitHub Pages
-  pages:
-    needs: build
-    if: ${{ !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    steps:
-      - id: deploy
-        uses: actions/deploy-pages@v4
+      - name: Publier dans la branche gh-pages (GitHub Pages)
+        if: ${{ !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/publier-gh-pages.sh

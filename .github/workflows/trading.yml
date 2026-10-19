@@ -3,7 +3,7 @@
 #   - 15 h 30 (Paris)    OUVERTURE   : le programme exécute les ordres planifiés dès l'ouverture de New York
 #   - fin d'après-midi   SUIVI       : bourse ouverte, l'équipe fait le point et agit en direct
 # La mémoire (notes, registre du compte, plan) est recommitée, puis le tableau de bord est publié :
-#   - dépôt PUBLIC  -> GitHub Pages (Settings > Pages > Source : « GitHub Actions »)
+#   - dépôt PUBLIC  -> branche gh-pages, servie par GitHub Pages (« Deploy from a branch » : gh-pages, racine)
 #   - dépôt PRIVÉ   -> Cloudflare Pages (variable CLOUDFLARE_PROJECT + secrets, voir le README)
 name: Bot IA trading
 
@@ -96,10 +96,11 @@ jobs:
           ALPACA_PAPER: "true"
         run: python build_site.py
 
-      - uses: actions/upload-pages-artifact@v3
-        if: always()
-        with:
-          path: site
+      - name: Publier dans la branche gh-pages (GitHub Pages)
+        if: ${{ always() && !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/publier-gh-pages.sh
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -108,21 +109,6 @@ jobs:
           path: site
           include-hidden-files: true
           retention-days: 3
-
-  # Dépôt public : publication sur GitHub Pages
-  pages:
-    needs: session
-    if: ${{ always() && !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    steps:
-      - id: deploy
-        uses: actions/deploy-pages@v4
 
   # Dépôt privé : publication sur Cloudflare Pages (gratuit)
   cloudflare:

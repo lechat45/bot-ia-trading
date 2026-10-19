@@ -137,7 +137,11 @@ Après chaque session, GitHub Actions génère une version en ligne de l'interfa
 « Lancer sur GitHub » ouvre la page Actions. Aucune clé n'y figure.
 
 **Choix A : dépôt public + GitHub Pages (le plus simple)**
-- Dans **Settings → Pages → Source**, choisis « **GitHub Actions** ». C'est tout.
+- Les workflows rangent le site tout prêt dans la branche **`gh-pages`** (créée au premier
+  passage). Dans **Settings → Pages → Build and deployment**, garde la source
+  « **Deploy from a branch** », puis choisis la branche **`gh-pages`** et le dossier **`/ (root)`**.
+- Le site est republié après chaque séance des IA, et dès qu'une modification de l'interface
+  arrive sur `main` (workflow « Publier le site », qui ne lance pas les IA).
 - Adresse du site : `https://<ton-pseudo>.github.io/<nom-du-depot>/`
 - Avantage : minutes GitHub Actions illimitées.
 - Inconvénient : tout le monde peut voir le code, les trades, les notes des agents et le site.
