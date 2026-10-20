@@ -82,13 +82,20 @@ def chain_opening(cfg, alpaca, router) -> None:
 
 def wait_for_open(alpaca, max_minutes: int) -> bool:
     end = time.time() + max_minutes * 60
+    said = 0.0
     while True:
         clock = alpaca.clock()
         if clock.get("is_open"):
             return True
         if time.time() > end:
             return False
-        log.info("Bourse fermée, ouverture prévue %s : attente…", clock.get("next_open"))
+        if time.time() - said >= 300:  # un message toutes les 5 minutes, explicite : l'attente est normale
+            nxt = clock.get("next_open")
+            when = dt.datetime.fromisoformat(nxt.replace("Z", "+00:00")) if nxt else None
+            left = (when - dt.datetime.now(dt.timezone.utc)).total_seconds() / 60 if when else 0
+            log.info("En attente de l'ouverture de New York (%s à Paris, dans %.0f min) : c'est normal, "
+                     "ne pas annuler la séance.", when.astimezone(PARIS).strftime("%H:%M") if when else "?", left)
+            said = time.time()
         time.sleep(30)
 
 
@@ -164,14 +171,18 @@ def main() -> int:
             log.info("Aucun plan à exécuter aujourd'hui (plan du %s, %s).", plan.get("date", "—"),
                      "déjà exécuté" if plan.get("execute_le") else "pas encore exécuté")
             return 0
-        if not is_open and not args.force:
-            if not wait_for_open(alpaca, args.attente_max):
-                log.info("La bourse n'a pas ouvert dans le délai : abandon.")
-                return 0
-            time.sleep(20)  # laisser passer les premières secondes de cotation
-        elif not is_open:
-            log.info("Bourse fermée + --force : simulation au dernier prix connu.")
-            dry_run = True
+        if not is_open:
+            nxt = clock.get("next_open")
+            wait = ((dt.datetime.fromisoformat(nxt.replace("Z", "+00:00")) - now).total_seconds() / 60
+                    if nxt else float("inf"))
+            if args.force and wait > args.attente_max:  # test à n'importe quelle heure
+                log.info("Bourse fermée + --force : simulation au dernier prix connu.")
+                dry_run = True
+            else:  # ouverture proche (même forcée depuis le site) : on l'attend et le plan est vraiment exécuté
+                if not wait_for_open(alpaca, args.attente_max):
+                    log.info("La bourse n'a pas ouvert dans le délai : abandon.")
+                    return 0
+                time.sleep(20)  # laisser passer les premières secondes de cotation
 
     if mode == "suivi" and is_open and not args.force and not dry_run:
         today = now.astimezone(PARIS).strftime("%Y-%m-%d")
