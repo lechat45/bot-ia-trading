@@ -36,6 +36,7 @@ log = logging.getLogger("seance")
 SKILLS = Path(__file__).resolve().parent.parent / "skills"
 PARIS, NY = ZoneInfo("Europe/Paris"), ZoneInfo("America/New_York")
 AGENT_DEADLINE_S = 20 * 60
+GROQ_REQUEST_CHARS = 21_000  # ~6 300 tokens : taille visée d'une requête Groq (consignes + outils + conversation)
 ACCOUNT = "equipe"  # le compte unique de l'équipe (tout le compte Alpaca paper)
 
 
@@ -117,6 +118,13 @@ def compact(messages: list[dict], budget: int, keep_last: int = 3) -> None:
         c = messages[i]["content"]
         if len(c) > 240:
             messages[i]["content"] = c[:200] + "… [ancien résultat raccourci]"
+    # Encore trop long : les résultats récents sont résumés à leur début, sauf le tout dernier.
+    for i in tool_idx[-keep_last:-1] if keep_last > 1 else []:
+        if size() <= budget:
+            return
+        c = messages[i]["content"]
+        if len(c) > 1600:
+            messages[i]["content"] = c[:1500] + "… [résultat raccourci]"
 
 
 class Session:
@@ -520,7 +528,11 @@ class Session:
         messages = [{"role": "user", "text": self.opening(a)}]
         env.log("notes", texte="Relit ses notes" + (", les propositions et les avis" if a.role == "gerant" else ""))
         max_steps = self.max_steps(a)
-        budget = 14000 if a.provider == "groq" else 60000
+        if a.provider == "groq":  # Groq gratuit refuse les requêtes de plus de ~7 000 tokens : on garde de la marge
+            fixed = len(system) + len(json.dumps(tools, ensure_ascii=False))
+            budget = max(5000, min(14000, GROQ_REQUEST_CHARS - fixed))
+        else:
+            budget = 60000
         keep = {"passer_ordre", "annuler_ordre", "ajuster_stop", "proposer_ordre", "donner_avis",
                 "ecrire_notes", "noter_lecon", "terminer_session"}
         final_tools = [t for t in tools if t["name"] in keep]  # en fin de séance : agir et conclure

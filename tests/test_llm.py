@@ -56,6 +56,17 @@ def test_surcharge_passagere_mise_de_cote():
     assert r.providers["gemini"].calls.count(("g1", gm[0])) == 1
 
 
+def test_requete_trop_grosse_passe_au_modele_suivant():
+    qm = llm.DEFAULT_MODELS["groq"]
+    r = router({}, {("q2", "qwen/qwen3.8-27b"): llm.ContextTooLarge("Request too large ... Limit 7000")})
+    agent = SimpleNamespace(id="contrarien", provider="groq", key_index=1, models=["qwen/qwen3.8-27b"] + qm[:1])
+    msgs = [{"role": "user", "text": "x" * 5000}]
+    msg, used = r.chat(agent, "", msgs, [])
+    assert msg["text"] == "ok" and used == f"groq#2:{qm[0]}"  # l'IA continue au lieu de s'arrêter
+    r.chat(agent, "", msgs, [])  # même taille : Qwen n'est pas réessayé
+    assert r.providers["groq"].calls.count(("q2", "qwen/qwen3.8-27b")) == 1
+
+
 def test_quota_du_jour_gemini():
     jour = SimpleNamespace(text='{"error":{"details":[{"quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier"},'
                                 '{"retryDelay":"30s"}]}}', headers={})

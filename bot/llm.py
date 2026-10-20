@@ -249,10 +249,13 @@ class Groq:
                               json=body, timeout=180)
         except requests.Timeout:
             raise ModelUnavailable(f"Groq {model} : délai dépassé")
+        # « Request too large » arrive parfois en 429 : la requête dépasse ce que le modèle accepte en une
+        # minute (ex. 7 000 tokens pour Qwen en gratuit). Attendre ne sert à rien, il faut un autre modèle.
+        if r.status_code == 413 or "request too large" in r.text.lower() or (
+                r.status_code == 400 and "context" in r.text.lower() and "length" in r.text.lower()):
+            raise ContextTooLarge(r.text[:200])
         if r.status_code == 429:
             raise RateLimited(_retry_after(r, 20), r.text)
-        if r.status_code == 413 or (r.status_code == 400 and "context" in r.text.lower() and "length" in r.text.lower()):
-            raise ContextTooLarge(r.text[:200])
         if r.status_code in (404, 500, 502, 503):
             raise ModelUnavailable(f"Groq {model} {r.status_code}")
         if r.status_code == 400 and "tool_use_failed" in r.text and tools:
@@ -295,6 +298,8 @@ class Router:
         # (fournisseur, clé, modèle) -> heure avant laquelle on ne le réessaie pas : un modèle qui demande
         # d'attendre 30 minutes n'est plus réessayé à chaque tour de chaque IA.
         self._cool: dict = {}
+        # (fournisseur, modèle) -> plus petite taille de requête (en caractères) refusée comme trop grosse
+        self._too_big: dict = {}
 
     def _cool_left(self, prov, ki, model) -> float:
         with self._lock:
@@ -341,15 +346,19 @@ class Router:
                 time.sleep(wait + random.uniform(1, 3))
 
     def _chat_once(self, agent, system, messages, tools, label, attempts):
-        last = None
+        last, too_large = None, False
         skipped: set = set()
         cooling = 0
+        size = len(system) + len(json.dumps(messages, ensure_ascii=False, default=str)) + len(json.dumps(tools or [], ensure_ascii=False))
         for prov_name, ki, model in attempts:
             prov = self.providers[prov_name]
             if (prov_name, ki) in skipped:
                 continue
             if self._cool_left(prov_name, ki, model) > 0:
                 cooling += 1
+                continue
+            if size >= self._too_big.get((prov_name, model), float("inf")) * 0.95:
+                too_large = True  # déjà refusée plus petite : inutile de réessayer ce modèle
                 continue
             try:
                 if model not in prov.available(prov.keys[ki]):
@@ -363,8 +372,11 @@ class Router:
                     msg, tokens = prov.chat(prov.keys[ki], model, system, messages, tools)
                     self._record(agent.id, prov_name, ki, tokens)
                     return msg, f"{prov_name}#{ki + 1}:{model}"
-                except ContextTooLarge:
-                    raise
+                except ContextTooLarge as e:  # trop gros pour ce modèle : le suivant (Gemini accepte bien plus)
+                    last, too_large = e, True
+                    with self._lock:
+                        self._too_big[(prov_name, model)] = min(size, self._too_big.get((prov_name, model), size))
+                    break
                 except RateLimited as e:
                     last = e
                     if attempt == 0 and e.wait <= 65:
@@ -384,6 +396,8 @@ class Router:
                         continue
                     break
             log.warning("%s : %s#%d %s indisponible (%s), essai suivant", label, prov_name, ki + 1, model, last)
+        if too_large:  # l'IA raccourcira sa conversation et réessaiera
+            raise ContextTooLarge(f"{label} : conversation trop longue pour les modèles disponibles")
         raise LLMError(f"{label} : aucune clé ni aucun modèle disponible ({last or f'{cooling} modèle(s) saturé(s)'})")
 
     def web_search(self, question: str, who: str = "web"):

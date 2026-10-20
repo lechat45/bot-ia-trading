@@ -67,78 +67,70 @@ def declarations(role: str, market_open: bool) -> list[dict]:
     order_props = {
         "action": {"type": "string", "enum": ["acheter", "vendre"]},
         "symbole": S,
-        "montant_usd": {"type": "number", "description": "achat : montant à investir en dollars"},
-        "pourcentage": {"type": "number", "description": "vente : % de la position à vendre (100 = tout)"},
-        "stop_loss_pct": {"type": "number", "description": "achat : stop loss en % sous le prix d'achat"},
-        "take_profit_pct": {"type": "number", "description": "achat : objectif de gain en % au-dessus du prix d'achat"},
-        "these": {"type": "string", "description": "thèse : arguments datés, risques, invalidation, horizon"},
+        "montant_usd": {"type": "number", "description": "achat, en dollars"},
+        "pourcentage": {"type": "number", "description": "vente : % de la position (100 = tout)"},
+        "stop_loss_pct": {"type": "number", "description": "achat : % sous le prix d'achat"},
+        "take_profit_pct": {"type": "number", "description": "achat : % au-dessus du prix d'achat"},
+        "these": {"type": "string", "description": "faits datés, risques, invalidation, horizon"},
     }
     research = [
-        {"name": "lire_skill", "description": "Lit un de tes skills (fiche de savoir-faire) avant d'utiliser un outil.",
+        {"name": "lire_skill", "description": "Lit une fiche de savoir-faire.",
          "parameters": {"type": "object", "properties": {"nom": {"type": "string", "enum": list(SKILL_INFO)}},
                         "required": ["nom"]}},
         {"name": "consulter_portefeuille",
-         "description": "Le compte de l'équipe : liquidités, positions (prix d'achat, plus-value, stop, objectif), ordres planifiés, limites.",
+         "description": "Le compte de l'équipe : liquidités, positions, ordres planifiés, limites restantes.",
          "parameters": {"type": "object", "properties": {}}},
         {"name": "screener",
-         "description": ("Filtre les actions selon un critère. Univers : ~170 grandes valeurs US et européennes cotées à "
-                         "New York, plus le marché entier pour plus_actives et les tendances Reddit."),
+         "description": "Classe les actions selon un critère (~170 grandes valeurs ; marché entier pour plus_actives et tendances_reddit).",
          "parameters": {"type": "object", "properties": {
              "critere": {"type": "string", "enum": SCREEN_CHOICES},
-             "limite": {"type": "integer", "description": "nombre de résultats (défaut 10, max 20)"}},
+             "limite": {"type": "integer", "description": "défaut 10, max 20"}},
              "required": ["critere"]}},
         {"name": "historique_prix",
-         "description": "Historique du cours : performances, moyennes mobiles, RSI, ATR, plus haut/bas 52 semaines, cours hebdo sur 1 an.",
+         "description": "Cours et indicateurs : performances, moyennes mobiles, RSI, ATR, plus haut sur 1 an, comparaison au S&P 500.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
         {"name": "donnees_financieres",
-         "description": "Santé de l'entreprise : secteur, capitalisation, PER, marges, croissance, dette, flux de trésorerie, date des prochains résultats (avec le nombre de jours).",
+         "description": "Santé de l'entreprise : secteur, croissance, marges, dette, valorisation, date des résultats.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
         {"name": "actualites",
-         "description": "Fil d'actualité financière en direct (multi-sources). Sans symbole : les dernières actualités du marché.",
+         "description": "Fil d'actualité financière en direct ; sans symbole, celles du marché.",
          "parameters": {"type": "object", "properties": {"symbole": S, "limite": {"type": "integer"}}}},
         {"name": "recherche_web",
-         "description": ("Recherche Google pour une question précise (dirigeant, date d'un événement, déclaration…). "
-                         "Réponse rédigée et sourcée ; si le quota de Gemini est épuisé, tu reçois à la place les "
-                         "articles de Google Actualités et Wikipédia (pose alors la question en anglais). Budget limité par séance."),
+         "description": "Recherche Google pour une question précise (en anglais pour une action américaine).",
          "parameters": {"type": "object", "properties": {"question": S}, "required": ["question"]}},
         {"name": "sentiment_reseaux",
-         "description": "Humeur des réseaux sur une action : mentions Reddit (r/wallstreetbets, r/stocks…) sur 24 h et évolution.",
+         "description": "Mentions Reddit sur 24 h et leur évolution, articles récents.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
         {"name": "ecrire_notes",
-         "description": "Réécrit ENTIÈREMENT tes notes (ta seule mémoire entre deux séances).",
+         "description": "Réécrit ENTIÈREMENT tes notes (ta mémoire entre deux séances).",
          "parameters": {"type": "object", "properties": {"contenu": S}, "required": ["contenu"]}},
         {"name": "noter_lecon",
-         "description": ("Ajoute une LEÇON durable à la mémoire longue de l'équipe (lue par les 6 IA à chaque séance) : "
-                         "une règle concrète tirée d'une erreur ou d'une réussite. 2 par séance au maximum."),
-         "parameters": {"type": "object", "properties": {"lecon": {"type": "string", "description": "une phrase, 300 caractères max"}},
+         "description": "Ajoute une règle durable à la mémoire longue de l'équipe (2 par séance).",
+         "parameters": {"type": "object", "properties": {"lecon": {"type": "string", "description": "300 caractères max"}},
                         "required": ["lecon"]}},
     ]
     research += [
         {"name": "lire_page",
-         "description": ("Navigateur : ouvre une page web précise (article, page de résultats, communiqué) et en lit le "
-                         "texte. Utile pour vérifier une source trouvée avec recherche_web ou citée dans une actualité. "
-                         "Budget limité par séance."),
-         "parameters": {"type": "object", "properties": {"url": {"type": "string", "description": "adresse complète, https://…"}},
+         "description": "Ouvre une page web précise et en lit le texte.",
+         "parameters": {"type": "object", "properties": {"url": {"type": "string", "description": "https://…"}},
                         "required": ["url"]}},
         {"name": "creer_rappel",
-         "description": ("Crée un rappel pour l'équipe sur un événement daté (résultats, annonce, réunion de la Fed…). "
-                         "Il sera présenté à toute l'équipe le jour venu, pour décider d'acheter ou de vendre en fonction."),
+         "description": "Crée un rappel daté, présenté à toute l'équipe le jour venu.",
          "parameters": {"type": "object", "properties": {
-             "date": {"type": "string", "description": "date du rappel, format AAAA-MM-JJ"},
-             "titre": S, "details": {"type": "string", "description": "ce qu'il faudra vérifier et faire ce jour-là"},
+             "date": {"type": "string", "description": "AAAA-MM-JJ"},
+             "titre": S, "details": {"type": "string", "description": "ce qu'il faudra vérifier et faire"},
              "symbole": S, "seance": {"type": "string", "enum": ["preparation", "suivi", "toutes"]}},
              "required": ["date", "titre"]}},
-        {"name": "voir_rappels", "description": "Liste les rappels actifs de l'équipe.",
+        {"name": "voir_rappels", "description": "Liste les rappels actifs.",
          "parameters": {"type": "object", "properties": {}}},
-        {"name": "terminer_rappel", "description": "Marque un rappel comme traité, avec ce qui a été fait.",
+        {"name": "terminer_rappel", "description": "Marque un rappel comme traité.",
          "parameters": {"type": "object", "properties": {"id": S, "note": S}, "required": ["id"]}},
     ]
     end = [{"name": "terminer_session", "description": "Termine ta séance avec ton compte rendu.",
             "parameters": {"type": "object", "properties": {"compte_rendu": S}, "required": ["compte_rendu"]}}]
     if role == "analyste":
         extra = [{"name": "proposer_ordre",
-                  "description": ("Propose un ordre au gérant de l'équipe (c'est lui qui décide). Les garde-fous vérifient "
-                                  "la proposition tout de suite et te renvoient la raison si elle est refusée."),
+                  "description": "Propose un ordre au gérant ; les garde-fous la vérifient tout de suite.",
                   "parameters": {"type": "object", "properties": {
                       **order_props, "confiance": {"type": "string", "enum": ["faible", "moyen", "eleve"]}},
                       "required": ["action", "symbole", "these"]}}]
@@ -150,9 +142,8 @@ def declarations(role: str, market_open: bool) -> list[dict]:
                       "raison": S}, "required": ["id", "verdict", "raison"]}}]
     else:  # gérant : le broker
         order_desc = ("Passe un ordre sur le compte de l'équipe. "
-                      + ("La bourse est OUVERTE : exécution immédiate." if market_open else
-                         "La bourse est FERMÉE : l'ordre est PLANIFIÉ et exécuté automatiquement à l'ouverture de "
-                         "New York (15h30 heure de Paris), au prix d'ouverture."))
+                      + ("Bourse OUVERTE : exécution immédiate." if market_open else
+                         "Bourse FERMÉE : ordre PLANIFIÉ, exécuté à l'ouverture de New York."))
         extra = [
             {"name": "passer_ordre", "description": order_desc,
              "parameters": {"type": "object", "properties": {
