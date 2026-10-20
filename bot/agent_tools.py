@@ -23,16 +23,23 @@ log = logging.getLogger("outils")
 SKILLS = Path(__file__).resolve().parent.parent / "skills"
 MAX_RESULT = 3500
 
-SKILL_INFO = {
-    "fonctionnement-du-marche": "actions, horaires, événements qui font bouger les cours",
-    "lecture-graphique": "tendance, moyennes mobiles, RSI, ATR, limites d'un graphique",
-    "analyse-fondamentale": "croissance, marges, dette, valorisation, pièges",
-    "actualite-et-catalyseurs": "vérifier une info, dates des catalyseurs, rappels",
-    "sentiment-reseaux": "utiliser Reddit et les réseaux sans se faire piéger",
-    "gestion-du-risque": "taille de position, corrélations, comportements à éviter",
-    "stop-loss-take-profit": "placer et gérer stop loss et objectif de gain",
-    "execution-des-ordres": "proposer et passer des ordres, ordres planifiés à l'ouverture",
-    "notes-et-memoire": "structure des notes entre deux séances",
+SKILL_INFO = {  # fiches détaillées lues à la demande (le socle commun et la stratégie sont déjà donnés)
+    "fonctionnement-du-marche": "horaires, exécution, gaps, moteurs des cours",
+    "contexte-macro": "lire le résumé du marché, dates macro",
+    "lecture-graphique": "lire historique_prix (tendance, RSI, ATR)",
+    "analyse-fondamentale": "lire donnees_financieres, signaux d'alerte",
+    "resultats-d-entreprise": "avant et après des résultats",
+    "actualite-et-catalyseurs": "juger une info, dater, rappels",
+    "recherche-web": "recherche_web et lire_page efficaces",
+    "sentiment-reseaux": "Reddit, emballements, manipulations",
+    "these-d-investissement": "thèse complète, confiance",
+    "taille-de-position": "montant selon risque et stop",
+    "stop-loss-take-profit": "stop, objectif, stop suiveur",
+    "gestion-du-risque": "contrôle avant achat, portefeuille",
+    "sortie-et-suivi": "vendre, alléger, garder ; autopsie",
+    "biais-et-erreurs": "pièges de raisonnement",
+    "execution-des-ordres": "utiliser les ordres, refus fréquents",
+    "notes-et-memoire": "modèles de notes, bonnes leçons",
 }
 SCREEN_CHOICES = list(tools.SCREENS) + ["plus_actives", "tendances_reddit", "europe_adr"]
 

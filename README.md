@@ -273,7 +273,16 @@ mois ; l'attente de l'ouverture en hiver (jusqu'à 70 min par jour) peut alors l
 - [bot/alpaca.py](bot/alpaca.py) : broker et données de marché gratuites (flux IEX)
 - [bot/tools.py](bot/tools.py) et [bot/universe.py](bot/universe.py) : indicateurs, screener, fondamentaux, Reddit
 - [bot/risk.py](bot/risk.py) et [bot/executor.py](bot/executor.py) : garde-fous et envoi des ordres
-- [skills/](skills/) : socle commun et stratégies (modifie-les pour changer le comportement des IA)
+- [skills/](skills/) : le savoir-faire des IA (modifie-les pour changer leur comportement) :
+  - lu à chaque séance : la charte de l'équipe (`commun/00-lisez-moi.md`), la routine
+    (`commun/routine-de-session.md`) et la stratégie de chaque IA (`strategies/`), avec des critères
+    chiffrés, les screeners à utiliser, et le stop, la taille et l'horizon propres à chaque style ;
+  - lu à la demande (outil `lire_skill`) : 16 fiches détaillées, dont la lecture du résumé du marché,
+    des graphiques et des données financières, les résultats d'entreprise, la thèse
+    d'investissement, le calcul de la taille de position, le stop suiveur, la sortie d'une position
+    et les biais de raisonnement ;
+  - [tests/test_skills.py](tests/test_skills.py) vérifie les renvois entre fiches, les outils cités,
+    et que les consignes restent sous 10 000 caractères (les quotas gratuits en dépendent).
 - [tests/test_risk.py](tests/test_risk.py) : tests des garde-fous et du registre du compte ;
   [tests/test_memoire.py](tests/test_memoire.py) : tests des leçons et de l'archivage ;
   [.github/workflows/tests.yml](.github/workflows/tests.yml) : les lance à chaque envoi
