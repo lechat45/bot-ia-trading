@@ -55,6 +55,31 @@ def check_missed(clock, mode: str, now: dt.datetime) -> None:
                     tags="warning", priorite="high")
 
 
+ENCHAINEMENT_MAX_MIN = 180  # une préparation faite moins de 3 h avant l'ouverture exécute elle-même son plan
+
+
+def chain_opening(cfg, alpaca, router) -> None:
+    """Préparation tardive (bouton du site, rattrapage) : si l'ouverture de New York est proche, ce même
+    lancement attend l'ouverture et exécute le plan, sans dépendre d'un autre déclenchement de GitHub
+    (qui saute parfois ses horaires). Un lancement « ouverture » qui suivrait ne refait rien."""
+    plan, clock = memory.read_plan(), alpaca.clock()
+    nxt = clock.get("next_open")
+    if clock.get("is_open") or not nxt or plan.get("execute_le") or plan.get("date") != _ny_date(nxt).isoformat():
+        return
+    if not any(o.get("statut") == "en_attente" for o in plan.get("ordres", [])):
+        return
+    wait = (dt.datetime.fromisoformat(nxt.replace("Z", "+00:00")) - dt.datetime.now(dt.timezone.utc)).total_seconds() / 60
+    if wait > ENCHAINEMENT_MAX_MIN:
+        log.info("Ouverture dans %.0f min : le plan sera exécuté par le lancement « ouverture » prévu.", wait)
+        return
+    log.info("Préparation tardive : ouverture dans %.0f min, ce lancement exécutera lui-même le plan.", wait)
+    if not wait_for_open(alpaca, int(wait) + 15):
+        log.info("La bourse n'a pas ouvert dans le délai : abandon.")
+        return
+    time.sleep(20)  # laisser passer les premières secondes de cotation
+    Session(cfg, alpaca, router, "ouverture", False).run()
+
+
 def wait_for_open(alpaca, max_minutes: int) -> bool:
     end = time.time() + max_minutes * 60
     while True:
@@ -163,6 +188,8 @@ def main() -> int:
 
     results = Session(cfg, alpaca, router, mode, dry_run, offline=args.offline, complet=args.force).run()
     log.info("Séance terminée (%d IA).", len(results))
+    if mode == "preparation" and not dry_run and not args.offline:
+        chain_opening(cfg, alpaca, router)
     return 0
 
 

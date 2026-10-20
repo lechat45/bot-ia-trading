@@ -190,7 +190,16 @@ function renderHeader(o) {
   const show = (kind, ic, html) => { ban.className = `banner ${kind}`; ban.innerHTML = `${icon(ic)}<span>${html}</span>`; ban.hidden = false; };
   const missed = STATIC ? missedSession(o) : "";
   if (o.erreur) show("err", "alert", `Alpaca ne répond pas : ${esc(o.erreur)}`);
-  else if (missed) show("warn", "alert", `<b>Séance manquée</b> : ${esc(missed)} GitHub saute parfois ses horaires : lancez la séance avec « Forcer le lancement », ou branchez cron-job.org (README, étape 6).`);
+  else if (missed) {
+    const prep = missed.startsWith("la préparation");
+    show("warn", "alert", `<b>Séance manquée</b> : ${esc(missed)} GitHub saute parfois ses horaires. ${prep ? "Avant 15 h 30, la préparation lancée maintenant exécutera elle-même son plan à l'ouverture." : ""}
+      <button class="btn" id="missed-run" style="margin-left:8px">${icon("send")}${prep ? "Lancer la préparation" : "Lancer une séance"}</button>`);
+    $("#missed-run").onclick = () => {
+      openForce();
+      $("#force-mode").value = prep ? "preparation" : "auto";
+      $("#force-sim").checked = false;
+    };
+  }
   else if (STATIC) show("info", "info", `Version en ligne, mise à jour après chaque séance. Dernière mise à jour : ${esc(fmtDate(o.genere_le, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }))}.`);
   else if (o.demo) show("warn", "info", "Mode démo : aucune clé Alpaca dans le fichier .env, les chiffres affichés sont factices.");
   else ban.hidden = true;
@@ -212,7 +221,8 @@ function missedSession(o) {
   const days = o.jours_bourse || [];
   const nyDay = new Date(`${nyToday}T12:00:00Z`).getUTCDay();
   const trading = days.length ? days.includes(nyToday) : nyDay > 0 && nyDay < 6;
-  if (trading && parisH >= 12 && o.plan?.date !== nyToday) return "la préparation de ce matin n'a pas eu lieu (aucun plan pour aujourd'hui).";
+  const planDate = "plan_reel" in o ? o.plan_reel : o.plan?.date;
+  if (trading && parisH >= 12 && planDate !== nyToday) return "la préparation de ce matin n'a pas eu lieu (aucun plan pour aujourd'hui).";
   const last = o.alertes?.ts ? new Date(o.alertes.ts) : null;
   const before = days.filter((d) => d < nyToday);
   if (last && before.length >= 2 && last.toLocaleDateString("sv-SE", { timeZone: "America/New_York" }) < before[before.length - 2])

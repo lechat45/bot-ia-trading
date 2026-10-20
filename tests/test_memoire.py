@@ -70,6 +70,43 @@ def test_seance_manquee():
     assert len(sent) == 2
 
 
+def test_preparation_tardive_enchaine_l_ouverture():
+    import datetime as dt
+    import main
+
+    runs, now = [], dt.datetime.now(dt.timezone.utc)
+
+    class Clock:
+        def __init__(self, minutes):
+            self.nxt = (now + dt.timedelta(minutes=minutes)).isoformat()
+
+        def clock(self):
+            return {"is_open": False, "next_open": self.nxt}
+
+    class FakeSession:
+        def __init__(self, cfg, alpaca, router, mode, dry_run, **kw):
+            runs.append((mode, dry_run))
+
+        def run(self):
+            return {}
+
+    old = main.Session, main.wait_for_open, main.time.sleep
+    main.Session, main.wait_for_open, main.time.sleep = FakeSession, lambda a, m: True, lambda s: None
+    try:
+        for minutes, expected in ((120, 1), (360, 0)):
+            day = main._ny_date(Clock(minutes).nxt).isoformat()
+            memory.write_plan({"date": day, "ordres": [{"statut": "en_attente"}]})
+            runs.clear()
+            main.chain_opening(None, Clock(minutes), None)
+            assert len(runs) == expected and (not runs or runs[0] == ("ouverture", False)), (minutes, runs)
+        memory.write_plan({"date": day, "execute_le": "déjà", "ordres": [{"statut": "en_attente"}]})
+        runs.clear()
+        main.chain_opening(None, Clock(120), None)
+        assert not runs  # plan déjà exécuté : rien à refaire
+    finally:
+        main.Session, main.wait_for_open, main.time.sleep = old
+
+
 def test_registre_des_propositions():
     memory.append_propositions([{"date": "2026-10-19", "id": "qualite-1", "auteur": "qualite", "action": "acheter",
                                  "symbole": "AAPL", "prix_ref": 200, "retenue": True, "verdict": "ok"}])

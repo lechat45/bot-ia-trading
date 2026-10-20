@@ -251,6 +251,8 @@ def overview() -> dict:
            "historique_ia": memory.read_history(), "installation": memory.read_installation(),
            "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(), "lecons": memory.read_lecons(),
            "alertes": alertes(), "jours_bourse": trading_days(),
+           # date du VRAI plan (pas celui d'une simulation) : sert à repérer une préparation manquée
+           "plan_reel": memory.read_plan(simulation=DEMO).get("date"),
            "ordres": [e for e in memory.recent_journal(120) if e.get("type") == "execution"][-300:]}
     try:
         acct = broker.account()
