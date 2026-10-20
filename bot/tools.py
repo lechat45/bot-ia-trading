@@ -4,6 +4,7 @@ les erreurs de calcul des IA (dates, pourcentages)."""
 import datetime as dt
 import html
 import ipaddress
+import json
 import logging
 import math
 import os
@@ -12,6 +13,7 @@ import socket
 import statistics
 import threading
 from html.parser import HTMLParser
+from pathlib import Path
 from urllib.parse import urlparse
 
 import requests
@@ -151,6 +153,144 @@ def fundamentals(symbol: str, today: dt.date) -> dict | None:
     except Exception as e:
         log.info("fondamentaux %s indisponibles : %s", symbol, e)
         return None
+
+
+# ---------------------------------------------------------------------- concurrents
+# Secteur, industrie et capitalisation des valeurs de l'univers (outils/construire_industries.py).
+try:
+    INDUSTRIES: dict = json.loads((Path(__file__).resolve().parent / "industries.json").read_text(encoding="utf-8"))
+except (OSError, ValueError):
+    INDUSTRIES = {}
+SECTOR_ETF = {"Technology": "XLK", "Communication Services": "XLC", "Consumer Cyclical": "XLY",
+              "Consumer Defensive": "XLP", "Financial Services": "XLF", "Healthcare": "XLV",
+              "Industrials": "XLI", "Energy": "XLE", "Basic Materials": "XLB", "Utilities": "XLU",
+              "Real Estate": "XLRE"}
+PEER_FIELDS = {"per_attendu": "PER attendu", "croissance_ca_pct": "croissance du CA", "marge_op_pct": "marge op.",
+               "roe_pct": "ROE", "dette_sur_fp": "dette/fonds propres"}
+
+
+def peers(symbol: str, secteur: str | None, industrie: str | None, n: int = 4) -> list[str]:
+    """Les plus grandes entreprises de la même industrie dans l'univers, complétées par le secteur."""
+    def big(s):
+        return -(INDUSTRIES[s].get("capitalisation") or 0)
+    same = sorted((s for s, v in INDUSTRIES.items() if s != symbol and industrie and v.get("industrie") == industrie), key=big)
+    out = same[:n]
+    if len(out) < 3 and secteur:
+        out += [s for s in sorted((s for s, v in INDUSTRIES.items() if v.get("secteur") == secteur), key=big)
+                if s != symbol and s not in out][: n - len(out)]
+    return out
+
+
+def peer_comparison(f: dict, peer_funds: dict) -> dict | None:
+    """Compare les chiffres d'une entreprise à la médiane de ses concurrents."""
+    rows = [{"s": s, "lien": "industrie" if pf.get("industrie") == f.get("industrie") else "secteur",
+             **{k: pf[k] for k in PEER_FIELDS if pf.get(k) is not None}} for s, pf in peer_funds.items() if pf]
+    if not rows:
+        return None
+    med = {}
+    for k in PEER_FIELDS:
+        vals = [r[k] for r in rows if r.get(k) is not None]
+        if len(vals) >= 2:
+            med[k] = round(statistics.median(vals), 1)
+    lecture = [f"{label} {f[k]:g} contre {med[k]:g}" for k, label in PEER_FIELDS.items()
+               if f.get(k) is not None and k in med]
+    return {"concurrents": rows, "mediane": med,
+            "lecture": (" ; ".join(lecture) + f" (médiane de {len(rows)} concurrents)") if lecture else ""}
+
+
+# ---------------------------------------------------------------------- analystes, dirigeants, vente à découvert
+def analysts_insiders(symbol: str) -> dict | None:
+    """Révisions des estimations et des notes des analystes, achats et ventes des dirigeants, vente à
+    découvert (Yahoo Finance, gratuit). Chaque partie est facultative : Yahoo est parfois incomplet."""
+    try:
+        import pandas as pd
+        import yfinance as yf
+
+        t = yf.Ticker(symbol)
+    except Exception as e:
+        log.info("analystes %s indisponibles : %s", symbol, e)
+        return None
+    out: dict = {}
+    now = pd.Timestamp.now()
+    try:
+        rev, trend = t.eps_revisions, t.eps_trend
+        for period, label in (("0q", "trimestre_en_cours"), ("0y", "annee_en_cours"), ("+1y", "annee_prochaine")):
+            if rev is None or period not in rev.index:
+                continue
+            row = {"estimations_relevees_30j": int(rev.loc[period, "upLast30days"] or 0),
+                   "estimations_abaissees_30j": int(rev.loc[period, "downLast30days"] or 0)}
+            if trend is not None and period in trend.index:
+                cur, ago = trend.loc[period, "current"], trend.loc[period, "30daysAgo"]
+                row["benefice_par_action_estime"] = _r(cur)
+                if cur and ago:
+                    row["variation_estimation_30j_pct"] = _r((cur / ago - 1) * 100, 1)
+            out.setdefault("revisions_estimations", {})[label] = row
+    except Exception as e:
+        log.info("révisions %s : %s", symbol, e)
+    try:
+        ud = t.upgrades_downgrades
+        if ud is not None and len(ud):
+            idx = pd.to_datetime(ud.index)
+            recent = ud[idx >= now - pd.Timedelta(days=30)]
+            act, tgt = recent["Action"].value_counts().to_dict(), recent["priceTargetAction"].value_counts().to_dict()
+            out["notes_analystes_30j"] = {
+                "notes_relevees": int(act.get("up", 0)), "notes_abaissees": int(act.get("down", 0)),
+                "objectifs_releves": int(tgt.get("Raises", 0)), "objectifs_abaisses": int(tgt.get("Lowers", 0)),
+                "dernieres": [{"date": str(d)[:10], "banque": r["Firm"], "note": r["ToGrade"],
+                               "objectif": _r(r.get("currentPriceTarget")), "action_objectif": r.get("priceTargetAction")}
+                              for d, r in recent.head(4).iterrows()]}
+    except Exception as e:
+        log.info("notes %s : %s", symbol, e)
+    try:
+        it = t.insider_transactions
+        if it is not None and len(it):
+            recent = it[pd.to_datetime(it["Start Date"]) >= now - pd.Timedelta(days=182)]
+            text = recent["Text"].fillna("")
+            buys, sells = recent[text.str.contains("Purchase", case=False)], recent[text.str.contains("Sale", case=False)]
+            out["dirigeants_6_mois"] = {
+                "achats": len(buys), "montant_achats_usd": _big(float(buys["Value"].fillna(0).sum())),
+                "ventes": len(sells), "montant_ventes_usd": _big(float(sells["Value"].fillna(0).sum())),
+                "derniers_achats": [{"date": str(r["Start Date"])[:10], "qui": r["Insider"], "poste": r["Position"],
+                                     "montant_usd": _big(float(r["Value"] or 0))} for _, r in buys.head(3).iterrows()],
+                "note": "les ventes des dirigeants sont courantes (rémunération) ; leurs ACHATS sont bien plus parlants"}
+    except Exception as e:
+        log.info("dirigeants %s : %s", symbol, e)
+    try:
+        info = t.info or {}
+
+        def pct(k):
+            v = info.get(k)
+            return _r(v * 100, 1) if isinstance(v, (int, float)) else None
+        short = {"part_du_flottant_vendue_pct": pct("shortPercentOfFloat"), "jours_pour_racheter": _r(info.get("shortRatio"), 1),
+                 "detention_institutions_pct": pct("heldPercentInstitutions"), "detention_dirigeants_pct": pct("heldPercentInsiders")}
+        short = {k: v for k, v in short.items() if v is not None}
+        if short:
+            out["vente_a_decouvert"] = short
+    except Exception as e:
+        log.info("vente à découvert %s : %s", symbol, e)
+    return out or None
+
+
+# ---------------------------------------------------------------------- niveaux calculés
+def levels(bars: list[dict], price: float | None) -> dict:
+    """Niveaux utiles pour placer un stop, calculés par le code (évite les erreurs de calcul des IA)."""
+    if len(bars) < 20 or not price:
+        return {}
+    ind = indicators(bars)
+    atr = ind.get("atr14") or 0
+    low10, low20 = min(b["l"] for b in bars[-10:]), min(b["l"] for b in bars[-20:])
+    out = {"plus_bas_10j": _r(low10), "plus_bas_20j": _r(low20), "plus_haut_20j": _r(max(b["h"] for b in bars[-20:])),
+           "atr_pct": _r(atr / price * 100, 1)}
+    for k, n in (("sma50", "ecart_sma50_pct"), ("sma200", "ecart_sma200_pct")):
+        if ind.get(k):
+            out[n] = _r((price / ind[k] - 1) * 100, 1)
+    stops = {}
+    for name, level in (("a_1_5_atr", price - 1.5 * atr), ("a_2_atr", price - 2 * atr), ("sous_plus_bas_20j", low20 * 0.99)):
+        pct = (price - level) / price * 100
+        if 1 <= pct <= 15:  # les limites du code pour un stop
+            stops[name] = {"prix": _r(level), "stop_loss_pct": _r(pct, 1)}
+    out["stops_possibles"] = stops or "aucun niveau entre 1 et 15 % : titre trop agité ou trop calme pour un stop technique"
+    return out
 
 
 _REDDIT: dict | None = None

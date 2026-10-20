@@ -1,0 +1,822 @@
+{
+ "AAPL": {
+  "capitalisation": 5004928221184,
+  "industrie": "Consumer Electronics",
+  "secteur": "Technology"
+ },
+ "ABBV": {
+  "capitalisation": 499528695808,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "ABNB": {
+  "capitalisation": 105062940672,
+  "industrie": "Travel Services",
+  "secteur": "Consumer Cyclical"
+ },
+ "ABT": {
+  "capitalisation": 181253062656,
+  "industrie": "Medical Devices",
+  "secteur": "Healthcare"
+ },
+ "ACN": {
+  "capitalisation": 144987439104,
+  "industrie": "Information Technology Services",
+  "secteur": "Technology"
+ },
+ "ADBE": {
+  "capitalisation": 96167428096,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "ADI": {
+  "capitalisation": 191088394240,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "ADP": {
+  "capitalisation": 113736081408,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "AMAT": {
+  "capitalisation": 327843020800,
+  "industrie": "Semiconductor Equipment & Materials",
+  "secteur": "Technology"
+ },
+ "AMD": {
+  "capitalisation": 878353186816,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "AMGN": {
+  "capitalisation": 229736169472,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "AMZN": {
+  "capitalisation": 2830868152320,
+  "industrie": "Internet Retail",
+  "secteur": "Consumer Cyclical"
+ },
+ "ARM": {
+  "capitalisation": 243557089280,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "ASML": {
+  "capitalisation": 634829275136,
+  "industrie": "Semiconductor Equipment & Materials",
+  "secteur": "Technology"
+ },
+ "AVGO": {
+  "capitalisation": 1597208788992,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "AZN": {
+  "capitalisation": 254270996480,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "BA": {
+  "capitalisation": 151182082048,
+  "industrie": "Aerospace & Defense",
+  "secteur": "Industrials"
+ },
+ "BAC": {
+  "capitalisation": 352364593152,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "BBVA": {
+  "capitalisation": 138874568704,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "BCS": {
+  "capitalisation": 73889275904,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "BKNG": {
+  "capitalisation": 125995245568,
+  "industrie": "Travel Services",
+  "secteur": "Consumer Cyclical"
+ },
+ "BLK": {
+  "capitalisation": 182720724992,
+  "industrie": "Asset Management",
+  "secteur": "Financial Services"
+ },
+ "BMY": {
+  "capitalisation": 120172904448,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "BP": {
+  "capitalisation": 127337234432,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "BRK.B": {
+  "capitalisation": null,
+  "industrie": null,
+  "secteur": null
+ },
+ "C": {
+  "capitalisation": 204127289344,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "CAT": {
+  "capitalisation": 333627424768,
+  "industrie": "Farm & Heavy Construction Machinery",
+  "secteur": "Industrials"
+ },
+ "CB": {
+  "capitalisation": 137448914944,
+  "industrie": "Insurance - Property & Casualty",
+  "secteur": "Financial Services"
+ },
+ "CCL": {
+  "capitalisation": 35564941312,
+  "industrie": "Travel Services",
+  "secteur": "Consumer Cyclical"
+ },
+ "CDNS": {
+  "capitalisation": 89877397504,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "CMCSA": {
+  "capitalisation": 77715144704,
+  "industrie": "Telecom Services",
+  "secteur": "Communication Services"
+ },
+ "CMG": {
+  "capitalisation": 37772726272,
+  "industrie": "Restaurants",
+  "secteur": "Consumer Cyclical"
+ },
+ "COIN": {
+  "capitalisation": 44443328512,
+  "industrie": "Financial Data & Stock Exchanges",
+  "secteur": "Financial Services"
+ },
+ "COP": {
+  "capitalisation": 174482259968,
+  "industrie": "Oil & Gas E&P",
+  "secteur": "Energy"
+ },
+ "COST": {
+  "capitalisation": 441148571648,
+  "industrie": "Discount Stores",
+  "secteur": "Consumer Defensive"
+ },
+ "CRM": {
+  "capitalisation": 199536345088,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "CRWD": {
+  "capitalisation": 233559539712,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "CSCO": {
+  "capitalisation": 419885514752,
+  "industrie": "Communication Equipment",
+  "secteur": "Technology"
+ },
+ "CVS": {
+  "capitalisation": 118534971392,
+  "industrie": "Healthcare Plans",
+  "secteur": "Healthcare"
+ },
+ "CVX": {
+  "capitalisation": 440124932096,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "DAL": {
+  "capitalisation": 49100001280,
+  "industrie": "Airlines",
+  "secteur": "Industrials"
+ },
+ "DB": {
+  "capitalisation": 59432771584,
+  "industrie": "Banks - Regional",
+  "secteur": "Financial Services"
+ },
+ "DDOG": {
+  "capitalisation": 93488766976,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "DE": {
+  "capitalisation": 169055125504,
+  "industrie": "Farm & Heavy Construction Machinery",
+  "secteur": "Industrials"
+ },
+ "DELL": {
+  "capitalisation": 289574551552,
+  "industrie": "Computer Hardware",
+  "secteur": "Technology"
+ },
+ "DEO": {
+  "capitalisation": 51994001408,
+  "industrie": "Beverages - Wineries & Distilleries",
+  "secteur": "Consumer Defensive"
+ },
+ "DHR": {
+  "capitalisation": 157771153408,
+  "industrie": "Diagnostics & Research",
+  "secteur": "Healthcare"
+ },
+ "DIS": {
+  "capitalisation": 189227597824,
+  "industrie": "Entertainment",
+  "secteur": "Communication Services"
+ },
+ "DUK": {
+  "capitalisation": 92995076096,
+  "industrie": "Utilities - Regulated Electric",
+  "secteur": "Utilities"
+ },
+ "E": {
+  "capitalisation": 84269572096,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "ELV": {
+  "capitalisation": 93303676928,
+  "industrie": "Healthcare Plans",
+  "secteur": "Healthcare"
+ },
+ "ENPH": {
+  "capitalisation": 4036979456,
+  "industrie": "Solar",
+  "secteur": "Technology"
+ },
+ "EQNR": {
+  "capitalisation": 109302423552,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "ERIC": {
+  "capitalisation": 33558943744,
+  "industrie": "Communication Equipment",
+  "secteur": "Technology"
+ },
+ "F": {
+  "capitalisation": 48568918016,
+  "industrie": "Auto Manufacturers",
+  "secteur": "Consumer Cyclical"
+ },
+ "FCX": {
+  "capitalisation": 100162224128,
+  "industrie": "Copper",
+  "secteur": "Basic Materials"
+ },
+ "FSLR": {
+  "capitalisation": 18463309824,
+  "industrie": "Solar",
+  "secteur": "Technology"
+ },
+ "GE": {
+  "capitalisation": 322972450816,
+  "industrie": "Aerospace & Defense",
+  "secteur": "Industrials"
+ },
+ "GILD": {
+  "capitalisation": 189799956480,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "GM": {
+  "capitalisation": 72609112064,
+  "industrie": "Auto Manufacturers",
+  "secteur": "Consumer Cyclical"
+ },
+ "GOOGL": {
+  "capitalisation": 4209298898944,
+  "industrie": "Internet Content & Information",
+  "secteur": "Communication Services"
+ },
+ "GS": {
+  "capitalisation": 255002083328,
+  "industrie": "Capital Markets",
+  "secteur": "Financial Services"
+ },
+ "GSK": {
+  "capitalisation": 99093864448,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "HD": {
+  "capitalisation": 309164048384,
+  "industrie": "Home Improvement Retail",
+  "secteur": "Consumer Cyclical"
+ },
+ "HON": {
+  "capitalisation": 66551058432,
+  "industrie": "Conglomerates",
+  "secteur": "Industrials"
+ },
+ "HOOD": {
+  "capitalisation": 86779420672,
+  "industrie": "Capital Markets",
+  "secteur": "Financial Services"
+ },
+ "HSBC": {
+  "capitalisation": 317922148352,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "IBM": {
+  "capitalisation": 222711152640,
+  "industrie": "Information Technology Services",
+  "secteur": "Technology"
+ },
+ "ICE": {
+  "capitalisation": 88924880896,
+  "industrie": "Financial Data & Stock Exchanges",
+  "secteur": "Financial Services"
+ },
+ "ING": {
+  "capitalisation": 93242089472,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "INTC": {
+  "capitalisation": 486480248832,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "INTU": {
+  "capitalisation": 87017381888,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "ISRG": {
+  "capitalisation": 153032982528,
+  "industrie": "Medical Instruments & Supplies",
+  "secteur": "Healthcare"
+ },
+ "JNJ": {
+  "capitalisation": 611608100864,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "JPM": {
+  "capitalisation": 885722316800,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "KLAC": {
+  "capitalisation": 217153060864,
+  "industrie": "Semiconductor Equipment & Materials",
+  "secteur": "Technology"
+ },
+ "KO": {
+  "capitalisation": 401944117248,
+  "industrie": "Beverages - Non-Alcoholic",
+  "secteur": "Consumer Defensive"
+ },
+ "LIN": {
+  "capitalisation": 232075853824,
+  "industrie": "Specialty Chemicals",
+  "secteur": "Basic Materials"
+ },
+ "LLY": {
+  "capitalisation": 1105585766400,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "LMT": {
+  "capitalisation": 126526406656,
+  "industrie": "Aerospace & Defense",
+  "secteur": "Industrials"
+ },
+ "LOW": {
+  "capitalisation": 109921697792,
+  "industrie": "Home Improvement Retail",
+  "secteur": "Consumer Cyclical"
+ },
+ "LRCX": {
+  "capitalisation": 340637745152,
+  "industrie": "Semiconductor Equipment & Materials",
+  "secteur": "Technology"
+ },
+ "LULU": {
+  "capitalisation": 11323148288,
+  "industrie": "Apparel Retail",
+  "secteur": "Consumer Cyclical"
+ },
+ "MA": {
+  "capitalisation": 539972534272,
+  "industrie": "Credit Services",
+  "secteur": "Financial Services"
+ },
+ "MCD": {
+  "capitalisation": 171723374592,
+  "industrie": "Restaurants",
+  "secteur": "Consumer Cyclical"
+ },
+ "MDLZ": {
+  "capitalisation": 81306378240,
+  "industrie": "Confectioners",
+  "secteur": "Consumer Defensive"
+ },
+ "MDT": {
+  "capitalisation": 118665617408,
+  "industrie": "Medical Devices",
+  "secteur": "Healthcare"
+ },
+ "META": {
+  "capitalisation": 1797112725504,
+  "industrie": "Internet Content & Information",
+  "secteur": "Communication Services"
+ },
+ "MMC": {
+  "capitalisation": null,
+  "industrie": null,
+  "secteur": null
+ },
+ "MO": {
+  "capitalisation": 123711315968,
+  "industrie": "Tobacco",
+  "secteur": "Consumer Defensive"
+ },
+ "MPC": {
+  "capitalisation": 138287464448,
+  "industrie": "Oil & Gas Refining & Marketing",
+  "secteur": "Energy"
+ },
+ "MRK": {
+  "capitalisation": 354359869440,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "MRNA": {
+  "capitalisation": 90582630400,
+  "industrie": "Biotechnology",
+  "secteur": "Healthcare"
+ },
+ "MS": {
+  "capitalisation": 280298979328,
+  "industrie": "Capital Markets",
+  "secteur": "Financial Services"
+ },
+ "MSFT": {
+  "capitalisation": 3961677414400,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "MU": {
+  "capitalisation": 1023824887808,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "NEE": {
+  "capitalisation": 163031760896,
+  "industrie": "Utilities - Regulated Electric",
+  "secteur": "Utilities"
+ },
+ "NEM": {
+  "capitalisation": 124346228736,
+  "industrie": "Gold",
+  "secteur": "Basic Materials"
+ },
+ "NET": {
+  "capitalisation": 105962192896,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "NFLX": {
+  "capitalisation": 290851160064,
+  "industrie": "Entertainment",
+  "secteur": "Communication Services"
+ },
+ "NKE": {
+  "capitalisation": 55268339712,
+  "industrie": "Footwear & Accessories",
+  "secteur": "Consumer Cyclical"
+ },
+ "NOK": {
+  "capitalisation": 50835693568,
+  "industrie": "Communication Equipment",
+  "secteur": "Technology"
+ },
+ "NOW": {
+  "capitalisation": 150282190848,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "NVDA": {
+  "capitalisation": 5242072072192,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "NVO": {
+  "capitalisation": 169551691776,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "ORCL": {
+  "capitalisation": 392852209664,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "OXY": {
+  "capitalisation": 62697259008,
+  "industrie": "Oil & Gas E&P",
+  "secteur": "Energy"
+ },
+ "PANW": {
+  "capitalisation": 283805122560,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "PEP": {
+  "capitalisation": 182021341184,
+  "industrie": "Beverages - Non-Alcoholic",
+  "secteur": "Consumer Defensive"
+ },
+ "PFE": {
+  "capitalisation": 167798390784,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "PG": {
+  "capitalisation": 366539866112,
+  "industrie": "Household & Personal Products",
+  "secteur": "Consumer Defensive"
+ },
+ "PHG": {
+  "capitalisation": 24924399616,
+  "industrie": "Medical Devices",
+  "secteur": "Healthcare"
+ },
+ "PLD": {
+  "capitalisation": 120626814976,
+  "industrie": "REIT - Industrial",
+  "secteur": "Real Estate"
+ },
+ "PLTR": {
+  "capitalisation": 466553765888,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "PM": {
+  "capitalisation": 313359237120,
+  "industrie": "Tobacco",
+  "secteur": "Consumer Defensive"
+ },
+ "PNC": {
+  "capitalisation": 86255616000,
+  "industrie": "Banks - Regional",
+  "secteur": "Financial Services"
+ },
+ "PSX": {
+  "capitalisation": 115935526912,
+  "industrie": "Oil & Gas Refining & Marketing",
+  "secteur": "Energy"
+ },
+ "PYPL": {
+  "capitalisation": 48711618560,
+  "industrie": "Credit Services",
+  "secteur": "Financial Services"
+ },
+ "QCOM": {
+  "capitalisation": 185302188032,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "RBLX": {
+  "capitalisation": 36254580736,
+  "industrie": "Electronic Gaming & Multimedia",
+  "secteur": "Communication Services"
+ },
+ "REGN": {
+  "capitalisation": 80514916352,
+  "industrie": "Biotechnology",
+  "secteur": "Healthcare"
+ },
+ "RELX": {
+  "capitalisation": 68173975552,
+  "industrie": "Specialty Business Services",
+  "secteur": "Industrials"
+ },
+ "RIVN": {
+  "capitalisation": 17866600448,
+  "industrie": "Auto Manufacturers",
+  "secteur": "Consumer Cyclical"
+ },
+ "RTX": {
+  "capitalisation": 258917810176,
+  "industrie": "Aerospace & Defense",
+  "secteur": "Industrials"
+ },
+ "SAN": {
+  "capitalisation": 188234121216,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "SAP": {
+  "capitalisation": 260884791296,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "SBUX": {
+  "capitalisation": 111571804160,
+  "industrie": "Restaurants",
+  "secteur": "Consumer Cyclical"
+ },
+ "SCHW": {
+  "capitalisation": 154913898496,
+  "industrie": "Capital Markets",
+  "secteur": "Financial Services"
+ },
+ "SHEL": {
+  "capitalisation": 298153377792,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "SHOP": {
+  "capitalisation": 220093317120,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "SLB": {
+  "capitalisation": 72856592384,
+  "industrie": "Oil & Gas Equipment & Services",
+  "secteur": "Energy"
+ },
+ "SMCI": {
+  "capitalisation": 20764622848,
+  "industrie": "Computer Hardware",
+  "secteur": "Technology"
+ },
+ "SNOW": {
+  "capitalisation": 111255478272,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "SNPS": {
+  "capitalisation": 87114178560,
+  "industrie": "Software - Infrastructure",
+  "secteur": "Technology"
+ },
+ "SNY": {
+  "capitalisation": 94815158272,
+  "industrie": "Drug Manufacturers - General",
+  "secteur": "Healthcare"
+ },
+ "SO": {
+  "capitalisation": 102692904960,
+  "industrie": "Utilities - Regulated Electric",
+  "secteur": "Utilities"
+ },
+ "SOFI": {
+  "capitalisation": 18469455872,
+  "industrie": "Credit Services",
+  "secteur": "Financial Services"
+ },
+ "SPGI": {
+  "capitalisation": 126124277760,
+  "industrie": "Financial Data & Stock Exchanges",
+  "secteur": "Financial Services"
+ },
+ "SPOT": {
+  "capitalisation": 106667466752,
+  "industrie": "Internet Content & Information",
+  "secteur": "Communication Services"
+ },
+ "STLA": {
+  "capitalisation": 12445038592,
+  "industrie": "Auto Manufacturers",
+  "secteur": "Consumer Cyclical"
+ },
+ "SYK": {
+  "capitalisation": 114281758720,
+  "industrie": "Medical Devices",
+  "secteur": "Healthcare"
+ },
+ "T": {
+  "capitalisation": 158975361024,
+  "industrie": "Telecom Services",
+  "secteur": "Communication Services"
+ },
+ "TGT": {
+  "capitalisation": 69638332416,
+  "industrie": "Discount Stores",
+  "secteur": "Consumer Defensive"
+ },
+ "TJX": {
+  "capitalisation": 162789244928,
+  "industrie": "Apparel Retail",
+  "secteur": "Consumer Cyclical"
+ },
+ "TMO": {
+  "capitalisation": 251198914560,
+  "industrie": "Diagnostics & Research",
+  "secteur": "Healthcare"
+ },
+ "TSLA": {
+  "capitalisation": 1453670400000,
+  "industrie": "Auto Manufacturers",
+  "secteur": "Consumer Cyclical"
+ },
+ "TSM": {
+  "capitalisation": 2179460104192,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "TTE": {
+  "capitalisation": 198324355072,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "TXN": {
+  "capitalisation": 252193341440,
+  "industrie": "Semiconductors",
+  "secteur": "Technology"
+ },
+ "UAL": {
+  "capitalisation": 31030208512,
+  "industrie": "Airlines",
+  "secteur": "Industrials"
+ },
+ "UBER": {
+  "capitalisation": 142897512448,
+  "industrie": "Software - Application",
+  "secteur": "Technology"
+ },
+ "UL": {
+  "capitalisation": 140303073280,
+  "industrie": "Household & Personal Products",
+  "secteur": "Consumer Defensive"
+ },
+ "UNH": {
+  "capitalisation": 365213384704,
+  "industrie": "Healthcare Plans",
+  "secteur": "Healthcare"
+ },
+ "UNP": {
+  "capitalisation": 170505617408,
+  "industrie": "Railroads",
+  "secteur": "Industrials"
+ },
+ "UPS": {
+  "capitalisation": 82917171200,
+  "industrie": "Integrated Freight & Logistics",
+  "secteur": "Industrials"
+ },
+ "USB": {
+  "capitalisation": 90133274624,
+  "industrie": "Banks - Regional",
+  "secteur": "Financial Services"
+ },
+ "V": {
+  "capitalisation": 756423983104,
+  "industrie": "Credit Services",
+  "secteur": "Financial Services"
+ },
+ "VLO": {
+  "capitalisation": 124761841664,
+  "industrie": "Oil & Gas Refining & Marketing",
+  "secteur": "Energy"
+ },
+ "VRTX": {
+  "capitalisation": 127143936000,
+  "industrie": "Biotechnology",
+  "secteur": "Healthcare"
+ },
+ "VZ": {
+  "capitalisation": 183433330688,
+  "industrie": "Telecom Services",
+  "secteur": "Communication Services"
+ },
+ "WFC": {
+  "capitalisation": 245534064640,
+  "industrie": "Banks - Diversified",
+  "secteur": "Financial Services"
+ },
+ "WMT": {
+  "capitalisation": 941735673856,
+  "industrie": "Discount Stores",
+  "secteur": "Consumer Defensive"
+ },
+ "XOM": {
+  "capitalisation": 733071671296,
+  "industrie": "Oil & Gas Integrated",
+  "secteur": "Energy"
+ },
+ "ZTS": {
+  "capitalisation": 32888465408,
+  "industrie": "Drug Manufacturers - Specialty & Generic",
+  "secteur": "Healthcare"
+ }
+}

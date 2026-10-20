@@ -14,6 +14,8 @@ Champ marche_SPY : les performances du S&P 500 sur 5 jours, 1 mois et 3 mois.
 - Compare perf_1m_pct et perf_3m_pct du titre à celles du SPY. Un titre qui monte plus que le marché dans une hausse, et baisse moins dans une baisse, est un « leader ».
 - Une baisse de 8 % quand le marché a perdu 7 % n'est pas un problème de l'entreprise : c'est le marché.
 
+Champ vs_secteur : la même comparaison avec le fonds de SON secteur (XLK pour la technologie, XLV pour la santé…). « ecart_1m_points » et « ecart_3m_points » sont positifs quand le titre fait mieux que son secteur. Un titre qui baisse pendant que son secteur monte a un problème qui lui est propre : cherche lequel.
+
 ## 3. L'élan : RSI et distance au plus haut
 - rsi14 au-dessus de 70 : la hausse a été très rapide. Dans une tendance haussière, ce n'est PAS un signal de vente à lui seul, mais acheter là, c'est acheter cher : attends un repli ou réduis la taille.
 - rsi14 sous 30 : la baisse a été très rapide. Dans une tendance baissière, le RSI peut rester bas longtemps. Ce n'est pas un signal d'achat à lui seul.
@@ -29,7 +31,12 @@ Champ marche_SPY : les performances du S&P 500 sur 5 jours, 1 mois et 3 mois.
 - volume_vs_moy20 : le volume du jour divisé par la moyenne des 20 jours. Au-dessus de 2 : volume inhabituel, quelque chose se passe (cherche la nouvelle avec actualites).
 - Une hausse avec gros volume est plus crédible qu'une hausse sans volume. Une chute avec gros volume après une mauvaise nouvelle peut marquer une capitulation, ou le début d'une longue baisse : il faut regarder les séances suivantes.
 
-## 6. Les cours bruts
+## 6. Les niveaux calculés par le code (champ niveaux)
+- plus_bas_10j, plus_bas_20j, plus_haut_20j : les supports et la résistance récents.
+- atr_pct : le bruit d'une journée en %. ecart_sma50_pct, ecart_sma200_pct : la distance du cours à ses moyennes (positif = au-dessus).
+- stops_possibles : des niveaux de stop déjà convertis en stop_loss_pct, à 1,5 ATR, à 2 ATR et juste sous le plus bas de 20 jours. Seuls ceux compris entre 1 et 15 % (les limites du code) sont donnés. Choisis celui qui correspond à ton invalidation et recopie son stop_loss_pct : n'en recalcule pas un.
+
+## 7. Les cours bruts
 - cours_20_derniers_jours : repère les plus bas récents (supports) et les plus hauts récents (résistances). Un support est un bon endroit pour placer un stop juste en dessous.
 - cours_hebdo_1an : la forme générale de l'année, une valeur par semaine.
 - date_dernier_cours : vérifie que les données sont à jour.

@@ -10,6 +10,7 @@ Tu les donnes en pourcentage du prix d'exécution : stop_loss_pct et take_profit
 1. Cherche le niveau d'INVALIDATION : sous le plus bas récent (cours_20_derniers_jours), sous la sma50 pour une tendance, sous le plus bas qui a suivi la mauvaise nouvelle pour un rebond.
 2. Vérifie qu'il est hors du BRUIT : au moins 1,5 à 2 fois l'ATR sous le prix (atr14 dans historique_prix). Exemple : prix 50 $, atr14 1,50 $ (3 %), donc un stop d'au moins 4,5 à 6 %.
 3. Convertis en pourcentage : stop_loss_pct = (prix - niveau du stop) ÷ prix × 100.
+Raccourci : historique_prix donne dans niveaux.stops_possibles ces niveaux déjà calculés (1,5 ATR, 2 ATR, sous le plus bas de 20 jours), avec leur stop_loss_pct. Utilise-les plutôt que de calculer toi-même.
 4. Contrôle : le code impose entre 1 et 15 %. Si le bon stop est à 20 %, le titre est trop agité pour cette stratégie, ou ce n'est pas le bon moment.
 Un stop trop serré se fait toucher par le bruit normal et te fait vendre au pire moment. Un stop trop large fait perdre trop. La taille de la position compense (fiche taille-de-position).
 

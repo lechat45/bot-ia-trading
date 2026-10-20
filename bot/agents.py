@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import memory, notify, tools
+from . import classement, memory, notify, tools
 from .agent_tools import SKILL_INFO, AgentEnv, Market, declarations
 from .comptes import Comptes
 from .executor import Broker
@@ -149,6 +149,7 @@ class Session:
         self.lecons: list = memory.read_lecons()  # mémoire longue de l'équipe
         self.new_lecons: list = []
         self.brief = ""  # résumé du marché préparé par le programme, donné aux 6 IA
+        self.track: dict = {}  # bilan des idées des analystes (bot/classement.py)
         self.stops_suiveurs: list = []
         self.allegee: str | None = None  # séance de suivi allégée (le gérant seul) et pourquoi
         self.suivi_raisons: list = []
@@ -254,6 +255,36 @@ class Session:
         return {"jour": (live / past[-1]["c"] - 1) * 100, "semaine": (live / past[-5 - k]["c"] - 1) * 100,
                 "mois": (live / past[-21 - k]["c"] - 1) * 100}
 
+    def track_record(self) -> dict:
+        """Ce qu'ont rapporté les idées passées de chaque analyste : chacun apprend de ses résultats."""
+        try:
+            props = classement.load_propositions()
+            prices = self.market.prices(sorted({p["symbole"] for p in props})) if props else {}
+            return classement.compute(props, prices, [a.id for a in ANALYSTES])
+        except Exception as e:  # un bilan manquant ne doit pas bloquer la séance
+            log.warning("bilan des analystes indisponible : %s", e)
+            return {}
+
+    def market_breadth(self) -> str:
+        """Combien des grandes valeurs de l'univers montent vraiment : une hausse portée par quelques géants
+        est plus fragile qu'une hausse générale. Calculé avec les cours déjà téléchargés pour le screener."""
+        n = above50 = above200 = highs = lows = 0
+        for bars in self.market.universe().values():
+            closes = [b["c"] for b in bars]
+            if len(closes) < 200:
+                continue
+            last, year = closes[-1], closes[-252:]
+            n += 1
+            above50 += last > sum(closes[-50:]) / 50
+            above200 += last > sum(closes[-200:]) / 200
+            highs += last >= max(year) * 0.98
+            lows += last <= min(year) * 1.02
+        if n < 50:
+            return ""
+        return (f"sur {n} grandes valeurs, {above50 * 100 // n} % sont au-dessus de leur moyenne 50 jours et "
+                f"{above200 * 100 // n} % au-dessus de leur moyenne 200 jours ; {highs} sont à moins de 2 % de leur "
+                f"plus haut sur un an, {lows} à moins de 2 % de leur plus bas")
+
     def market_brief(self) -> str:
         """Résumé du marché préparé par le programme et donné aux 6 IA : indices, taux et matières premières,
         secteurs, positions du compte et grands titres. Il leur évite de dépenser des appels d'outils."""
@@ -274,6 +305,8 @@ class Session:
                 L.append(f"- Indices : {idx}")
             if mac := line(BRIEF_MACRO):
                 L.append(f"- Taux, matières premières et dollar : {mac}")
+            if breadth := self.market_breadth():
+                L.append(f"- Largeur du marché : {breadth}")
             sect = [(name, sym, m["semaine"]) for sym, name in BRIEF_SECTEURS if (m := self._moves(sym))]
             if sect:
                 sect.sort(key=lambda x: x[2], reverse=True)
@@ -380,6 +413,7 @@ class Session:
                     self.plan = {"date": self.trading_date, "cree_le": self.now.isoformat(timespec="seconds"),
                                  "simulation": self.dry_run, "ordres": []}
                 self.brief = self.market_brief()
+                self.track = self.track_record()
                 if self.mode == "suivi":
                     self.suivi_raisons = self.suivi_reasons()
                     if not self.suivi_raisons:
@@ -465,6 +499,7 @@ class Session:
         notes = memory.read_notes(a.id) or "(aucune note : c'est ta toute première séance)"
         txt = f"Nouvelle séance : {MODES[self.mode]}.\n\nTES NOTES (écrites lors de ta dernière séance) :\n{notes}\n\n"
         txt += self.brief
+        txt += classement.summary(a.role, a.id, self.track, {x.id: x.nom.replace("Analyste ", "") for x in ANALYSTES})
         if self.lecons:
             txt += ("LEÇONS APPRISES PAR L'ÉQUIPE (mémoire longue, à respecter) :\n"
                     + "\n".join(f"- {l['texte']}" for l in self.lecons[-15:]) + "\n\n")

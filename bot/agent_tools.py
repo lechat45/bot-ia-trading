@@ -7,6 +7,7 @@ Chaque IA de l'équipe décide seule lesquels appeler et quand. Selon son rôle,
   - gérant   : passer_ordre, annuler_ordre, ajuster_stop (le broker, sur le compte de l'équipe).
 Chaque appel est exécuté ici, journalisé (le « cerveau » du tableau de bord) et renvoyé à l'IA.
 """
+import concurrent.futures as cf
 import datetime as dt
 import json
 import logging
@@ -92,6 +93,9 @@ def declarations(role: str, market_open: bool) -> list[dict]:
         {"name": "donnees_financieres",
          "description": "Santé de l'entreprise : secteur, croissance, marges, dette, valorisation, date des résultats.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
+        {"name": "analystes_et_inities",
+         "description": "Révisions des estimations et des notes des analystes (30 j), achats et ventes des dirigeants (6 mois), vente à découvert.",
+         "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
         {"name": "actualites",
          "description": "Fil d'actualité financière en direct ; sans symbole, celles du marché.",
          "parameters": {"type": "object", "properties": {"symbole": S, "limite": {"type": "integer"}}}},
@@ -168,6 +172,7 @@ class Market:
         self._bars: dict = {}
         self._universe = False
         self._fund: dict = {}
+        self._analysts: dict = {}
         self._prices: dict = {}
         self._prices_ts = 0.0
 
@@ -209,15 +214,22 @@ class Market:
         return self.prices([sym]).get(sym)
 
     def fundamentals(self, sym):
+        return self._cached(self._fund, sym, lambda: tools.fundamentals(sym, self.today))
+
+    def analysts(self, sym):
+        return self._cached(self._analysts, sym, lambda: tools.analysts_insiders(sym))
+
+    def _cached(self, cache: dict, sym, fetch):
+        """Données Yahoo Finance, téléchargées une seule fois par séance pour toute l'équipe."""
         if self.offline:
             return None
         with self.lock:
-            if sym in self._fund:
-                return self._fund[sym]
-        f = tools.fundamentals(sym, self.today)
+            if sym in cache:
+                return cache[sym]
+        value = fetch()
         with self.lock:
-            self._fund[sym] = f
-        return f
+            cache[sym] = value
+        return value
 
 
 # ---------------------------------------------------------------------- exécution des outils d'une IA
@@ -343,12 +355,38 @@ class AgentEnv:
         live = self.s.market.price(sym)
         if live:
             out["dernier_prix"] = round(live, 2)
+        out["niveaux"] = tools.levels(bars, live or out.get("prix"))
+        # comparaison au fonds de son secteur, pas seulement au S&P 500
+        sect = tools.INDUSTRIES.get(sym, {}).get("secteur") or (self.s.market.fundamentals(sym) or {}).get("secteur")
+        etf = tools.SECTOR_ETF.get(sect)
+        eb = self.s.market.bars([etf]).get(etf) if etf and etf != sym else None
+        if eb:
+            e, me = tools.indicators(eb), out
+            row = {"fonds": etf, "secteur": sect}
+            for k in ("perf_1m_pct", "perf_3m_pct"):
+                if e.get(k) is not None and me.get(k) is not None:
+                    row[f"secteur_{k}"] = e[k]
+                    row[f"ecart_{k[5:7]}_points"] = round(me[k] - e[k], 1)
+            out["vs_secteur"] = row
         return out
 
     def t_donnees_financieres(self, symbole=""):
         sym = clean_symbol(symbole)
         f = self.s.market.fundamentals(sym)
-        return f or {"erreur": f"données financières de {sym} indisponibles"}
+        if not f:
+            return {"erreur": f"données financières de {sym} indisponibles"}
+        names = tools.peers(sym, f.get("secteur"), f.get("industrie"))
+        if names:  # les concurrents, téléchargés en parallèle (et gardés pour toute l'équipe)
+            with cf.ThreadPoolExecutor(max_workers=4) as pool:
+                funds = dict(zip(names, pool.map(self.s.market.fundamentals, names)))
+            comp = tools.peer_comparison(f, funds)
+            if comp:
+                f = {**f, "comparaison_concurrents": comp}
+        return f
+
+    def t_analystes_et_inities(self, symbole=""):
+        sym = clean_symbol(symbole)
+        return self.s.market.analysts(sym) or {"erreur": f"données des analystes et des dirigeants de {sym} indisponibles"}
 
     def t_actualites(self, symbole="", limite=8):
         sym = clean_symbol(symbole) if symbole else None

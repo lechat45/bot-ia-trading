@@ -23,10 +23,22 @@ donnees_financieres donne la carte d'identité financière d'une entreprise (sou
 - rendement_dividende_pct : au-delà de 6 à 7 %, méfiance. Un rendement très élevé vient souvent d'un cours effondré et annonce une baisse du dividende.
 - objectif_analystes et avis_analystes : le consensus des analystes. Un objectif 30 % au-dessus du cours n'est pas une preuve : les analystes suivent souvent le prix avec retard. C'est un élément de contexte, jamais une thèse.
 
-## 5. La date des résultats
+## 5. La comparaison aux concurrents (comparaison_concurrents)
+donnees_financieres compare l'entreprise à 3 ou 4 concurrents : les plus grands de la même industrie, complétés si besoin par ceux du même secteur (champ « lien » : industrie ou secteur ; un concurrent du seul secteur compare moins bien).
+- « lecture » résume l'écart : « PER attendu 15 contre 18,1 (médiane de 4 concurrents) ».
+- Un PER attendu nettement sous la médiane avec une croissance et des marges comparables : décote à expliquer (occasion ou problème caché).
+- Un PER attendu au-dessus de la médiane se justifie seulement par une croissance ou des marges nettement supérieures.
+
+## 6. Ce qu'en pensent les analystes et les dirigeants (outil analystes_et_inities)
+- revisions_estimations : combien d'analystes ont RELEVÉ ou ABAISSÉ leur estimation de bénéfice sur 30 jours, et de combien l'estimation moyenne a varié. Des estimations qui montent sont l'un des signaux les plus fiables à quelques mois ; des estimations qui baissent avant des résultats sont un avertissement.
+- notes_analystes_30j : notes relevées ou abaissées, objectifs de cours relevés ou abaissés, et les 4 dernières décisions. Une seule note ne veut rien dire ; une série de baisses, si.
+- dirigeants_6_mois : leurs ventes sont courantes (rémunération, impôts) et peu parlantes. Leurs ACHATS avec leur propre argent sont un vrai signal de confiance, surtout après une baisse (utile à la stratégie Contrarien).
+- vente_a_decouvert : part_du_flottant_vendue_pct. Sous 5 %, normal. Au-delà de 15 %, beaucoup d'investisseurs parient sur la baisse : risque élevé, mais aussi possibilité de hausse brutale si une bonne nouvelle les force à racheter (« short squeeze », utile à la stratégie Sentiment). jours_pour_racheter au-delà de 5 renforce ce risque.
+
+## 7. La date des résultats
 prochains_resultats et jours_avant_resultats (calculés par le code). Le code refuse un achat 0 ou 1 jour avant les résultats. Au-delà, lis la fiche resultats-d-entreprise avant d'acheter à moins de 10 jours d'une publication.
 
-## 6. Les signaux d'alerte
+## 8. Les signaux d'alerte
 - Bénéfice en hausse mais flux de trésorerie libre en baisse : la qualité du bénéfice est douteuse.
 - Chiffre d'affaires en baisse depuis plusieurs trimestres, et marges qui se resserrent.
 - Dette qui grimpe sans que la croissance suive.

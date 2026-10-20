@@ -10,6 +10,7 @@ Quatre fois par an, chaque entreprise publie ses résultats trimestriels. C'est 
 
 ## Avant la publication
 - Le code interdit d'acheter 0 ou 1 jour avant les résultats.
+- Regarde les révisions des analystes (outil analystes_et_inities) : des estimations relevées dans les 30 derniers jours placent la barre plus haut, des estimations abaissées signalent que les analystes s'attendent à un trimestre difficile.
 - Entre 2 et 10 jours avant : n'ouvre une position que si les résultats SONT la thèse, et alors en demi-taille, en sachant que tu joues à pile ou face sur la réaction.
 - Sinon, le meilleur choix est souvent d'attendre : crée un rappel (creer_rappel) pour le lendemain de la publication, avec ce qu'il faudra vérifier.
 - Pour une position DÉTENUE, décide AVANT la publication, à la séance de préparation qui précède :

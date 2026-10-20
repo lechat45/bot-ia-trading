@@ -13,6 +13,7 @@
 - Rapport mentions_24h / mentions_veille : au-delà de 3, il se passe quelque chose. Cherche le FAIT déclencheur (actualites).
 - Mentions en hausse ET articles de presse en hausse : l'attention est réelle et large.
 - Mentions en hausse SANS article de presse : l'emballement vient seulement des forums. Prudence maximale.
+- Vente à découvert (outil analystes_et_inities) : si plus de 15 % des actions disponibles sont vendues à découvert, une bonne nouvelle peut forcer ces vendeurs à racheter en catastrophe (« short squeeze ») et faire bondir le cours. C'est aussi le signe que beaucoup de professionnels parient sur la baisse : le risque est élevé dans les deux sens.
 
 ## Ce que le sentiment peut annoncer
 - Un sentiment qui monte avec une vraie nouvelle et un volume inhabituel (volume_vs_moy20 > 2) : l'élan peut durer quelques jours ou semaines.
