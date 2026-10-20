@@ -8,6 +8,20 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-10-19T17:45:58+00:00",
+  "statut": "fait",
+  "note": "Rappel pris en compte. Les résultats de AMZN sont le 29 octobre (dans 9 jours). La position est gérée avec un stop protecteur.",
+  "fait_par": "equilibre",
+  "fait_le": "2026-10-20T11:24:50+00:00"
+ },
+ {
+  "id": "r2-1029",
+  "date": "2026-10-29",
+  "titre": "Résultats T3 Amazon (AMZN)",
+  "details": "Résultats T3 Amazon (AMZN). Évaluer la position (plus-value, dynamique du marché) et décider d'alléger ou conserver avant l'annonce.",
+  "symbole": "AMZN",
+  "seance": "preparation",
+  "cree_par": "gerant",
+  "cree_le": "2026-10-20T11:35:28+00:00",
   "statut": "actif"
  }
 ]
