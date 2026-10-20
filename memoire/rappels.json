@@ -23,5 +23,27 @@
   "cree_par": "gerant",
   "cree_le": "2026-10-20T11:35:28+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r3-1028",
+  "date": "2026-10-28",
+  "titre": "Suivi résultats DB",
+  "details": "Résultats DB, vérifier si catalyseur se produit, ajuster stop si nécessaire",
+  "symbole": "DB",
+  "seance": "preparation",
+  "cree_par": "critique",
+  "cree_le": "2026-10-20T12:42:00+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r4-0112",
+  "date": "2027-01-12",
+  "titre": "Résultats T4 UnitedHealth Group (UNH)",
+  "details": "Publication des résultats T4 de UnitedHealth Group (UNH). Évaluer la position et ajuster le stop loss ou prendre les bénéfices avant annonce.",
+  "symbole": "UNH",
+  "seance": "preparation",
+  "cree_par": "gerant",
+  "cree_le": "2026-10-20T12:44:24+00:00",
+  "statut": "actif"
  }
 ]
