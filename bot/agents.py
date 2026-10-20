@@ -29,7 +29,7 @@ from . import backtest, classement, memory, notify, tools
 from .agent_tools import SKILL_INFO, AgentEnv, Market, declarations
 from .comptes import Comptes
 from .executor import Broker
-from .llm import ContextTooLarge, LLMError
+from .llm import GEMMA_MODELS, ContextTooLarge, LLMError
 from .risk import check_buy, check_sell, trailing_stop
 from .universe import UNIVERSE
 
@@ -53,7 +53,7 @@ class Agent:
     inspire_de: str = ""
 
 
-GEMINI = ["gemini-3.5-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"]
+GEMINI = ["gemini-3.5-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"] + GEMMA_MODELS  # Gemma : roue de secours
 AGENTS = [
     Agent("qualite", "Analyste Qualité", "analyste", "gemini", 0, GEMINI, "qualite", "Claude"),
     Agent("equilibre", "Analyste Équilibre", "analyste", "gemini", 1, GEMINI, "equilibre", "ChatGPT"),

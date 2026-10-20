@@ -23,6 +23,11 @@ travaillent ensemble sur un seul compte** Alpaca paper (argent virtuel), gratuit
 - Si une clé ou un modèle est saturé, le routeur passe au modèle suivant, à la clé de relais, puis
   à l'autre fournisseur, sans perdre le fil de la séance. La clé Gemini 3 sert aussi à l'outil
   « Navigateur web » (recherche Google).
+- **Roue de secours Gemma 4** : quand le quota du jour de Gemini est épuisé, les IA Gemini passent à
+  Gemma 4, des IA de Google qui marchent avec les mêmes clés et ont un quota gratuit bien plus large
+  (environ 1 500 requêtes par jour et par projet). Les IA Groq, quand Groq est saturé, passent elles
+  aussi par Gemma avant Gemini, pour laisser le quota Gemini aux IA Gemini. Tes vraies limites sont
+  visibles sur https://aistudio.google.com/rate-limit.
 
 ## La journée de bourse
 

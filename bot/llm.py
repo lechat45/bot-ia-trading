@@ -106,7 +106,11 @@ class Gemini:
                 add("user", [{"text": m["text"]}])
             elif m["role"] == "assistant":
                 if m.get("raw_gemini"):
-                    add("model", copy.deepcopy(m["raw_gemini"]))
+                    parts = copy.deepcopy(m["raw_gemini"])
+                    first = next((p for p in parts if "functionCall" in p), None)
+                    if first and not any("thoughtSignature" in p for p in parts):
+                        first["thoughtSignature"] = "skip_thought_signature_validator"  # appel venu de Gemma
+                    add("model", parts)
                     continue
                 parts = [{"text": m["text"]}] if m.get("text") else []
                 for i, c in enumerate(m.get("calls", [])):
@@ -346,9 +350,15 @@ class Mistral(Groq):
 
 
 # ---------------------------------------------------------------------------- Routeur
+GEMINI_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3-flash-preview",
+                 "gemini-3.1-flash-lite"]
+# Gemma 4 : IA ouvertes de Google, sur les mêmes clés Gemini, avec un quota gratuit bien plus large
+# (environ 1 500 requêtes par jour, contre une vingtaine pour Gemini 3.5 Flash). La 31B, plus lente et
+# souvent en erreur 500, passe après la 26B.
+GEMMA_MODELS = ["gemma-4-26b-a4b-it", "gemma-4-31b-it"]
 DEFAULT_MODELS = {
-    "gemini": ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3-flash-preview",
-               "gemini-3.1-flash-lite"],
+    # Relais des IA Groq et Mistral : Gemma d'abord, pour laisser le peu de quota Gemini aux IA Gemini
+    "gemini": GEMMA_MODELS + GEMINI_MODELS,
     "groq": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"],
     "mistral": ["mistral-medium-latest", "mistral-small-latest", "ministral-14b-latest"],
 }
@@ -533,7 +543,7 @@ class Router:
         gem = self.providers["gemini"]
         n = len(gem.keys)
         for ki in [(start + i) % n for i in range(n)]:
-            for model in DEFAULT_MODELS["gemini"][:3]:
+            for model in GEMINI_MODELS[:3]:
                 if self._cool_left("gemini-recherche", ki, model) > 0:
                     continue
                 try:

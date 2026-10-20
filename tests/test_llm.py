@@ -98,6 +98,19 @@ def test_relais_vers_mistral():
     assert r._attempts("mistral", 0, llm.DEFAULT_MODELS["mistral"])[3][0] == "gemini"
 
 
+def test_roue_de_secours_gemma():
+    from bot.agents import AGENTS
+
+    qualite = next(a for a in AGENTS if a.id == "qualite")
+    assert qualite.models[0].startswith("gemini") and qualite.models[-2:] == llm.GEMMA_MODELS
+    r = router({}, {})
+    relais = [m for p, _, m in r._attempts("groq", 0, ["openai/gpt-oss-120b"]) if p == "gemini"]
+    assert relais[:2] == llm.GEMMA_MODELS  # Groq saturé : Gemma avant le peu de quota Gemini
+    gemma = {"role": "assistant", "raw_gemini": [{"functionCall": {"name": "screener", "args": {}, "id": "a"}}]}
+    part = llm.Gemini.render([gemma])[0]["parts"][0]
+    assert part["thoughtSignature"]  # Gemini peut reprendre une conversation où Gemma a appelé un outil
+
+
 def test_recherche_web_de_secours():
     from bot import tools
 
