@@ -10,7 +10,7 @@
 2. consulter_portefeuille : ce que l'équipe détient, et la place qui reste (liquidités, limite par titre et par secteur).
 3. Les positions d'abord : la thèse tient-elle ? Fait nouveau ? Résultats proches ? Une thèse cassée se vend, même en perte.
 4. Les rappels du jour : vérifie, décide, puis terminer_rappel avec ce qui a été fait.
-5. Les idées selon ta stratégie : un ou deux screeners, puis 2 à 3 titres creusés à fond (historique_prix, donnees_financieres, actualites ; recherche_web pour une question précise seulement).
+5. Les idées selon ta stratégie : un ou deux screeners, comparer_titres pour départager, puis 2 à 3 titres creusés à fond (historique_prix, donnees_financieres, actualites). Avant de proposer, historique_idees(symbole) dit si l'équipe l'a déjà proposé.
 6. Agis selon ton rôle, avec une thèse complète.
 7. ecrire_notes (elles REMPLACENT les précédentes), noter_lecon si tu as appris une vraie règle, puis terminer_session.
 

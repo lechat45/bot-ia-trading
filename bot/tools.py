@@ -98,6 +98,33 @@ def screen(bars_by_sym: dict, critere: str, limite: int, only: set | None = None
     return rows[:limite]
 
 
+# Critères calqués sur les stratégies de l'équipe (filtre, tri) : un appel au lieu de cinq.
+STRATEGY_SCREENS = {
+    # Qualité : un repli dans une tendance haussière intacte
+    "repli_dans_tendance": (lambda i: i["prix"] > i["sma200"] and i["sma50"] > i["sma200"] and i["perf_5j_pct"] < 0
+                            and 35 <= i["rsi14"] <= 55, "perf_5j_pct", False),
+    # Équilibre, Sentiment : les tendances haussières les plus fortes
+    "tendance_haussiere": (lambda i: i["prix"] > i["sma50"] > i["sma200"] and i["perf_3m_pct"] > 0, "perf_3m_pct", True),
+    # Contrarien : une forte chute qui commence à se stabiliser
+    "rebond_apres_chute": (lambda i: i["perf_1m_pct"] <= -10 and i["perf_5j_pct"] > 0 and 30 <= i["rsi14"] <= 50,
+                           "perf_1m_pct", False),
+}
+
+
+def screen_strategy(bars_by_sym: dict, critere: str, limite: int) -> list[dict]:
+    keep, key, desc = STRATEGY_SCREENS[critere]
+    rows = []
+    for sym, bars in bars_by_sym.items():
+        ind = indicators(bars)
+        need = ("prix", "sma50", "sma200", "perf_5j_pct", "perf_1m_pct", "perf_3m_pct", "rsi14")
+        if any(ind.get(k) is None for k in need) or not keep(ind):
+            continue
+        rows.append({"s": sym, "prix": ind["prix"], "perf_5j_pct": ind["perf_5j_pct"], "perf_1m_pct": ind["perf_1m_pct"],
+                     "perf_3m_pct": ind["perf_3m_pct"], "rsi14": ind["rsi14"], "ecart_plus_haut_pct": ind.get("ecart_plus_haut_pct")})
+    rows.sort(key=lambda r: r[key], reverse=desc)
+    return rows[:limite] or [{"info": "aucune action ne remplit ces conditions aujourd'hui"}]
+
+
 def _big(x):
     if x is None:
         return None
@@ -269,6 +296,39 @@ def analysts_insiders(symbol: str) -> dict | None:
     except Exception as e:
         log.info("vente à découvert %s : %s", symbol, e)
     return out or None
+
+
+# ---------------------------------------------------------------------- risque du portefeuille
+def portfolio_risk(val: dict, sector_of, today: dt.date | None = None) -> dict:
+    """Pour chaque position : distance au stop et à l'objectif, perte si le stop est touché, secteur,
+    jours de détention ; pour le compte : risque total et poids de chaque secteur."""
+    today = today or dt.date.today()
+    total = val.get("valeur") or 0
+    rows, risk, sect = [], 0.0, {}
+    for p in val.get("positions") or []:
+        r = {**p, "these": (p.get("these") or "")[:160]}
+        prix, stop, tp = p.get("prix"), p.get("stop"), p.get("tp")
+        if prix and stop:
+            loss = p["qty"] * max(prix - stop, 0)
+            r["distance_stop_pct"] = _r((prix - stop) / prix * 100, 1)
+            r["perte_si_stop_usd"] = _r(loss, 0)
+            risk += loss
+        if prix and tp:
+            r["distance_objectif_pct"] = _r((tp / prix - 1) * 100, 1)
+        try:
+            r["jours_detenue"] = (today - dt.date.fromisoformat(str(p.get("depuis"))[:10])).days
+        except ValueError:
+            pass
+        s = sector_of(p["symbole"]) or "inconnu"
+        r["secteur"] = s
+        sect[s] = sect.get(s, 0.0) + (p.get("valeur") or 0)
+        rows.append(r)
+    return {"positions": rows,
+            "risque_total": {"perte_si_tous_les_stops_usd": _r(risk, 0),
+                             "pct_du_compte": _r(risk / total * 100, 2) if total else None,
+                             "repere": "garder sous 6 % du compte (fiche gestion-du-risque)"},
+            "poids_par_secteur_pct": {s: _r(v / total * 100, 1) for s, v in sorted(sect.items(), key=lambda x: -x[1])}
+            if total else {}}
 
 
 # ---------------------------------------------------------------------- niveaux calculés

@@ -3,7 +3,7 @@
 Acheter est facile ; bien vendre fait la différence. Chaque position se revoit à chaque séance de suivi, et avant chaque publication de résultats.
 
 ## La revue d'une position (en 4 questions)
-Pour chaque ligne de consulter_portefeuille (prix d'achat, cours, plus-value, stop, objectif, thèse, date d'achat) :
+Pour chaque ligne de consulter_portefeuille (prix d'achat, cours, plus-value, stop, objectif, thèse, jours_detenue, distance_stop_pct, distance_objectif_pct, perte_si_stop_usd) :
 1. La THÈSE tient-elle encore ? Relis-la : les faits qui la fondaient sont-ils toujours vrais ? Un fait nouveau la contredit-il (actualites) ?
 2. Le CATALYSEUR attendu a-t-il eu lieu ? S'il est passé sans effet, la raison d'être de la position a disparu.
 3. Y a-t-il un RISQUE proche : des résultats dans quelques jours, une décision attendue ?

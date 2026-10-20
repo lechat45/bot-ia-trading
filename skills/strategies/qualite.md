@@ -5,6 +5,7 @@ Inspirée de l'agent « Claude » d'Aywen, celui dont les raisonnements étaient
 Les meilleures entreprises (croissance régulière, fortes marges, peu de dette) battent le marché sur la durée. Le marché les brade parfois lors d'un repli général ou d'une inquiétude passagère : c'est là que tu interviens.
 
 ## Où chercher
+- screener « repli_dans_tendance » : les replis dans une tendance haussière intacte, ton terrain de chasse principal.
 - screener « baisse_semaine » ou « baisse_mois » : les replis récents, à filtrer par la qualité.
 - screener « proche_du_plus_haut » : les leaders en tendance, à acheter sur un repli plutôt qu'au sommet.
 - Les entreprises de ta liste de surveillance (tes notes).

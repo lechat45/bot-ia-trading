@@ -11,13 +11,14 @@ import concurrent.futures as cf
 import datetime as dt
 import json
 import logging
+import re
 import threading
 import time
 from pathlib import Path
 
-from . import memory, tools
+from . import classement, memory, tools
 from .alpaca import AlpacaError
-from .risk import SYMBOL_RE, check_buy, check_sell, check_stop, clean_symbol
+from .risk import SYMBOL_RE, check_buy, check_sell, check_stop, clean_symbol, montant_selon_risque
 from .universe import EUROPE_ADR, UNIVERSE
 
 log = logging.getLogger("outils")
@@ -42,7 +43,7 @@ SKILL_INFO = {  # fiches détaillées lues à la demande (le socle commun et la 
     "execution-des-ordres": "utiliser les ordres, refus fréquents",
     "notes-et-memoire": "modèles de notes, bonnes leçons",
 }
-SCREEN_CHOICES = list(tools.SCREENS) + ["plus_actives", "tendances_reddit", "europe_adr"]
+SCREEN_CHOICES = list(tools.SCREENS) + list(tools.STRATEGY_SCREENS) + ["plus_actives", "tendances_reddit", "europe_adr"]
 
 
 def _str(x) -> str:
@@ -68,7 +69,7 @@ def declarations(role: str, market_open: bool) -> list[dict]:
     order_props = {
         "action": {"type": "string", "enum": ["acheter", "vendre"]},
         "symbole": S,
-        "montant_usd": {"type": "number", "description": "achat, en dollars"},
+        "montant_usd": {"type": "number", "description": "achat, en dollars ; absent : calculé selon confiance et stop"},
         "pourcentage": {"type": "number", "description": "vente : % de la position (100 = tout)"},
         "stop_loss_pct": {"type": "number", "description": "achat : % sous le prix d'achat"},
         "take_profit_pct": {"type": "number", "description": "achat : % au-dessus du prix d'achat"},
@@ -93,6 +94,13 @@ def declarations(role: str, market_open: bool) -> list[dict]:
         {"name": "donnees_financieres",
          "description": "Santé de l'entreprise : secteur, croissance, marges, dette, valorisation, date des résultats.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
+        {"name": "comparer_titres",
+         "description": "Compare 2 à 5 actions côte à côte : tendance, valorisation, croissance, résultats.",
+         "parameters": {"type": "object", "properties": {"symboles": {"type": "string", "description": "ex. AAPL, MSFT"}},
+                        "required": ["symboles"]}},
+        {"name": "historique_idees",
+         "description": "Idées d'achat déjà proposées par l'équipe (sur un titre, ou les dernières) : avis, achat, rendement depuis.",
+         "parameters": {"type": "object", "properties": {"symbole": S}}},
         {"name": "analystes_et_inities",
          "description": "Révisions des estimations et des notes des analystes (30 j), achats et ventes des dirigeants (6 mois), vente à découvert.",
          "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
@@ -151,7 +159,8 @@ def declarations(role: str, market_open: bool) -> list[dict]:
         extra = [
             {"name": "passer_ordre", "description": order_desc,
              "parameters": {"type": "object", "properties": {
-                 **order_props, "source": {"type": "string", "description": "id de la proposition retenue (ex. qualite-1), si c'en est une"}},
+                 **order_props, "source": {"type": "string", "description": "id de la proposition retenue (ex. qualite-1), si c'en est une"},
+                 "confiance": {"type": "string", "enum": ["faible", "moyen", "eleve"]}},
                  "required": ["action", "symbole", "these"]}},
             {"name": "annuler_ordre", "description": "Annule un ordre planifié (pas encore exécuté) sur ce titre.",
              "parameters": {"type": "object", "properties": {"symbole": S}, "required": ["symbole"]}},
@@ -292,11 +301,15 @@ class AgentEnv:
     def reserved(self):
         return sum(o.get("montant_usd", 0) for o in self.planned() if o["action"] == "acheter")
 
+    def sector_of(self, sym):
+        return tools.INDUSTRIES.get(sym, {}).get("secteur") or (self.s.market.fundamentals(sym) or {}).get("secteur")
+
     def t_consulter_portefeuille(self):
         v = self.valuation()
         cfg = self.s.cfg
         return {
             **v,
+            **tools.portfolio_risk(v, self.sector_of),
             "ordres_planifies_pour_ouverture": [{k: o.get(k) for k in ("action", "symbole", "montant_usd", "pourcentage",
                                                                        "stop_loss_pct", "take_profit_pct")} for o in self.planned()],
             "limites": {
@@ -314,6 +327,8 @@ class AgentEnv:
     def t_screener(self, critere="baisse_semaine", limite=10):
         limite = max(1, min(int(_num(limite) or 10), 20))
         mk, mn = self.s.market, self.s.cfg.min_price
+        if critere in tools.STRATEGY_SCREENS:
+            return tools.screen_strategy(mk.universe(), critere, limite)
         if critere == "plus_actives":
             rows = self.s.alpaca.most_actives(40)
             syms = [r["symbol"] for r in rows if SYMBOL_RE.match(r["symbol"])]
@@ -392,9 +407,52 @@ class AgentEnv:
         sym = clean_symbol(symbole) if symbole else None
         limite = max(1, min(int(_num(limite) or 8), 15))
         news = self.s.alpaca.news([sym] if sym else None, limit=limite)
-        return [{"date": n.get("created_at", "")[:16].replace("T", " "), "titre": n.get("headline", ""),
-                 "resume": (n.get("summary") or "")[:220], "source": n.get("source"),
-                 "symboles": n.get("symbols", [])[:5]} for n in news] or {"info": "aucune actualité récente"}
+        out = [{"date": n.get("created_at", "")[:16].replace("T", " "), "titre": n.get("headline", ""),
+                "resume": (n.get("summary") or "")[:220], "source": n.get("source"),
+                "symboles": n.get("symbols", [])[:5]} for n in news]
+        if sym and not self.s.market.offline:  # Google Actualités : la grande presse, en plus du fil d'Alpaca
+            name = (self.s.market.fundamentals(sym) or {}).get("nom")
+            try:
+                seen = {o["titre"] for o in out}
+                out += [{"date": g["date"], "titre": g["titre"], "source": f"{g['source']} (Google Actualités)"}
+                        for g in tools.google_news(f"{name} {sym}" if name else f"{sym} stock", limit=5)
+                        if g["titre"] not in seen]
+            except Exception as e:
+                log.info("Google Actualités %s : %s", sym, e)
+        return out or {"info": "aucune actualité récente"}
+
+    def t_comparer_titres(self, symboles=""):
+        raw = ",".join(symboles) if isinstance(symboles, list) else str(symboles)
+        syms = list(dict.fromkeys(clean_symbol(s) for s in re.split(r"[,;\s]+", raw) if s.strip()))[:5]
+        if len(syms) < 2:
+            return {"erreur": "donne 2 à 5 symboles séparés par des virgules, ex. « AAPL, MSFT, GOOGL »"}
+        bars = self.s.market.bars(syms)
+        with cf.ThreadPoolExecutor(max_workers=5) as pool:
+            funds = dict(zip(syms, pool.map(self.s.market.fundamentals, syms)))
+        rows = []
+        for s in syms:
+            ind, f = tools.indicators(bars.get(s) or []), funds.get(s) or {}
+            row = {"s": s, "secteur": f.get("secteur"),
+                   **{k: ind.get(k) for k in ("prix", "perf_1m_pct", "perf_3m_pct", "rsi14", "ecart_plus_haut_pct")}}
+            if ind.get("prix") and ind.get("sma200"):
+                row["au_dessus_sma200"] = ind["prix"] > ind["sma200"]
+            if ind.get("prix") and ind.get("atr14"):
+                row["atr_pct"] = round(ind["atr14"] / ind["prix"] * 100, 1)
+            row.update({k: f[k] for k in ("per_attendu", "croissance_ca_pct", "marge_op_pct", "roe_pct", "dette_sur_fp",
+                                          "jours_avant_resultats") if f.get(k) is not None})
+            rows.append({k: v for k, v in row.items() if v is not None})
+        return {"comparaison": rows}
+
+    def t_historique_idees(self, symbole=""):
+        sym = clean_symbol(symbole) if symbole else None
+        props = [p for p in classement.load_propositions() if not sym or p["symbole"] == sym][-10:]
+        if not props:
+            return {"info": f"l'équipe n'a encore jamais proposé {sym}" if sym else "aucune idée passée"}
+        prices = self.s.market.prices(sorted({p["symbole"] for p in props}))
+        return [{"date": p.get("date"), "auteur": p.get("auteur"), "symbole": p["symbole"],
+                 "avis_critique": p.get("verdict"), "achetee": bool(p.get("retenue")), "prix_du_jour": p["prix_ref"],
+                 "rendement_depuis_pct": round((prices[p["symbole"]] / p["prix_ref"] - 1) * 100, 1)
+                 if prices.get(p["symbole"]) else None} for p in reversed(props)]
 
     def t_recherche_web(self, question=""):
         if self.web_left <= 0:
@@ -471,6 +529,7 @@ class AgentEnv:
             return {"refuse": "3 propositions maximum par séance : garde les meilleures idées"}
         if any(p["symbole"] == sym for p in self.proposals):
             return {"refuse": "tu as déjà proposé ce titre"}
+        montant_usd, auto = self._auto_amount(action, montant_usd, stop_loss_pct, confiance)
         # Les montants sont vérifiés comme pour un vrai ordre, mais ramenés aux limites plutôt que refusés :
         # c'est le gérant qui décidera de la taille finale.
         ok, msg, d = self._check(action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct, clamp=True)
@@ -483,7 +542,27 @@ class AgentEnv:
                                                               "take_profit_pct", "pourcentage") if d.get(k) is not None}}
         self.proposals.append(p)
         self.s.add_proposal(p)
-        return {"ok": True, "id": pid, "message": f"Proposition {pid} transmise au critique puis au gérant."}
+        return {"ok": True, "id": pid, "message": f"Proposition {pid} transmise au critique puis au gérant.",
+                **self._risk_summary(d, auto)}
+
+    def _auto_amount(self, action, montant_usd, stop_loss_pct, confiance):
+        """Montant facultatif pour un achat : sans montant, le code le calcule selon la confiance et le stop."""
+        if action != "acheter" or (_num(montant_usd) or 0) > 0:
+            return montant_usd, False
+        m = montant_selon_risque(self.valuation()["valeur"], stop_loss_pct, confiance)
+        return (m, True) if m else (montant_usd, False)
+
+    def _risk_summary(self, d: dict, auto: bool) -> dict:
+        """Ce que l'achat risque vraiment : perte si le stop est touché, en % du compte, et ratio gain/perte."""
+        if not d.get("montant") or not d.get("stop_loss_pct"):
+            return {}
+        value = self.valuation()["valeur"] or 1
+        out = {"risque_pct_du_compte": round(d["montant"] * d["stop_loss_pct"] / value, 2),
+               "ratio_gain_perte": round(d["take_profit_pct"] / d["stop_loss_pct"], 2)}
+        if auto:
+            out["montant_calcule"] = (f"{d['montant']:.0f} $ calculés par le code selon ta confiance et ton stop "
+                                      "(fiche taille-de-position), ramenés aux limites si besoin")
+        return out
 
     # -------------------------------------------------- critique : avis
     def t_donner_avis(self, id="", verdict="", raison=""):
@@ -496,13 +575,14 @@ class AgentEnv:
 
     # -------------------------------------------------- gérant : broker
     def t_passer_ordre(self, action="", symbole="", montant_usd=None, pourcentage=None,
-                       stop_loss_pct=None, take_profit_pct=None, these="", source=""):
+                       stop_loss_pct=None, take_profit_pct=None, these="", source="", confiance=""):
         cfg, sym, action = self.s.cfg, clean_symbol(symbole), str(action).lower().strip()
         if len(self.orders) >= cfg.max_orders:
             return {"refuse": f"maximum {cfg.max_orders} ordres par séance atteint"}
         if any(o["symbole"] == sym for o in self.orders):
             return {"refuse": "un seul ordre par titre et par séance"}
-        ok, msg, d = self._check(action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct)
+        montant_usd, auto = self._auto_amount(action, montant_usd, stop_loss_pct, confiance)
+        ok, msg, d = self._check(action, sym, montant_usd, pourcentage, stop_loss_pct, take_profit_pct, clamp=auto)
         if not ok:
             self.log("refus", symbole=sym, raison=msg)
             return {"refuse": msg}
@@ -523,14 +603,14 @@ class AgentEnv:
                 msg = f"Vente de {d['qty']} {sym} planifiée pour l'ouverture."
             self.s.add_plan(o)
             self.orders.append({**record, **o, "resultat": "planifié pour l'ouverture"})
-            return {"planifie": True, "message": msg}
+            return {"planifie": True, "message": msg, **self._risk_summary(d, auto)}
         if action == "acheter":
             r = self.s.broker.buy(self.acct, sym, d["qty"], d["stop_loss_pct"], d["take_profit_pct"], these[:1500],
                                   source=source)
         else:
             r = self.s.broker.sell(self.acct, sym, d["qty"], these, source=source)
         self.orders.append({**record, **d, "resultat": r["message"], "ok": r["ok"]})
-        return r
+        return {**r, **self._risk_summary(d, auto)} if action == "acheter" else r
 
     def t_annuler_ordre(self, symbole=""):
         sym = clean_symbol(symbole)

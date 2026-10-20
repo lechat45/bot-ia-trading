@@ -31,6 +31,40 @@ def test_niveaux_et_stops_calcules():
     assert tools.levels(bars[:5], 102.0) == {}
 
 
+def _serie(closes):
+    return [{"o": c, "h": c * 1.01, "l": c * 0.99, "c": c, "v": 1000} for c in closes]
+
+
+def test_criteres_du_screener_par_strategie():
+    hausse = [100 + i * 0.5 for i in range(250)]
+    repli = hausse + [hausse[-1] - i * 1.2 for i in range(1, 7)]  # tendance intacte, petit repli de 6 jours
+    chute = [100.0] * 200 + [100 - i * 1.5 for i in range(1, 21)] + [70 + i * 1.5 for i in range(1, 6)]  # RSI ~36
+    bars = {"REPLI": _serie(repli), "HAUSSE": _serie(hausse), "CHUTE": _serie(chute)}
+    assert [r["s"] for r in tools.screen_strategy(bars, "repli_dans_tendance", 5)] == ["REPLI"]
+    assert "HAUSSE" in [r["s"] for r in tools.screen_strategy(bars, "tendance_haussiere", 5)]
+    assert [r["s"] for r in tools.screen_strategy(bars, "rebond_apres_chute", 5)] == ["CHUTE"]
+
+
+def test_risque_du_portefeuille():
+    import datetime as dt
+    val = {"valeur": 100_000, "positions": [
+        {"symbole": "AAA", "qty": 10, "prix": 100.0, "stop": 94.0, "tp": 112.0, "valeur": 1000.0, "depuis": "2026-10-10"},
+        {"symbole": "BBB", "qty": 20, "prix": 50.0, "stop": 45.0, "tp": None, "valeur": 1000.0, "depuis": "2026-10-19"}]}
+    r = tools.portfolio_risk(val, {"AAA": "Santé", "BBB": "Santé"}.get, today=dt.date(2026, 10, 20))
+    a = r["positions"][0]
+    assert a["distance_stop_pct"] == 6.0 and a["distance_objectif_pct"] == 12.0 and a["jours_detenue"] == 10
+    assert r["risque_total"]["perte_si_tous_les_stops_usd"] == 160 and r["risque_total"]["pct_du_compte"] == 0.16
+    assert r["poids_par_secteur_pct"] == {"Santé": 2.0}
+
+
+def test_montant_selon_le_risque():
+    from bot.risk import montant_selon_risque
+    assert montant_selon_risque(100_000, 5, "moyen") == 12_000  # 0,6 % du compte / 5 % de stop
+    assert montant_selon_risque(100_000, 8, "eleve") == 11_250
+    assert montant_selon_risque(100_000, 10, "faible") == 4_000
+    assert montant_selon_risque(100_000, 5, None) == 12_000 and montant_selon_risque(100_000, None) is None
+
+
 def test_bilan_d_un_analyste():
     props = [{"auteur": "qualite", "symbole": "AAA", "prix_ref": 100, "date": "2026-10-01", "retenue": True, "verdict": "ok"},
              {"auteur": "qualite", "symbole": "BBB", "prix_ref": 50, "date": "2026-10-02", "retenue": False, "verdict": "rejet"}]

@@ -9,7 +9,7 @@ Un portefeuille bien réparti sur plusieurs secteurs encaisse mieux les chocs et
 2. Lis le régime du marché dans le résumé (fiche contexte-macro) :
    - risk-on : complète avec un secteur cyclique sous-représenté (industrie, finance, consommation cyclique) ;
    - risk-off ou correction : renforce la défense (santé, consommation de base, services publics) et garde des liquidités.
-3. Cherche dans ce secteur : screener « proche_du_plus_haut » (les leaders) ou « baisse_semaine » (un repli), puis historique_prix et donnees_financieres sur 2 ou 3 candidats.
+3. Cherche dans ce secteur : screener « tendance_haussiere » ou « proche_du_plus_haut » (les leaders), « baisse_semaine » (un repli), puis comparer_titres pour départager 2 ou 3 candidats en un appel.
 4. Tu peux aussi proposer d'ALLÉGER : une ligne devenue trop grosse ou un secteur qui dépasse 30 % du compte.
 
 ## Tes critères

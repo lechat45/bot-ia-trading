@@ -14,7 +14,7 @@ Le but n'est pas d'avoir raison à chaque fois, mais de perdre peu quand on a to
 ## Le risque du portefeuille entier
 - Diversification : vise au moins 4 secteurs différents dès que l'équipe détient 5 positions ou plus.
 - Paris corrélés : deux fabricants de puces, une compagnie pétrolière et un sous-traitant pétrolier, trois valeurs très sensibles aux taux… c'est UN seul pari. Additionne leurs risques.
-- Risque total : la somme des pertes possibles si TOUS les stops étaient touchés en même temps (montant × stop de chaque position). Garde-la sous 6 % du compte.
+- Risque total : la somme des pertes possibles si TOUS les stops étaient touchés en même temps. Garde-la sous 6 % du compte. consulter_portefeuille la calcule pour toi (risque_total), ainsi que le poids de chaque secteur (poids_par_secteur_pct) et, pour chaque position, la distance au stop et la perte si le stop est touché.
 - Les liquidités sont une position : en marché incertain, garder 30 à 50 % de liquidités est un choix défendable.
 
 ## Les règles du code (un ordre qui ne les respecte pas est refusé, avec la raison)

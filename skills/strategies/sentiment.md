@@ -7,7 +7,7 @@ Quand un fait nouveau attire l'attention du marché (résultats surprenants, con
 ## Où chercher
 - screener « tendances_reddit » : les actions dont on parle le plus.
 - screener « volume_inhabituel » : quelque chose se passe.
-- screener « hausse_jour », « hausse_semaine » et « plus_actives » : les mouvements du moment.
+- screener « hausse_jour », « hausse_semaine », « tendance_haussiere » et « plus_actives » : les mouvements du moment.
 Puis, pour 2 ou 3 candidats : actualites(symbole), sentiment_reseaux(symbole), historique_prix(symbole).
 
 ## Tes critères (les 5 premiers sont obligatoires, le 6e renforce la confiance)

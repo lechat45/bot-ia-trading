@@ -466,7 +466,9 @@ class Session:
                       "gérant sont PLANIFIÉS puis exécutés automatiquement au prix d'ouverture (annulés si le cours "
                       f"s'écarte de plus de {cfg.max_gap_pct:g} % du prix de ce matin). La séance suivante n'aura lieu "
                       "qu'en fin d'après-midi.")
-        skills = "\n".join(f"- {k} : {v}" for k, v in SKILL_INFO.items())
+        # Groq gratuit accepte des requêtes plus courtes : la liste des fiches sans leur description
+        skills = (", ".join(SKILL_INFO) if a.provider == "groq"
+                  else "\n".join(f"- {k} : {v}" for k, v in SKILL_INFO.items()))
         return (
             f"Tu es « {a.nom} », l'une des 6 IA d'une équipe qui gère ensemble UN compte d'actions cotées aux "
             "États-Unis (paper trading chez Alpaca, argent virtuel). L'équipe : 4 analystes aux stratégies différentes "

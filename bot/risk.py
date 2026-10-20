@@ -28,6 +28,19 @@ def _done(journal, aid, sym, actions, since: dt.datetime) -> bool:
                and e.get("ts", "") >= since.isoformat() for e in journal)
 
 
+# Part du compte risquée (perdue si le stop est touché) selon la confiance : fiche taille-de-position.
+RISQUE_PAR_CONFIANCE = {"faible": 0.4, "moyen": 0.6, "eleve": 0.9}
+
+
+def montant_selon_risque(valeur: float, stop_pct, confiance=None) -> float | None:
+    """Montant d'un achat calculé par le code : (valeur du compte × risque accepté) ÷ distance au stop."""
+    sl = _num(stop_pct)
+    if not valeur or not sl or sl <= 0:
+        return None
+    risk = RISQUE_PAR_CONFIANCE.get(str(confiance or "moyen").lower().replace("é", "e"), RISQUE_PAR_CONFIANCE["moyen"])
+    return round(valeur * risk / sl, 0)
+
+
 def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pct, tp_pct,
               journal: list, reserved: float = 0.0, clamp: bool = False, frein: str | None = None,
               secteur: str | None = None, secteur_valeur: float = 0.0, jours_resultats=None):

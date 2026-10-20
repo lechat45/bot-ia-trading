@@ -20,7 +20,7 @@ Regarde la réaction du cours depuis la publication (historique_prix : perf_1j_p
 - Date introuvable après une recherche : écris « inconnue » et avance. Ne cherche pas la même date plusieurs fois (fiche biais-et-erreurs).
 
 ## 4. Utiliser les bons outils
-- actualites(symbole) : le fil financier en direct sur une action. C'est le premier réflexe, gratuit en quotas.
+- actualites(symbole) : le fil financier en direct sur une action (Alpaca), complété par les articles de la grande presse trouvés par Google Actualités (repérés par « Google Actualités » dans la source). C'est le premier réflexe, gratuit en quotas.
 - actualites() sans symbole : les dernières nouvelles du marché (le résumé du marché t'en donne déjà les grands titres).
 - recherche_web : une question précise, quand le fil ne suffit pas (fiche recherche-web).
 - lire_page : ouvrir la source d'origine (communiqué, article) avant de te fier à un titre.

@@ -11,6 +11,9 @@ montant = (valeur du compte × risque accepté) ÷ distance au stop
   - confiance élevée : 0,75 à 1 %. Jamais plus de 1 % sur une seule idée.
 - La distance au stop est le stop_loss_pct de l'ordre.
 
+## Le code peut le calculer pour toi
+Si tu ne donnes pas de montant_usd à proposer_ordre ou passer_ordre, le code applique cette formule avec : confiance faible 0,4 %, moyenne 0,6 %, élevée 0,9 % du compte. Le résultat est ramené aux limites, et la réponse indique le risque réellement pris (risque_pct_du_compte). C'est la façon la plus sûre d'éviter une erreur de calcul.
+
 ## Exemples avec un compte de 100 000 $
 - Confiance moyenne (0,5 %), stop à 5 % : 100 000 × 0,005 ÷ 0,05 = 10 000 $.
 - Confiance élevée (1 %), stop à 8 % : 100 000 × 0,01 ÷ 0,08 = 12 500 $.

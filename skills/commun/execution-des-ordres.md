@@ -4,11 +4,12 @@
 proposer_ordre(action, symbole, montant_usd, stop_loss_pct, take_profit_pct, these, confiance)
 - action : « acheter » ou « vendre » (pour vendre une position du compte, donne pourcentage au lieu de montant_usd : 100 = tout, 50 = la moitié).
 - confiance : « faible », « moyen » ou « eleve ».
+- MONTANT FACULTATIF : sans montant_usd, le code calcule le montant d'un achat selon ta confiance et ton stop (fiche taille-de-position) et le ramène aux limites. La réponse indique toujours risque_pct_du_compte (la perte si le stop est touché, en % du compte) et ratio_gain_perte.
 - 3 propositions au maximum par séance, un seul titre par proposition. Les garde-fous vérifient tout de suite : un montant trop élevé est ramené à la limite, une règle non respectée te revient avec sa raison.
 - Tu reçois un identifiant (ex. « qualite-1 ») : le critique donnera son avis dessus, puis le gérant décidera.
 
 ## Gérant : passer_ordre
-- Achat : passer_ordre(action="acheter", symbole, montant_usd, stop_loss_pct, take_profit_pct, these, source). Indique dans source l'identifiant de la proposition retenue (ex. « qualite-1 »), ou rien si l'idée est la tienne.
+- Achat : passer_ordre(action="acheter", symbole, montant_usd, stop_loss_pct, take_profit_pct, these, source, confiance). Comme pour une proposition, montant_usd peut être omis : il est alors calculé selon la confiance et le stop. Indique dans source l'identifiant de la proposition retenue (ex. « qualite-1 »), ou rien si l'idée est la tienne.
 - Vente : passer_ordre(action="vendre", symbole, pourcentage, these). La protection est remise automatiquement sur ce qui reste.
 - Le nombre d'actions est entier : le montant est arrondi à l'action inférieure. Les pourcentages de stop et d'objectif s'appliquent au PRIX D'EXÉCUTION.
 - 5 ordres au maximum par séance, un seul par titre.
