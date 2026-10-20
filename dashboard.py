@@ -6,6 +6,7 @@ Sans clés Alpaca dans .env, il démarre en mode DÉMO avec de fausses données.
 Le serveur n'écoute que sur ta machine (127.0.0.1) et n'affiche jamais les clés.
 """
 import argparse
+import datetime as dt
 import collections
 import json
 import os
@@ -20,7 +21,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from bot import classement as ranking
-from bot import memory
+from bot import memory, tools
 from bot.agents import ACCOUNT, AGENTS
 from bot.comptes import PATH as COMPTES_PATH
 from bot.comptes import Comptes
@@ -169,6 +170,43 @@ def performance(spy: list) -> dict:
     return out
 
 
+SECTEURS_FR = {"Technology": "Technologie", "Communication Services": "Communication",
+               "Consumer Cyclical": "Consommation cyclique", "Consumer Defensive": "Consommation de base",
+               "Financial Services": "Finance", "Healthcare": "Santé", "Industrials": "Industrie",
+               "Energy": "Énergie", "Basic Materials": "Matériaux", "Utilities": "Services publics",
+               "Real Estate": "Immobilier"}
+_secteurs: dict = {}
+
+
+def _secteur(sym: str) -> str:
+    """Secteur d'un titre : la carte de l'univers d'abord, sinon Yahoo Finance (gardé en mémoire)."""
+    if sym not in _secteurs:
+        s = tools.INDUSTRIES.get(sym, {}).get("secteur")
+        if not s:
+            try:
+                s = (tools.fundamentals(sym, dt.date.today()) or {}).get("secteur")
+            except Exception:
+                s = None
+        _secteurs[sym] = SECTEURS_FR.get(s, s or "Autre")
+    return _secteurs[sym]
+
+
+def repartition(e: dict) -> dict:
+    """Répartition du compte de l'équipe par secteur, liquidités comprises (camembert de l'Accueil)."""
+    total = e.get("valeur") or 0
+    groups: dict = {}
+    for p in e.get("positions") or []:
+        g = groups.setdefault(_secteur(p["symbole"]), {"valeur": 0.0, "symboles": []})
+        g["valeur"] += p.get("valeur") or 0
+        g["symboles"].append(p["symbole"])
+    rows = [{"secteur": k, "valeur": round(v["valeur"], 2), "symboles": v["symboles"],
+             "pct": round(v["valeur"] / total * 100, 1) if total else 0} for k, v in groups.items()]
+    rows.sort(key=lambda r: -r["valeur"])
+    cash = e.get("cash") or 0
+    return {"secteurs": rows, "liquidites": round(cash, 2), "liquidites_pct": round(cash / total * 100, 1) if total else 0,
+            "total": round(total, 2)}
+
+
 def alertes() -> dict:
     """Frein d'urgence et écarts avec Alpaca relevés lors de la dernière séance réelle."""
     for p in sorted((MEM / "sessions").glob("*.json"), key=lambda p: p.stem, reverse=True):
@@ -218,6 +256,7 @@ def overview() -> dict:
         prices = {p["symbol"]: float(p["current_price"]) for p in broker.positions()}
         out["equipe"] = _compte(out["compte"]["equity"], prices)
         out["positions"] = out["equipe"]["positions"]
+        out["repartition"] = repartition(out["equipe"])
         try:  # le S&P 500 (fonds SPY) pour comparer la performance du compte au marché
             spy = [{"t": str(b.get("t", ""))[:10], "c": b["c"]}
                    for b in (broker.bars(["SPY"], days=400) or {}).get("SPY") or []]

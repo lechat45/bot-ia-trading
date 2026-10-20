@@ -155,7 +155,7 @@ window.addEventListener("hashchange", route);
 function renderPage() {
   if (!S.ov) return;
   if (S.page === "accueil") {
-    renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov);
+    renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov); renderRepartition(S.ov);
     renderBilan(S.ov); renderStats(S.ov); renderLecons(S.ov); renderRappelsCard(S.ov); renderSysteme(S.ov);
   }
   if (S.page === "ia") { renderIAList(); renderIAPanel(); renderRanking(S.ov); }
@@ -490,6 +490,70 @@ function renderPlan(o) {
     : "";
   $("#plan-card").innerHTML = orders.length ? `<div class="list">${orders.map(planRow).join("")}</div>`
     : empty("calendar", "Aucun ordre planifié", `Chaque jour de bourse à ${o.limites?.preparation_heure ?? 9} h, l'équipe prépare les ordres de l'ouverture.`);
+}
+
+/* ---------- Accueil : répartition du compte par secteur (anneau) ----------
+   Les 3 plus gros secteurs en couleur (seules 3 teintes restent distinguables entre elles quand n'importe
+   quelles parts se touchent, daltoniens compris), les suivants regroupés en « Autres secteurs », les
+   liquidités en gris clair. La légende donne nom, %, montant et titres : rien ne repose sur la couleur seule. */
+function renderRepartition(o) {
+  const box = $("#repart-card");
+  const r = o.repartition;
+  if (!r || !r.total) {
+    box.innerHTML = empty("wallet", "Pas encore de données", "La répartition apparaîtra avec les données du compte.");
+    return;
+  }
+  const secs = r.secteurs || [];
+  const top = secs.slice(0, 3), rest = secs.slice(3);
+  const parts = top.map((s, i) => ({ nom: s.secteur, valeur: s.valeur, pct: s.pct, titres: s.symboles, fill: `var(--viz-${i + 1})` }));
+  if (rest.length) {
+    parts.push({ nom: "Autres secteurs", valeur: rest.reduce((a, s) => a + s.valeur, 0), pct: rest.reduce((a, s) => a + s.pct, 0),
+      titres: rest.flatMap((s) => s.symboles), detail: rest.map((s) => s.secteur).join(", "), fill: "var(--viz-autres)" });
+  }
+  if (r.liquidites > 0) parts.push({ nom: "Liquidités", valeur: r.liquidites, pct: r.liquidites_pct, titres: [], fill: "var(--viz-cash)" });
+
+  const S0 = 168, C = S0 / 2, R1 = 78, R0 = 54, gap = parts.length > 1 ? 2 / ((R0 + R1) / 2) : 0;  // 2 px d'écart entre les parts
+  const pt = (rad, a) => `${(C + rad * Math.sin(a)).toFixed(2)},${(C - rad * Math.cos(a)).toFixed(2)}`;
+  const arc = (a0, a1) => {
+    if (a1 - a0 >= Math.PI * 2 - 1e-6) {  // une seule part : l'anneau entier
+      return `M${pt(R1, 0)} A${R1},${R1} 0 1 1 ${pt(R1, Math.PI)} A${R1},${R1} 0 1 1 ${pt(R1, 0)} M${pt(R0, 0)} A${R0},${R0} 0 1 0 ${pt(R0, Math.PI)} A${R0},${R0} 0 1 0 ${pt(R0, 0)} Z`;
+    }
+    const big = a1 - a0 > Math.PI ? 1 : 0;
+    return `M${pt(R1, a0)} A${R1},${R1} 0 ${big} 1 ${pt(R1, a1)} L${pt(R0, a1)} A${R0},${R0} 0 ${big} 0 ${pt(R0, a0)} Z`;
+  };
+  const sum = parts.reduce((a, p) => a + p.valeur, 0) || 1;
+  let a = 0;
+  const paths = parts.map((p, i) => {
+    const span = (p.valeur / sum) * Math.PI * 2;
+    const a0 = a + (span > gap ? gap / 2 : 0), a1 = a + span - (span > gap ? gap / 2 : 0);
+    a += span;
+    return `<path class="viz-seg" data-i="${i}" d="${arc(a0, a1)}" fill="${p.fill}" fill-rule="evenodd"></path>`;
+  }).join("");
+  const investi = 100 - (r.liquidites_pct || 0);
+  const label = parts.map((p) => `${p.nom} ${nb(p.pct, 1)} %`).join(", ");
+  box.innerHTML = `<div class="viz-donut">
+      <div class="viz-ring">
+        <svg viewBox="0 0 ${S0} ${S0}" role="img" aria-label="Répartition du compte : ${esc(label)}">${paths}</svg>
+        <div class="viz-center"><b>${esc(nb(investi, 0))} %</b><span>investi</span></div>
+        <div class="viz-tip" hidden></div>
+      </div>
+      <ul class="viz-legend">${parts.map((p, i) => `<li data-i="${i}"><i style="background:${p.fill}"></i>
+        <span class="viz-name">${esc(p.nom)}<small>${esc(p.titres.length ? p.titres.join(", ") : p.nom === "Liquidités" ? "non investies" : "")}</small></span>
+        <span class="viz-val"><b>${esc(nb(p.pct, 1))} %</b><small>${esc(money(p.valeur, 0))}</small></span></li>`).join("")}</ul>
+    </div>`;
+  const tip = $(".viz-tip", box), segs = $$(".viz-seg", box), rows = $$(".viz-legend li", box);
+  const focus = (i) => {
+    segs.forEach((s) => s.classList.toggle("dim", i !== null && +s.dataset.i !== i));
+    rows.forEach((li) => li.classList.toggle("on", +li.dataset.i === i));
+    if (i === null) { tip.hidden = true; return; }
+    const p = parts[i];
+    tip.innerHTML = `<b>${esc(p.nom)}</b><span>${esc(nb(p.pct, 1))} % du compte · ${esc(money(p.valeur, 0))}</span>${p.titres.length ? `<span>${esc(p.titres.join(", "))}</span>` : ""}${p.detail ? `<span>${esc(p.detail)}</span>` : ""}`;
+    tip.hidden = false;
+  };
+  [...segs, ...rows].forEach((el) => {
+    el.addEventListener("mouseenter", () => focus(+el.dataset.i));
+    el.addEventListener("mouseleave", () => focus(null));
+  });
 }
 
 /* ====================================================================== Direct (séance en cours) */
