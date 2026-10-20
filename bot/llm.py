@@ -316,6 +316,10 @@ class Mistral(Groq):
                               json=body, timeout=180)
         except requests.Timeout:
             raise ModelUnavailable(f"Mistral {model} : délai dépassé")
+        if r.status_code == 429 and r.headers.get("x-ratelimit-limit-req-minute") == "0":
+            # clé valide, mais aucune formule active : inutile de réessayer avant longtemps
+            raise RateLimited(3600, "limite Mistral à 0 requête par minute : active la formule gratuite "
+                                    "« Experiment » dans la console Mistral")
         if r.status_code == 429:
             raise RateLimited(_retry_after(r, 15), r.text)
         if r.status_code in (404, 500, 502, 503):
@@ -346,7 +350,7 @@ DEFAULT_MODELS = {
     "gemini": ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3-flash-preview",
                "gemini-3.1-flash-lite"],
     "groq": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"],
-    "mistral": ["mistral-medium-latest", "mistral-small-latest", "mistral-large-latest"],
+    "mistral": ["mistral-medium-latest", "mistral-small-latest", "ministral-14b-latest"],
 }
 # Quand le fournisseur d'une IA est saturé : à qui demander ensuite (Groq, le plus chargé, en dernier)
 FALLBACK = {"gemini": ("mistral", "groq"), "groq": ("mistral", "gemini"), "mistral": ("gemini", "groq")}

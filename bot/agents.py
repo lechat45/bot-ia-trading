@@ -65,7 +65,7 @@ AGENTS = [
           ["openai/gpt-oss-20b", "qwen/qwen3.8-27b", "openai/gpt-oss-120b"], "critique", ""),
     Agent("gerant", "Gérant", "gerant", "gemini", 2, GEMINI, "gerant", "Claude"),
 ]
-MISTRAL_MODELS = ["mistral-medium-latest", "mistral-small-latest", "mistral-large-latest"]
+MISTRAL_MODELS = ["mistral-medium-latest", "mistral-small-latest", "ministral-14b-latest"]
 MISTRAL_AGENTS = ("contrarien", "critique")
 
 
