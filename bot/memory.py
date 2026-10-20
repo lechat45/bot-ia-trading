@@ -127,6 +127,16 @@ def read_propositions() -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------------- veille
+def read_veille() -> dict:
+    return _read_json(ROOT / "veille.json", {})
+
+
+def write_veille(data: dict) -> None:
+    """Ce que la veille a déjà signalé aujourd'hui (pour ne pas prévenir deux fois) et ses réveils."""
+    _write(ROOT / "veille.json", json.dumps(data, ensure_ascii=False, indent=1))
+
+
 # ---------------------------------------------------------------------- quotas des IA
 def read_quotas() -> dict:
     return _read_json(ROOT / "quotas.json", {})

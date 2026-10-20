@@ -3,6 +3,7 @@ import json
 import sys
 import tempfile
 import zipfile
+from types import SimpleNamespace
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -75,6 +76,7 @@ def test_preparation_tardive_enchaine_l_ouverture():
     import main
 
     runs, now = [], dt.datetime.now(dt.timezone.utc)
+    cfg = SimpleNamespace(ouverture_delai_min=10)
 
     class Clock:
         def __init__(self, minutes):
@@ -97,14 +99,41 @@ def test_preparation_tardive_enchaine_l_ouverture():
             day = main._ny_date(Clock(minutes).nxt).isoformat()
             memory.write_plan({"date": day, "ordres": [{"statut": "en_attente"}]})
             runs.clear()
-            main.chain_opening(None, Clock(minutes), None)
+            main.chain_opening(cfg, Clock(minutes), None)
             assert len(runs) == expected and (not runs or runs[0] == ("ouverture", False)), (minutes, runs)
         memory.write_plan({"date": day, "execute_le": "déjà", "ordres": [{"statut": "en_attente"}]})
         runs.clear()
-        main.chain_opening(None, Clock(120), None)
+        main.chain_opening(cfg, Clock(120), None)
         assert not runs  # plan déjà exécuté : rien à refaire
     finally:
         main.Session, main.wait_for_open, main.time.sleep = old
+
+
+def test_veille_reveille_le_gerant_une_seule_fois():
+    from bot import agents, notify
+    from bot import comptes as comptes_mod
+    from bot.config import Config
+    from bot.fakes import FakeAlpaca, FakeRouter
+
+    comptes_mod.PATH = TMP / "comptes.json"  # jamais le vrai registre
+    sent = []
+    notify.send = lambda titre, message, **kw: sent.append(message) if titre.startswith("Veille") else None
+    events = [("baisse:AAPL", "AAPL -5,0 % depuis la clôture d'hier")]
+    old = agents.Session.watch_events
+    agents.Session.watch_events = lambda self: list(events)
+    cfg = Config(gemini_keys=[], groq_keys=[], alpaca_key="", alpaca_secret="", paper=True, live_refused=False,
+                 dry_run=False)
+    try:
+        def veille():
+            return agents.Session(cfg, FakeAlpaca(open_=True), FakeRouter(), "veille", False, offline=True).run()
+        assert "gerant" in veille() and len(sent) == 1  # événement nouveau : alerte + gérant réveillé
+        assert veille() == {} and len(sent) == 1  # le même événement n'est pas signalé deux fois
+        cfg.veille_max_reveils = 1
+        events.append(("stop:AAPL", "AAPL à moins de 1,5 % de son stop"))
+        assert veille() == {} and len(sent) == 2  # alerte, mais plus de réveil aujourd'hui
+        assert memory.read_veille()["reveils"] == 1
+    finally:
+        agents.Session.watch_events = old
 
 
 def test_registre_des_propositions():

@@ -87,11 +87,15 @@ BRIEF_MACRO = [("TLT", "obligations US à 20 ans"), ("GLD", "or"), ("USO", "pét
 BRIEF_SECTEURS = [("XLK", "technologie"), ("XLC", "communication"), ("XLY", "consommation cyclique"),
                   ("XLP", "consommation de base"), ("XLF", "finance"), ("XLV", "santé"), ("XLI", "industrie"),
                   ("XLE", "énergie"), ("XLB", "matériaux"), ("XLU", "services publics"), ("XLRE", "immobilier")]
+IMPORTANT_NEWS = re.compile(r"\b(guidance|downgrade[sd]?|FDA|SEC|investigat\w*|probes?|lawsuits?|recalls?|acqui\w+|"
+                            r"mergers?|CEO|resign\w*|bankrupt\w*|halt\w*|cuts?|plunge[sd]?|tumble[sd]?|sinks?|warn\w*)\b",
+                            re.I)
 ANALYST_NOTE = re.compile(r"\b(Maintains|Reiterates|Upgrades|Downgrades|Initiates|Assumes|Price Target)\b", re.I)
 MODES = {
     "preparation": "Préparation (bourse fermée, ordres planifiés pour l'ouverture)",
     "ouverture": "Ouverture (exécution des ordres planifiés)",
     "suivi": "Suivi (bourse ouverte, ordres immédiats)",
+    "veille": "Veille (événement pendant la séance de bourse)",
 }
 ROLES = {
     "analyste": ("Tu es l'un des 4 ANALYSTES de l'équipe. Tu ne passes pas d'ordre : tu cherches des idées selon "
@@ -237,6 +241,78 @@ class Session:
         if len(eq) >= 6 and (week := (equity / eq[-6] - 1) * 100) <= -cfg.frein_semaine_pct:
             return f"le compte a perdu {-week:.1f} % en une semaine (seuil {cfg.frein_semaine_pct:g} %)"
         return None
+
+    def watch(self) -> dict:
+        """Veille sans IA : signale les événements nouveaux du jour et ne réveille le gérant que s'il le faut."""
+        today = self.now.astimezone(PARIS).strftime("%Y-%m-%d")
+        state = memory.read_veille()
+        if state.get("date") != today:
+            state = {"date": today, "reveils": 0, "vus": []}
+        events = [(k, t) for k, t in self.watch_events() if k not in state["vus"]]
+        if not events:
+            log.info("Veille : rien de nouveau sur le compte.")
+            if not self.dry_run and self.stops_suiveurs:
+                self.comptes.save()
+            return {}
+        texts = [t for _, t in events]
+        state["vus"] += [k for k, _ in events]
+        wake = state["reveils"] < self.cfg.veille_max_reveils
+        log.info("Veille : %s", " ; ".join(texts))
+        if not self.dry_run:
+            notify.send("Veille : événement sur le compte", "\n".join(texts)[:800]
+                        + ("\nLe gérant est réveillé pour décider." if wake else "\nRéveils du jour épuisés : à toi de voir."),
+                        tags="eyes", priorite="high")
+        if wake:
+            state["reveils"] += 1
+            self.allegee, self.suivi_raisons = "veille : " + " ; ".join(texts), texts
+            self.brief, self.track = self.market_brief(), self.track_record()
+            self.results[GERANT.id] = self.run_agent(GERANT)
+            self.finish()
+        elif not self.dry_run:
+            self.comptes.save()
+        if not self.dry_run:
+            memory.write_veille(state)
+        return self.results
+
+    def watch_events(self) -> list[tuple[str, str]]:
+        """Les événements qui méritent l'attention du gérant : (clé pour ne les signaler qu'une fois, texte)."""
+        cfg, out = self.cfg, []
+        val = self.comptes.valuation(ACCOUNT, self.market.prices(self.comptes.symbols()))
+        held, moved = [], {}
+        for p in val["positions"]:
+            if p.get("en_attente"):
+                continue
+            sym = p["symbole"]
+            held.append(sym)
+            m = self._moves(sym)
+            moved[sym] = m["jour"] if m else 0.0
+            if m and m["jour"] <= -cfg.veille_baisse_pct:
+                out.append((f"baisse:{sym}", f"{sym} {m['jour']:+.1f} % depuis la clôture d'hier"))
+            if p.get("stop") and p["prix"] and (p["prix"] / p["stop"] - 1) * 100 <= 1.5:
+                out.append((f"stop:{sym}", f"{sym} à moins de 1,5 % de son stop ({p['stop']:.2f} $)"))
+        spy = self._moves("SPY")
+        if spy and spy["jour"] <= -cfg.veille_marche_pct:
+            out.append(("marche", f"S&P 500 {spy['jour']:+.1f} % aujourd'hui"))
+        if self.frein:
+            out.append(("frein", f"frein d'urgence : {self.frein}"))
+        since = (self.now - dt.timedelta(minutes=40)).isoformat()
+        for e in self.comptes.take_events(ACCOUNT, since):
+            if "Stop loss déclenché" in e or "Objectif de gain atteint" in e:
+                out.append(("exec:" + e[:60], e))
+        if held:
+            try:
+                news = self.alpaca.news(held, limit=20)
+            except Exception:
+                news = []
+            for n in news:
+                head = n.get("headline") or ""
+                syms = [s for s in n.get("symbols") or [] if s in held]
+                if not syms or str(n.get("created_at", "")) < since or ANALYST_NOTE.search(head):
+                    continue
+                # une nouvelle compte si elle est forte, ou si le titre bouge déjà de 2 % ou plus
+                if IMPORTANT_NEWS.search(head) or any(abs(moved.get(s, 0)) >= 2 for s in syms):
+                    out.append((f"news:{n.get('id')}", f"Nouvelle sur {', '.join(syms)} : {head[:140]}"))
+        return out
 
     def apply_trailing_stops(self):
         """Stop suiveur codé (pas une décision d'IA) : remonte le stop des positions en gain."""
@@ -401,13 +477,13 @@ class Session:
             equity = float(account["equity"])
             self.comptes = Comptes.load([ACCOUNT], equity, persist=not self.dry_run)
             self.comptes.sync(self.alpaca)
-            if not self.offline:
+            if not self.offline and self.mode != "veille":
                 self.check_ledger()
             self.frein = self.emergency_brake(equity, float(account.get("last_equity") or 0))
             if self.frein:
                 log.warning("Frein d'urgence : %s", self.frein)
                 self.comptes.event(ACCOUNT, f"Frein d'urgence actif : {self.frein}")
-                if not self.dry_run:
+                if not self.dry_run and self.mode != "veille":  # la veille le signale une fois par jour
                     notify.send("Frein d'urgence", f"Aucun achat pendant cette séance : {self.frein}.",
                                 tags="rotating_light", priorite="high")
             self.broker = Broker(self.alpaca, self.comptes, self.dry_run)
@@ -427,6 +503,8 @@ class Session:
                     r["statut"] = "expire"
             if self.market_open:  # cours de la séance régulière uniquement
                 self.apply_trailing_stops()
+            if self.mode == "veille":
+                return self.watch()
 
             if self.mode == "ouverture":
                 self.plan = memory.read_plan(simulation=self.offline)
@@ -537,6 +615,12 @@ class Session:
             events = self.comptes.take_events(ACCOUNT, acct.get("derniere_seance"))
             txt += ("CE QUI S'EST PASSÉ SUR LE COMPTE DEPUIS LA DERNIÈRE SÉANCE :\n"
                     + ("\n".join(f"- {e}" for e in events) or "- rien de particulier") + "\n\n")
+            if self.mode == "veille":
+                return txt + (f"RÉVEIL PAR LA VEILLE : {'; '.join(self.suivi_raisons)}.\n"
+                              "Le programme surveille le compte toutes les 30 minutes et t'a réveillé pour cet "
+                              "événement. Vérifie la ou les positions concernées (actualites, historique_prix) et "
+                              "décide : garder, alléger, vendre ou remonter le stop. Pas de nouvel achat sauf raison "
+                              "évidente. Note ta décision dans le journal de bord avec ecrire_notes, puis termine.")
             if self.allegee:
                 return txt + (f"SÉANCE DE SUIVI ALLÉGÉE ({self.allegee}) : les analystes et le critique ne sont pas "
                               "sollicités, pour économiser les quotas des IA. Vérifie les positions (thèse, actualité, "

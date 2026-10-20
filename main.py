@@ -17,6 +17,7 @@ complète est faite automatiquement avant la séance.
 import argparse
 import datetime as dt
 import logging
+import os
 import sys
 import time
 from zoneinfo import ZoneInfo
@@ -76,8 +77,24 @@ def chain_opening(cfg, alpaca, router) -> None:
     if not wait_for_open(alpaca, int(wait) + 15):
         log.info("La bourse n'a pas ouvert dans le délai : abandon.")
         return
-    time.sleep(20)  # laisser passer les premières secondes de cotation
+    opening_pause(cfg)
     Session(cfg, alpaca, router, "ouverture", False).run()
+
+
+def opening_pause(cfg) -> None:
+    """Les premières minutes après l'ouverture sont les plus agitées : on laisse les prix se calmer avant d'acheter."""
+    minutes = max(0, cfg.ouverture_delai_min)
+    if minutes:
+        log.info("Bourse ouverte : achats dans %d minutes, le temps que les premiers prix se calment.", minutes)
+    time.sleep(max(20, minutes * 60))
+
+
+def publish(yes: bool) -> None:
+    """Indique au workflow GitHub s'il faut republier le site après ce lancement."""
+    out = os.getenv("GITHUB_OUTPUT")
+    if out:
+        with open(out, "a", encoding="utf-8") as f:
+            f.write(f"publier={'oui' if yes else 'non'}\n")
 
 
 def wait_for_open(alpaca, max_minutes: int) -> bool:
@@ -101,7 +118,7 @@ def wait_for_open(alpaca, max_minutes: int) -> bool:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=["auto", "preparation", "ouverture", "suivi"], default="auto")
+    ap.add_argument("--mode", choices=["auto", "preparation", "ouverture", "suivi", "veille"], default="auto")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--offline", action="store_true")
@@ -117,7 +134,7 @@ def main() -> int:
         from bot.fakes import FakeAlpaca, FakeRouter
 
         cfg.paper = True
-        alpaca, router, dry_run = FakeAlpaca(open_=args.mode in ("ouverture", "suivi")), FakeRouter(), True
+        alpaca, router, dry_run = FakeAlpaca(open_=args.mode in ("ouverture", "suivi", "veille")), FakeRouter(), True
     else:
         problems = cfg.problems()
         if problems:
@@ -134,7 +151,7 @@ def main() -> int:
 
     if args.verifier:
         return 0 if verification.run(cfg, alpaca, router, offline=args.offline)["ok"] else 1
-    if not args.offline and not memory.read_installation().get("ok"):
+    if not args.offline and args.mode != "veille" and not memory.read_installation().get("ok"):
         log.info("Première utilisation (ou dernière vérification en échec) : vérification complète avant la séance.")
         if not verification.run(cfg, alpaca, router)["ok"]:
             log.error("Vérification en échec : séance annulée. Détail dans memoire/installation.json.")
@@ -185,13 +202,18 @@ def main() -> int:
                 if not wait_for_open(alpaca, args.attente_max):
                     log.info("La bourse n'a pas ouvert dans le délai : abandon.")
                     return 0
-                time.sleep(20)  # laisser passer les premières secondes de cotation
+                opening_pause(cfg)
 
     if mode == "suivi" and is_open and not args.force and not dry_run:
         today = now.astimezone(PARIS).strftime("%Y-%m-%d")
         if any((memory.ROOT / "sessions").glob(f"{today}_*_suivi.json")):
             log.info("La séance de suivi du jour a déjà eu lieu.")
             return 0
+
+    if mode == "veille" and not is_open:
+        log.info("Bourse fermée : pas de veille.")
+        publish(False)
+        return 0
 
     if mode == "suivi" and not is_open:
         if not args.force:
@@ -200,8 +222,11 @@ def main() -> int:
         log.info("Bourse fermée + --force : passage en simulation.")
         dry_run = True
 
-    results = Session(cfg, alpaca, router, mode, dry_run, offline=args.offline, complet=args.force).run()
+    session = Session(cfg, alpaca, router, mode, dry_run, offline=args.offline, complet=args.force)
+    results = session.run()
     log.info("Séance terminée (%d IA).", len(results))
+    if mode == "veille":  # une veille sans événement ne republie pas le site
+        publish(bool(results) or bool(session.stops_suiveurs))
     if mode == "preparation" and not dry_run and not args.offline:
         chain_opening(cfg, alpaca, router)
     return 0

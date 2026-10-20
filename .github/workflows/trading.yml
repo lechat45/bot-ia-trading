@@ -28,7 +28,7 @@ on:
       mode:
         description: "Séance à lancer (auto = préparation si la bourse est fermée, suivi si elle est ouverte ; verification = tester l installation)"
         type: choice
-        options: [auto, preparation, suivi, ouverture, verification]
+        options: [auto, preparation, suivi, ouverture, veille, verification]
         default: auto
       dry_run:
         description: "Simulation (aucun ordre envoyé, rien d'enregistré)"
@@ -65,6 +65,7 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: Séance des IA
+        id: seance
         env:
           GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
@@ -112,7 +113,8 @@ jobs:
           fi
 
       - name: Construire le tableau de bord en ligne
-        if: always()
+        # une veille sans événement ne republie pas le site (elle tourne toutes les 30 minutes)
+        if: ${{ always() && steps.seance.outputs.publier != 'non' }}
         env:
           ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
@@ -127,7 +129,7 @@ jobs:
         run: python build_site.py
 
       - name: Publier dans la branche gh-pages (GitHub Pages)
-        if: ${{ always() && !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
+        if: ${{ always() && steps.seance.outputs.publier != 'non' && !github.event.repository.private && vars.CLOUDFLARE_PROJECT == '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash .github/publier-gh-pages.sh

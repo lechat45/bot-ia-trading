@@ -67,6 +67,11 @@ class Config:
     suivi_complet: bool = False  # True : toute l'équipe à chaque suivi, même sans événement
     suivi_mouvement_pct: float = 4.0  # une position qui bouge de 4 % dans la journée réveille l'équipe
     suivi_marche_pct: float = 1.5  # … de même si le S&P 500 bouge de 1,5 %
+    # Veille toutes les 30 minutes pendant la bourse (sans IA, sauf événement)
+    veille_baisse_pct: float = 4.0  # une position qui perd 4 % dans la journée
+    veille_marche_pct: float = 2.0  # le S&P 500 qui perd 2 % dans la journée
+    veille_max_reveils: int = 3  # réveils du gérant par jour au plus
+    ouverture_delai_min: int = 10  # minutes d'attente après l'ouverture avant d'acheter (prix plus calmes)
     max_web_searches: int = 3  # recherches Google par IA et par séance
     # Facultatif : une clé Mistral gratuite (formule Experiment) décharge Groq du Contrarien et du critique
     mistral_keys: list = field(default_factory=list)
@@ -97,6 +102,9 @@ class Config:
             stop_suiveur_pct=_float("STOP_SUIVEUR_PCT", 5.0),
             stop_suiveur_distance_pct=_float("STOP_SUIVEUR_DISTANCE_PCT", 5.0),
             suivi_complet=_bool("SUIVI_COMPLET", False),
+            veille_baisse_pct=_float("VEILLE_BAISSE_PCT", 4.0),
+            veille_max_reveils=int(_float("VEILLE_MAX_REVEILS", 3)),
+            ouverture_delai_min=int(_float("OUVERTURE_DELAI_MIN", 10)),
             preparation_heure=int(_float("PREPARATION_HEURE", 9)),
             max_steps_analyste=int(_float("MAX_STEPS_ANALYSTE", 10)),
             max_steps_analyste_suivi=int(_float("MAX_STEPS_ANALYSTE_SUIVI", 6)),
