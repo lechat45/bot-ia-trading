@@ -176,21 +176,31 @@ Le rapport s'ouvre dans `memoire/sessions/`.
    - `TAVILY_API_KEY` : une **recherche web complète de secours** (réponse rédigée et liens) quand le
      quota de Gemini est épuisé. 1 000 recherches gratuites par mois, sans carte bancaire, sur
      https://tavily.com. Sans elle, le secours passe par Google Actualités et Wikipédia.
+   - `MISTRAL_API_KEY` : un **3e fournisseur d'IA gratuit**. Avec cette clé, le Contrarien et le critique
+     travaillent avec Mistral, ce qui décharge Groq (ses 3 clés partagent un seul quota). Formule gratuite
+     « Experiment » sur https://console.mistral.ai, avec vérification par téléphone ; Mistral peut
+     utiliser les requêtes gratuites pour entraîner ses modèles (ici : des analyses de marché, sans donnée
+     personnelle). Sans clé, rien ne change.
 6. Facultatif : **un déclencheur à l'heure exacte**. GitHub retarde parfois ses horaires, ou en oublie
    un quand il est surchargé. Le service gratuit https://cron-job.org peut lancer les séances à la
    minute près, en plus des horaires de GitHub (une séance déjà faite n'est jamais refaite) :
    1. Crée un jeton GitHub à accès précis (**Settings → Developer settings → Fine-grained tokens**),
       limité à ce dépôt, avec la permission **Actions : Read and write**. C'est le même type de jeton
       que celui du bouton « Forcer le lancement ».
-   2. Sur cron-job.org, crée 3 tâches, du lundi au vendredi, fuseau **Europe/Paris** : 9 h 00
-      (`preparation`), 14 h 25 (`ouverture` : la séance attend l'ouverture de New York) et 18 h 30
-      (`suivi`). Pour chacune :
+   2. Sur cron-job.org, crée 3 tâches, fuseau **Europe/Paris** : 9 h 02 (`preparation`), 14 h 25
+      (`ouverture` : la séance attend l'ouverture de New York) et 19 h 00 (`suivi`). « Tous les jours »
+      convient : les week-ends et jours fériés, le programme s'arrête seul. Pour chacune :
       - adresse : `https://api.github.com/repos/<ton-pseudo>/<nom-du-depot>/actions/workflows/trading.yml/dispatches`
       - méthode **POST**, en-têtes `Authorization: Bearer <ton jeton>` et `Accept: application/vnd.github+json`
       - corps : `{"ref":"main","inputs":{"mode":"preparation","dry_run":"false","force":"false"}}`
         (remplace `preparation` par `ouverture` ou `suivi`).
    3. `"force":"false"` est indispensable : la séance respecte alors les horaires et ne refait jamais
       une séance déjà faite. Une réponse **204** veut dire que la séance est lancée.
+   4. Facultatif, une 4e tâche pour la **veille** : toutes les 30 minutes de 15 h 30 à 21 h 30, avec
+      `"mode":"veille"` dans le corps. Sans IA, le code vérifie le compte (positions en forte baisse, stop
+      presque touché, nouvelle importante, S&P 500 en chute, stop ou objectif déclenché, frein d'urgence)
+      et ne réveille le gérant qu'en cas d'événement nouveau, 3 fois par jour au plus, avec une
+      notification. Une veille sans événement ne laisse aucune trace (ni séance, ni site republié).
 7. À chaque envoi de code sur GitHub, le workflow **Tests** vérifie tout le programme sans clé
    (garde-fous, mémoire, séances complètes avec de fausses IA, site). Un code cassé est repéré
    avant la séance suivante.
@@ -213,6 +223,19 @@ Le rapport s'ouvre dans `memoire/sessions/`.
   de Gemini est épuisé, la recherche passe tout de suite à **Tavily** (si tu as mis sa clé), sinon à
   **Google Actualités et Wikipédia**, sans aucune clé : l'IA reçoit alors les titres, sources et dates
   des articles au lieu d'une réponse rédigée.
+- **Quotas gardés en mémoire** : un modèle d'IA saturé (quota du jour épuisé, limite de débit) est noté
+  dans `memoire/quotas.json` et sauté d'emblée aux séances suivantes, au lieu d'être réessayé pour rien. Si
+  la moitié des IA démarrent saturées, la séance réduit d'un tiers leurs appels d'outils. La consommation
+  de chaque clé s'affiche dans « État du système ».
+- **Achats après l'ouverture** : les ordres planifiés partent 10 minutes après l'ouverture de New York
+  (`OUVERTURE_DELAI_MIN`), le temps que les premiers prix, très agités, se calment.
+- **Ce que valent les critères du screener** : une fois par semaine, chaque critère est rejoué sur 3 ans de
+  cours des grandes valeurs (les 10 actions signalées chaque semaine, et ce qu'elles ont rapporté 5, 20 et
+  60 séances plus tard, comparé au S&P 500). Les IA reçoivent ces chiffres au début de chaque séance, et
+  le site les affiche sur la page « Les IA » (`memoire/backtest.json`). Un passé ne prédit pas l'avenir.
+- **Portefeuilles fantômes** : chaque analyste a 100 000 $ virtuels qui suivent toutes ses idées,
+  achetées ou non par le gérant, avec leurs stops et objectifs. C'est la compétition des IA d'Aywen, sans
+  risquer le vrai compte ; le résultat s'affiche sur la page « Les IA » et chaque analyste le reçoit.
 - **Archivage** : les 60 dernières séances restent lisibles dans `memoire/sessions/`, les plus
   anciennes sont compressées par mois dans `memoire/archives/`.
 

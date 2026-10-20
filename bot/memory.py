@@ -127,6 +127,15 @@ def read_propositions() -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------------- test des critères du screener
+def read_backtest() -> dict:
+    return _read_json(ROOT / "backtest.json", {})
+
+
+def write_backtest(data: dict) -> None:
+    _write(ROOT / "backtest.json", json.dumps(data, ensure_ascii=False, indent=1))
+
+
 # ---------------------------------------------------------------------- veille
 def read_veille() -> dict:
     return _read_json(ROOT / "veille.json", {})

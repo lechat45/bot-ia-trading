@@ -65,6 +65,37 @@ def test_montant_selon_le_risque():
     assert montant_selon_risque(100_000, 5, None) == 12_000 and montant_selon_risque(100_000, None) is None
 
 
+def test_test_des_criteres_sur_le_passe():
+    import datetime as dt
+    from bot import backtest
+
+    start = dt.date(2023, 1, 2)
+    dates = [(start + dt.timedelta(days=i)).isoformat() for i in range(420)]
+    def bars(f):
+        return [{"t": d, "o": f(i), "h": f(i) * 1.01, "l": f(i) * 0.99, "c": f(i), "v": 1000} for i, d in enumerate(dates)]
+    universe = {f"U{k}": bars(lambda i, k=k: 100 * (1 + 0.001 * k) ** i) for k in range(60)}  # 60 titres en hausse régulière
+    r = backtest.run(universe, bars(lambda i: 100 * 1.0005 ** i))
+    t = r["criteres"]["tendance_haussiere"]["20j"]
+    assert r["valeurs"] == 60 and t["signaux"] > 0 and t["gagnants_pct"] == 100 and t["ecart_points"] > 0
+    assert "tendance_haussiere" in backtest.summary(r)
+
+
+def test_portefeuille_fantome():
+    def bars(rows):
+        return [{"t": d, "o": o, "h": h, "l": lo, "c": c} for d, o, h, lo, c in rows]
+    aaa = bars([("2026-10-01", 100, 101, 99, 100), ("2026-10-02", 100, 113, 99, 112), ("2026-10-05", 112, 113, 110, 111)])
+    bbb = bars([("2026-10-01", 50, 51, 49, 50), ("2026-10-02", 50, 50, 44, 45), ("2026-10-05", 45, 46, 44, 45)])
+    spy = bars([("2026-10-01", 1, 1, 1, 100), ("2026-10-02", 1, 1, 1, 101), ("2026-10-05", 1, 1, 1, 102)])
+    props = [{"auteur": "qualite", "action": "acheter", "symbole": "AAA", "prix_ref": 100, "montant": 10_000, "date": "2026-10-01",
+              "stop_loss_pct": 5, "take_profit_pct": 10},
+             {"auteur": "qualite", "action": "acheter", "symbole": "BBB", "prix_ref": 50, "montant": 10_000, "date": "2026-10-01",
+              "stop_loss_pct": 8, "take_profit_pct": 16}]
+    r = classement.shadow_portfolios(props, {"AAA": aaa, "BBB": bbb}, spy, ["qualite", "sentiment"])
+    q = r["analystes"]["qualite"]
+    assert q["ventes"] == 2 and q["gagnantes"] == 1  # AAA à l'objectif (+10 %), BBB au stop (-8 %)
+    assert q["valeur"] == 100_200.0 and r["sp500_pct"] == 2.0 and "sentiment" not in r["analystes"]
+
+
 def test_bilan_d_un_analyste():
     props = [{"auteur": "qualite", "symbole": "AAA", "prix_ref": 100, "date": "2026-10-01", "retenue": True, "verdict": "ok"},
              {"auteur": "qualite", "symbole": "BBB", "prix_ref": 50, "date": "2026-10-02", "retenue": False, "verdict": "rejet"}]

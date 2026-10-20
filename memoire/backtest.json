@@ -1,0 +1,373 @@
+{
+ "periode": "2024-09-26 au 2026-07-23",
+ "jours_testes": 92,
+ "valeurs": 164,
+ "calcule_le": "2026-10-20T18:49:41+00:00",
+ "criteres": {
+  "repli_dans_tendance": {
+   "5j": {
+    "signaux": 862,
+    "moyenne_pct": 0.54,
+    "mediane_pct": 0.43,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.31,
+    "ecart_points": 0.23
+   },
+   "20j": {
+    "signaux": 862,
+    "moyenne_pct": 1.93,
+    "mediane_pct": 1.03,
+    "gagnants_pct": 56,
+    "sp500_pct": 1.22,
+    "ecart_points": 0.71
+   },
+   "60j": {
+    "signaux": 862,
+    "moyenne_pct": 6.5,
+    "mediane_pct": 2.95,
+    "gagnants_pct": 57,
+    "sp500_pct": 3.75,
+    "ecart_points": 2.75
+   }
+  },
+  "tendance_haussiere": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 1.0,
+    "mediane_pct": 0.81,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.67
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 3.75,
+    "mediane_pct": 1.69,
+    "gagnants_pct": 57,
+    "sp500_pct": 1.42,
+    "ecart_points": 2.33
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 9.92,
+    "mediane_pct": 6.35,
+    "gagnants_pct": 62,
+    "sp500_pct": 4.06,
+    "ecart_points": 5.86
+   }
+  },
+  "rebond_apres_chute": {
+   "5j": {
+    "signaux": 217,
+    "moyenne_pct": 0.61,
+    "mediane_pct": 0.4,
+    "gagnants_pct": 53,
+    "sp500_pct": 0.59,
+    "ecart_points": 0.02
+   },
+   "20j": {
+    "signaux": 217,
+    "moyenne_pct": 2.36,
+    "mediane_pct": 2.01,
+    "gagnants_pct": 59,
+    "sp500_pct": 2.13,
+    "ecart_points": 0.23
+   },
+   "60j": {
+    "signaux": 217,
+    "moyenne_pct": 10.13,
+    "mediane_pct": 4.83,
+    "gagnants_pct": 61,
+    "sp500_pct": 6.69,
+    "ecart_points": 3.44
+   }
+  },
+  "hausse_semaine": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.61,
+    "mediane_pct": 0.39,
+    "gagnants_pct": 52,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.28
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 3.14,
+    "mediane_pct": 1.68,
+    "gagnants_pct": 57,
+    "sp500_pct": 1.42,
+    "ecart_points": 1.72
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 9.44,
+    "mediane_pct": 4.36,
+    "gagnants_pct": 59,
+    "sp500_pct": 4.06,
+    "ecart_points": 5.38
+   }
+  },
+  "baisse_semaine": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.75,
+    "mediane_pct": 0.5,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.42
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 2.45,
+    "mediane_pct": 1.55,
+    "gagnants_pct": 56,
+    "sp500_pct": 1.42,
+    "ecart_points": 1.03
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 7.17,
+    "mediane_pct": 3.19,
+    "gagnants_pct": 55,
+    "sp500_pct": 4.06,
+    "ecart_points": 3.11
+   }
+  },
+  "hausse_mois": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 1.16,
+    "mediane_pct": 0.82,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.83
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 4.16,
+    "mediane_pct": 1.95,
+    "gagnants_pct": 58,
+    "sp500_pct": 1.42,
+    "ecart_points": 2.74
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 10.15,
+    "mediane_pct": 4.64,
+    "gagnants_pct": 59,
+    "sp500_pct": 4.06,
+    "ecart_points": 6.09
+   }
+  },
+  "baisse_mois": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.49,
+    "mediane_pct": 0.42,
+    "gagnants_pct": 53,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.16
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 1.36,
+    "mediane_pct": 0.51,
+    "gagnants_pct": 52,
+    "sp500_pct": 1.42,
+    "ecart_points": -0.06
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 6.06,
+    "mediane_pct": 2.16,
+    "gagnants_pct": 55,
+    "sp500_pct": 4.06,
+    "ecart_points": 2.0
+   }
+  },
+  "hausse_jour": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": -0.03,
+    "mediane_pct": -0.21,
+    "gagnants_pct": 48,
+    "sp500_pct": 0.33,
+    "ecart_points": -0.36
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 1.75,
+    "mediane_pct": 0.43,
+    "gagnants_pct": 52,
+    "sp500_pct": 1.42,
+    "ecart_points": 0.33
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 6.08,
+    "mediane_pct": 2.12,
+    "gagnants_pct": 54,
+    "sp500_pct": 4.06,
+    "ecart_points": 2.02
+   }
+  },
+  "baisse_jour": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.92,
+    "mediane_pct": 0.48,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.59
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 2.83,
+    "mediane_pct": 1.38,
+    "gagnants_pct": 56,
+    "sp500_pct": 1.42,
+    "ecart_points": 1.41
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 8.59,
+    "mediane_pct": 4.99,
+    "gagnants_pct": 58,
+    "sp500_pct": 4.06,
+    "ecart_points": 4.53
+   }
+  },
+  "loin_du_plus_haut": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.49,
+    "mediane_pct": 0.29,
+    "gagnants_pct": 52,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.16
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 1.66,
+    "mediane_pct": 0.58,
+    "gagnants_pct": 52,
+    "sp500_pct": 1.42,
+    "ecart_points": 0.24
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 4.75,
+    "mediane_pct": 0.04,
+    "gagnants_pct": 50,
+    "sp500_pct": 4.06,
+    "ecart_points": 0.69
+   }
+  },
+  "proche_du_plus_haut": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.48,
+    "mediane_pct": 0.32,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.15
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 2.03,
+    "mediane_pct": 0.79,
+    "gagnants_pct": 54,
+    "sp500_pct": 1.42,
+    "ecart_points": 0.61
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 4.85,
+    "mediane_pct": 2.6,
+    "gagnants_pct": 57,
+    "sp500_pct": 4.06,
+    "ecart_points": 0.79
+   }
+  },
+  "rsi_survendu": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.64,
+    "mediane_pct": 0.55,
+    "gagnants_pct": 55,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.31
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 1.16,
+    "mediane_pct": 0.68,
+    "gagnants_pct": 52,
+    "sp500_pct": 1.42,
+    "ecart_points": -0.26
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 4.59,
+    "mediane_pct": 1.92,
+    "gagnants_pct": 55,
+    "sp500_pct": 4.06,
+    "ecart_points": 0.53
+   }
+  },
+  "rsi_surachete": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.46,
+    "mediane_pct": 0.39,
+    "gagnants_pct": 53,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.13
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 2.18,
+    "mediane_pct": 1.62,
+    "gagnants_pct": 57,
+    "sp500_pct": 1.42,
+    "ecart_points": 0.76
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 5.38,
+    "mediane_pct": 2.75,
+    "gagnants_pct": 58,
+    "sp500_pct": 4.06,
+    "ecart_points": 1.32
+   }
+  },
+  "volume_inhabituel": {
+   "5j": {
+    "signaux": 920,
+    "moyenne_pct": 0.41,
+    "mediane_pct": 0.34,
+    "gagnants_pct": 54,
+    "sp500_pct": 0.33,
+    "ecart_points": 0.08
+   },
+   "20j": {
+    "signaux": 920,
+    "moyenne_pct": 1.59,
+    "mediane_pct": 0.88,
+    "gagnants_pct": 55,
+    "sp500_pct": 1.42,
+    "ecart_points": 0.17
+   },
+   "60j": {
+    "signaux": 920,
+    "moyenne_pct": 5.66,
+    "mediane_pct": 3.17,
+    "gagnants_pct": 59,
+    "sp500_pct": 4.06,
+    "ecart_points": 1.6
+   }
+  }
+ },
+ "limites": "passé ≠ avenir ; univers des grandes valeurs d'aujourd'hui ; frais non comptés"
+}

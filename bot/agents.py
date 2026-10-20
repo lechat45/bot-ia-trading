@@ -25,12 +25,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from . import classement, memory, notify, tools
+from . import backtest, classement, memory, notify, tools
 from .agent_tools import SKILL_INFO, AgentEnv, Market, declarations
 from .comptes import Comptes
 from .executor import Broker
 from .llm import ContextTooLarge, LLMError
 from .risk import check_buy, check_sell, trailing_stop
+from .universe import UNIVERSE
 
 log = logging.getLogger("seance")
 SKILLS = Path(__file__).resolve().parent.parent / "skills"
@@ -168,6 +169,7 @@ class Session:
         self.new_lecons: list = []
         self.brief = ""  # résumé du marché préparé par le programme, donné aux 6 IA
         self.track: dict = {}  # bilan des idées des analystes (bot/classement.py)
+        self.bt: dict = memory.read_backtest()  # ce que valent les critères du screener sur le passé
         self.stops_suiveurs: list = []
         self.allegee: str | None = None  # séance de suivi allégée (le gérant seul) et pourquoi
         self.suivi_raisons: list = []
@@ -347,12 +349,41 @@ class Session:
         return {"jour": (live / past[-1]["c"] - 1) * 100, "semaine": (live / past[-5 - k]["c"] - 1) * 100,
                 "mois": (live / past[-21 - k]["c"] - 1) * 100}
 
+    def refresh_backtest(self) -> dict:
+        """Le test des critères du screener sur 3 ans, refait une fois par semaine (environ 10 secondes)."""
+        data = self.bt or {}
+        try:
+            age = (self.now - dt.datetime.fromisoformat(data["calcule_le"])).days
+        except (KeyError, ValueError, TypeError):
+            age = 99
+        if age < 7 or self.offline:
+            return data
+        try:
+            bars = self.alpaca.bars(list(UNIVERSE) + ["SPY"], days=1120)
+            spy = bars.pop("SPY", [])
+            new = backtest.run(bars, spy)
+        except Exception as e:  # le test est un plus : il ne doit jamais bloquer la séance
+            log.warning("test des critères du screener impossible : %s", e)
+            return data
+        if new and not self.dry_run:
+            memory.write_backtest(new)
+        log.info("Critères du screener testés sur %s", new.get("periode") if new else "?")
+        return new or data
+
     def track_record(self) -> dict:
         """Ce qu'ont rapporté les idées passées de chaque analyste : chacun apprend de ses résultats."""
         try:
+            ids = [a.id for a in ANALYSTES]
             props = classement.load_propositions()
             prices = self.market.prices(sorted({p["symbole"] for p in props})) if props else {}
-            return classement.compute(props, prices, [a.id for a in ANALYSTES])
+            data = classement.compute(props, prices, ids)
+            every = classement.load_propositions(with_sells=True)
+            syms = sorted({p["symbole"] for p in every})
+            if syms:  # le portefeuille fantôme de chaque analyste (cours déjà téléchargés pour la séance)
+                bars = self.market.bars(syms + ["SPY"])
+                data["fantomes"] = classement.shadow_portfolios(every, {s: bars.get(s) or [] for s in syms},
+                                                                bars.get("SPY") or [], ids)
+            return data
         except Exception as e:  # un bilan manquant ne doit pas bloquer la séance
             log.warning("bilan des analystes indisponible : %s", e)
             return {}
@@ -515,6 +546,7 @@ class Session:
                                  "simulation": self.dry_run, "ordres": []}
                 self.brief = self.market_brief()
                 self.track = self.track_record()
+                self.bt = self.refresh_backtest()
                 if self.mode == "suivi":
                     self.suivi_raisons = self.suivi_reasons()
                     if not self.suivi_raisons:
@@ -605,6 +637,7 @@ class Session:
         notes = memory.read_notes(a.id) or "(aucune note : c'est ta toute première séance)"
         txt = f"Nouvelle séance : {MODES[self.mode]}.\n\nTES NOTES (écrites lors de ta dernière séance) :\n{notes}\n\n"
         txt += self.brief
+        txt += backtest.summary(self.bt)
         txt += classement.summary(a.role, a.id, self.track, {x.id: x.nom.replace("Analyste ", "") for x in ANALYSTES})
         if self.lecons:
             txt += ("LEÇONS APPRISES PAR L'ÉQUIPE (mémoire longue, à respecter) :\n"

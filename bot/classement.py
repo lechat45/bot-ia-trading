@@ -6,8 +6,8 @@ import json
 from . import memory
 
 
-def load_propositions() -> list[dict]:
-    """Propositions d'achat des séances réelles, une seule par analyste, titre et jour."""
+def load_propositions(with_sells: bool = False) -> list[dict]:
+    """Propositions des séances réelles (achats, et ventes si demandé), une seule par analyste, titre et jour."""
     rows = list(memory.read_propositions())
     folder = memory.ROOT / "sessions"
     for p in sorted(folder.glob("*.json"), key=lambda p: p.stem) if folder.exists() else []:  # séances d'avant ce registre
@@ -21,11 +21,76 @@ def load_propositions() -> list[dict]:
                  for x in d.get("propositions") or []]
     seen, out = set(), []
     for r in rows:
-        key = (r.get("auteur"), r.get("symbole"), r.get("date"))
-        if r.get("action") == "acheter" and r.get("prix_ref") and key not in seen:
+        key = (r.get("auteur"), r.get("symbole"), r.get("date"), r.get("action"))
+        buy = r.get("action") == "acheter" and r.get("prix_ref")
+        sell = with_sells and r.get("action") in ("vendre", "alleger")
+        if (buy or sell) and key not in seen:
             seen.add(key)
             out.append(dict(r))
     return out
+
+
+def shadow_portfolios(props: list[dict], bars_by_sym: dict, spy_bars: list[dict], analysts: list[str],
+                      capital: float = 100_000.0) -> dict:
+    """Portefeuille fantôme de chaque analyste : 100 000 $ virtuels qui suivent TOUTES ses idées (achetées ou non
+    par le gérant), avec leurs stops et objectifs, séance après séance sur les vrais cours. Comme la compétition
+    des 4 IA d'Aywen, sans risquer le vrai compte. Simplifications : achat au prix du jour de la proposition,
+    sortie au stop ou à l'objectif touché dans la journée (le stop d'abord si les deux le sont)."""
+    dated = [p for p in props if p.get("date")]
+    if not dated or not spy_bars:
+        return {}
+    start = min(p["date"] for p in dated)
+    days = [str(b["t"])[:10] for b in spy_bars if str(b["t"])[:10] >= start]
+    if not days:
+        return {}
+    bar = {s: {str(b["t"])[:10]: b for b in rows} for s, rows in bars_by_sym.items()}
+    last_close = {s: rows[-1]["c"] for s, rows in bars_by_sym.items() if rows}
+    spy0 = next(b["c"] for b in spy_bars if str(b["t"])[:10] >= start)
+    out = {}
+    for aid in analysts:
+        mine = sorted((p for p in dated if p.get("auteur") == aid), key=lambda p: p["date"])
+        if not mine:
+            continue
+        cash, held, closed = capital, {}, []
+        for d in days:
+            for sym, pos in list(held.items()):  # sorties : stop ou objectif touché dans la journée
+                b = bar.get(sym, {}).get(d)
+                if not b or d <= pos["date"]:
+                    continue
+                if b["l"] <= pos["stop"]:
+                    px = min(b["o"], pos["stop"])
+                elif b["h"] >= pos["tp"]:
+                    px = max(b["o"], pos["tp"])
+                else:
+                    continue
+                cash += pos["qty"] * px
+                closed.append((px / pos["prix"] - 1) * 100)
+                del held[sym]
+            for p in (x for x in mine if x["date"] == d):
+                sym = p["symbole"]
+                if p["action"] in ("vendre", "alleger") and sym in held:
+                    b = bar.get(sym, {}).get(d)
+                    px = b["c"] if b else last_close.get(sym, held[sym]["prix"])
+                    cash += held[sym]["qty"] * px
+                    closed.append((px / held[sym]["prix"] - 1) * 100)
+                    del held[sym]
+                elif p["action"] == "acheter" and sym not in held and p.get("prix_ref"):
+                    amount = min(p.get("montant") or capital * 0.1, cash * 0.95)
+                    if amount < 500:
+                        continue
+                    price = p["prix_ref"]
+                    sl, tp = p.get("stop_loss_pct") or 8, p.get("take_profit_pct") or 16
+                    held[sym] = {"qty": amount / price, "prix": price, "date": d,
+                                 "stop": price * (1 - sl / 100), "tp": price * (1 + tp / 100)}
+                    cash -= amount
+        value = cash + sum(pos["qty"] * last_close.get(s, pos["prix"]) for s, pos in held.items())
+        out[aid] = {"valeur": round(value, 2), "perf_pct": round((value / capital - 1) * 100, 2),
+                    "ventes": len(closed), "gagnantes": sum(r > 0 for r in closed),
+                    "en_cours": [{"symbole": s, "pl_pct": round((last_close.get(s, pos["prix"]) / pos["prix"] - 1) * 100, 1)}
+                                 for s, pos in held.items()],
+                    "depuis": start}
+    spy_now = spy_bars[-1]["c"]
+    return {"analystes": out, "sp500_pct": round((spy_now / spy0 - 1) * 100, 2), "depuis": start}
 
 
 def compute(props: list[dict], prices: dict, analysts: list[str]) -> dict:
@@ -77,6 +142,11 @@ def summary(role: str, aid: str, data: dict, names: dict) -> str:
         txt = (f"{r['propositions']} idée(s) d'achat depuis le {data.get('depuis')} : rendement moyen {_pct(r['rendement_moyen'])}, "
                f"{r['reussite_pct']} % gagnantes ; {bought}{left} ; meilleure {r['meilleure']['symbole']} "
                f"{_pct(r['meilleure']['rendement'])}, pire {r['pire']['symbole']} {_pct(r['pire']['rendement'])}.")
+        f = ((data.get("fantomes") or {}).get("analystes") or {}).get(aid)
+        if f:
+            value = f"{f['valeur']:,.0f}".replace(",", " ")
+            txt += (f" Ton portefeuille fantôme (100 000 $ virtuels qui suivent toutes tes idées) vaut {value} $ "
+                    f"({_pct(f['perf_pct'])}, S&P 500 {_pct(data['fantomes'].get('sp500_pct'))} sur la même période).")
         return (f"TON BILAN (ce qu'ont rapporté tes idées depuis que tu les as proposées) : {txt}"
                 f"{PETIT if r['propositions'] < MIN_IDEES else ''}\n\n")
     if role == "critique":

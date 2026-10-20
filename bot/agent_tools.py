@@ -327,8 +327,10 @@ class AgentEnv:
     def t_screener(self, critere="baisse_semaine", limite=10):
         limite = max(1, min(int(_num(limite) or 10), 20))
         mk, mn = self.s.market, self.s.cfg.min_price
+        hist = (getattr(self.s, "bt", None) or {}).get("criteres", {}).get(critere)
         if critere in tools.STRATEGY_SCREENS:
-            return tools.screen_strategy(mk.universe(), critere, limite)
+            rows = tools.screen_strategy(mk.universe(), critere, limite)
+            return {"resultats": rows, "historique_du_critere": hist} if hist else rows
         if critere == "plus_actives":
             rows = self.s.alpaca.most_actives(40)
             syms = [r["symbol"] for r in rows if SYMBOL_RE.match(r["symbol"])]
@@ -354,7 +356,9 @@ class AgentEnv:
             return sorted(res, key=lambda r: r["perf_1m_pct"] or 0)[:limite]
         if critere not in tools.SCREENS:
             return {"erreur": f"critère inconnu, choix : {', '.join(SCREEN_CHOICES)}"}
-        return tools.screen(mk.universe(), critere, limite)
+        rows = tools.screen(mk.universe(), critere, limite)
+        # ce qu'a valu ce critère sur le passé (bot/backtest.py) : à garder en tête avant d'y croire
+        return {"resultats": rows, "historique_du_critere": hist} if hist else rows
 
     # -------------------------------------------------- données
     def t_historique_prix(self, symbole=""):

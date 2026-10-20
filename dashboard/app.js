@@ -159,7 +159,7 @@ function renderPage() {
     renderBand(S.ov); renderChart(S.ov); renderDay(); renderPositions(S.ov); renderPlan(S.ov); renderRepartition(S.ov);
     renderBilan(S.ov); renderStats(S.ov); renderLecons(S.ov); renderRappelsCard(S.ov); renderSysteme(S.ov);
   }
-  if (S.page === "ia") { renderIAList(); renderIAPanel(); renderRanking(S.ov); }
+  if (S.page === "ia") { renderIAList(); renderIAPanel(); renderRanking(S.ov); renderBacktest(S.ov); }
   if (S.page === "journal") renderJournal();
   if (S.page === "bureau") renderDesktop();
 }
@@ -376,7 +376,37 @@ function renderRanking(o) {
     ${rows.map((r, i) => `<tr><td><span style="display:inline-flex;align-items:center;gap:8px">${avatar(r.id, true)}<b>${i + 1}. ${esc(shortName(r.id))}</b></span></td><td>${r.propositions}</td><td>${r.retenues}</td><td>${cell(r.rendement_moyen)}</td><td>${r.reussite_pct ?? "—"} %</td><td>${cell(r.moyenne_retenues)}</td><td>${cell(r.moyenne_ecartees)}</td>
       <td class="mono" style="white-space:nowrap">${r.meilleure ? `${esc(r.meilleure.symbole)} ${cell(r.meilleure.rendement)}` : "—"}${r.pire && r.pire.symbole !== r.meilleure?.symbole ? ` · ${esc(r.pire.symbole)} ${cell(r.pire.rendement)}` : ""}</td></tr>`).join("")}
     </tbody></table></div>
-    <p class="small muted" style="margin:10px 0 0">Rendement mesuré depuis le prix du jour de la proposition, jusqu'au dernier cours.${crit.avis ? ` Avis du critique confirmés par la suite : ${crit.justes_pct} % (${crit.avis} avis « ok » ou « rejet »).` : ""}</p>`;
+    <p class="small muted" style="margin:10px 0 0">Rendement mesuré depuis le prix du jour de la proposition, jusqu'au dernier cours.${crit.avis ? ` Avis du critique confirmés par la suite : ${crit.justes_pct} % (${crit.avis} avis « ok » ou « rejet »).` : ""}</p>
+    ${shadowHtml(c.fantomes)}`;
+}
+
+// Portefeuilles fantômes : 100 000 $ virtuels par analyste, qui suivent toutes ses idées (stops et objectifs compris).
+function shadowHtml(f) {
+  const rows = Object.entries(f?.analystes || {}).sort((a, b) => b[1].perf_pct - a[1].perf_pct);
+  if (!rows.length) return "";
+  return `<div class="overline sub-h" style="margin-top:16px">Portefeuilles fantômes · 100 000 $ virtuels chacun depuis le ${esc(fmtDate(`${f.depuis}T12:00:00Z`, { day: "numeric", month: "short" }))}</div>
+    ${kvBox([...rows.map(([id, s]) => [shortName(id), `${money(s.valeur, 0)} (${pct(s.perf_pct, 2)})`, tone(s.perf_pct)]),
+      ["S&P 500 sur la période", pct(f.sp500_pct, 2), tone(f.sp500_pct)]])}
+    <p class="small muted" style="margin:8px 0 0">Chaque portefeuille suit toutes les idées de son analyste, achetées ou non par le gérant, avec leurs stops et objectifs : la compétition des IA d'Aywen, sans risquer le vrai compte.</p>`;
+}
+
+// Ce que valent les critères du screener, rejoués sur 3 ans de cours (bot/backtest.py).
+function renderBacktest(o) {
+  const bt = o.backtest || {};
+  const strat = ["repli_dans_tendance", "tendance_haussiere", "rebond_apres_chute"];
+  const rows = Object.entries(bt.criteres || {}).filter(([, h]) => h["20j"]?.signaux)
+    .sort((a, b) => (b[1]["20j"].ecart_points ?? -99) - (a[1]["20j"].ecart_points ?? -99));
+  $("#bt-sub").textContent = bt.periode ? `signaux du ${bt.periode.replace(" au ", " au ")}` : "";
+  if (!rows.length) {
+    $("#bt-card").innerHTML = empty("filter", "Pas encore testé", "Le test des critères du screener se fait une fois par semaine, à la séance de préparation.");
+    return;
+  }
+  const cell = (v) => `<span class="${tone(v)}">${esc(pct(v, 1))}</span>`;
+  $("#bt-card").innerHTML = `<div class="table-wrap"><table class="tbl-tight"><thead><tr><th>Critère</th><th>20 séances</th><th>S&amp;P 500</th><th>Écart</th><th>Gagnants</th><th>60 séances</th></tr></thead><tbody>
+    ${rows.map(([c, h]) => { const a = h["20j"], b = h["60j"] || {}; return `<tr><td><b>${esc(c.replaceAll("_", " "))}</b>${strat.includes(c) ? ' <span class="pill pill-coral">stratégie</span>' : ""}</td>
+      <td>${cell(a.moyenne_pct)}</td><td>${cell(a.sp500_pct)}</td><td>${cell(a.ecart_points)}</td><td>${esc(a.gagnants_pct)} %</td><td>${cell(b.moyenne_pct)} <span class="small muted">(S&amp;P ${esc(pct(b.sp500_pct, 1))})</span></td></tr>`; }).join("")}
+    </tbody></table></div>
+    <p class="small muted" style="margin:10px 0 0">Chaque semaine du passé, les 10 actions signalées par le critère, et ce qu'elles ont rapporté ensuite (${esc(bt.valeurs)} grandes valeurs, ${esc(bt.jours_testes)} semaines testées). Un passé ne prédit pas l'avenir, les entreprises disparues manquent et les frais ne sont pas comptés.</p>`;
 }
 
 function rappelRow(r) {
@@ -1066,16 +1096,19 @@ const APP_RENDER = {
   },
 
   screener(items, q, w) {
-    const runs = items.filter((x) => x.nom === "screener" && Array.isArray(x.d));
+    const rowsOf = (x) => (Array.isArray(x.d) ? x.d : x.d?.resultats);
+    const runs = items.filter((x) => x.nom === "screener" && Array.isArray(rowsOf(x)));
     if (!runs.length) return empty("filter", "Aucun screener", "Les IA n'ont pas utilisé le screener dans cette sélection.");
     const key = (x, i) => `${x.ts}-${x.agent}-${i}`;
     const pick = runs.find((x, i) => key(x, i) === w.state.pick) || runs[0];
-    const rows = pick.d.filter((r) => match(q, r.s, r.nom));
+    const rows = rowsOf(pick).filter((r) => r.s && match(q, r.s, r.nom));
+    const h = pick.d?.historique_du_critere?.["20j"];
     const cols = [...new Set(rows.flatMap((r) => Object.keys(r)))].filter((c) => c !== "s");
     const label = { prix: "Prix", var_pct: "Variation", perf_5j_pct: "5 jours", perf_1m_pct: "1 mois", perf_1j_pct: "1 jour", rsi14: "RSI", ecart_plus_haut_pct: "Sous le plus haut", volume_vs_moy20: "Volume / moy.", volume: "Volume", nom: "Nom", mentions_24h: "Mentions 24 h", mentions_veille: "Veille" };
     const cell = (c, v) => /pct$/.test(c) ? `<span class="${tone(v)}">${esc(pct(v, 1))}</span>` : c === "prix" ? esc(money(v, 2)) : esc(typeof v === "number" ? nb(v) : v);
     return `<div class="app-split"><div class="app-side">${runs.map((x, i) => `<button class="side-item ${x === pick ? "sel" : ""}" data-pick="${esc(key(x, i))}">${avatar(x.agent, true)}<span><b>${esc(String(x.args.critere || "").replaceAll("_", " "))}</b><span class="small muted">${esc(hm(x.ts))}</span></span></button>`).join("")}</div>
       <div class="app-main"><div class="app-card-h"><b>${esc(String(pick.args.critere || "").replaceAll("_", " "))}</b><span class="readers">par ${avatar(pick.agent, true)}</span><span class="b-time">${esc(dayHm(pick.ts))}</span></div>
+      ${h?.signaux ? `<div class="small muted">Sur le passé : ${esc(pct(h.moyenne_pct, 1))} en moyenne 20 séances après le signal (S&amp;P 500 ${esc(pct(h.sp500_pct, 1))}), ${esc(h.gagnants_pct)} % de gagnants.</div>` : ""}
       <div class="table-wrap" style="margin:8px 0 0"><table><thead><tr><th>Titre</th>${cols.map((c) => `<th>${esc(label[c] || c)}</th>`).join("")}</tr></thead>
       <tbody>${rows.map((r) => `<tr><td class="mono"><b>${esc(r.s)}</b></td>${cols.map((c) => `<td>${cell(c, r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div></div>`;
   },

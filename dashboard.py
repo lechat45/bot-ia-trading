@@ -129,12 +129,23 @@ def _compte(equity: float, prices: dict) -> dict:
 
 def classement() -> dict:
     """Ce qu'auraient rapporté les idées de chaque analyste depuis qu'il les a proposées (bot/classement.py)."""
+    ids = [a.id for a in AGENTS if a.role == "analyste"]
     props = ranking.load_propositions()
     try:
         prices = broker.latest_prices(sorted({p["symbole"] for p in props})) if props else {}
     except Exception:
         prices = {}
-    return ranking.compute(props, prices, [a.id for a in AGENTS if a.role == "analyste"])
+    data = ranking.compute(props, prices, ids)
+    every = ranking.load_propositions(with_sells=True)
+    syms = sorted({p["symbole"] for p in every})
+    if syms:  # portefeuilles fantômes : 100 000 $ virtuels par analyste, qui suivent toutes ses idées
+        try:
+            bars = broker.bars(syms + ["SPY"], days=400)
+            data["fantomes"] = ranking.shadow_portfolios(every, {s: bars.get(s) or [] for s in syms},
+                                                         bars.get("SPY") or [], ids)
+        except Exception:
+            pass
+    return data
 
 
 def performance(spy: list) -> dict:
@@ -263,6 +274,7 @@ def overview() -> dict:
            "historique_ia": memory.read_history(), "installation": memory.read_installation(),
            "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(), "lecons": memory.read_lecons(),
            "alertes": alertes(), "jours_bourse": trading_days(), "quotas": quotas(),
+           "backtest": {k: v for k, v in memory.read_backtest().items() if k != "limites"},
            # date du VRAI plan (pas celui d'une simulation) : sert à repérer une préparation manquée
            "plan_reel": memory.read_plan(simulation=DEMO).get("date"),
            "ordres": [e for e in memory.recent_journal(120) if e.get("type") == "execution"][-300:]}
