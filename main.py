@@ -22,7 +22,7 @@ import time
 from zoneinfo import ZoneInfo
 
 from bot import memory
-from bot.agents import Session
+from bot.agents import Session, assign_providers
 from bot.config import Config
 
 PARIS, NY = ZoneInfo("Europe/Paris"), ZoneInfo("America/New_York")
@@ -111,6 +111,7 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)-8s %(message)s",
                         datefmt="%H:%M:%S", stream=sys.stdout)
     cfg = Config.from_env()
+    assign_providers(cfg)  # Mistral pour le Contrarien et le critique, si la clé existe
 
     if args.offline:
         from bot.fakes import FakeAlpaca, FakeRouter
@@ -145,6 +146,8 @@ def main() -> int:
     mode = args.mode if args.mode != "auto" else ("suivi" if is_open else "preparation")
     log.info("Séance %s — %s%s — %d clé(s) Gemini, %d clé(s) Groq", mode, "PAPER" if cfg.paper else "ARGENT RÉEL",
              " / SIMULATION" if dry_run else "", len(cfg.gemini_keys), len(cfg.groq_keys))
+    if cfg.mistral_keys:
+        log.info("Clé Mistral présente : le Contrarien et le critique travaillent avec Mistral.")
 
     if not args.offline and not dry_run:
         check_missed(clock, mode, now)

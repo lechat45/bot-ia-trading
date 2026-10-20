@@ -64,6 +64,20 @@ AGENTS = [
           ["openai/gpt-oss-20b", "qwen/qwen3.8-27b", "openai/gpt-oss-120b"], "critique", ""),
     Agent("gerant", "Gérant", "gerant", "gemini", 2, GEMINI, "gerant", "Claude"),
 ]
+MISTRAL_MODELS = ["mistral-medium-latest", "mistral-small-latest", "mistral-large-latest"]
+MISTRAL_AGENTS = ("contrarien", "critique")
+
+
+def assign_providers(cfg) -> None:
+    """Avec une clé Mistral, le Contrarien et le critique passent chez Mistral : les 3 clés Groq (une seule
+    organisation, donc un seul quota) ne servent plus qu'à l'analyste Sentiment et en relais."""
+    if not getattr(cfg, "mistral_keys", None):
+        return
+    for a in AGENTS:
+        if a.id in MISTRAL_AGENTS:
+            a.provider, a.key_index, a.models = "mistral", 0, list(MISTRAL_MODELS)
+
+
 ANALYSTES = [a for a in AGENTS if a.role == "analyste"]
 CRITIQUE = next(a for a in AGENTS if a.role == "critique")
 GERANT = next(a for a in AGENTS if a.role == "gerant")
@@ -153,6 +167,8 @@ class Session:
         self.stops_suiveurs: list = []
         self.allegee: str | None = None  # séance de suivi allégée (le gérant seul) et pourquoi
         self.suivi_raisons: list = []
+        self.step_factor = 1.0  # réduit quand les quotas gratuits sont déjà entamés au début de la séance
+        self.quotas_bas = False
 
     # ------------------------------------------------------------------ données partagées de la séance
     def add_plan(self, order: dict):
@@ -396,6 +412,13 @@ class Session:
                                 tags="rotating_light", priorite="high")
             self.broker = Broker(self.alpaca, self.comptes, self.dry_run)
             self.market = Market(self.alpaca, self.offline, self.now.astimezone(NY).date())
+            if not self.offline and hasattr(self.router, "load_quotas"):
+                self.router.load_quotas(memory.read_quotas())  # les clés saturées aux séances précédentes
+                share = self.router.saturated_share(AGENTS)
+                if share >= 0.5:
+                    self.step_factor, self.quotas_bas = 0.67, True
+                    log.warning("Quotas bas : %d %% des IA démarrent avec leur modèle saturé, appels d'outils réduits "
+                                "d'un tiers.", share * 100)
             self.journal = memory.recent_journal(10)
             self.before = self.comptes.valuation(ACCOUNT, {})
             limit = (dt.date.fromisoformat(self.trading_date) - dt.timedelta(days=3)).isoformat()
@@ -446,6 +469,9 @@ class Session:
 
     # ------------------------------------------------------------------ une IA
     def max_steps(self, a: Agent) -> int:
+        return max(4, round(self._max_steps(a) * self.step_factor))
+
+    def _max_steps(self, a: Agent) -> int:
         c = self.cfg
         if a.role == "analyste":
             return c.max_steps_analyste if self.mode == "preparation" else c.max_steps_analyste_suivi
@@ -774,6 +800,7 @@ class Session:
             "plan": self.plan.get("ordres", []) if self.mode == "preparation" else [],
             "compte": after, "valeur_avant": self.before["valeur"],
             "cles": dict(self.router.slots),
+            "quotas_bas": self.quotas_bas,
             "bilan": self.bilan,
             "frein": self.frein,
             "lecons": self.new_lecons,
@@ -785,6 +812,9 @@ class Session:
             "rappels": [r for r in self.rappels if r["statut"] == "actif" or r.get("fait_le", "") >= self.now.isoformat()],
         }
         memory.write_session_json(name, data)
+        if not self.offline and hasattr(self.router, "export_quotas"):  # même en simulation : les clés sont réelles
+            memory.save_quotas(self.router.export_quotas(), dict(self.router.slots),
+                               self.now.astimezone(PARIS).strftime("%Y-%m-%d"))
         report = self.report(data)
         path = memory.write_report(name, report)
         summary = os.getenv("GITHUB_STEP_SUMMARY")

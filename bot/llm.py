@@ -11,7 +11,9 @@ ce qui permet de passer d'une clé, d'un modèle ou même d'un fournisseur à l'
 si l'un d'eux est saturé.
 """
 import copy
+import datetime as dt
 import difflib
+import hashlib
 import json
 import logging
 import random
@@ -54,8 +56,12 @@ def _retry_after(resp: requests.Response, default: float) -> float:
 def _gemini_wait(resp: requests.Response) -> float:
     """Temps d'attente annoncé par Gemini. Un quota du JOUR épuisé (« PerDay ») ne revient pas avant des
     heures, même si la réponse propose de réessayer dans 30 secondes."""
-    if "PerDay" in resp.text:
-        return 3600.0
+    if "PerDay" in resp.text:  # remis à zéro à minuit, heure de Californie (9 h à Paris)
+        from zoneinfo import ZoneInfo
+
+        now = dt.datetime.now(ZoneInfo("America/Los_Angeles"))
+        reset = (now + dt.timedelta(days=1)).replace(hour=0, minute=1, second=0, microsecond=0)
+        return max(600.0, (reset - now).total_seconds())
     m = re.search(r'"retryDelay":\s*"(\d+(?:\.\d+)?)s"', resp.text)
     return float(m.group(1)) if m else _retry_after(resp, 30)
 
@@ -278,18 +284,79 @@ class Groq:
         return {"role": "assistant", "text": text, "calls": calls}, data.get("usage", {}).get("total_tokens", 0)
 
 
+# ---------------------------------------------------------------------------- Mistral
+class Mistral(Groq):
+    """Mistral (La Plateforme, formule gratuite « Experiment ») : même format que Groq, à deux détails près.
+    Ses identifiants d'appel d'outil doivent faire 9 caractères (lettres et chiffres), et la longueur de
+    réponse s'appelle max_tokens."""
+    name = "mistral"
+    URL = "https://api.mistral.ai/v1"
+
+    @staticmethod
+    def _id(raw: str) -> str:
+        return hashlib.md5(str(raw).encode()).hexdigest()[:9]
+
+    @classmethod
+    def render(cls, system, messages):
+        out = Groq.render(system, messages)
+        for m in out:
+            for c in m.get("tool_calls") or []:
+                c["id"] = cls._id(c["id"])
+            if m["role"] == "tool":
+                m["tool_call_id"] = cls._id(m["tool_call_id"])
+        return out
+
+    def chat(self, key, model, system, messages, tools, max_tokens=2000):
+        body = {"model": model, "messages": self.render(system, messages), "temperature": 0.6, "max_tokens": max_tokens}
+        if tools:
+            body["tools"] = [{"type": "function", "function": t} for t in tools]
+            body["tool_choice"] = "auto"
+        try:
+            r = requests.post(f"{self.URL}/chat/completions", headers={"Authorization": f"Bearer {key}"},
+                              json=body, timeout=180)
+        except requests.Timeout:
+            raise ModelUnavailable(f"Mistral {model} : délai dépassé")
+        if r.status_code == 429:
+            raise RateLimited(_retry_after(r, 15), r.text)
+        if r.status_code in (404, 500, 502, 503):
+            raise ModelUnavailable(f"Mistral {model} {r.status_code}")
+        if r.status_code == 400 and "too large" in r.text.lower():
+            raise ContextTooLarge(r.text[:200])
+        if r.status_code >= 400:
+            raise LLMError(f"Mistral {r.status_code}: {r.text[:300]}")
+        data = r.json()
+        m = data["choices"][0]["message"]
+        calls = []
+        for c in m.get("tool_calls") or []:
+            args = c["function"].get("arguments") or "{}"
+            try:
+                args = json.loads(args) if isinstance(args, str) else args
+            except json.JSONDecodeError:
+                args = {}
+            calls.append({"id": c.get("id") or _new_id(), "name": c["function"]["name"],
+                          "args": args if isinstance(args, dict) else {}})
+        text = m.get("content") or ""
+        if isinstance(text, list):  # réponse découpée en morceaux
+            text = "".join(p.get("text", "") for p in text if isinstance(p, dict))
+        return {"role": "assistant", "text": text.strip(), "calls": calls}, data.get("usage", {}).get("total_tokens", 0)
+
+
 # ---------------------------------------------------------------------------- Routeur
 DEFAULT_MODELS = {
     "gemini": ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3-flash-preview",
                "gemini-3.1-flash-lite"],
     "groq": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"],
+    "mistral": ["mistral-medium-latest", "mistral-small-latest", "mistral-large-latest"],
 }
+# Quand le fournisseur d'une IA est saturé : à qui demander ensuite (Groq, le plus chargé, en dernier)
+FALLBACK = {"gemini": ("mistral", "groq"), "groq": ("mistral", "gemini"), "mistral": ("gemini", "groq")}
 RELAY_KEY = 2  # 3e clé de chaque fournisseur : relais (et recherche web pour Gemini)
 
 
 class Router:
     def __init__(self, cfg):
-        self.providers = {"gemini": Gemini(cfg.gemini_keys), "groq": Groq(cfg.groq_keys)}
+        self.providers = {"gemini": Gemini(cfg.gemini_keys), "groq": Groq(cfg.groq_keys),
+                          "mistral": Mistral(getattr(cfg, "mistral_keys", []) or [])}
         self.usage = defaultdict(lambda: {"tokens": 0, "appels": 0})  # par IA
         self.slots = defaultdict(lambda: {"tokens": 0, "appels": 0})  # par clé
         self._lock = threading.Lock()
@@ -301,6 +368,29 @@ class Router:
         # (fournisseur, modèle) -> plus petite taille de requête (en caractères) refusée comme trop grosse
         self._too_big: dict = {}
 
+    # -- mémoire des quotas entre les séances (memoire/quotas.json)
+    def load_quotas(self, data: dict) -> int:
+        """Reprend les modèles saturés lors des séances précédentes : on ne les réessaie pas pour rien."""
+        now, n = time.time(), 0
+        for k, until in (data.get("satures") or {}).items():
+            prov, ki, model = k.split("|", 2)
+            if float(until) > now and prov in self.providers:
+                self._cool_down(prov, int(ki), model, float(until) - now)
+                n += 1
+        return n
+
+    def export_quotas(self) -> dict:
+        """Les saturations longues (plus de 10 minutes) à garder pour les prochaines séances."""
+        now = time.time()
+        with self._lock:
+            return {f"{p}|{k}|{m}": round(u) for (p, k, m), u in self._cool.items() if u - now > 600}
+
+    def saturated_share(self, agents) -> float:
+        """Part des IA dont le modèle principal, sur leur propre clé, est saturé au début de la séance."""
+        if not agents:
+            return 0.0
+        return sum(self._cool_left(a.provider, a.key_index, a.models[0]) > 0 for a in agents) / len(agents)
+
     def _cool_left(self, prov, ki, model) -> float:
         with self._lock:
             return self._cool.get((prov, ki, model), 0.0) - time.time()
@@ -311,15 +401,16 @@ class Router:
             self._cool[key] = max(self._cool.get(key, 0.0), time.time() + seconds)
 
     def _attempts(self, provider: str, key_index: int, models: list[str]):
-        """Ordre d'essai : sa clé, puis la clé relais du même fournisseur, puis l'autre fournisseur."""
+        """Ordre d'essai : sa clé, la clé relais du même fournisseur, puis les autres fournisseurs."""
         out = []
         own = self.providers[provider]
         keys = [key_index, RELAY_KEY] + [i for i in range(len(own.keys)) if i not in (key_index, RELAY_KEY)]
         for ki in dict.fromkeys(k for k in keys if k < len(own.keys)):
             out += [(provider, ki, m) for m in models]
-        other = "groq" if provider == "gemini" else "gemini"
-        for ki in range(len(self.providers[other].keys)):
-            out += [(other, ki, m) for m in DEFAULT_MODELS[other]]
+        for other in FALLBACK[provider]:
+            prov = self.providers.get(other)
+            for ki in range(len(prov.keys) if prov else 0):
+                out += [(other, ki, m) for m in DEFAULT_MODELS[other]]
         return out
 
     def _record(self, who, prov, ki, tokens):

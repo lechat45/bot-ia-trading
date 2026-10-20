@@ -130,7 +130,7 @@ def run(cfg, alpaca, router, offline: bool = False) -> dict:
         c.run("page", "Lecture d'une page web", "utile", page)
 
     # ------------------------------------------------------------- clés et modèles d'IA
-    for prov in ("gemini", "groq"):
+    for prov in ("gemini", "groq", "mistral"):
         p = router.providers[prov] if hasattr(router, "providers") else None
         keys = p.keys if p else []
         for i, key in enumerate(keys):

@@ -22,7 +22,7 @@ from urllib.parse import parse_qs, urlparse
 
 from bot import classement as ranking
 from bot import memory, tools
-from bot.agents import ACCOUNT, AGENTS
+from bot.agents import ACCOUNT, AGENTS, assign_providers
 from bot.comptes import PATH as COMPTES_PATH
 from bot.comptes import Comptes
 from bot.config import Config
@@ -35,6 +35,7 @@ TYPES = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
          ".js": "application/javascript; charset=utf-8", ".svg": "image/svg+xml"}
 
 cfg = Config.from_env()
+assign_providers(cfg)
 DEMO = not (cfg.alpaca_key and cfg.alpaca_secret)
 if DEMO:
     from bot.fakes import FakeAlpaca
@@ -95,7 +96,7 @@ _cache: dict = {}
 
 def _key_ok(provider: str, n: int) -> bool:
     """Une clé est « configurée » si elle est présente ici, ou si la dernière vérification l'a validée."""
-    keys = cfg.gemini_keys if provider == "gemini" else cfg.groq_keys
+    keys = {"gemini": cfg.gemini_keys, "groq": cfg.groq_keys, "mistral": cfg.mistral_keys}.get(provider, [])
     if n <= len(keys):
         return True
     checks = memory.read_installation().get("checks") or []
@@ -220,6 +221,21 @@ def alertes() -> dict:
     return {}
 
 
+def quotas() -> dict:
+    """Clés et modèles d'IA saturés en ce moment, et consommation de chaque clé aujourd'hui."""
+    q = memory.read_quotas()
+    now = time.time()
+    sat = []
+    for k, until in (q.get("satures") or {}).items():
+        if float(until) > now:
+            prov, ki, model = k.split("|", 2)
+            sat.append({"cle": f"{prov} n°{int(ki) + 1}", "modele": model,
+                        "jusqu_a": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(float(until)))})
+    days = q.get("jours") or {}
+    last = max(days) if days else None
+    return {"satures": sat, "jour": last, "consommation": days.get(last, {}) if last else {}}
+
+
 def trading_days() -> list[str]:
     """Jours de bourse de New York autour d'aujourd'hui : le site en ligne s'en sert pour repérer une séance
     manquée (il est calculé à la publication, mais vérifié par le navigateur à l'heure où on le regarde)."""
@@ -241,11 +257,12 @@ def overview() -> dict:
                "max_position_pct", "min_cash_pct", "max_positions", "max_orders", "max_stop_distance_pct",
                "min_reward_risk", "max_gap_pct", "preparation_heure")},
            "cles": {"gemini": sum(_key_ok("gemini", n) for n in (1, 2, 3)),
-                    "groq": sum(_key_ok("groq", n) for n in (1, 2, 3)), "alpaca": not DEMO},
+                    "groq": sum(_key_ok("groq", n) for n in (1, 2, 3)),
+                    "mistral": sum(_key_ok("mistral", n) for n in (1, 2, 3)), "alpaca": not DEMO},
            "plan": memory.read_plan(simulation=DEMO) or memory.read_plan(simulation=True),
            "historique_ia": memory.read_history(), "installation": memory.read_installation(),
            "rappels": memory.read_rappels(), "bilan": memory.read_last_bilan(), "lecons": memory.read_lecons(),
-           "alertes": alertes(), "jours_bourse": trading_days(),
+           "alertes": alertes(), "jours_bourse": trading_days(), "quotas": quotas(),
            # date du VRAI plan (pas celui d'une simulation) : sert à repérer une préparation manquée
            "plan_reel": memory.read_plan(simulation=DEMO).get("date"),
            "ordres": [e for e in memory.recent_journal(120) if e.get("type") == "execution"][-300:]}

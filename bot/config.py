@@ -1,6 +1,6 @@
 """Configuration lue depuis les variables d'environnement (ou le fichier .env en local)."""
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 try:
     from dotenv import load_dotenv
@@ -68,6 +68,8 @@ class Config:
     suivi_mouvement_pct: float = 4.0  # une position qui bouge de 4 % dans la journée réveille l'équipe
     suivi_marche_pct: float = 1.5  # … de même si le S&P 500 bouge de 1,5 %
     max_web_searches: int = 3  # recherches Google par IA et par séance
+    # Facultatif : une clé Mistral gratuite (formule Experiment) décharge Groq du Contrarien et du critique
+    mistral_keys: list = field(default_factory=list)
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -76,6 +78,7 @@ class Config:
         return cls(
             gemini_keys=_keys("GEMINI_API_KEY"),
             groq_keys=_keys("GROQ_API_KEY"),
+            mistral_keys=list(dict.fromkeys(k for k in [os.getenv("MISTRAL_API_KEY", "").strip(), *_keys("MISTRAL_API_KEY")] if k)),
             alpaca_key=os.getenv("ALPACA_API_KEY", "").strip(),
             alpaca_secret=os.getenv("ALPACA_SECRET_KEY", "").strip(),
             paper=not (want_live and confirmed),

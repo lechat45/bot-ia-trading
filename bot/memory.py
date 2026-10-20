@@ -127,6 +127,26 @@ def read_propositions() -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------------- quotas des IA
+def read_quotas() -> dict:
+    return _read_json(ROOT / "quotas.json", {})
+
+
+def save_quotas(satures: dict, usage: dict, day: str) -> None:
+    """Modèles saturés (jusqu'à quand) et consommation de chaque clé par jour (14 derniers jours)."""
+    with _lock:
+        data = read_quotas()
+        data["satures"] = satures
+        days = data.setdefault("jours", {})
+        today = days.setdefault(day, {})
+        for key, u in usage.items():
+            cur = today.setdefault(key, {"tokens": 0, "appels": 0})
+            cur["tokens"] += u.get("tokens", 0)
+            cur["appels"] += u.get("appels", 0)
+        data["jours"] = dict(sorted(days.items())[-14:])
+        _write(ROOT / "quotas.json", json.dumps(data, ensure_ascii=False, indent=1))
+
+
 # ---------------------------------------------------------------------- alertes (une seule fois par jour)
 def alert_once(date: str, kind: str) -> bool:
     """True la première fois qu'une alerte (kind) est levée pour ce jour : évite de prévenir à chaque

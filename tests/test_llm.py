@@ -72,7 +72,30 @@ def test_quota_du_jour_gemini():
                                 '{"retryDelay":"30s"}]}}', headers={})
     minute = SimpleNamespace(text='{"error":{"details":[{"quotaId":"GenerateRequestsPerMinutePerProjectPerModel"},'
                                   '{"retryDelay":"17s"}]}}', headers={})
-    assert llm._gemini_wait(jour) == 3600 and llm._gemini_wait(minute) == 17
+    assert 600 <= llm._gemini_wait(jour) <= 25 * 3600  # jusqu'à minuit en Californie
+    assert llm._gemini_wait(minute) == 17
+
+
+def test_saturations_gardees_entre_les_seances():
+    qm = llm.DEFAULT_MODELS["groq"]
+    r = router({}, {(k, m): RateLimited(1800, "TPD") for k in ("q1", "q2", "q3") for m in qm})
+    agent = SimpleNamespace(id="sentiment", provider="groq", key_index=0, models=qm)
+    r.chat(agent, "", [], [])
+    saved = r.export_quotas()
+    assert len(saved) == 9 and all(k.startswith("groq|") for k in saved)
+    r2 = router({}, {})  # séance suivante : les modèles saturés sont sautés d'emblée
+    assert r2.load_quotas({"satures": saved}) == 9
+    assert r2.saturated_share([agent]) == 1.0
+    r2.chat(agent, "", [], [])
+    assert r2.providers["groq"].calls == []
+
+
+def test_relais_vers_mistral():
+    r = router({}, {})
+    r.providers["mistral"] = FakeProvider(["m1"], llm.DEFAULT_MODELS["mistral"], {})
+    attempts = r._attempts("groq", 1, ["qwen/qwen3.8-27b"])
+    assert attempts[3][0] == "mistral"  # Groq saturé : Mistral avant Gemini
+    assert r._attempts("mistral", 0, llm.DEFAULT_MODELS["mistral"])[3][0] == "gemini"
 
 
 def test_recherche_web_de_secours():

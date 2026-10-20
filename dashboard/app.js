@@ -112,7 +112,8 @@ const empty = (ic, title, sub) =>
 const agentOf = (id) => S.ov?.agents.find((a) => a.id === id) || { id, nom: id, provider: "", cle: "", role: "" };
 const shortName = (id) => agentOf(id).nom.replace("Analyste ", "");
 const avatar = (id, small) => `<span class="avatar${small ? " sm" : ""}" style="--c:${META[id]?.color || "var(--coral)"}" title="${esc(agentOf(id).nom)}">${icon(id)}</span>`;
-const providerPill = (a) => `<span class="pill ${a.provider === "gemini" ? "pill-sky" : "pill-peach"}">${a.provider === "gemini" ? "Gemini" : "Groq"} · clé ${a.cle}</span>`;
+const PROVIDER = { gemini: ["Gemini", "pill-sky"], groq: ["Groq", "pill-peach"], mistral: ["Mistral", "pill-plum"] };
+const providerPill = (a) => `<span class="pill ${PROVIDER[a.provider]?.[1] || ""}">${PROVIDER[a.provider]?.[0] || a.provider} · clé ${a.cle}</span>`;
 const modelName = (m) => String(m || "").replace(/^(gemini|groq)#\d:/, "").replace("openai/", "").replace("qwen/", "");
 const verdictPill = (v) => v ? `<span class="pill ${VERDICT[v.verdict]?.[1] || ""}">critique : ${esc(VERDICT[v.verdict]?.[0] || v.verdict)}</span>` : '<span class="pill">pas d\'avis</span>';
 const modePill = (m) => `<span class="pill ${MODE[m]?.[1] || ""}">${esc(MODE[m]?.[0] || m || "Séance")}</span>`;
@@ -208,6 +209,7 @@ function renderHeader(o) {
   $("#nav-foot").innerHTML = `
     <div class="row"><span>Clés Gemini</span><span class="pill ${k.gemini >= 3 || o.demo ? "pill-sage" : "pill-peach"}">${o.demo ? "démo" : `${k.gemini}/3`}</span></div>
     <div class="row"><span>Clés Groq</span><span class="pill ${k.groq >= 3 || o.demo ? "pill-sage" : "pill-peach"}">${o.demo ? "démo" : `${k.groq}/3`}</span></div>
+    ${k.mistral ? `<div class="row"><span>Clé Mistral</span><span class="pill pill-sage">${k.mistral}</span></div>` : ""}
     <div class="row"><span>Max par titre</span><span>${esc(L.max_position_pct)} %</span></div>
     <div class="row"><span>Écart max à l'ouverture</span><span>${esc(L.max_gap_pct)} %</span></div>`;
 }
@@ -411,9 +413,15 @@ function renderSysteme(o) {
   const al = o.alertes || {};
   const alerts = (al.frein ? `<div class="banner err" style="margin:0 0 10px">${icon("alert")}<span><b>Frein d'urgence</b> à la séance du ${esc(al.quand)} : ${esc(al.frein)}. Aucun achat tant que la perte dépasse le seuil.</span></div>` : "")
     + ((al.ecarts || []).length ? `<div class="banner warn" style="margin:0 0 10px">${icon("alert")}<span><b>Écart avec Alpaca</b> : ${esc(al.ecarts.join(" ; "))}. Vérifiez les positions sur le site d'Alpaca.</span></div>` : "");
+  const q = o.quotas || {};
+  const conso = Object.entries(q.consommation || {}).sort(([a], [b]) => a.localeCompare(b));
+  const quotaHtml = (conso.length || (q.satures || []).length) ? `<div class="order"><span class="pill">quotas des IA</span>
+      <div class="why">${conso.length ? `Consommation du ${esc(fmtDate(`${q.jour}T12:00:00Z`, { day: "numeric", month: "short" }))} : ${conso.map(([k, v]) => `${esc(k)} ${esc(nb((v.tokens || 0) / 1000, 0))} k tokens`).join(" · ")}.` : ""}
+      ${(q.satures || []).length ? `<br>Saturés en ce moment : ${q.satures.map((s) => `${esc(s.cle)} ${esc(modelName(s.modele))} jusqu'à ${esc(hm(s.jusqu_a))}`).join(" · ")}.` : ""}</div></div>` : "";
   $("#systeme-card").innerHTML = alerts + `<p class="small muted" style="margin:0 0 10px">Vérifié le ${esc(dayHm(v.date))} : ${esc(v.reussis)}/${esc(v.total)} tests réussis.</p>
     <div class="list">${(bad.length ? bad : (v.checks || []).slice(0, 5)).map((c) => `<div class="order"><span class="pill ${c.ok ? "pill-sage" : c.niveau === "critique" ? "pill-danger" : "pill-peach"}">${c.ok ? "ok" : c.niveau === "critique" ? "échec" : "attention"}</span><b>${esc(c.nom)}</b><div class="why">${esc(c.detail)}</div></div>`).join("")}</div>
-    ${bad.length ? "" : '<p class="small muted" style="margin:10px 0 0">Tout fonctionne : clés, broker, données, IA et garde-fous.</p>'}`;
+    ${bad.length ? "" : '<p class="small muted" style="margin:10px 0 0">Tout fonctionne : clés, broker, données, IA et garde-fous.</p>'}
+    ${quotaHtml ? `<div class="list" style="margin-top:10px">${quotaHtml}</div>` : ""}`;
 }
 
 function todayParis(d) { return fmtDate(d, { year: "numeric", month: "2-digit", day: "2-digit" }); }
