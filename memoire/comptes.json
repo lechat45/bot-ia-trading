@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 80606.61,
+   "cash": 70639.79000000001,
    "positions": {
     "AMZN": {
      "lots": [
@@ -37,6 +37,22 @@
       }
      ],
      "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01$), SMA50 (386.12$) et SMA200 (356.04$), surperformance +7.6% sur 5j. Stop loss à 6.0% (382.50$), Take Profit à 12.0% (455.75$). Prochains résultats dans 84 jours (12/01/2027)."
+    },
+    "NVDA": {
+     "lots": [
+      {
+       "qty": 46,
+       "prix": 216.67,
+       "date": "2026-10-20T18:52:55+00:00",
+       "stop": 202.58,
+       "tp": 249.16,
+       "statut": "ouvert",
+       "parent_id": "a2a206ae-4ceb-48b7-8cc0-0fca15e12da0",
+       "stop_id": "f8f58628-c20d-4560-a1f9-f8567824a0f3",
+       "tp_id": "8a796dc1-1670-4794-9a03-b9020e73003c"
+      }
+     ],
+     "these": "NVIDIA (NVDA) : Fondamentaux exceptionnels (croissance CA +105.9%, marge op 66.2%, ROE 117.2%, dette/FP 17%, FCF 41.8Md$) avec un PER attendu attrayant de 13.6x. Repli sain de 5% sur 5j (RSI 14 à 37, -9.2% sous le plus haut de 239.17$) venant tester la zone de support au-dessus de la SMA200 (202.95$). Prochains résultats le 17/11/2026 (28 jours). Entrée technologique parfaite diversifiant le portefeuille. Stop loss à -6.5% (sous SMA200), TP à +15.0% (ratio 2.3:1). Horizon 1 à 3 mois."
     }
    },
    "realise": 0.0,
@@ -46,7 +62,7 @@
      "texte": "Ouverture, ordre planifié acheter UNH : Achat exécuté : 23 UNH à 409.33 $ (stop 384.66 $, objectif 458.32 $)"
     }
    ],
-   "derniere_seance": "2026-10-20T15:51:22+00:00"
+   "derniere_seance": "2026-10-20T18:19:49+00:00"
   }
  }
 }

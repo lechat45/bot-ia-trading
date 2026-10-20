@@ -1,14 +1,11 @@
-_Mis à jour : 2026-10-20 14:28 (Paris)_
-
-_Mis à jour : 2026-10-20 14:35 (Paris)_
+_Mis à jour : 2026-10-20 20:19 (Paris)_
 
 # Notes - Analyste Qualité
 - Date : 20/10/2026 (Séance de préparation)
-- Portefeuille : AMZN détenu (38 actions @ 262.6$, ~9 975$, stop 249.49$, TP 288.89$). Prochains résultats le 29/10/2026 (dans 9 jours, rappel actif posé par le gérant). Pas d'invalidation, thèse intacte, position neutre (-0.04%). Liquidités portefeuille : ~85 021 $.
-- Analyses de la séance :
-  * MSFT & GOOGL : Fondamentaux exceptionnels (MSFT : marge op 45%, ROE 34%, dette/FP 29 ; GOOGL : marge op 34%, ROE 48.7%, FCF 22.7Md$), mais tous deux publient leurs résultats le 28/10/2026 (dans 8 jours). Règle Qualité : pas d'achat < 10 jours des résultats.
-  * CAT : Solides fondamentaux (marge op 22.2%, ROE 57%), mais résultats le 29/10/2026 (dans 9 jours).
-  * DDOG : Croissance forte (+35.6%) mais marges et rentabilité insuffisantes pour les critères Qualité (marge op 0.7%, ROE 4.7%).
-  * Rappel des analyses précédentes : V (résultats dans 7j), MA (résultats dans 9j), INTU (sous SMA200, RSI 85), PANW (marge op 5.4%).
-- Décision : Aucune nouvelle proposition d'achat. La saison des résultats bat son plein et presque toutes les valeurs de très haute qualité publient sous 7 à 9 jours. Respect rigoureux de la discipline de gestion du risque d'annonces de résultats.
-- À surveiller : Résultats de MSFT/GOOGL (28/10) et AMZN/CAT/MA (29/10) pour des opportunités post-résultats avec visibilité claire.
+- Portefeuille : AMZN détenu (38 actions @ 262.6$, ~9 975$, stop 249.49$, TP 288.89$). Prochains résultats le 29/10/2026. UNH détenu (23 actions @ 409.33$, ~9 678$). Liquidités portefeuille : ~80 606 $.
+- Analyse et IDÉE validée : NVDA (NVIDIA Corp)
+  * Fondamentaux d'exception : Croissance CA +105.9%, marge op 66.2%, ROE 117.2%, dette/FP 17% et FCF 41.8Md$. Prochains résultats le 17/11/2026 (dans 28 jours, respectant la règle des >10 jours).
+  * Configuration technique : Repli de 5% sur 5 séances, RSI à 37 (proche survente), prix au-dessus de la SMA200 (202.95$). Entrée parfaite sur repli dans une tendance de fond haussière.
+  * Proposition d'achat : ~10 000 USD, stop loss à 6% (204.12$), take profit à 15% (ratio gain/perte 2.5).
+- Autres valeurs analysées : META présente d'excellents fondamentaux mais publie ses résultats dès demain (21/10/2026), exclu selon notre discipline de gestion du risque post-résultats.
+- Discipline : Suivi rigoureux des règles de Qualité (fondamentaux solides + repli technique + absence de publications imminentes).

@@ -45,5 +45,16 @@
   "cree_par": "gerant",
   "cree_le": "2026-10-20T12:44:24+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r5-1117",
+  "date": "2026-11-17",
+  "titre": "Résultats de NVDA",
+  "symbole": "NVDA",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-10-20T18:55:28+00:00",
+  "statut": "actif"
  }
 ]
