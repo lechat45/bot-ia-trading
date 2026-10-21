@@ -207,7 +207,9 @@ class Session:
         est déjà investi ou planifié dans ce secteur) et nombre de jours avant ses résultats."""
         f = self.market.fundamentals(sym) or {}
         secteur = f.get("secteur")
-        ctx = {"frein": self.frein, "secteur": secteur, "jours_resultats": f.get("jours_avant_resultats")}
+        t = self.trend()
+        ctx = {"frein": self.frein, "secteur": secteur, "jours_resultats": f.get("jours_avant_resultats"),
+               "tendance_baissiere": bool(t and not t["haussiere"])}
         if secteur:
             def same(s):
                 return (self.market.fundamentals(s) or {}).get("secteur") == secteur
@@ -215,6 +217,18 @@ class Session:
                                      + sum(o.get("montant_usd") or 0 for o in planned
                                            if o["action"] == "acheter" and same(o["symbole"])))
         return ctx
+
+    def trend(self) -> dict | None:
+        """Filtre de tendance de fond du S&P 500 (moyenne 10 mois), calculé une fois par séance."""
+        if "_tendance" not in self.__dict__:
+            t = None
+            if self.cfg.filtre_tendance:
+                try:
+                    t = tools.trend_filter(self.market.bars(["SPY"]).get("SPY") or [], self.now.astimezone(NY).date())
+                except Exception as e:  # le filtre est un plus : il ne doit jamais bloquer la séance
+                    log.warning("filtre de tendance indisponible : %s", e)
+            self._tendance = t
+        return self._tendance
 
     def check_ledger(self):
         """Compare le registre de l'équipe aux positions réelles chez Alpaca et signale les écarts."""
@@ -356,7 +370,8 @@ class Session:
             age = (self.now - dt.datetime.fromisoformat(data["calcule_le"])).days
         except (KeyError, ValueError, TypeError):
             age = 99
-        if age < 7 or self.offline:
+        nouveaux = set(tools.STRATEGY_SCREENS) - set(data.get("criteres") or {})  # un critère ajouté depuis
+        if (age < 7 and not nouveaux) or self.offline:
             return data
         try:
             bars = self.alpaca.bars(list(UNIVERSE) + ["SPY"], days=1120)
@@ -430,6 +445,14 @@ class Session:
                 L.append(f"- Taux, matières premières et dollar : {mac}")
             if breadth := self.market_breadth():
                 L.append(f"- Largeur du marché : {breadth}")
+            if t := self.trend():
+                px = lambda v: f"{v:,.2f} $".replace(",", " ").replace(".", ",")  # noqa: E731
+                L.append(f"- Tendance de fond (règle des 10 mois de Faber, S&P 500) : clôture de fin {t['mois']} "
+                         f"{px(t['cloture_mois'])} contre une moyenne 10 mois de {px(t['moyenne_10_mois'])} "
+                         f"({fmt(t['ecart_pct'])}) → " + (
+                             "HAUSSIÈRE : tailles normales." if t["haussiere"] else
+                             "BAISSIÈRE : le code divise par 2 la taille maximale des nouveaux achats ; privilégie "
+                             "les entreprises solides et peu volatiles, et protège les positions."))
             sect = [(name, sym, m["semaine"]) for sym, name in BRIEF_SECTEURS if (m := self._moves(sym))]
             if sect:
                 sect.sort(key=lambda x: x[2], reverse=True)

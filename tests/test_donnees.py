@@ -45,6 +45,52 @@ def test_criteres_du_screener_par_strategie():
     assert [r["s"] for r in tools.screen_strategy(bars, "rebond_apres_chute", 5)] == ["CHUTE"]
 
 
+def test_elan_12_mois_et_faible_volatilite():
+    import datetime as dt
+    from bot import backtest
+
+    def serie(f):
+        start = dt.date(2025, 1, 1)
+        return [{"t": (start + dt.timedelta(days=i)).isoformat(), "o": f(i), "h": f(i) * 1.01, "l": f(i) * 0.99,
+                 "c": f(i), "v": 1000} for i in range(300)]
+    bars = {"FORT": serie(lambda i: 100 * 1.004 ** min(i, 278)),  # forte hausse sur un an, plat le dernier mois
+            "CALME": serie(lambda i: 100 * 1.0005 ** i * (1 + 0.002 * (-1) ** i)),
+            "AGITE": serie(lambda i: 100 * 1.001 ** i * (1 + 0.03 * (-1) ** i))}
+    assert tools.screen_strategy(bars, "momentum_12_1", 3)[0]["s"] == "FORT"
+    assert [r["s"] for r in tools.screen_strategy(bars, "faible_volatilite", 3)][0] in ("CALME", "FORT")
+    assert tools.screen_strategy(bars, "faible_volatilite", 3)[-1]["s"] == "AGITE"
+    ind, ser = tools.indicators(bars["AGITE"]), backtest._series(bars["AGITE"])[-1]  # même calcul partout
+    assert abs(ind["perf_12_1_pct"] - ser["perf_12_1_pct"]) < 0.1 and abs(ind["volat_1an_pct"] - ser["volat_1an_pct"]) < 0.1
+
+
+def test_filtre_de_tendance_10_mois():
+    import datetime as dt
+
+    def mois(closes):
+        return [{"t": f"2025-{m:02d}-28" if m <= 12 else f"2026-{m - 12:02d}-28", "c": c} for m, c in enumerate(closes, 1)]
+    hausse = tools.trend_filter(mois([100 + 5 * k for k in range(12)] + [200]), dt.date(2026, 1, 15))
+    assert hausse["haussiere"] and hausse["mois"] == "décembre" and hausse["moyenne_10_mois"] == 132.5
+    baisse = tools.trend_filter(mois([150 - 4 * k for k in range(12)]), dt.date(2026, 1, 15))
+    assert not baisse["haussiere"] and baisse["ecart_pct"] < 0
+    assert tools.trend_filter(mois([100] * 5), dt.date(2026, 1, 15)) is None  # pas assez d'historique
+
+
+def test_taille_divisee_par_2_en_tendance_baissiere():
+    from types import SimpleNamespace
+    from bot.risk import check_buy
+
+    cfg = SimpleNamespace(earnings_blackout_days=1, min_price=5, min_stop_distance_pct=2, max_stop_distance_pct=15,
+                          min_reward_risk=1.5, anti_churn_days=5, max_positions=10, max_position_pct=15,
+                          min_cash_pct=5, max_sector_pct=35)
+    val = {"valeur": 100_000, "cash": 100_000, "positions": []}
+    ok, _, d = check_buy(cfg, "t", val, "AAPL", 100, 15_000, 5, 10, [])
+    assert ok and d["qty"] == 150
+    ok, msg, _ = check_buy(cfg, "t", val, "AAPL", 100, 15_000, 5, 10, [], tendance_baissiere=True)
+    assert not ok and "7.5 %" in msg.replace(",", ".") and "baissière" in msg
+    ok, _, d = check_buy(cfg, "t", val, "AAPL", 100, 15_000, 5, 10, [], clamp=True, tendance_baissiere=True)
+    assert ok and d["qty"] == 75
+
+
 def test_risque_du_portefeuille():
     import datetime as dt
     val = {"valeur": 100_000, "positions": [

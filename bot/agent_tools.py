@@ -26,7 +26,7 @@ SKILLS = Path(__file__).resolve().parent.parent / "skills"
 MAX_RESULT = 3500
 
 SKILL_INFO = {  # fiches détaillées lues à la demande (le socle commun et la stratégie sont déjà donnés)
-    "fonctionnement-du-marche": "horaires, exécution, gaps, moteurs des cours",
+    "fonctionnement-du-marche": "horaires, exécution, gaps",
     "contexte-macro": "lire le résumé du marché, dates macro",
     "lecture-graphique": "lire historique_prix (tendance, RSI, ATR)",
     "analyse-fondamentale": "lire donnees_financieres, signaux d'alerte",
@@ -40,7 +40,8 @@ SKILL_INFO = {  # fiches détaillées lues à la demande (le socle commun et la 
     "gestion-du-risque": "contrôle avant achat, portefeuille",
     "sortie-et-suivi": "vendre, alléger, garder ; autopsie",
     "biais-et-erreurs": "pièges de raisonnement",
-    "execution-des-ordres": "utiliser les ordres, refus fréquents",
+    "ce-qui-marche-vraiment": "méthodes prouvées ou non",
+    "execution-des-ordres": "ordres et refus fréquents",
     "notes-et-memoire": "modèles de notes, bonnes leçons",
 }
 SCREEN_CHOICES = list(tools.SCREENS) + list(tools.STRATEGY_SCREENS) + ["plus_actives", "tendances_reddit", "europe_adr"]
@@ -554,6 +555,9 @@ class AgentEnv:
         if action != "acheter" or (_num(montant_usd) or 0) > 0:
             return montant_usd, False
         m = montant_selon_risque(self.valuation()["valeur"], stop_loss_pct, confiance)
+        t = getattr(self.s, "trend", lambda: None)()
+        if m and t and not t["haussiere"]:  # tendance de fond baissière : risque divisé par 2
+            m = round(m / 2, 0)
         return (m, True) if m else (montant_usd, False)
 
     def _risk_summary(self, d: dict, auto: bool) -> dict:

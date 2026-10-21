@@ -23,6 +23,13 @@ travaillent ensemble sur un seul compte** Alpaca paper (argent virtuel), gratuit
 - Si une clé ou un modèle est saturé, le routeur passe au modèle suivant, à la clé de relais, puis
   à l'autre fournisseur, sans perdre le fil de la séance. La clé Gemini 3 sert aussi à l'outil
   « Navigateur web » (recherche Google).
+- **Méthodes prouvées** (tirées d'une encyclopédie de 93 algorithmes de trading classés selon les études) :
+  le screener propose l'élan sur 12 mois (`momentum_12_1`) et la faible volatilité (`faible_volatilite`), deux
+  des méthodes les mieux prouvées, testées chaque semaine comme les autres critères. Le résumé du marché
+  donne la tendance de fond du S&P 500 (règle des 10 mois de Faber) : quand elle est baissière, le code
+  divise par 2 la taille maximale des nouveaux achats (`FILTRE_TENDANCE=false` pour l'enlever). La fiche
+  `ce-qui-marche-vraiment` dit aux IA ce qui est prouvé et ce qui ne l'est pas ; l'analyste Sentiment part
+  de l'élan des prix plutôt que de Reddit, et le Contrarien exige une valorisation basse.
 - **Roue de secours Gemma 4** : quand le quota du jour de Gemini est épuisé, les IA Gemini passent à
   Gemma 4, des IA de Google qui marchent avec les mêmes clés et ont un quota gratuit bien plus large
   (environ 1 500 requêtes par jour et par projet). Les IA Groq, quand Groq est saturé, passent elles

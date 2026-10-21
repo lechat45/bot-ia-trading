@@ -393,7 +393,7 @@ function shadowHtml(f) {
 // Ce que valent les critères du screener, rejoués sur 3 ans de cours (bot/backtest.py).
 function renderBacktest(o) {
   const bt = o.backtest || {};
-  const strat = ["repli_dans_tendance", "tendance_haussiere", "rebond_apres_chute"];
+  const strat = ["repli_dans_tendance", "tendance_haussiere", "rebond_apres_chute", "momentum_12_1", "faible_volatilite"];
   const rows = Object.entries(bt.criteres || {}).filter(([, h]) => h["20j"]?.signaux)
     .sort((a, b) => (b[1]["20j"].ecart_points ?? -99) - (a[1]["20j"].ecart_points ?? -99));
   $("#bt-sub").textContent = bt.periode ? `signaux du ${bt.periode.replace(" au ", " au ")}` : "";
@@ -406,7 +406,7 @@ function renderBacktest(o) {
     ${rows.map(([c, h]) => { const a = h["20j"], b = h["60j"] || {}; return `<tr><td><b>${esc(c.replaceAll("_", " "))}</b>${strat.includes(c) ? ' <span class="pill pill-coral">stratégie</span>' : ""}</td>
       <td>${cell(a.moyenne_pct)}</td><td>${cell(a.sp500_pct)}</td><td>${cell(a.ecart_points)}</td><td>${esc(a.gagnants_pct)} %</td><td>${cell(b.moyenne_pct)} <span class="small muted">(S&amp;P ${esc(pct(b.sp500_pct, 1))})</span></td></tr>`; }).join("")}
     </tbody></table></div>
-    <p class="small muted" style="margin:10px 0 0">Chaque semaine du passé, les 10 actions signalées par le critère, et ce qu'elles ont rapporté ensuite (${esc(bt.valeurs)} grandes valeurs, ${esc(bt.jours_testes)} semaines testées). Un passé ne prédit pas l'avenir, les entreprises disparues manquent et les frais ne sont pas comptés.</p>`;
+    <p class="small muted" style="margin:10px 0 0">Chaque semaine du passé, les 10 actions signalées par le critère, et ce qu'elles ont rapporté ensuite (${esc(bt.valeurs)} grandes valeurs, ${esc(bt.jours_testes)} semaines testées). Environ 2 ans de tests : un indice, pas une preuve (il faudrait une quinzaine d'années). Les entreprises disparues manquent et les frais ne sont pas comptés.</p>`;
 }
 
 function rappelRow(r) {

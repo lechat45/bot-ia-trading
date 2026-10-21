@@ -1,5 +1,7 @@
 # sentiment-reseaux : Reddit, emballements et manipulations
 
+À savoir d'abord : l'humeur des réseaux sociaux est l'une des méthodes les MOINS prouvées (fiche ce-qui-marche-vraiment). Le célèbre article qui prédisait la bourse avec Twitter n'a jamais été reproduit. Sers-t'en pour repérer un risque (un emballement, une manipulation), jamais comme raison d'acheter.
+
 ## Les outils
 - sentiment_reseaux(symbole) renvoie :
   - reddit : rang parmi les actions les plus discutées, mentions_24h, mentions_veille, rang_veille, upvotes. « Hors du top 300 » veut dire peu discuté.

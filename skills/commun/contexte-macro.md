@@ -33,6 +33,11 @@ Le résumé classe les 11 secteurs sur 5 séances.
 - Cycliques en tête (technologie XLK, consommation cyclique XLY, finance XLF, industrie XLI) : appétit pour le risque. Ambiance « risk-on ».
 - Une idée qui va CONTRE le courant de son secteur demande une raison propre à l'entreprise (fiche actualite-et-catalyseurs).
 
+## La tendance de fond (règle des 10 mois)
+Le résumé compare la dernière clôture mensuelle du S&P 500 à la moyenne de ses 10 dernières clôtures mensuelles (règle de Faber, 2007). Elle ne change qu'à la fin de chaque mois : c'est la toile de fond, pas l'humeur du jour.
+- HAUSSIÈRE : tailles normales.
+- BAISSIÈRE : le code divise par 2 la taille maximale de chaque nouvel achat et le montant qu'il calcule. Préfère les entreprises solides et peu volatiles (screener « faible_volatilite »), et surveille les stops. Historiquement, cette règle a évité une grande partie des krachs de 2008, mais elle rate les rebonds très rapides (mars 2020).
+
 ## 5. Ce que tu en fais
 Écris en une phrase, dans ton raisonnement, le régime du jour : « risk-on large », « hausse étroite », « risk-off », « correction » ou « calme sans direction ». Puis ajuste :
 - risk-on large : tailles normales, les idées de tendance sont favorisées ;

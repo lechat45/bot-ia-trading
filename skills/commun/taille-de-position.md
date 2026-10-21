@@ -22,7 +22,7 @@ Si tu ne donnes pas de montant_usd à proposer_ordre ou passer_ordre, le code ap
 Un titre agité demande un stop plus large, donc une position plus petite : c'est normal et sain.
 
 ## Les limites du code (un dépassement est refusé ou réduit)
-- Taille maximale par titre (15 % du compte par défaut), position déjà détenue comprise.
+- Taille maximale par titre (15 % du compte par défaut), position déjà détenue comprise. Elle est divisée par 2 quand la tendance de fond du marché est baissière (fiche contexte-macro), comme le montant calculé par le code.
 - 35 % du compte au maximum dans un même secteur, ordres planifiés compris.
 - Une réserve de liquidités est toujours gardée (5 % par défaut). Les achats déjà planifiés pour l'ouverture sont déduits des liquidités disponibles.
 - 10 positions au maximum.

@@ -43,12 +43,14 @@ def montant_selon_risque(valeur: float, stop_pct, confiance=None) -> float | Non
 
 def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pct, tp_pct,
               journal: list, reserved: float = 0.0, clamp: bool = False, frein: str | None = None,
-              secteur: str | None = None, secteur_valeur: float = 0.0, jours_resultats=None):
+              secteur: str | None = None, secteur_valeur: float = 0.0, jours_resultats=None,
+              tendance_baissiere: bool = False):
     """Renvoie (ok, message, détails). clamp=True réduit le montant aux limites au lieu de refuser
     (utilisé à l'ouverture, quand le prix a un peu bougé depuis le matin).
     frein : raison du frein d'urgence s'il est actif (aucun achat). secteur / secteur_valeur :
     secteur du titre et valeur déjà investie (ou planifiée) dans ce secteur. jours_resultats :
-    nombre de jours avant la publication des résultats du titre."""
+    nombre de jours avant la publication des résultats du titre. tendance_baissiere : S&P 500 sous sa
+    moyenne 10 mois (filtre de Faber) ; la taille maximale par titre est alors divisée par 2."""
     if frein:
         return False, f"frein d'urgence actif : {frein}. Aucun achat tant qu'il est actif (les ventes restent possibles)", {}
     if not SYMBOL_RE.match(sym):
@@ -77,7 +79,8 @@ def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pc
     if sym not in positions and len(positions) >= cfg.max_positions:
         return False, f"déjà {cfg.max_positions} positions : vendez-en une avant d'en ouvrir une autre", {}
     existing = positions.get(sym, {}).get("valeur", 0.0)
-    max_line = val["valeur"] * cfg.max_position_pct / 100 - existing
+    line_pct = cfg.max_position_pct / (2 if tendance_baissiere else 1)
+    max_line = val["valeur"] * line_pct / 100 - existing
     cash_free = val["cash"] - reserved - val["valeur"] * cfg.min_cash_pct / 100
     max_sector = (val["valeur"] * cfg.max_sector_pct / 100 - secteur_valeur) if secteur else float("inf")
     limit = min(max_line, cash_free, max_sector)
@@ -85,7 +88,9 @@ def check_buy(cfg, aid, val: dict, sym: str, price: float | None, montant, sl_pc
         return False, f"montant_usd manquant (maximum possible : {max(0, limit):.0f} $)", {}
     if amount > limit + 0.01:
         if not clamp:
-            why = ("limite par titre" if limit == max_line else
+            why = ((f"limite de {line_pct:g} % du compte par titre" + (", divisée par 2 : tendance de fond du marché "
+                                                                     "baissière" if tendance_baissiere else ""))
+                   if limit == max_line else
                    f"limite de {cfg.max_sector_pct:g} % par secteur ({secteur})" if limit == max_sector else
                    "liquidités disponibles (après réserve et ordres planifiés)")
             return False, f"montant trop élevé : maximum {max(0, limit):.0f} $ ({why})", {}

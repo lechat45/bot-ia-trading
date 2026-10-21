@@ -45,6 +45,8 @@ def indicators(bars: list[dict]) -> dict:
     trs = [max(highs[i] - lows[i], abs(highs[i] - closes[i - 1]), abs(lows[i] - closes[i - 1]))
            for i in range(len(closes) - 14, len(closes))]
     rets = [closes[i] / closes[i - 1] - 1 for i in range(len(closes) - 20, len(closes))]
+    full_year = len(closes) >= 253
+    rets_1y = [closes[i] / closes[i - 1] - 1 for i in range(len(closes) - 252, len(closes))] if full_year else []
     year = closes[-252:]
     vol20 = sum(vols[-20:]) / 20
     return {
@@ -52,6 +54,9 @@ def indicators(bars: list[dict]) -> dict:
         "sma20": sma(20), "sma50": sma(50), "sma200": sma(200),
         "perf_5j_pct": perf(5), "perf_1m_pct": perf(21), "perf_3m_pct": perf(63),
         "perf_1an_pct": perf(252),
+        # élan sur 12 mois sans le dernier mois (Jegadeesh-Titman) et volatilité sur un an
+        "perf_12_1_pct": _r((closes[-22] / closes[-253] - 1) * 100, 1) if full_year else None,
+        "volat_1an_pct": _r(statistics.pstdev(rets_1y) * math.sqrt(252) * 100, 1) if full_year else None,
         "rsi14": _r(rsi, 0),
         "atr14": _r(sum(trs) / 14),
         "volat_annuelle_pct": _r(statistics.pstdev(rets) * math.sqrt(252) * 100, 0),
@@ -108,6 +113,11 @@ STRATEGY_SCREENS = {
     # Contrarien : une forte chute qui commence à se stabiliser
     "rebond_apres_chute": (lambda i: i["perf_1m_pct"] <= -10 and i["perf_5j_pct"] > 0 and 30 <= i["rsi14"] <= 50,
                            "perf_1m_pct", False),
+    # Sentiment et élan : les plus fortes hausses sur 12 mois sans le dernier mois (Jegadeesh & Titman,
+    # 1993), l'une des régularités les mieux prouvées
+    "momentum_12_1": (lambda i: i["perf_12_1_pct"] > 0, "perf_12_1_pct", True),
+    # Qualité, Équilibre : les actions les plus calmes sur un an (Ang et al. 2006, Frazzini & Pedersen 2014)
+    "faible_volatilite": (lambda i: True, "volat_1an_pct", False),
 }
 
 
@@ -116,13 +126,35 @@ def screen_strategy(bars_by_sym: dict, critere: str, limite: int) -> list[dict]:
     rows = []
     for sym, bars in bars_by_sym.items():
         ind = indicators(bars)
-        need = ("prix", "sma50", "sma200", "perf_5j_pct", "perf_1m_pct", "perf_3m_pct", "rsi14")
+        need = ("prix", "sma50", "sma200", "perf_5j_pct", "perf_1m_pct", "perf_3m_pct", "rsi14", key)
         if any(ind.get(k) is None for k in need) or not keep(ind):
             continue
-        rows.append({"s": sym, "prix": ind["prix"], "perf_5j_pct": ind["perf_5j_pct"], "perf_1m_pct": ind["perf_1m_pct"],
-                     "perf_3m_pct": ind["perf_3m_pct"], "rsi14": ind["rsi14"], "ecart_plus_haut_pct": ind.get("ecart_plus_haut_pct")})
+        rows.append({"s": sym, "prix": ind["prix"], key: ind[key], "perf_5j_pct": ind["perf_5j_pct"],
+                     "perf_1m_pct": ind["perf_1m_pct"], "perf_3m_pct": ind["perf_3m_pct"], "rsi14": ind["rsi14"],
+                     "ecart_plus_haut_pct": ind.get("ecart_plus_haut_pct")})
     rows.sort(key=lambda r: r[key], reverse=desc)
     return rows[:limite] or [{"info": "aucune action ne remplit ces conditions aujourd'hui"}]
+
+
+MOIS = ("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
+        "novembre", "décembre")
+
+
+def trend_filter(bars: list[dict], today: dt.date) -> dict | None:
+    """Filtre de tendance de fond (Faber, 2007) : le marché est en tendance haussière si sa dernière clôture
+    mensuelle est au-dessus de la moyenne de ses 10 dernières clôtures mensuelles. Décidé une fois par mois,
+    à la fin du mois : il réduit surtout les grosses pertes (une grande partie de 2008 évitée)."""
+    month_end: dict[str, float] = {}
+    for b in bars:
+        month_end[str(b.get("t", ""))[:7]] = b["c"]
+    done = [m for m in sorted(month_end) if len(m) == 7 and m < today.strftime("%Y-%m")]  # mois terminés
+    if len(done) < 10:
+        return None
+    last10 = [month_end[m] for m in done[-10:]]
+    sma, close = sum(last10) / 10, last10[-1]
+    return {"mois": MOIS[int(done[-1][5:]) - 1], "cloture_mois": round(close, 2), "moyenne_10_mois": round(sma, 2),
+            "ecart_pct": round((close / sma - 1) * 100, 1), "haussiere": close > sma,
+            "prix_actuel": round(bars[-1]["c"], 2)}
 
 
 def _big(x):

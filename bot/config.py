@@ -51,6 +51,7 @@ class Config:
     max_gap_pct: float = 5.0  # ordre planifié annulé si l'ouverture s'écarte trop du prix du matin
     max_sector_pct: float = 35.0  # % max du compte dans un même secteur (tech, énergie…)
     earnings_blackout_days: int = 1  # pas d'achat si les résultats tombent dans 0 ou 1 jour
+    filtre_tendance: bool = True  # S&P 500 sous sa moyenne 10 mois : taille max des achats divisée par 2
     frein_jour_pct: float = 3.0  # frein d'urgence : plus d'achat si le compte perd 3 % en un jour…
     frein_semaine_pct: float = 7.0  # … ou 7 % sur 7 jours
     # Stop suiveur codé : à +5 % le stop remonte au prix d'achat, à +10 % il suit le cours à 5 % en dessous
@@ -97,6 +98,7 @@ class Config:
             min_reward_risk=_float("MIN_REWARD_RISK", 1.5),
             max_gap_pct=_float("MAX_GAP_PCT", 5.0),
             max_sector_pct=_float("MAX_SECTOR_PCT", 35.0),
+            filtre_tendance=_bool("FILTRE_TENDANCE", True),
             frein_jour_pct=_float("FREIN_JOUR_PCT", 3.0),
             frein_semaine_pct=_float("FREIN_SEMAINE_PCT", 7.0),
             stop_suiveur_pct=_float("STOP_SUIVEUR_PCT", 5.0),

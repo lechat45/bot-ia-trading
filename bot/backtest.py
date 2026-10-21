@@ -24,11 +24,18 @@ def _series(bars: list[dict]) -> list[dict | None]:
     pre = [0.0]
     for x in c:
         pre.append(pre[-1] + x)
+    # sommes cumulées des rendements quotidiens (et de leurs carrés) : volatilité sur un an en un passage
+    r = [0.0] + [c[j] / c[j - 1] - 1 for j in range(1, n)]
+    pr, pr2 = [0.0], [0.0]
+    for x in r:
+        pr.append(pr[-1] + x)
+        pr2.append(pr2[-1] + x * x)
     out: list[dict | None] = [None] * n
     for i in range(252, n):
         gains = sum(max(c[j] - c[j - 1], 0) for j in range(i - 13, i + 1))
         losses = sum(max(c[j - 1] - c[j], 0) for j in range(i - 13, i + 1))
         vol20 = sum(v[i - 19:i + 1]) / 20
+        m1, m2 = (pr[i + 1] - pr[i - 251]) / 252, (pr2[i + 1] - pr2[i - 251]) / 252
         out[i] = {
             "prix": c[i], "sma50": (pre[i + 1] - pre[i - 49]) / 50, "sma200": (pre[i + 1] - pre[i - 199]) / 200,
             "perf_1j_pct": (c[i] / c[i - 1] - 1) * 100, "perf_5j_pct": (c[i] / c[i - 5] - 1) * 100,
@@ -36,6 +43,8 @@ def _series(bars: list[dict]) -> list[dict | None]:
             "rsi14": 100.0 if losses == 0 else 100 - 100 / (1 + gains / losses),
             "ecart_plus_haut_pct": (c[i] / max(c[i - 251:i + 1]) - 1) * 100,
             "volume_vs_moy20": v[i] / vol20 if vol20 else None,
+            "perf_12_1_pct": (c[i - 21] / c[i - 252] - 1) * 100,
+            "volat_1an_pct": max(m2 - m1 * m1, 0) ** 0.5 * 252 ** 0.5 * 100,
         }
     return out
 
@@ -118,4 +127,5 @@ def summary(data: dict, criteres=tuple(tools.STRATEGY_SCREENS)) -> str:
     if not rows:
         return ""
     return (f"CE QUE VALENT TES CRITÈRES DE SCREENER, testés sur le passé ({data.get('periode')}, "
-            f"{data.get('valeurs')} grandes valeurs ; passé ≠ avenir) : " + " ; ".join(rows) + ".\n\n")
+            f"{data.get('valeurs')} grandes valeurs ; un indice, pas une preuve : il faudrait 15 ans de données, "
+            "et les entreprises disparues manquent) : " + " ; ".join(rows) + ".\n\n")
