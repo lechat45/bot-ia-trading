@@ -10,13 +10,18 @@
    "symbole": "TSM",
    "source": "qualite-1",
    "these": "Achat de Taiwan Semiconductor (TSM) - Proposition qualite-1 : 1. Pourquoi maintenant : Opportunité de qualité sur repli sectoriel temporaire (-5.5% sur 5j sur XLK). TSM s'est replié de -12.5% depuis ses sommets (486.01$) avec un RSI à 37, proche d'un support solide au-dessus de la SMA200 (394.91$). 2. Fondamentaux Qualité exceptionnels : Croissance du CA +50.9%, marge op 58.7%, ROE 41.9%, dette/FP très faible (12%), FCF massif. PER attendu de 18.2x. 3. Catalyseurs : Fonderie incontournable pour l'écosystème AI (Nvidia, etc.). Prochains résultats dans 85j (14/01/2027). 4. Risques : Risque géopolitique Taïwan et volatilité Tech. 5. Invalidation / Niveaux : Invalidation sous 400$ (SMA200). Stop loss à 6.0% (399.69$, ~2 ATR) et Take profit à 15.0% (488.98$), ratio R:R de 2.5:1. Risque max sur capital : 0.59%.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-10-21T07:17:24+00:00",
    "prix_reference": 425.8,
    "montant_usd": 9793.4,
    "qty_estimee": 23,
    "stop_loss_pct": 6.0,
-   "take_profit_pct": 15.0
+   "take_profit_pct": 15.0,
+   "resultat": "Achat exécuté : 22 TSM à 429.93 $ (stop 403.85 $, objectif 494.07 $)",
+   "prix_execution": 429.93,
+   "qty": 22,
+   "traite_le": "2026-10-21T13:40:17+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-10-21T13:40:17+00:00"
 }

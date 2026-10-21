@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 70639.79000000001,
+   "cash": 61181.33000000001,
    "positions": {
     "AMZN": {
      "lots": [
@@ -53,6 +53,22 @@
       }
      ],
      "these": "NVIDIA (NVDA) : Fondamentaux exceptionnels (croissance CA +105.9%, marge op 66.2%, ROE 117.2%, dette/FP 17%, FCF 41.8Md$) avec un PER attendu attrayant de 13.6x. Repli sain de 5% sur 5j (RSI 14 à 37, -9.2% sous le plus haut de 239.17$) venant tester la zone de support au-dessus de la SMA200 (202.95$). Prochains résultats le 17/11/2026 (28 jours). Entrée technologique parfaite diversifiant le portefeuille. Stop loss à -6.5% (sous SMA200), TP à +15.0% (ratio 2.3:1). Horizon 1 à 3 mois."
+    },
+    "TSM": {
+     "lots": [
+      {
+       "qty": 22,
+       "prix": 429.93,
+       "date": "2026-10-21T13:40:17+00:00",
+       "stop": 403.85,
+       "tp": 494.07,
+       "statut": "ouvert",
+       "parent_id": "594e294c-0b93-4f51-874d-bc1706ee9ff9",
+       "stop_id": "49f88c49-a96c-4586-a58d-2e3bdf1b3ffe",
+       "tp_id": "f2c82378-4e53-4140-b601-cd5855376c10"
+      }
+     ],
+     "these": "Achat de Taiwan Semiconductor (TSM) - Proposition qualite-1 : 1. Pourquoi maintenant : Opportunité de qualité sur repli sectoriel temporaire (-5.5% sur 5j sur XLK). TSM s'est replié de -12.5% depuis ses sommets (486.01$) avec un RSI à 37, proche d'un support solide au-dessus de la SMA200 (394.91$). 2. Fondamentaux Qualité exceptionnels : Croissance du CA +50.9%, marge op 58.7%, ROE 41.9%, dette/FP très faible (12%), FCF massif. PER attendu de 18.2x. 3. Catalyseurs : Fonderie incontournable pour l'écosystème AI (Nvidia, etc.). Prochains résultats dans 85j (14/01/2027). 4. Risques : Risque géopolitique Taïwan et volatilité Tech. 5. Invalidation / Niveaux : Invalidation sous 400$ (SMA200). Stop loss à 6.0% (399.69$, ~2 ATR) et Take profit à 15.0% (488.98$), ratio R:R de 2.5:1. Risque max sur capital : 0.59%."
     }
    },
    "realise": 0.0,
@@ -60,6 +76,10 @@
     {
      "ts": "2026-10-20T13:31:03+00:00",
      "texte": "Ouverture, ordre planifié acheter UNH : Achat exécuté : 23 UNH à 409.33 $ (stop 384.66 $, objectif 458.32 $)"
+    },
+    {
+     "ts": "2026-10-21T13:40:17+00:00",
+     "texte": "Ouverture, ordre planifié acheter TSM : Achat exécuté : 22 TSM à 429.93 $ (stop 403.85 $, objectif 494.07 $)"
     }
    ],
    "derniere_seance": "2026-10-21T07:02:34+00:00"

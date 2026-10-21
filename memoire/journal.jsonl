@@ -1,3 +1,4 @@
 {"type": "execution", "ts": "2026-10-19T17:44:41+00:00", "agent": "equipe", "action": "acheter", "symbole": "AMZN", "qty": 38, "statut": "exécuté", "prix": 262.6, "stop": 249.49, "tp": 288.89, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-10-20T13:31:03+00:00", "agent": "equipe", "action": "acheter", "symbole": "UNH", "qty": 23, "statut": "exécuté", "prix": 409.33, "stop": 384.66, "tp": 458.32, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-10-20T18:52:55+00:00", "agent": "equipe", "action": "acheter", "symbole": "NVDA", "qty": 46, "statut": "exécuté", "prix": 216.67, "stop": 202.58, "tp": 249.16, "source": "qualite-1"}
+{"type": "execution", "ts": "2026-10-21T13:40:17+00:00", "agent": "equipe", "action": "acheter", "symbole": "TSM", "qty": 22, "statut": "exécuté", "prix": 429.93, "stop": 403.85, "tp": 494.07, "source": "qualite-1"}

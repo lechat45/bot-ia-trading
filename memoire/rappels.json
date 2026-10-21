@@ -56,5 +56,16 @@
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-10-20T18:55:28+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r6-0114",
+  "date": "2027-01-14",
+  "titre": "Résultats de TSM",
+  "symbole": "TSM",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-10-21T13:40:17+00:00",
+  "statut": "actif"
  }
 ]
