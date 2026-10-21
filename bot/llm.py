@@ -33,9 +33,10 @@ class LLMError(Exception):
 
 
 class RateLimited(LLMError):
-    def __init__(self, wait: float, msg: str = ""):
+    def __init__(self, wait: float, msg: str = "", shared: bool = False):
         super().__init__(f"limite atteinte ({msg[:80]}), attendre {wait:.0f}s")
         self.wait = wait
+        self.shared = shared  # limite commune à toutes les clés du fournisseur : inutile d'essayer les autres
 
 
 class ModelUnavailable(LLMError):
@@ -244,14 +245,17 @@ class Groq:
         return {"role": "assistant", "text": "", "calls": [{"id": _new_id(), "name": match[0],
                                                             "args": args if isinstance(args, dict) else {}}]}
 
-    def chat(self, key, model, system, messages, tools, max_tokens=2000):
+    def chat(self, key, model, system, messages, tools, max_tokens=1400):
+        # Groq gratuit compte la réponse RÉSERVÉE (max_completion_tokens) dans sa limite de 8 000 jetons par
+        # minute : une réserve de 2 000 rendait « trop grosses » des requêtes de 6 000 jetons. Une réflexion
+        # courte (reasoning_effort low) tient dans 1 400 jetons et consomme moins de quota.
         body = {"model": model, "messages": self.render(system, messages), "temperature": 0.6,
                 "max_completion_tokens": max_tokens}
         if tools:
             body["tools"] = [{"type": "function", "function": t} for t in tools]
             body["tool_choice"] = "auto"
         if "gpt-oss" in model:
-            body["reasoning_effort"] = "medium"
+            body["reasoning_effort"] = "low"
         if "qwen" in model:
             body["reasoning_format"] = "hidden"
         try:
@@ -264,8 +268,8 @@ class Groq:
         if r.status_code == 413 or "request too large" in r.text.lower() or (
                 r.status_code == 400 and "context" in r.text.lower() and "length" in r.text.lower()):
             raise ContextTooLarge(r.text[:200])
-        if r.status_code == 429:
-            raise RateLimited(_retry_after(r, 20), r.text)
+        if r.status_code == 429:  # les clés d'une même organisation partagent la limite
+            raise RateLimited(_retry_after(r, 20), r.text, shared=True)
         if r.status_code in (404, 500, 502, 503):
             raise ModelUnavailable(f"Groq {model} {r.status_code}")
         if r.status_code == 400 and "tool_use_failed" in r.text and tools:
@@ -353,9 +357,10 @@ class Mistral(Groq):
 GEMINI_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3-flash-preview",
                  "gemini-3.1-flash-lite"]
 # Gemma 4 : IA ouvertes de Google, sur les mêmes clés Gemini, avec un quota gratuit bien plus large
-# (environ 1 500 requêtes par jour, contre une vingtaine pour Gemini 3.5 Flash). La 31B, plus lente et
-# souvent en erreur 500, passe après la 26B.
-GEMMA_MODELS = ["gemma-4-26b-a4b-it", "gemma-4-31b-it"]
+# (environ 1 500 requêtes par jour, contre une vingtaine pour Gemini 3.5 Flash) mais 16 000 jetons envoyés
+# par minute et par clé, soit environ 2 requêtes du bot par minute. La 31B est écartée : elle répond
+# « erreur 500 » après 25 secondes dès que la requête a la taille de celles du bot.
+GEMMA_MODELS = ["gemma-4-26b-a4b-it"]
 DEFAULT_MODELS = {
     # Relais des IA Groq et Mistral : Gemma d'abord, pour laisser le peu de quota Gemini aux IA Gemini
     "gemini": GEMMA_MODELS + GEMINI_MODELS,
@@ -423,7 +428,8 @@ class Router:
             out += [(provider, ki, m) for m in models]
         for other in FALLBACK[provider]:
             prov = self.providers.get(other)
-            for ki in range(len(prov.keys) if prov else 0):
+            n = len(prov.keys) if prov else 0
+            for ki in [(key_index + j) % n for j in range(n)]:  # chaque IA commence par une clé différente
                 out += [(other, ki, m) for m in DEFAULT_MODELS[other]]
         return out
 
@@ -451,7 +457,7 @@ class Router:
                 time.sleep(wait + random.uniform(1, 3))
 
     def _chat_once(self, agent, system, messages, tools, label, attempts):
-        last, too_large = None, False
+        last, too_large, waiting = None, False, False
         skipped: set = set()
         cooling = 0
         size = len(system) + len(json.dumps(messages, ensure_ascii=False, default=str)) + len(json.dumps(tools or [], ensure_ascii=False))
@@ -461,6 +467,7 @@ class Router:
                 continue
             if self._cool_left(prov_name, ki, model) > 0:
                 cooling += 1
+                waiting = True
                 continue
             if size >= self._too_big.get((prov_name, model), float("inf")) * 0.95:
                 too_large = True  # déjà refusée plus petite : inutile de réessayer ce modèle
@@ -483,7 +490,11 @@ class Router:
                         self._too_big[(prov_name, model)] = min(size, self._too_big.get((prov_name, model), size))
                     break
                 except RateLimited as e:
-                    last = e
+                    last, waiting = e, True
+                    if e.shared:  # Groq : les autres clés partagent la limite, on passe tout de suite au suivant
+                        for k in range(len(prov.keys)):
+                            self._cool_down(prov_name, k, model, max(e.wait, 20))
+                        break
                     if attempt == 0 and e.wait <= 65:
                         log.info("%s : %s#%d %s limité, pause %.0fs", label, prov_name, ki + 1, model, e.wait)
                         time.sleep(e.wait + random.uniform(1, 3))
@@ -501,7 +512,7 @@ class Router:
                         continue
                     break
             log.warning("%s : %s#%d %s indisponible (%s), essai suivant", label, prov_name, ki + 1, model, last)
-        if too_large:  # l'IA raccourcira sa conversation et réessaiera
+        if too_large and not waiting:  # l'IA raccourcira sa conversation et réessaiera
             raise ContextTooLarge(f"{label} : conversation trop longue pour les modèles disponibles")
         raise LLMError(f"{label} : aucune clé ni aucun modèle disponible ({last or f'{cooling} modèle(s) saturé(s)'})")
 

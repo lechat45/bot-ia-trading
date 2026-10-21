@@ -31,8 +31,9 @@ travaillent ensemble sur un seul compte** Alpaca paper (argent virtuel), gratuit
   `ce-qui-marche-vraiment` dit aux IA ce qui est prouvé et ce qui ne l'est pas ; l'analyste Sentiment part
   de l'élan des prix plutôt que de Reddit, et le Contrarien exige une valorisation basse.
 - **Roue de secours Gemma 4** : quand le quota du jour de Gemini est épuisé, les IA Gemini passent à
-  Gemma 4, des IA de Google qui marchent avec les mêmes clés et ont un quota gratuit bien plus large
-  (environ 1 500 requêtes par jour et par projet). Les IA Groq, quand Groq est saturé, passent elles
+  Gemma 4 (26B), une IA de Google qui marche avec les mêmes clés et a un quota gratuit bien plus large
+  (environ 1 500 requêtes par jour et par projet, mais 16 000 jetons par minute : environ 2 requêtes du bot
+  par minute et par clé). Les IA Groq, quand Groq est saturé, passent elles
   aussi par Gemma avant Gemini, pour laisser le quota Gemini aux IA Gemini. Tes vraies limites sont
   visibles sur https://aistudio.google.com/rate-limit.
 

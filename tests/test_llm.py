@@ -40,7 +40,7 @@ def test_un_modele_sature_n_est_plus_reessaye():
     r = router({}, groq_fail)
     agent = SimpleNamespace(id="critique", provider="groq", key_index=2, models=qm)
     msg, used = r.chat(agent, "", [], [])
-    assert used.startswith("gemini#1") and msg["text"] == "ok"
+    assert used.startswith("gemini#3") and msg["text"] == "ok"  # relais : la clé Gemini du même numéro d'abord
     first = len(r.providers["groq"].calls)
     assert first == 9  # 3 clés x 3 modèles essayés une fois
     r.chat(agent, "", [], [])  # 2e tour : les modèles Groq saturés sont sautés
@@ -102,13 +102,39 @@ def test_roue_de_secours_gemma():
     from bot.agents import AGENTS
 
     qualite = next(a for a in AGENTS if a.id == "qualite")
-    assert qualite.models[0].startswith("gemini") and qualite.models[-2:] == llm.GEMMA_MODELS
+    assert qualite.models[0].startswith("gemini") and qualite.models[-len(llm.GEMMA_MODELS):] == llm.GEMMA_MODELS
     r = router({}, {})
     relais = [m for p, _, m in r._attempts("groq", 0, ["openai/gpt-oss-120b"]) if p == "gemini"]
-    assert relais[:2] == llm.GEMMA_MODELS  # Groq saturé : Gemma avant le peu de quota Gemini
+    assert relais[:len(llm.GEMMA_MODELS)] == llm.GEMMA_MODELS  # Groq saturé : Gemma avant le peu de quota Gemini
     gemma = {"role": "assistant", "raw_gemini": [{"functionCall": {"name": "screener", "args": {}, "id": "a"}}]}
     part = llm.Gemini.render([gemma])[0]["parts"][0]
     assert part["thoughtSignature"]  # Gemini peut reprendre une conversation où Gemma a appelé un outil
+
+
+def test_limite_groq_commune_a_toutes_les_cles():
+    qm = llm.DEFAULT_MODELS["groq"]
+    r = router({}, {(k, qm[0]): RateLimited(40, "TPM", shared=True) for k in ("q1", "q2", "q3")})
+    agent = SimpleNamespace(id="sentiment", provider="groq", key_index=0, models=qm[:1])
+    t = __import__("time").time()
+    msg, used = r.chat(agent, "", [], [])
+    assert __import__("time").time() - t < 5  # pas de pause de 40 s : on passe tout de suite au relais
+    assert used.startswith("gemini#1") and r.providers["groq"].calls == [("q1", qm[0])]  # les clés 2 et 3 sautées
+    assert r._cool_left("groq", 2, qm[0]) > 30
+
+
+def test_trop_gros_pour_groq_mais_relais_juste_limite():
+    qm = llm.DEFAULT_MODELS["groq"]
+    gm = llm.DEFAULT_MODELS["gemini"]
+    big = {(k, m): llm.ContextTooLarge("Request too large") for k in ("q1", "q2", "q3") for m in qm}
+    r = router({(k, m): RateLimited(300, "par minute") for k in ("g1", "g2", "g3") for m in gm}, big)
+    agent = SimpleNamespace(id="critique", provider="groq", key_index=2, models=qm)
+    try:
+        r._chat_once(agent, "", [{"role": "user", "text": "x"}], [], "critique", r._attempts("groq", 2, qm))
+        raise AssertionError("aucun modèle ne devait répondre")
+    except llm.ContextTooLarge:
+        raise AssertionError("le relais est seulement limité : il faut attendre, pas raccourcir la conversation")
+    except llm.LLMError:
+        pass
 
 
 def test_recherche_web_de_secours():
