@@ -1,15 +1,15 @@
-_Mis à jour : 2026-10-20 20:19 (Paris)_
-
-_Mis à jour : 2026-10-20 20:25 (Paris) - Séance de suivi_
+_Mis à jour : 2026-10-21 09:02 (Paris)_
 
 Analyste Contrarien :
-- Portefeuille : AMZN (+0.1 %) et UNH (+2.8 %). Les thèses tiennent, aucun signal de sortie ou d'invalidation. Stop loss bien positionnés. UNH a ses résultats le 12/01/2027 (84j), AMZN fin octobre.
-- Proposition DB (Deutsche Bank ADR) :
-  * Déjà proposée lors de la séance de préparation le 20/10/2026 au matin (avis critique : OK).
-  * En séance de suivi (bourse ouverte), les positions existantes se portent bien, cash suffisant (~80k$).
-  * Pas de nouvelle proposition redondante nécessaire pendant le suivi si le gérant a déjà arbitré pour la journée ou s'il s'agit de la même thèse en attente.
-  * DB se maintient à 31.79 $ (+0.5 % depuis hier). Résultats le 28/10/2026 (dans 8 jours). Rappel actif id r3-1028.
-- Autres valeurs surveillées :
-  * BCS : résultats dans 2 jours (22/10), trop proche pour une entrée contrarienne selon nos règles de risque.
-  * NOK : marge nette faible (3.5 %), valorisation élevée (PER 64.8), pas assez de marge de sécurité.
-- Prochaine étape : suivre l'exécution éventuelle des ordres par le gérant ou refaire le point lors de la prochaine séance de préparation.
+- Portefeuille : AMZN, UNH, NVDA. Thèses intactes, pas de signal de vente.
+- Suivi DB (Deutsche Bank ADR) :
+  * Proposition déjà soumise le 20/10 (avis critique OK).
+  * Situation extrême : RSI14 à 8.0 (survente massive), PER attendu à 6.8 (très bas vs secteur).
+  * Catalyseur : Résultats le 28/10 (dans 7 jours).
+  * Le titre reste une excellente opportunité contrarienne si le gérant décide de l'intégrer.
+- Analyse INTC (Intel) :
+  * Écarté. Malgré un RSI très bas (12), les fondamentaux sont dégradés (marge nette négative, ROE négatif) et la valorisation (PER 43.4) reste élevée par rapport aux pairs. Piège à valeur probable.
+- Autres pistes :
+  * ARM et SMCI montrent des chutes brutales et RSI bas, mais manque de budget d'analyse pour valider la stabilisation et les fondamentaux cette séance. À surveiller.
+  * BCS : Résultats trop proches (22/10), exclu.
+- Prochaine étape : Surveiller l'exécution de DB et vérifier la stabilisation d'ARM/SMCI lors de la prochaine préparation.

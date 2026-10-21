@@ -1,6 +1,32 @@
 {
  "satures": {},
  "jours": {
-  "2026-10-20": {}
+  "2026-10-20": {},
+  "2026-10-21": {
+   "groq#1": {
+    "tokens": 39818,
+    "appels": 6
+   },
+   "groq#2": {
+    "tokens": 14728,
+    "appels": 3
+   },
+   "gemini#2": {
+    "tokens": 108226,
+    "appels": 10
+   },
+   "gemini#1": {
+    "tokens": 271293,
+    "appels": 25
+   },
+   "groq#3": {
+    "tokens": 20399,
+    "appels": 3
+   },
+   "gemini#3": {
+    "tokens": 88657,
+    "appels": 7
+   }
+  }
  }
 }
