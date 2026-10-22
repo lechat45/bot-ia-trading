@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 61181.33000000001,
+   "cash": 47110.53000000001,
    "positions": {
     "AMZN": {
      "lots": [
@@ -69,6 +69,22 @@
       }
      ],
      "these": "Achat de Taiwan Semiconductor (TSM) - Proposition qualite-1 : 1. Pourquoi maintenant : Opportunité de qualité sur repli sectoriel temporaire (-5.5% sur 5j sur XLK). TSM s'est replié de -12.5% depuis ses sommets (486.01$) avec un RSI à 37, proche d'un support solide au-dessus de la SMA200 (394.91$). 2. Fondamentaux Qualité exceptionnels : Croissance du CA +50.9%, marge op 58.7%, ROE 41.9%, dette/FP très faible (12%), FCF massif. PER attendu de 18.2x. 3. Catalyseurs : Fonderie incontournable pour l'écosystème AI (Nvidia, etc.). Prochains résultats dans 85j (14/01/2027). 4. Risques : Risque géopolitique Taïwan et volatilité Tech. 5. Invalidation / Niveaux : Invalidation sous 400$ (SMA200). Stop loss à 6.0% (399.69$, ~2 ATR) et Take profit à 15.0% (488.98$), ratio R:R de 2.5:1. Risque max sur capital : 0.59%."
+    },
+    "TMO": {
+     "lots": [
+      {
+       "qty": 20,
+       "prix": 703.54,
+       "date": "2026-10-22T13:40:28+00:00",
+       "stop": 660.07,
+       "tp": 807.53,
+       "statut": "ouvert",
+       "parent_id": "eb7b4eea-f827-44b8-ba9f-9d81e37aaef3",
+       "stop_id": "5cd53b11-618c-4796-9804-bb1a3f595802",
+       "tp_id": "f0682af5-df6b-42e2-adfd-584b3aab1887"
+      }
+     ],
+     "these": "Thermo Fisher Scientific (TMO) : publication de résultats T3 solides hier (21/10/2026) avec relèvement des prévisions de CA et de BPA. Volume supérieur à la moyenne (1.7x). Configuration haussière robuste (TMO proche de ses plus hauts annuels, RSI à 66). Diversification dans la santé avec un leader mondial de la recherche et du diagnostic. Stop loss à 6.0% (sécurisé), take profit à 15.0% (ratio R/R > 2). Horizon 1 à 3 mois."
     }
    },
    "realise": 0.0,
@@ -80,6 +96,10 @@
     {
      "ts": "2026-10-21T13:40:17+00:00",
      "texte": "Ouverture, ordre planifié acheter TSM : Achat exécuté : 22 TSM à 429.93 $ (stop 403.85 $, objectif 494.07 $)"
+    },
+    {
+     "ts": "2026-10-22T13:40:28+00:00",
+     "texte": "Ouverture, ordre planifié acheter TMO : Achat exécuté : 20 TMO à 703.54 $ (stop 660.07 $, objectif 807.53 $)"
     }
    ],
    "derniere_seance": "2026-10-22T07:02:28+00:00"

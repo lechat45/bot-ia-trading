@@ -10,13 +10,18 @@
    "symbole": "TMO",
    "source": "sentiment-1",
    "these": "Thermo Fisher Scientific (TMO) : publication de résultats T3 solides hier (21/10/2026) avec relèvement des prévisions de CA et de BPA. Volume supérieur à la moyenne (1.7x). Configuration haussière robuste (TMO proche de ses plus hauts annuels, RSI à 66). Diversification dans la santé avec un leader mondial de la recherche et du diagnostic. Stop loss à 6.0% (sécurisé), take profit à 15.0% (ratio R/R > 2). Horizon 1 à 3 mois.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-10-22T07:07:18+00:00",
    "prix_reference": 694.14,
    "montant_usd": 14577.05,
    "qty_estimee": 21,
    "stop_loss_pct": 6.0,
-   "take_profit_pct": 15.0
+   "take_profit_pct": 15.0,
+   "resultat": "Achat exécuté : 20 TMO à 703.54 $ (stop 660.07 $, objectif 807.53 $)",
+   "prix_execution": 703.54,
+   "qty": 20,
+   "traite_le": "2026-10-22T13:40:28+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-10-22T13:40:28+00:00"
 }
