@@ -1,27 +1,22 @@
 {
- "date": "2026-10-21",
- "cree_le": "2026-10-21T07:02:34+00:00",
+ "date": "2026-10-22",
+ "cree_le": "2026-10-22T07:02:28+00:00",
  "simulation": false,
  "ordres": [
   {
    "compte": "equipe",
    "agent": "gerant",
    "action": "acheter",
-   "symbole": "TSM",
-   "source": "qualite-1",
-   "these": "Achat de Taiwan Semiconductor (TSM) - Proposition qualite-1 : 1. Pourquoi maintenant : Opportunité de qualité sur repli sectoriel temporaire (-5.5% sur 5j sur XLK). TSM s'est replié de -12.5% depuis ses sommets (486.01$) avec un RSI à 37, proche d'un support solide au-dessus de la SMA200 (394.91$). 2. Fondamentaux Qualité exceptionnels : Croissance du CA +50.9%, marge op 58.7%, ROE 41.9%, dette/FP très faible (12%), FCF massif. PER attendu de 18.2x. 3. Catalyseurs : Fonderie incontournable pour l'écosystème AI (Nvidia, etc.). Prochains résultats dans 85j (14/01/2027). 4. Risques : Risque géopolitique Taïwan et volatilité Tech. 5. Invalidation / Niveaux : Invalidation sous 400$ (SMA200). Stop loss à 6.0% (399.69$, ~2 ATR) et Take profit à 15.0% (488.98$), ratio R:R de 2.5:1. Risque max sur capital : 0.59%.",
-   "statut": "execute",
-   "cree_le": "2026-10-21T07:17:24+00:00",
-   "prix_reference": 425.8,
-   "montant_usd": 9793.4,
-   "qty_estimee": 23,
+   "symbole": "TMO",
+   "source": "sentiment-1",
+   "these": "Thermo Fisher Scientific (TMO) : publication de résultats T3 solides hier (21/10/2026) avec relèvement des prévisions de CA et de BPA. Volume supérieur à la moyenne (1.7x). Configuration haussière robuste (TMO proche de ses plus hauts annuels, RSI à 66). Diversification dans la santé avec un leader mondial de la recherche et du diagnostic. Stop loss à 6.0% (sécurisé), take profit à 15.0% (ratio R/R > 2). Horizon 1 à 3 mois.",
+   "statut": "en_attente",
+   "cree_le": "2026-10-22T07:07:18+00:00",
+   "prix_reference": 694.14,
+   "montant_usd": 14577.05,
+   "qty_estimee": 21,
    "stop_loss_pct": 6.0,
-   "take_profit_pct": 15.0,
-   "resultat": "Achat exécuté : 22 TSM à 429.93 $ (stop 403.85 $, objectif 494.07 $)",
-   "prix_execution": 429.93,
-   "qty": 22,
-   "traite_le": "2026-10-21T13:40:17+00:00"
+   "take_profit_pct": 15.0
   }
- ],
- "execute_le": "2026-10-21T13:40:17+00:00"
+ ]
 }

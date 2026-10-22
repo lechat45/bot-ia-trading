@@ -8,5 +8,10 @@
   "date": "2026-10-20",
   "auteur": "contrarien",
   "texte": "Un titre contrarien doit montrer 2+ séances sans nouveau plus bas après le choc, pas juste une date lointaine."
+ },
+ {
+  "date": "2026-10-22",
+  "auteur": "sentiment",
+  "texte": "Lorsque le volume dépasse 1,5× la moyenne 20‑jours juste après un catalyseur (ex. résultats) et que le prix reste au‑dessus de SMA20/SMA50, l’élan d’actualité peut être confirmé même si le RSI est déjà élevé."
  }
 ]

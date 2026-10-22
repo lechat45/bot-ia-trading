@@ -1,28 +1,28 @@
-_Mis à jour : 2026-10-21 18:14 (Paris)_
+_Mis à jour : 2026-10-22 09:02 (Paris)_
 
-Mis à jour : 2026-10-21 18:30 (Paris) - Séance de Suivi
+Mis à jour : 2026-10-22 09:15 (Paris) - Séance de Préparation
 
-Analyste Équilibre - Suivi & Action
+Analyste Équilibre - Préparation
 État du portefeuille géré (4 positions) :
-- AMZN (Consumer Cyclical) : ~9 977 USD (-0.02%), Stop 249.49 USD, TP 288.89 USD. Résultats le 29/10/2026.
-- UNH (Healthcare) : ~9 548 USD (+1.42%), Stop 384.66 USD, TP 458.32 USD. Résultats le 12/01/2027.
-- NVDA (Technology) : ~10 143 USD (+1.77%), Stop 202.58 USD, TP 249.16 USD. Résultats le 18/11/2026.
-- TSM (Technology) : ~9 421 USD (-0.39%), Stop 403.85 USD, TP 494.07 USD. Résultats inconnu.
-- Total investi : ~39.1k USD (39.1% du compte). Cash disponible : ~61 181 USD.
+- AMZN (Consumer Cyclical) : ~10.0k USD, Stop 249.49 USD, TP 288.89 USD. Résultats le 29/10/2026.
+- UNH (Healthcare) : ~9.6k USD, Stop 384.66 USD, TP 458.32 USD. Résultats le 12/01/2027.
+- NVDA (Technology) : ~10.2k USD, Stop 202.58 USD, TP 249.16 USD. Résultats le 18/11/2026.
+- TSM (Technology) : ~9.5k USD, Stop 403.85 USD, TP 494.07 USD. Résultats inconnu.
+- Total investi : ~39.3k USD (39.3% du compte). Cash disponible : ~56.2k USD.
 
 Répartition sectorielle actuelle :
-- Technology : 19.5%
+- Technology : 19.6%
 - Consumer Cyclical : 10.0%
 - Healthcare : 9.5%
-- Secteurs majeurs absents : Financial Services, Consumer Staples, Industrials, Energy.
+- Secteurs absents majeurs : Financial Services, Consumer Staples, Industrials, Energy.
 
 Proposition transmise cette séance (ID equilibre-1) :
-- ACHAT de 10 000 USD sur Visa Inc. (V - Financial Services) :
-  * Thèse : Apport d'une diversification sectorielle indispensable (0% Financials actuellement). Secteur financier bien orienté (+2.8% sur 5j).
-  * Qualité exceptionnelle : Marge nette 50.8%, Marge opératoire 66.1%, ROE 61.2%, FCF 20.4Md$, Dette/FP 68%.
-  * Tendance : Au plus haut historique ($409.32), RSI 92.
-  * Stop Loss à 5.0% (388.85 USD), TP à 10.0% (450.25 USD). Ratio 2.0:1. Risque capital : 0.49% (500 USD).
-  * Résultats le 27 octobre 2026 (dans 6 jours, > 1 jour, validé).
+- ACHAT de 10 000 USD sur Chubb Limited (CB - Financial Services / Assurance) :
+  * Thèse : Premier titre financier du portefeuille, secteur absent (0%). Volatilité faible (19.4%), grand assureur mondial.
+  * Fondamentaux : FCF 10.5Md$, ROE 14.8%, Dette/FP 31%, PER 12.1x.
+  * Tendance : Proche des plus hauts, SMA200 validée, RSI 78.
+  * Stop Loss à 5.0%, Take Profit à 10.0% (ratio 2.0:1). Risque du compte : 0.49%.
+  * Résultats passés le 20/10/2026 (aucun risque immédiat de publication).
 
 Pistes pour prochaines séances :
-- Consolider la robustesse du portefeuille en surveillant des opportunités sur Consumer Staples (KO) ou Industrials (GE, CAT, HON) dès que le cash le permettra.
+- Continuer à renforcer la diversification sectorielle (Consumer Staples avec KO, ou Industrials) à mesure que le cash est déployé de manière équilibrée.
