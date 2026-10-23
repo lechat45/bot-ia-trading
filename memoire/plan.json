@@ -10,13 +10,18 @@
    "symbole": "META",
    "source": "qualite-1",
    "these": "Thèse Qualité retenue (qualite-1) : Leader mondial (Communication Services, 0% du portefeuille), rentabilité hors normes (marge op 34.8%, ROE 29.8%, FCF 21.6Md$, dette/FP 43%). Valorisation attrayante post-résultats T3 (PER attendu 18.6x). Repli technique de -11.9% sur 5j vers le support SMA200 (631.67$), RSI survendu à 31. Stop loss fixé à 605.00$ (6.75% sous cours, sous SMA200 et >1.5 ATR). Objectif à 746.00$ (+15.0%), ratio R/R 2.22x. Invalidation si rupture nette de la SMA200. Horizon 1-3 mois.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-10-23T07:13:29+00:00",
    "prix_reference": 646.74,
    "montant_usd": 8407.62,
    "qty_estimee": 13,
    "stop_loss_pct": 6.75,
-   "take_profit_pct": 15.0
+   "take_profit_pct": 15.0,
+   "resultat": "Achat exécuté : 13 META à 640.87 $ (stop 596.30 $, objectif 735.38 $)",
+   "prix_execution": 640.865385,
+   "qty": 13,
+   "traite_le": "2026-10-23T13:40:24+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-10-23T13:40:24+00:00"
 }

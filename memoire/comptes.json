@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 56585.000004000016,
+   "cash": 48253.749999000014,
    "positions": {
     "UNH": {
      "lots": [
@@ -69,6 +69,22 @@
       }
      ],
      "these": "Thermo Fisher Scientific (TMO) : publication de résultats T3 solides hier (21/10/2026) avec relèvement des prévisions de CA et de BPA. Volume supérieur à la moyenne (1.7x). Configuration haussière robuste (TMO proche de ses plus hauts annuels, RSI à 66). Diversification dans la santé avec un leader mondial de la recherche et du diagnostic. Stop loss à 6.0% (sécurisé), take profit à 15.0% (ratio R/R > 2). Horizon 1 à 3 mois."
+    },
+    "META": {
+     "lots": [
+      {
+       "qty": 13,
+       "prix": 640.865385,
+       "date": "2026-10-23T13:40:24+00:00",
+       "stop": 596.3,
+       "tp": 735.38,
+       "statut": "ouvert",
+       "parent_id": "317297ff-31c8-4a00-9cb2-12a42e191abf",
+       "stop_id": "d268d47a-c38b-4a1a-af32-85970c327796",
+       "tp_id": "24aa016c-1050-4e84-a308-b207d8b97432"
+      }
+     ],
+     "these": "Thèse Qualité retenue (qualite-1) : Leader mondial (Communication Services, 0% du portefeuille), rentabilité hors normes (marge op 34.8%, ROE 29.8%, FCF 21.6Md$, dette/FP 43%). Valorisation attrayante post-résultats T3 (PER attendu 18.6x). Repli technique de -11.9% sur 5j vers le support SMA200 (631.67$), RSI survendu à 31. Stop loss fixé à 605.00$ (6.75% sous cours, sous SMA200 et >1.5 ATR). Objectif à 746.00$ (+15.0%), ratio R/R 2.22x. Invalidation si rupture nette de la SMA200. Horizon 1-3 mois."
     }
    },
    "realise": -504.3299960000008,
@@ -88,6 +104,10 @@
     {
      "ts": "2026-10-23T07:02:31+00:00",
      "texte": "Stop loss déclenché : 38 AMZN vendues à 249.33 $ (plus-value -504.33 $)"
+    },
+    {
+     "ts": "2026-10-23T13:40:24+00:00",
+     "texte": "Ouverture, ordre planifié acheter META : Achat exécuté : 13 META à 640.87 $ (stop 596.30 $, objectif 735.38 $)"
     }
    ],
    "derniere_seance": "2026-10-23T07:02:31+00:00"
