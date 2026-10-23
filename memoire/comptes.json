@@ -4,24 +4,8 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 47110.53000000001,
+   "cash": 56585.000004000016,
    "positions": {
-    "AMZN": {
-     "lots": [
-      {
-       "qty": 38,
-       "prix": 262.6,
-       "date": "2026-10-19T17:44:41+00:00",
-       "stop": 249.49,
-       "tp": 288.89,
-       "statut": "ouvert",
-       "parent_id": "d17c1268-cd7e-4808-acf8-fb165b70d4b4",
-       "stop_id": "2d4467f4-1ac1-4842-bff5-ab7001bd55fb",
-       "tp_id": "f2cde9da-59fc-43bf-bd8f-f0851b16101e"
-      }
-     ],
-     "these": "Amazon (AMZN) présente une qualité financière indiscutable : CA +19.6%, BPA +242%, marge nette 17.4%, ROE 30.6%, dette/FP très saine à 46% et FCF positif de 3.2Md$. Le titre surperforme le marché (+5.1% ce jour, +22.5% sur 1 an), au-dessus de sa SMA200 (242.87$) et SMA20 (253.45$). Résultats trimestriels le 29/10/2026 (dans 10 jours, donc >1 jour). Allocation de 10 000 $ (10% du portefeuille). Stop loss à 5% (~249.43$), take profit à 10% (~288.82$, ratio 2.0). Invalidation : clôture sous la SMA20/support 249$. Horizon moyen terme. Confiance élevée."
-    },
     "UNH": {
      "lots": [
       {
@@ -87,7 +71,7 @@
      "these": "Thermo Fisher Scientific (TMO) : publication de résultats T3 solides hier (21/10/2026) avec relèvement des prévisions de CA et de BPA. Volume supérieur à la moyenne (1.7x). Configuration haussière robuste (TMO proche de ses plus hauts annuels, RSI à 66). Diversification dans la santé avec un leader mondial de la recherche et du diagnostic. Stop loss à 6.0% (sécurisé), take profit à 15.0% (ratio R/R > 2). Horizon 1 à 3 mois."
     }
    },
-   "realise": 0.0,
+   "realise": -504.3299960000008,
    "evenements": [
     {
      "ts": "2026-10-20T13:31:03+00:00",
@@ -100,9 +84,13 @@
     {
      "ts": "2026-10-22T13:40:28+00:00",
      "texte": "Ouverture, ordre planifié acheter TMO : Achat exécuté : 20 TMO à 703.54 $ (stop 660.07 $, objectif 807.53 $)"
+    },
+    {
+     "ts": "2026-10-23T07:02:31+00:00",
+     "texte": "Stop loss déclenché : 38 AMZN vendues à 249.33 $ (plus-value -504.33 $)"
     }
    ],
-   "derniere_seance": "2026-10-22T17:01:08+00:00"
+   "derniere_seance": "2026-10-23T07:02:31+00:00"
   }
  }
 }

@@ -3,3 +3,4 @@
 {"type": "execution", "ts": "2026-10-20T18:52:55+00:00", "agent": "equipe", "action": "acheter", "symbole": "NVDA", "qty": 46, "statut": "exécuté", "prix": 216.67, "stop": 202.58, "tp": 249.16, "source": "qualite-1"}
 {"type": "execution", "ts": "2026-10-21T13:40:17+00:00", "agent": "equipe", "action": "acheter", "symbole": "TSM", "qty": 22, "statut": "exécuté", "prix": 429.93, "stop": 403.85, "tp": 494.07, "source": "qualite-1"}
 {"type": "execution", "ts": "2026-10-22T13:40:28+00:00", "agent": "equipe", "action": "acheter", "symbole": "TMO", "qty": 20, "statut": "exécuté", "prix": 703.54, "stop": 660.07, "tp": 807.53, "source": "sentiment-1"}
+{"type": "execution", "ts": "2026-10-23T07:02:31+00:00", "agent": "alpaca", "action": "vendre", "symbole": "AMZN", "qty": 38, "statut": "exécuté", "prix": 249.328158, "plus_value": -504.33, "source": "stop loss"}

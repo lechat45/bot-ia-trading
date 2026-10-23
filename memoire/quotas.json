@@ -53,6 +53,32 @@
     "tokens": 181866,
     "appels": 16
    }
+  },
+  "2026-10-23": {
+   "groq#1": {
+    "tokens": 19883,
+    "appels": 3
+   },
+   "groq#2": {
+    "tokens": 6759,
+    "appels": 1
+   },
+   "gemini#2": {
+    "tokens": 211343,
+    "appels": 17
+   },
+   "gemini#1": {
+    "tokens": 267650,
+    "appels": 21
+   },
+   "groq#3": {
+    "tokens": 20378,
+    "appels": 3
+   },
+   "gemini#3": {
+    "tokens": 254593,
+    "appels": 20
+   }
   }
  }
 }

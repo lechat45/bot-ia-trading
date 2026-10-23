@@ -22,7 +22,10 @@
   "seance": "preparation",
   "cree_par": "gerant",
   "cree_le": "2026-10-20T11:35:28+00:00",
-  "statut": "actif"
+  "statut": "fait",
+  "note": "Position AMZN clôturée le 22/10/2026 suite au déclenchement du stop loss. Rappel désormais inutile.",
+  "fait_par": "gerant",
+  "fait_le": "2026-10-23T07:11:26+00:00"
  },
  {
   "id": "r3-1028",

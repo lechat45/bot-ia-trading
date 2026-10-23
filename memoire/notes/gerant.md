@@ -1,37 +1,41 @@
-_Mis à jour : 2026-10-22 19:01 (Paris)_
+_Mis à jour : 2026-10-23 09:02 (Paris)_
 
-JOURNAL DE BORD DU GÉRANT (22/10/2026 - Séance de Suivi)
+_Mis à jour : 2026-10-23 09:02 (Paris)_
 
-## 1. Portefeuille & Positions Actives (Valeur totale : ~98 773 $, Cash disponible : ~47 111 $)
-- **AMZN (Amazon.com, Inc.)** :
-  - Quantité : 38 actions. Cours : 251.23 $ (-4.33% depuis l'achat).
-  - Stop loss : 249.49 $ (TRÈS PROCHE : 0.7% du cours). 
-  - Prochains résultats : 29/10/2026. Surveillance critique de la cassure du support.
+JOURNAL DE BORD DU GÉRANT (23/10/2026 - Séance de Préparation)
+
+## 1. Portefeuille & Positions Actives (Valeur totale : ~98 686 $, Cash dispo : ~56 585 $)
 - **UNH (UnitedHealth Group Incorporated)** :
-  - Quantité : 23 actions. Cours : 424.76 $ (+3.77% depuis l'achat).
-  - Stop loss : 384.66 $. Position défensive qui stabilise le compte.
+  - Quantité : 23 actions. Cours : 424.89 $ (+3.80% depuis l'achat).
+  - Stop loss : 384.66 $ (-9.5% du cours). Position défensive solide dans la Santé.
 - **NVDA (NVIDIA Corporation)** :
-  - Quantité : 46 actions. Cours : 212.50 $ (-1.92% depuis l'achat).
-  - Stop loss : 202.58 $. Correction sectorielle normale.
-- **TSM (Taiwan Semiconductor Manufacturing Co)** :
-  - Quantité : 22 actions. Cours : 410.90 $ (-4.43% depuis l'achat).
-  - Stop loss : 403.85 $ (PROCHE : 1.7% du cours).
+  - Quantité : 46 actions. Cours : 212.27 $ (-2.03% depuis l'achat).
+  - Stop loss : 202.58 $ (-4.6% du cours). Consolidation sectorielle normale.
 - **TMO (Thermo Fisher Scientific)** :
-  - Quantité : 20 actions. Cours : 676.55 $ (-3.84% depuis l'achat).
-  - Stop loss : 660.07 $. Nouvelle position, subit l'élan de marché mais thèse intacte.
+  - Quantité : 20 actions. Cours : 676.25 $ (-3.88% depuis l'achat).
+  - Stop loss : 660.07 $ (-2.4% du cours). Post-résultats T3 solides, thèse inchangée.
+- **TSM (Taiwan Semiconductor Manufacturing Co)** :
+  - Quantité : 22 actions. Cours : 410.86 $ (-4.44% depuis l'achat).
+  - Stop loss : 403.85 $ (-1.7% du cours). Sur support SMA200 (395.91$) et RSI14 à 26 (survendu). On conserve et laisse le stop serré gérer la protection.
 
-## 2. Décisions de la séance
-- **DB (Deutsche Bank) - [contrarien-1]** : **NON RETENU**. Risque de gap de résultats trop proche (28/10) et avis du critique prudent sur le volume et la dynamique. Préférer l'attente post-résultats.
-- **Aucun autre ordre passé.**
+## 2. Ordres Planifiés pour l'Ouverture (23/10/2026)
+- **META (Meta Platforms, Inc.) - [qualite-1]** : **ACHAT PLANIFIÉ** (~8 408 $, ~13 actions).
+  - Thèse : Leader de la Tech / Communication Services (0% du compte), croissance CA +28%, Marge Op 34.8%, PER attendu attractif à 18.6x. Repli sévère (-11.9% sur 5j) post-résultats T3 vers support majeur SMA200 (631.67$), RSI survendu à 31.
+  - Stop loss : 605.00 $ (-6.75%), Objectif : 746.00 $ (+15.0%), Ratio R/R : 2.22x. Risque engagé : 0.58% du capital.
 
-## 3. Allocation Sectorielle & Risque Global
-- **Liquidités** : ~48% (Forte capacité de réaction).
-- **Exposition Sectorielle** :
+## 3. Analyse des Propositions Rejetées / En Attente
+- **BRK.B - [equilibre-1]** : NON RETENU pour le moment. Même si la diversification sectorielle (Finance) est intéressante, le titre est sur son sommet historique à 52s avec un RSI14 à 99 (extrême surachat), ce qui expose à un repli technique.
+- **VLO - [sentiment-1]** : NON RETENU. Reserve du critique quant à la forte volatilité (ATR ~13$) et au refluement post-résultats (-4.1% sur 5j). Priorité donnée à META.
+- **TSM Vente - [sentiment-2]** : NON RETENU. Préféré de laisser le stop-loss discipliné à 403.85$ (à 1.7% du cours) jouer son rôle plutôt que d'anticiper une vente sur un RSI à 26 (survendu).
+
+## 4. Allocation Sectorielle Prévue & Risque Global
+- **Liquidités restantes** : ~48 177 $ (~48.8%).
+- **Exposition Sectorielle (après exécution META)** :
   - Healthcare : 23.6%
-  - Technology : 19.0%
-  - Consumer Cyclical : 9.7%
-- **Risque global engagé** : 1.95% du capital (Limite 6%).
+  - Technology : 19.1%
+  - Communication Services : ~8.5%
+- **Risque global engagé par les stops** : 2.45% du capital (bien sous la limite de 6%).
 
-## 4. Calendrier & Surveillance
-- **28/10/2026** : Résultats DB (à surveiller si nous entrons plus tard).
-- **29/10/2026** : Résultats AMZN (Décision d'allègement/maintien à prendre avant l'annonce).
+## 5. Calendrier & Rappels
+- **28/10/2026** : Résultats DB (suivi si opportunité post-publication).
+- **17/11/2026** : Résultats NVDA.
