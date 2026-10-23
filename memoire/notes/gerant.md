@@ -1,41 +1,37 @@
-_Mis à jour : 2026-10-23 09:02 (Paris)_
+_Mis à jour : 2026-10-23 19:01 (Paris)_
 
-_Mis à jour : 2026-10-23 09:02 (Paris)_
+JOURNAL DE BORD DU GÉRANT (23/10/2026 - Séance de Suivi)
 
-JOURNAL DE BORD DU GÉRANT (23/10/2026 - Séance de Préparation)
-
-## 1. Portefeuille & Positions Actives (Valeur totale : ~98 686 $, Cash dispo : ~56 585 $)
+## 1. Portefeuille & Positions Actives (Valeur totale : ~98 659 $, Cash dispo : ~43 253 $)
 - **UNH (UnitedHealth Group Incorporated)** :
-  - Quantité : 23 actions. Cours : 424.89 $ (+3.80% depuis l'achat).
-  - Stop loss : 384.66 $ (-9.5% du cours). Position défensive solide dans la Santé.
+  - Quantité : 23 actions. Cours : 422.59 $ (+3.24% depuis l'achat).
+  - Stop loss : 384.66 $ (-9.0% du cours). Position défensive solide dans la Santé.
 - **NVDA (NVIDIA Corporation)** :
-  - Quantité : 46 actions. Cours : 212.27 $ (-2.03% depuis l'achat).
-  - Stop loss : 202.58 $ (-4.6% du cours). Consolidation sectorielle normale.
+  - Quantité : 46 actions. Cours : 211.88 $ (-2.21% depuis l'achat).
+  - Stop loss : 202.58 $ (-4.4% du cours). Consolidation sectorielle normale.
 - **TMO (Thermo Fisher Scientific)** :
-  - Quantité : 20 actions. Cours : 676.25 $ (-3.88% depuis l'achat).
-  - Stop loss : 660.07 $ (-2.4% du cours). Post-résultats T3 solides, thèse inchangée.
+  - Quantité : 20 actions. Cours : 668.43 $ (-4.99% depuis l'achat).
+  - Stop loss : 660.07 $ (-1.3% du cours). Proche de son stop, mais position maintenue sans modification conformément aux règles.
 - **TSM (Taiwan Semiconductor Manufacturing Co)** :
-  - Quantité : 22 actions. Cours : 410.86 $ (-4.44% depuis l'achat).
-  - Stop loss : 403.85 $ (-1.7% du cours). Sur support SMA200 (395.91$) et RSI14 à 26 (survendu). On conserve et laisse le stop serré gérer la protection.
+  - Quantité : 22 actions. Cours : 417.61 $ (-2.87% depuis l'achat).
+  - Stop loss : 403.85 $ (-3.3% du cours). Rebond en cours, la thèse tient.
+- **META (Meta Platforms, Inc.)** :
+  - Quantité : 13 actions. Cours : 644.91 $ (+0.63% depuis l'achat).
+  - Stop loss : 596.30 $ (-7.5% du cours). Achat exécuté avec succès lors de l'ouverture.
+- **JPM (JPMorgan Chase & Co.)** :
+  - Quantité : 15 actions. Cours : 331.40 $ (prix d'achat).
+  - Stop loss : 314.68 $ (-5.0% du cours), Take Profit : 366.03 $ (+10.5%). Achat exécuté ce jour (source : equilibre-1, montant ajusté à 5 000 $ suite à la réserve du critique pour intégrer la distance au catalyseur et la géopolitique).
 
-## 2. Ordres Planifiés pour l'Ouverture (23/10/2026)
-- **META (Meta Platforms, Inc.) - [qualite-1]** : **ACHAT PLANIFIÉ** (~8 408 $, ~13 actions).
-  - Thèse : Leader de la Tech / Communication Services (0% du compte), croissance CA +28%, Marge Op 34.8%, PER attendu attractif à 18.6x. Repli sévère (-11.9% sur 5j) post-résultats T3 vers support majeur SMA200 (631.67$), RSI survendu à 31.
-  - Stop loss : 605.00 $ (-6.75%), Objectif : 746.00 $ (+15.0%), Ratio R/R : 2.22x. Risque engagé : 0.58% du capital.
-
-## 3. Analyse des Propositions Rejetées / En Attente
-- **BRK.B - [equilibre-1]** : NON RETENU pour le moment. Même si la diversification sectorielle (Finance) est intéressante, le titre est sur son sommet historique à 52s avec un RSI14 à 99 (extrême surachat), ce qui expose à un repli technique.
-- **VLO - [sentiment-1]** : NON RETENU. Reserve du critique quant à la forte volatilité (ATR ~13$) et au refluement post-résultats (-4.1% sur 5j). Priorité donnée à META.
-- **TSM Vente - [sentiment-2]** : NON RETENU. Préféré de laisser le stop-loss discipliné à 403.85$ (à 1.7% du cours) jouer son rôle plutôt que d'anticiper une vente sur un RSI à 26 (survendu).
-
-## 4. Allocation Sectorielle Prévue & Risque Global
-- **Liquidités restantes** : ~48 177 $ (~48.8%).
-- **Exposition Sectorielle (après exécution META)** :
-  - Healthcare : 23.6%
-  - Technology : 19.1%
+## 2. Allocation Sectorielle & Risque Global
+- **Liquidités restantes** : ~43 253 $ (~43.8%).
+- **Exposition Sectorielle** :
+  - Healthcare : ~23.4%
+  - Technology : ~19.2%
+  - Financial Services : ~5.0%
   - Communication Services : ~8.5%
-- **Risque global engagé par les stops** : 2.45% du capital (bien sous la limite de 6%).
+- **Risque global engagé par les stops** : ~2.65% du capital (bien sous la limite de 6%).
 
-## 5. Calendrier & Rappels
+## 3. Calendrier & Rappels
 - **28/10/2026** : Résultats DB (suivi si opportunité post-publication).
 - **17/11/2026** : Résultats NVDA.
+- **14/01/2027** : Résultats JPM.

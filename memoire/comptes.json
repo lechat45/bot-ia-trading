@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 48253.749999000014,
+   "cash": 43282.749999000014,
    "positions": {
     "UNH": {
      "lots": [
@@ -85,6 +85,22 @@
       }
      ],
      "these": "Thèse Qualité retenue (qualite-1) : Leader mondial (Communication Services, 0% du portefeuille), rentabilité hors normes (marge op 34.8%, ROE 29.8%, FCF 21.6Md$, dette/FP 43%). Valorisation attrayante post-résultats T3 (PER attendu 18.6x). Repli technique de -11.9% sur 5j vers le support SMA200 (631.67$), RSI survendu à 31. Stop loss fixé à 605.00$ (6.75% sous cours, sous SMA200 et >1.5 ATR). Objectif à 746.00$ (+15.0%), ratio R/R 2.22x. Invalidation si rupture nette de la SMA200. Horizon 1-3 mois."
+    },
+    "JPM": {
+     "lots": [
+      {
+       "qty": 15,
+       "prix": 331.4,
+       "date": "2026-10-23T17:08:00+00:00",
+       "stop": 314.68,
+       "tp": 366.03,
+       "statut": "ouvert",
+       "parent_id": "550fbe01-64e0-4649-a343-3a756e7c51d1",
+       "stop_id": "812eb609-2347-44f6-9399-852f9f52bf53",
+       "tp_id": "f0b08143-5e2a-4258-a2ee-94d1bbbda6be"
+      }
+     ],
+     "these": "Achat de JPM (JP Morgan Chase & Co.) - Proposition equilibre-1 ajustée par le critique : Leader financier incontesté (secteur Finance actuellement à 0% du portefeuille). Excellent point d'entrée sur repli (-8.8%), PER attendu attractif de 13.0x, marge opérationnelle exceptionnelle de 42.6% et ROE de 18.0%. Prix au-dessus de la SMA200 (319.75$). Prochains résultats dans 83 jours. Stop loss à 5% sous le prix d'achat, take profit à +10.5%. Horizon 1-3 mois. Risque ajusté à 5 000 $ selon la réserve du critique."
     }
    },
    "realise": -504.3299960000008,
@@ -110,7 +126,7 @@
      "texte": "Ouverture, ordre planifié acheter META : Achat exécuté : 13 META à 640.87 $ (stop 596.30 $, objectif 735.38 $)"
     }
    ],
-   "derniere_seance": "2026-10-23T07:02:31+00:00"
+   "derniere_seance": "2026-10-23T17:01:18+00:00"
   }
  }
 }

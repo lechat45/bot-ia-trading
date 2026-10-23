@@ -1,17 +1,13 @@
-_Mis à jour : 2026-10-23 09:02 (Paris)_
+_Mis à jour : 2026-10-23 19:01 (Paris)_
 
-_Mis à jour : 2026-10-23 09:10 (Paris)_
+_Mis à jour : 2026-10-23 13:02 (NY) / 19:02 (Paris)_
 
-SÉANCE DE PRÉPARATION DU 23/10 :
-Avis rendus :
-1. BRK.B (equilibre-1) -> OK : Très bonne diversification sectorielle (Finance/Conglomérat). Tendance haussière forte au-dessus des SMA20/50/200, volatilité maîtrisée. Stop à 5.2% (518.69$) sous SMA20 parfait.
-2. META (qualite-1) -> OK : Excellents fondamentaux (marge 34.8%, ROE 29.8%, FCF 21.6Md$). Repli marqué (-11.9% sur 5j, RSI 31) testant le support majeur de la SMA200 (631.67$). Stop à 6.75% (605$) > 1.5 ATR. Ratio R/R 2.22x.
-3. VLO (sentiment-1) -> RESERVE : Résultats T3 supérieurs aux attentes, élan de fond solide (+143% sur 1 an). Néanmoins, repli de -4.1% sur 5j montre une digestion du marché post-publication. Ajuster le montant à la baisse pour compenser le manque d'élan immédiat.
-4. TSM (sentiment-2) -> OK : Vente motivée par la cassure de la SMA20 et SMA50 (433.97$). Perte d'élan technique et tendance court terme brisée. Sortie disciplinée.
+SÉANCE DE SUIVI DU 23/10/2026 :
+Avis rendus sur les propositions :
+1. JPM (equilibre-1) -> RESERVE :
+   - Points forts : Excellente rentabilité (ROE 18.0%, marge op. 42.6%), PER attendu attractif (13.0x vs 9.7x médiane du secteur), cours soutenu au-dessus de la SMA200 (319.75$). Stop placé sous la SMA200 à 314.80$ (-5.0%).
+   - Points faibles / Risques : Prochains résultats éloignés (83 jours), absence de catalyseur immédiat et contexte géopolitique tendu pesant sur les bancaires.
+   - Ajustement proposé : Réduire l'allocation à environ 5 000 $ au lieu des 9 941 $ initiaux pour modérer le risque de marché global sans catalyseur imminent.
 
-Positions en portefeuille à surveiller :
-- AMZN, UNH, NVDA, TSM (en cours de vente selon arbitrage).
-
-Prochains rappels :
-- [2026-10-28] Deutsche Bank (DB) - Résultats T3.
-- [2026-10-29] Amazon (AMZN) - Résultats T3.
+Suivi portefeuille & alertes :
+- DB & AMZN : Résultats T3 très proches (28/10 et 29/10). À surveiller de près.

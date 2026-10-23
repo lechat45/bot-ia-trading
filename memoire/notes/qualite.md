@@ -1,22 +1,35 @@
-_Mis à jour : 2026-10-23 09:02 (Paris)_
-
-_Mis à jour : 2026-10-23 09:10 (Paris)_
+_Mis à jour : 2026-10-23 19:01 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 23/10/2026 (Séance de préparation)
+- Date : 23/10/2026 (Séance de Suivi)
 
-## Positions en portefeuille :
-- **UNH** : 424.89$ (+3.8% depuis achat). Solide rôle défensif en Santé. Stop à 384.66$.
-- **NVDA** : 212.27$ (-2.0% depuis achat). Reprise attendue, fondamentaux exceptionnels. Stop à 202.58$.
-- **TSM** : 410.86$ (-4.4% depuis achat). Proche du stop (403.85$), nous restons disciplinés.
-- **TMO** : 676.25$ (-3.9% depuis achat). Entrée récente post-résultats. Stop à 660.07$.
+## État du Portefeuille & Suivi des Thèses :
+1. **UNH (Healthcare)** :
+   * Cours : 422.72$ (+3.27% depuis achat).
+   * Tendance : Solide tenue dans un secteur défensif surperformant.
+   * Stop : 384.66$ (-9.0% du cours actuel).
+2. **NVDA (Technology)** :
+   * Cours : 211.65$ (-2.32% depuis achat).
+   * Tendance : Consolidation calme dans le secteur Tech.
+   * Stop : 202.58$ (-4.3% du cours actuel). Thèse et fondamentaux intacts.
+3. **TSM (Technology)** :
+   * Cours : 417.66$ (-2.85% depuis achat, +1.3% aujourd'hui).
+   * Tendance : Rebond engagé en séance.
+   * Stop : 403.85$ (-3.3% du cours actuel).
+4. **TMO (Healthcare)** :
+   * Cours : 668.08$ (-5.04% depuis achat, -1.2% aujourd'hui).
+   * Tendance : Repli dans le bruit global du marché, reste bien au-dessus de SMA50 (644.73$) et SMA200 (548.51$).
+   * Stop : 660.07$ (-1.2% du cours actuel). La thèse post-résultats T3 reste valide.
+5. **META (Communication Services)** :
+   * Cours : 643.93$ (+0.48% depuis achat aujourd'hui).
+   * Tendance : Exécution de l'ordre d'achat réussie, stabilisation en cours.
+   * Stop : 596.30$ (-7.4% du cours actuel).
 
-## Idée proposée aujourd'hui :
-- **META (Communication Services)** :
-  * Thèse : Qualité exceptionnelle en repli marqué (-11.9% sur 5j, RSI=31) post-résultats/bruit judiciaire. Croissance CA +28.0%, Marge op 34.8%, ROE 29.8%, FCF 21.6Md$, PER attendu 18.6x (PEG < 0.7x).
-  * Technique : Prix à 648.76$, SMA200 à 631.67$. Volume 2.1x la moyenne.
-  * Plan : Achat de $9,000 (~9.1% du compte). Stop à 605.00$ (-6.75%, sous SMA200, >1.5 ATR). Take Profit à 746.00$ (+15.0%), Ratio R/R 2.22x. Risque compte : 0.58%.
+## Synthèse Risque & Allocation :
+- Investi : 50 379.67$ (51.1% du compte). Cash : 48 253.75$ (48.9%).
+- Risque total théorique si tous les stops touchent : 2 376$ (2.41% du capital), très bien calibré (< 6.0%).
+- Aucune anomalie ni cassure de thèse constatée. Pas d'ordre d'ajustement ou de vente nécessaire.
 
-## À surveiller :
-- Publications T3 imminentes : MSFT (28/10), AMZN (29/10).
-- Prochaine étape : Suivre l'exécution de l'ordre META à l'ouverture et le comportement de TSM près de son stop.
+## Prochains catalyseurs à surveiller :
+- Publications T3 Big Tech : MSFT (28/10), AMZN (29/10).
+- Suivi du titre DB avant résultats du 28/10 (rappel [r3-1028]).
