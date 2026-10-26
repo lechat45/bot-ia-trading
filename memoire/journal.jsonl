@@ -6,3 +6,5 @@
 {"type": "execution", "ts": "2026-10-23T07:02:31+00:00", "agent": "alpaca", "action": "vendre", "symbole": "AMZN", "qty": 38, "statut": "exécuté", "prix": 249.328158, "plus_value": -504.33, "source": "stop loss"}
 {"type": "execution", "ts": "2026-10-23T13:40:24+00:00", "agent": "equipe", "action": "acheter", "symbole": "META", "qty": 13, "statut": "exécuté", "prix": 640.865385, "stop": 596.3, "tp": 735.38, "source": "qualite-1"}
 {"type": "execution", "ts": "2026-10-23T17:08:00+00:00", "agent": "equipe", "action": "acheter", "symbole": "JPM", "qty": 15, "statut": "exécuté", "prix": 331.4, "stop": 314.68, "tp": 366.03, "source": "equilibre-1"}
+{"type": "execution", "ts": "2026-10-26T13:40:19+00:00", "agent": "equipe", "action": "acheter", "symbole": "PG", "qty": 46, "statut": "exécuté", "prix": 160.74, "stop": 152.55, "tp": 177.44, "source": "equilibre-1"}
+{"type": "execution", "ts": "2026-10-26T13:40:25+00:00", "agent": "equipe", "action": "acheter", "symbole": "VLO", "qty": 14, "statut": "exécuté", "prix": 424.51, "stop": 401.34, "tp": 473.54, "source": "sentiment-2"}

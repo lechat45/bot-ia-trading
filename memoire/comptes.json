@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 43282.749999000014,
+   "cash": 29945.569999000014,
    "positions": {
     "UNH": {
      "lots": [
@@ -101,6 +101,38 @@
       }
      ],
      "these": "Achat de JPM (JP Morgan Chase & Co.) - Proposition equilibre-1 ajustée par le critique : Leader financier incontesté (secteur Finance actuellement à 0% du portefeuille). Excellent point d'entrée sur repli (-8.8%), PER attendu attractif de 13.0x, marge opérationnelle exceptionnelle de 42.6% et ROE de 18.0%. Prix au-dessus de la SMA200 (319.75$). Prochains résultats dans 83 jours. Stop loss à 5% sous le prix d'achat, take profit à +10.5%. Horizon 1-3 mois. Risque ajusté à 5 000 $ selon la réserve du critique."
+    },
+    "PG": {
+     "lots": [
+      {
+       "qty": 46,
+       "prix": 160.74,
+       "date": "2026-10-26T13:40:19+00:00",
+       "stop": 152.55,
+       "tp": 177.44,
+       "statut": "ouvert",
+       "parent_id": "2fc09fbe-1164-44cb-878e-1ac11878e4b7",
+       "stop_id": "e3c457df-b604-4101-a8ba-cc7e075508fe",
+       "tp_id": "e220b1b0-b4cc-4c99-8758-d249bb3b9e8e"
+      }
+     ],
+     "these": "Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). Fondamentaux d'exception (FCF 12.7Md$, marge op 27.1%, ROE 29.6%). PER attendu 21.7x (médiane sectorielle 31.8x). Tendance haussière confirmée au-dessus de SMA20 (151.82$) et SMA200 (146.34$). Horizon 1-3 mois, aucun résultat avant 87 jours. Invalidation si rupture SMA20 à 151.80$. Stop -5.0% (153.06$), TP +10.5% (178.04$), R/R 2.1x."
+    },
+    "VLO": {
+     "lots": [
+      {
+       "qty": 14,
+       "prix": 424.51,
+       "date": "2026-10-26T13:40:25+00:00",
+       "stop": 401.34,
+       "tp": 473.54,
+       "statut": "ouvert",
+       "parent_id": "499a818b-aed3-47c7-9e80-abfce078e0f6",
+       "stop_id": "ea4a09ab-f53e-4e7f-8b31-088dba1a836a",
+       "tp_id": "4ae2790e-0c79-457b-8289-ce93320300dc"
+      }
+     ],
+     "these": "Achat de VLO (Valero Energy) - Proposition sentiment-2 ajustée : Entrée sur le secteur Énergie (XLE +1.6% sur 5j, 0% du portefeuille actuellement). Catalyseur fort (résultats T3 du 22/10 supérieurs aux attentes, EPS 23.9$ vs 21.0$, révisions à la hausse d'analystes vers 443$-490$). PER très bas à 8.1x, marge op 19.7%, croissance CA +51.9%. Le repli récent (-5.7% sur 5j, RSI à 50) offre un point d'entrée attractif juste au-dessus de la SMA50 (392.4$). Stop-loss ajusté à -5.5% (396.28$), TP +11.5% (467.57$), R/R ~2.1x."
     }
    },
    "realise": -504.3299960000008,
@@ -124,6 +156,14 @@
     {
      "ts": "2026-10-23T13:40:24+00:00",
      "texte": "Ouverture, ordre planifié acheter META : Achat exécuté : 13 META à 640.87 $ (stop 596.30 $, objectif 735.38 $)"
+    },
+    {
+     "ts": "2026-10-26T13:40:19+00:00",
+     "texte": "Ouverture, ordre planifié acheter PG : Achat exécuté : 46 PG à 160.74 $ (stop 152.55 $, objectif 177.44 $)"
+    },
+    {
+     "ts": "2026-10-26T13:40:25+00:00",
+     "texte": "Ouverture, ordre planifié acheter VLO : Achat exécuté : 14 VLO à 424.51 $ (stop 401.34 $, objectif 473.54 $)"
     }
    ],
    "derniere_seance": "2026-10-26T08:02:36+00:00"
