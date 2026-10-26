@@ -1,37 +1,33 @@
-_Mis à jour : 2026-10-23 19:01 (Paris)_
+_Mis à jour : 2026-10-26 09:02 (Paris)_
 
-JOURNAL DE BORD DU GÉRANT (23/10/2026 - Séance de Suivi)
+_Mis à jour : 2026-10-26 09:15 (Paris) - Séance de Préparation_
 
-## 1. Portefeuille & Positions Actives (Valeur totale : ~98 659 $, Cash dispo : ~43 253 $)
-- **UNH (UnitedHealth Group Incorporated)** :
-  - Quantité : 23 actions. Cours : 422.59 $ (+3.24% depuis l'achat).
-  - Stop loss : 384.66 $ (-9.0% du cours). Position défensive solide dans la Santé.
-- **NVDA (NVIDIA Corporation)** :
-  - Quantité : 46 actions. Cours : 211.88 $ (-2.21% depuis l'achat).
-  - Stop loss : 202.58 $ (-4.4% du cours). Consolidation sectorielle normale.
-- **TMO (Thermo Fisher Scientific)** :
-  - Quantité : 20 actions. Cours : 668.43 $ (-4.99% depuis l'achat).
-  - Stop loss : 660.07 $ (-1.3% du cours). Proche de son stop, mais position maintenue sans modification conformément aux règles.
-- **TSM (Taiwan Semiconductor Manufacturing Co)** :
-  - Quantité : 22 actions. Cours : 417.61 $ (-2.87% depuis l'achat).
-  - Stop loss : 403.85 $ (-3.3% du cours). Rebond en cours, la thèse tient.
-- **META (Meta Platforms, Inc.)** :
-  - Quantité : 13 actions. Cours : 644.91 $ (+0.63% depuis l'achat).
-  - Stop loss : 596.30 $ (-7.5% du cours). Achat exécuté avec succès lors de l'ouverture.
-- **JPM (JPMorgan Chase & Co.)** :
-  - Quantité : 15 actions. Cours : 331.40 $ (prix d'achat).
-  - Stop loss : 314.68 $ (-5.0% du cours), Take Profit : 366.03 $ (+10.5%). Achat exécuté ce jour (source : equilibre-1, montant ajusté à 5 000 $ suite à la réserve du critique pour intégrer la distance au catalyseur et la géopolitique).
+JOURNAL DE BORD DU GÉRANT (26/10/2026 - Séance de Préparation)
 
-## 2. Allocation Sectorielle & Risque Global
-- **Liquidités restantes** : ~43 253 $ (~43.8%).
-- **Exposition Sectorielle** :
-  - Healthcare : ~23.4%
-  - Technology : ~19.2%
-  - Financial Services : ~5.0%
-  - Communication Services : ~8.5%
-- **Risque global engagé par les stops** : ~2.65% du capital (bien sous la limite de 6%).
+## 1. Portefeuille & Positions Actives (Valeur totale : ~98 630 $, Cash dispo : ~43 283 $)
+- **UNH (UnitedHealth Group)** : 23 actions @ 418.06 $ (+2.13%). Stop : 384.66 $ (-8.0%). Santé défensive solide.
+- **NVDA (NVIDIA Corp)** : 46 actions @ 211.50 $ (-2.39%). Stop : 202.58 $ (-4.2%). Thèse Tech intacte, consolidation sectorielle.
+- **TSM (Taiwan Semiconductor)** : 22 actions @ 418.37 $ (-2.69%). Stop : 403.85 $ (-3.5%). Proposition de vente (sentiment-1) REJETÉE : la thèse Qualité moyen terme reste valide, cours au-dessus de SMA200, RSI survendu (22.0), stop non touché.
+- **TMO (Thermo Fisher Scientific)** : 20 actions @ 673.84 $ (-4.22%). Stop : 660.07 $ (-2.0%). Position maintenue.
+- **META (Meta Platforms)** : 13 actions @ 642.24 $ (+0.21%). Stop : 596.30 $ (-7.2%). Thèse Qualité intacte.
+- **JPM (JPMorgan Chase)** : 15 actions @ 331.53 $ (+0.04%). Stop : 314.68 $ (-5.1%). Position Finance défensive.
 
-## 3. Calendrier & Rappels
-- **28/10/2026** : Résultats DB (suivi si opportunité post-publication).
+## 2. Ordres Planifiés pour l'Ouverture (New York)
+- **PG (Procter & Gamble)** [source: equilibre-1] : ACHAT ~7 500 $ (~46 actions @ 161.12 $). Stop loss : -5.0% (153.06 $), Take Profit : +10.5% (178.04 $). Thèse : Diversification sectorielle défensive (Consommation de base 0%), PER 21.7x, FCF 12.7Md$, marge op 27.1%, au-dessus SMA20/SMA200.
+- **VLO (Valero Energy)** [source: sentiment-2] : ACHAT ~6 500 $ (~15 actions @ 419.35 $). Stop loss : -5.5% (396.28 $), Take Profit : +11.5% (467.57 $). Thèse : Force relative Énergie (0% portefeuille), catalyseur résultats T3 (EPS 23.9$ vs 21.0$), révisions d'analystes positives, PER 8.1x, élan 12_1 +141.6%, repli sur SMA50 (392.4$).
+
+## 3. Allocation Sectorielle & Risque Global Projeté
+- **Cash estimé après exécution** : ~29 283 $ (~29.7% du compte).
+- **Exposition Sectorielle projetée** : Healthcare ~23.4%, Technology ~19.2%, Communication ~8.5%, Consumer Defensive ~7.6%, Energy ~6.6%, Finance ~5.0%.
+- **Risque global engagé par les stops** : ~3.4% du capital (bien sous le plafond de 6%).
+
+## 4. Décisions de la Séance
+- **PG retenu (equilibre-1)** : apport de stabilité et diversification sectorielle essentielle (Staples).
+- **VLO retenu (sentiment-2)** : momentum énergie très puissant, PER 8.1x et catalyseur de résultats T3 probant. Stop ajusté à -5.5%.
+- **Vente TSM rejetée (sentiment-1)** : invalidation d'élan court terme non suffisante pour couper une thèse de Qualité fondamentalement intacte et sur-vendue (RSI 22).
+
+## 5. Calendrier & Rappels
+- **28/10/2026** : Résultats DB (suivi opportunité post-publication).
 - **17/11/2026** : Résultats NVDA.
-- **14/01/2027** : Résultats JPM.
+- **14/01/2027** : Résultats JPM / TSM.
+- **21/01/2027** : Résultats PG.

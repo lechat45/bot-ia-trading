@@ -1,27 +1,37 @@
 {
- "date": "2026-10-23",
- "cree_le": "2026-10-23T07:02:31+00:00",
+ "date": "2026-10-26",
+ "cree_le": "2026-10-26T08:02:36+00:00",
  "simulation": false,
  "ordres": [
   {
    "compte": "equipe",
    "agent": "gerant",
    "action": "acheter",
-   "symbole": "META",
-   "source": "qualite-1",
-   "these": "Thèse Qualité retenue (qualite-1) : Leader mondial (Communication Services, 0% du portefeuille), rentabilité hors normes (marge op 34.8%, ROE 29.8%, FCF 21.6Md$, dette/FP 43%). Valorisation attrayante post-résultats T3 (PER attendu 18.6x). Repli technique de -11.9% sur 5j vers le support SMA200 (631.67$), RSI survendu à 31. Stop loss fixé à 605.00$ (6.75% sous cours, sous SMA200 et >1.5 ATR). Objectif à 746.00$ (+15.0%), ratio R/R 2.22x. Invalidation si rupture nette de la SMA200. Horizon 1-3 mois.",
-   "statut": "execute",
-   "cree_le": "2026-10-23T07:13:29+00:00",
-   "prix_reference": 646.74,
-   "montant_usd": 8407.62,
-   "qty_estimee": 13,
-   "stop_loss_pct": 6.75,
-   "take_profit_pct": 15.0,
-   "resultat": "Achat exécuté : 13 META à 640.87 $ (stop 596.30 $, objectif 735.38 $)",
-   "prix_execution": 640.865385,
-   "qty": 13,
-   "traite_le": "2026-10-23T13:40:24+00:00"
+   "symbole": "PG",
+   "source": "equilibre-1",
+   "these": "Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). Fondamentaux d'exception (FCF 12.7Md$, marge op 27.1%, ROE 29.6%). PER attendu 21.7x (médiane sectorielle 31.8x). Tendance haussière confirmée au-dessus de SMA20 (151.82$) et SMA200 (146.34$). Horizon 1-3 mois, aucun résultat avant 87 jours. Invalidation si rupture SMA20 à 151.80$. Stop -5.0% (153.06$), TP +10.5% (178.04$), R/R 2.1x.",
+   "statut": "en_attente",
+   "cree_le": "2026-10-26T08:19:02+00:00",
+   "prix_reference": 161.12,
+   "montant_usd": 7411.52,
+   "qty_estimee": 46,
+   "stop_loss_pct": 5.0,
+   "take_profit_pct": 10.5
+  },
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "acheter",
+   "symbole": "VLO",
+   "source": "sentiment-2",
+   "these": "Achat de VLO (Valero Energy) - Proposition sentiment-2 ajustée : Entrée sur le secteur Énergie (XLE +1.6% sur 5j, 0% du portefeuille actuellement). Catalyseur fort (résultats T3 du 22/10 supérieurs aux attentes, EPS 23.9$ vs 21.0$, révisions à la hausse d'analystes vers 443$-490$). PER très bas à 8.1x, marge op 19.7%, croissance CA +51.9%. Le repli récent (-5.7% sur 5j, RSI à 50) offre un point d'entrée attractif juste au-dessus de la SMA50 (392.4$). Stop-loss ajusté à -5.5% (396.28$), TP +11.5% (467.57$), R/R ~2.1x.",
+   "statut": "en_attente",
+   "cree_le": "2026-10-26T08:19:17+00:00",
+   "prix_reference": 419.35,
+   "montant_usd": 6290.25,
+   "qty_estimee": 15,
+   "stop_loss_pct": 5.5,
+   "take_profit_pct": 11.5
   }
- ],
- "execute_le": "2026-10-23T13:40:24+00:00"
+ ]
 }
