@@ -1,7 +1,6 @@
-_Mis à jour : 2026-10-27 09:02 (Paris)_
+_Mis à jour : 2026-10-27 19:01 (Paris)_
 
-- **Stratégie Sentiment & Élan :** 
-  - VLO (détenu) et MPC (proposé à l'achat pour 7 000 $) illustrent parfaitement l'élan de fond dans un secteur Énergie en forte surperformance.
-  - MPC : Momentum 12-1 de +104%, révisions d'estimations positives (10 hausses de BPA sur 30j), objectifs relevés par les analystes (jusqu'à $560 par Wells Fargo).
-  - TSM : Sortie confirmée/proposée car la tendance est brisée (sous SMA20 et SMA50).
-- **Prochaines étapes :** Surveiller l'exécution des ordres et la réaction des marchés sur la tech (résultats AMZN le 29/10).
+- Stratégie Sentiment & Élan : 
+  - Les valeurs énergétiques (VLO, MPC) marquent une consolidation après une forte course, à surveiller.
+  - TSM : position maintenue, au-dessus de la SMA50 (433.87 vs 437.06).
+- Prochaines étapes : Suivre la tenue des tendances haussières et préparer les prochaines opportunités de momentum si les volumes reviennent sur les leaders proches de leurs sommets (ex: TMO, AMGN).

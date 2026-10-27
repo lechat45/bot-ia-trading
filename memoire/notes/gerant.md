@@ -1,21 +1,19 @@
-_Mis à jour : 2026-10-27 09:02 (Paris)_
+_Mis à jour : 2026-10-27 19:01 (Paris)_
 
-JOURNAL DE BORD DU GÉRANT (27/10/2026 - Séance de Préparation)
+JOURNAL DE BORD DU GÉRANT (27/10/2026 - Séance de Suivi)
 
-## 1. État du Portefeuille (Valeur totale : ~98 898 $, Cash : ~29 946 $ / 30.3%)
-- 8 positions actives : UNH, NVDA, TSM, TMO, META, JPM, PG, VLO.
-- Toutes les thèses de position restent valides. Aucun incident ni déclenchement de stop.
+## 1. État du Portefeuille (Valeur totale : ~99 085 $, Cash : ~18 026 $ / 18.2%)
+- 9 positions actives : UNH, NVDA, TSM, TMO, META, JPM, PG, UNP, ASML.
+- Événements de la séance :
+  - Vente automatique/stop de VLO exécutée (plus-value -327.60 $).
+  - Achat exécuté : ASML (source contrarien-1) pour ~9 829 $ (6 actions à ~1638.56 $, stop -7%, TP +15%). Monopole technologique EUV, fondamentaux d'excellence, stabilisation confirmée sur support SMA200 après correction sectorielle.
 
-## 2. Analyse des Propositions & Décisions de la Séance
-- **Sentiment-1 (MPC)** : Rejeté par le critique et le gérant en raison de la publication des résultats trop proche (03/11/2026, dans 7 jours), violant les règles de gestion du risque avant annonces.
-- **Contrarien-1 (ASML)** : Classé en réserve par le critique (stop un peu serré). Bien que l'idée soit séduisante sur repli, le gérant privilégie l'équilibre sectoriel et la robustesse sans surcharger le portefeuille.
-- **Équilibre-1 (UNP - Union Pacific Corp)** : VALIDÉ et planifié à l'achat (~7 721 $, stop -5.2%, take-profit +11.5%). Permet d'introduire le secteur des Industrielles (actuellement à 0% dans le portefeuille) avec un leader solide dont les résultats T3 sont déjà passés.
+## 2. Analyse & Validité des Thèses
+- Toutes les thèses des 9 positions en portefeuille restent valides. META consolide mais conserve des fondamentaux massifs.
+- Régime de marché toujours haussier (S&P 500 au-dessus de la moyenne 10 mois à +6.3%). Liquidités à 18.2%, parfaitement dans les règles (conserve > 5%).
 
-## 3. Allocation & Risque
-- S&P 500 au-dessus de la moyenne 10 mois (+6,3%) → Régime de marché HAUSSIER (tailles normales).
-- Secteur industriel intègre le portefeuille. Liquidités maintenues à un niveau confortable (~22% post-exécution).
-
-## 4. Prochains Rappels
+## 3. Prochains Rappels
 - 28/10/2026 : Résultats DB (Suivi opportunité post-publication).
-- 03/11/2026 : Résultats MPC (à observer suite au rejet).
+- 03/11/2026 : Résultats MPC.
 - 17/11/2026 : Résultats NVDA.
+- Janvier 2027 : Résultats UNH, TSM, JPM, PG.

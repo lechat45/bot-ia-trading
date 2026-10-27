@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 22241.769999000015,
+   "cash": 18025.949999000015,
    "positions": {
     "UNH": {
      "lots": [
@@ -118,22 +118,6 @@
      ],
      "these": "Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). Fondamentaux d'exception (FCF 12.7Md$, marge op 27.1%, ROE 29.6%). PER attendu 21.7x (médiane sectorielle 31.8x). Tendance haussière confirmée au-dessus de SMA20 (151.82$) et SMA200 (146.34$). Horizon 1-3 mois, aucun résultat avant 87 jours. Invalidation si rupture SMA20 à 151.80$. Stop -5.0% (153.06$), TP +10.5% (178.04$), R/R 2.1x."
     },
-    "VLO": {
-     "lots": [
-      {
-       "qty": 14,
-       "prix": 424.51,
-       "date": "2026-10-26T13:40:25+00:00",
-       "stop": 401.34,
-       "tp": 473.54,
-       "statut": "ouvert",
-       "parent_id": "499a818b-aed3-47c7-9e80-abfce078e0f6",
-       "stop_id": "ea4a09ab-f53e-4e7f-8b31-088dba1a836a",
-       "tp_id": "4ae2790e-0c79-457b-8289-ce93320300dc"
-      }
-     ],
-     "these": "Achat de VLO (Valero Energy) - Proposition sentiment-2 ajustée : Entrée sur le secteur Énergie (XLE +1.6% sur 5j, 0% du portefeuille actuellement). Catalyseur fort (résultats T3 du 22/10 supérieurs aux attentes, EPS 23.9$ vs 21.0$, révisions à la hausse d'analystes vers 443$-490$). PER très bas à 8.1x, marge op 19.7%, croissance CA +51.9%. Le repli récent (-5.7% sur 5j, RSI à 50) offre un point d'entrée attractif juste au-dessus de la SMA50 (392.4$). Stop-loss ajusté à -5.5% (396.28$), TP +11.5% (467.57$), R/R ~2.1x."
-    },
     "UNP": {
      "lots": [
       {
@@ -149,9 +133,25 @@
       }
      ],
      "these": "Diversification vers les Industrielles avec le leader du fret ferroviaire nord-américain UNP. Résultats T3 déjà publiés (22/10), incertitude levée. FCF robuste 5.1Md$, marge opérationnelle 41.3%, PER attractif de 20.6x. Invalidation à -5.2%, objectif à +11.5%."
+    },
+    "ASML": {
+     "lots": [
+      {
+       "qty": 6,
+       "prix": 1638.56,
+       "date": "2026-10-27T18:03:44+00:00",
+       "stop": 1523.73,
+       "tp": 1884.18,
+       "statut": "ouvert",
+       "parent_id": "4b4ce530-47ce-42a4-add7-a890fa954d24",
+       "stop_id": "f15917d9-908f-4cbd-943d-07c64050061b",
+       "tp_id": "910e5c4b-4823-477f-a6fd-223d4b20319f"
+      }
+     ],
+     "these": "Opportunité contrarienne de qualité sur ASML post-correction sectorielle de 17.5%. Le titre a testé avec succès son support SMA200 (1587$) et montre 3 séances consécutives de hausse sans nouveau plus bas, confirmant la stabilisation (RSI 32). Fondamentaux d'excellence : monopoly mondial EUV, marge nette 34.1%, FCF +10.4Md$, dette/FP 9%. Résultats T3 déjà publiés le 14/10/2026. Invalidation : cassure sous 1523$ (-7%). Horizon : 4-8 semaines. Objectif : 1884$ (+15%)."
     }
    },
-   "realise": -504.3299960000008,
+   "realise": -831.9299960000005,
    "evenements": [
     {
      "ts": "2026-10-20T13:31:03+00:00",
@@ -184,9 +184,13 @@
     {
      "ts": "2026-10-27T13:40:22+00:00",
      "texte": "Ouverture, ordre planifié acheter UNP : Achat exécuté : 26 UNP à 296.30 $ (stop 280.23 $, objectif 329.59 $)"
+    },
+    {
+     "ts": "2026-10-27T18:01:19+00:00",
+     "texte": "Stop loss déclenché : 14 VLO vendues à 401.11 $ (plus-value -327.60 $)"
     }
    ],
-   "derniere_seance": "2026-10-27T08:02:32+00:00"
+   "derniere_seance": "2026-10-27T18:01:18+00:00"
   }
  }
 }
