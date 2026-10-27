@@ -1,9 +1,12 @@
-_Mis à jour : 2026-10-23 19:01 (Paris)_
+_Mis à jour : 2026-10-27 09:02 (Paris)_
 
-_Mis à jour : 2026-10-23 19:01 (Paris)_
+_Mis à jour : 2026-10-27 09:45 (Paris)_
 
-Session 2026-10-23 (SUIVI - Bourse ouverte).
-- Portefeuille de l'équipe : UNH (+3.3%), NVDA (-2.3%), TSM (-2.9%), TMO (-5.0%), META (+0.5%).
-- Suivi DB (Deutsche Bank) : Cours à 31,21 $, RSI14 extrêmement survendu (17.0). Le titre cherche un point d'appui (plus bas 20j à 30,77 $). Catalyseur résultats prévu le 2026-10-28 (rappel r3-1028). Pas de stabilisation nette sur 2 séances consécutives pour le moment.
-- Suivi META : Chute importante du secteur Communication Services (-3.6% sur 5j). META RSI14 à 25.0. Le stop actuel à -7.4% protège la position.
-- Pas de nouvelle proposition contrarienne nécessaire sur cette séance de suivi : respect du principe de prudence et de stabilisation avant entrée.
+Session 2026-10-27 (PRÉPARATION).
+- Analyse du secteur semi-conducteurs : Forte correction (panique sectorielle) impactant ASML.
+- Analyse STLA : Très faible PER, mais FCF négatif et marges faibles -> Risque de value trap. Écarté.
+- Analyse DB & SAN : RSI très bas mais résultats demain (10/28) -> Trop de risque immédiat. Écartés.
+- Analyse ASML : Leader technologique (Marge nette 34%, FCF +10Md). RSI 22 (survendu). Stabilisation observée sur 2 séances (pas de nouveau plus bas). 
+- Proposition : Achat ASML (~10k$) pour profiter du rebond sectoriel. Stop sous le support 20j (1530$), objectif 1705$.
+
+Positions actuelles : UNH, NVDA, TSM, TMO, META, JPM, PG, VLO. (Pas de changement).
