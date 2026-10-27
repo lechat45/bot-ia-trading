@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 29945.569999000014,
+   "cash": 22241.769999000015,
    "positions": {
     "UNH": {
      "lots": [
@@ -133,6 +133,22 @@
       }
      ],
      "these": "Achat de VLO (Valero Energy) - Proposition sentiment-2 ajustée : Entrée sur le secteur Énergie (XLE +1.6% sur 5j, 0% du portefeuille actuellement). Catalyseur fort (résultats T3 du 22/10 supérieurs aux attentes, EPS 23.9$ vs 21.0$, révisions à la hausse d'analystes vers 443$-490$). PER très bas à 8.1x, marge op 19.7%, croissance CA +51.9%. Le repli récent (-5.7% sur 5j, RSI à 50) offre un point d'entrée attractif juste au-dessus de la SMA50 (392.4$). Stop-loss ajusté à -5.5% (396.28$), TP +11.5% (467.57$), R/R ~2.1x."
+    },
+    "UNP": {
+     "lots": [
+      {
+       "qty": 26,
+       "prix": 296.3,
+       "date": "2026-10-27T13:40:22+00:00",
+       "stop": 280.23,
+       "tp": 329.59,
+       "statut": "ouvert",
+       "parent_id": "c3d54705-87b3-4661-b3f2-9025547bd1f9",
+       "stop_id": "530e2cef-2ccb-4069-a283-2aa95a432d39",
+       "tp_id": "e8e996aa-255c-49d8-abbf-a9cee591cf91"
+      }
+     ],
+     "these": "Diversification vers les Industrielles avec le leader du fret ferroviaire nord-américain UNP. Résultats T3 déjà publiés (22/10), incertitude levée. FCF robuste 5.1Md$, marge opérationnelle 41.3%, PER attractif de 20.6x. Invalidation à -5.2%, objectif à +11.5%."
     }
    },
    "realise": -504.3299960000008,
@@ -164,6 +180,10 @@
     {
      "ts": "2026-10-26T13:40:25+00:00",
      "texte": "Ouverture, ordre planifié acheter VLO : Achat exécuté : 14 VLO à 424.51 $ (stop 401.34 $, objectif 473.54 $)"
+    },
+    {
+     "ts": "2026-10-27T13:40:22+00:00",
+     "texte": "Ouverture, ordre planifié acheter UNP : Achat exécuté : 26 UNP à 296.30 $ (stop 280.23 $, objectif 329.59 $)"
     }
    ],
    "derniere_seance": "2026-10-27T08:02:32+00:00"

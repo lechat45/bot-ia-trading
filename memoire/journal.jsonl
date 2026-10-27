@@ -8,3 +8,4 @@
 {"type": "execution", "ts": "2026-10-23T17:08:00+00:00", "agent": "equipe", "action": "acheter", "symbole": "JPM", "qty": 15, "statut": "exécuté", "prix": 331.4, "stop": 314.68, "tp": 366.03, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-10-26T13:40:19+00:00", "agent": "equipe", "action": "acheter", "symbole": "PG", "qty": 46, "statut": "exécuté", "prix": 160.74, "stop": 152.55, "tp": 177.44, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-10-26T13:40:25+00:00", "agent": "equipe", "action": "acheter", "symbole": "VLO", "qty": 14, "statut": "exécuté", "prix": 424.51, "stop": 401.34, "tp": 473.54, "source": "sentiment-2"}
+{"type": "execution", "ts": "2026-10-27T13:40:22+00:00", "agent": "equipe", "action": "acheter", "symbole": "UNP", "qty": 26, "statut": "exécuté", "prix": 296.3, "stop": 280.23, "tp": 329.59, "source": "equilibre-1"}
