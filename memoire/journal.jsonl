@@ -11,3 +11,4 @@
 {"type": "execution", "ts": "2026-10-27T13:40:22+00:00", "agent": "equipe", "action": "acheter", "symbole": "UNP", "qty": 26, "statut": "exécuté", "prix": 296.3, "stop": 280.23, "tp": 329.59, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-10-27T18:01:19+00:00", "agent": "alpaca", "action": "vendre", "symbole": "VLO", "qty": 14, "statut": "exécuté", "prix": 401.11, "plus_value": -327.6, "source": "stop loss"}
 {"type": "execution", "ts": "2026-10-27T18:03:44+00:00", "agent": "equipe", "action": "acheter", "symbole": "ASML", "qty": 6, "statut": "exécuté", "prix": 1638.56, "stop": 1523.73, "tp": 1884.18, "source": "contrarien-1"}
+{"type": "execution", "ts": "2026-10-28T13:40:21+00:00", "agent": "equipe", "action": "acheter", "symbole": "DUK", "qty": 55, "statut": "exécuté", "prix": 123.92, "stop": 116.4, "tp": 138.69, "source": "equilibre-1"}
