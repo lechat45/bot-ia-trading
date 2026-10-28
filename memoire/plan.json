@@ -1,27 +1,22 @@
 {
- "date": "2026-10-27",
- "cree_le": "2026-10-27T08:02:32+00:00",
+ "date": "2026-10-28",
+ "cree_le": "2026-10-28T08:02:37+00:00",
  "simulation": false,
  "ordres": [
   {
    "compte": "equipe",
    "agent": "gerant",
    "action": "acheter",
-   "symbole": "UNP",
+   "symbole": "DUK",
    "source": "equilibre-1",
-   "these": "Diversification vers les Industrielles avec le leader du fret ferroviaire nord-américain UNP. Résultats T3 déjà publiés (22/10), incertitude levée. FCF robuste 5.1Md$, marge opérationnelle 41.3%, PER attractif de 20.6x. Invalidation à -5.2%, objectif à +11.5%.",
-   "statut": "execute",
-   "cree_le": "2026-10-27T08:12:07+00:00",
-   "prix_reference": 296.96,
-   "montant_usd": 7720.96,
-   "qty_estimee": 26,
-   "stop_loss_pct": 5.2,
-   "take_profit_pct": 11.5,
-   "resultat": "Achat exécuté : 26 UNP à 296.30 $ (stop 280.23 $, objectif 329.59 $)",
-   "prix_execution": 296.3,
-   "qty": 26,
-   "traite_le": "2026-10-27T13:40:22+00:00"
+   "these": "Achat de DUK (Duke Energy) - Proposition equilibre-1 : Intégration stratégique du secteur Utilities (0% du portefeuille) qui est le secteur le plus fort du marché sur 5 séances (+2.4%). Valorisation attractive (PER 17.4x vs 18.8x secteur), dividende 3.48%. Stop loss à 6.0% (~117.32$) sous le support des SMA20 (118.86$) et SMA50 (118.98$). TP à +12.0% (139.79$), ratio R/R 2.0. Prochains résultats le 05/11/2026 (dans 8 jours).",
+   "statut": "en_attente",
+   "cree_le": "2026-10-28T08:15:14+00:00",
+   "prix_reference": 124.81,
+   "montant_usd": 6864.55,
+   "qty_estimee": 55,
+   "stop_loss_pct": 6.0,
+   "take_profit_pct": 12.0
   }
- ],
- "execute_le": "2026-10-27T13:40:22+00:00"
+ ]
 }

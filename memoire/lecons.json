@@ -23,5 +23,10 @@
   "date": "2026-10-23",
   "auteur": "bilan",
   "texte": "En phase de réallocation sectorielle défensive, calibrer des tailles de positions plus réduites pour amortir la volatilité des premières lignes."
+ },
+ {
+  "date": "2026-10-28",
+  "auteur": "sentiment",
+  "texte": "Lors d'un élan de fond, vérifier que le titre reste au‑dessus de la SMA50 et que le RSI ne dépasse pas 75 ; sinon l’élan peut s’essouffler rapidement."
  }
 ]

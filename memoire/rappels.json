@@ -36,7 +36,10 @@
   "seance": "preparation",
   "cree_par": "critique",
   "cree_le": "2026-10-20T12:42:00+00:00",
-  "statut": "actif"
+  "statut": "fait",
+  "note": "Publication des résultats DB aujourd'hui (28/10/2026, 0 jour). En accord avec la règle d'interdiction d'achat 1 jour avant/pendant les résultats et le fait que DB n'est pas en portefeuille, aucune action n'est prise ce jour.",
+  "fait_par": "equilibre",
+  "fait_le": "2026-10-28T08:03:02+00:00"
  },
  {
   "id": "r4-0112",
@@ -91,6 +94,17 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-10-26T13:40:25+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r9-1105",
+  "date": "2026-11-05",
+  "titre": "Résultats de DUK (Duke Energy)",
+  "details": "Publication des résultats du T3 de Duke Energy (DUK). Réévaluer la position et ajuster le stop loss si nécessaire.",
+  "symbole": "DUK",
+  "seance": "toutes",
+  "cree_par": "gerant",
+  "cree_le": "2026-10-28T08:15:28+00:00",
   "statut": "actif"
  }
 ]
