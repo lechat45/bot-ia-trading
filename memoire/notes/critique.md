@@ -1,12 +1,12 @@
-_Mis à jour : 2026-10-27 19:01 (Paris)_
+_Mis à jour : 2026-10-29 09:02 (Paris)_
 
-_Mis à jour : 2026-10-27 19:05 (Paris)_
+_Mis à jour : 2026-10-29 09:05 (Paris)_
 
-SÉANCE DE SUIVI DU 27/10/2026 :
-Avis rendu sur la proposition d'achat :
+SÉANCE DE PRÉPARATION DU 29/10/2026 :
+Avis rendu sur la proposition de vente :
 
-1. ASML (contrarien-1) -> OK :
-   - Thèse : Achat contrarien sur repli (-17.5% vs plus haut 52s, RSI 32), rebond confirmé sur la SMA200 ($1587.87) et 3 séances sans nouveau plus bas.
-   - Fondamentaux & Calendrier : Marge nette 34.1%, FCF 10.4Md$. Résultats T3 du 14/10 déjà passés.
-   - Niveaux & Risk Management : Stop Loss à 7.0% (~$1523.45, soit 2.0x ATR / sous le plus bas 20j de $1548.33). Take Profit à +15.0% (~$1883.84, ratio R/R de 2.14x). Montant $9 828.72 (6.1% du compte).
+1. META (equilibre-1) -> OK :
+   - Thèse : Vente totale (13 actions, 100% de la ligne) pour invalidation technique sous SMA200 et dégradation du secteur des Services de Communication (XLC -5.3% sur 5j).
+   - Constat technique & Facteurs exogènes : Clôture à $616.26 sous la SMA200 ($631.29) avec volume à 1.8x la moyenne 20j. Publication décevante d'Alphabet (GOOGL) ce matin exerçant une pression supplémentaire sur la publicité numérique et le Nasdaq-100 (-1% sur futures).
+   - Impact portefeuille : Prise de perte contrôlée (-3.8%), protection contre un gap baissier sous le stop ($596.30), passage à 9 positions et augmentation des liquidités.
    - Verdict : OK sans réserve.
