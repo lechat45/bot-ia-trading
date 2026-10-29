@@ -10,11 +10,16 @@
    "symbole": "META",
    "source": "equilibre-1",
    "these": "Vente totale 100% de META (13 actions). Raisons : 1) Cassure nette de la SMA200 (631,29 $) à 612.63 $/616.26 $ sur fort volume (1,8x moy 20j). 2) Dégradation sectorielle marquée sur XLC (-5,3% sur 5j). 3) Déception sur les résultats d Alphabet (GOOGL) ce matin créant un risque fort de gap baissier à l'ouverture. Sortie de protection pour encaisser une perte contenue (-3,8%) et libérer ~8 000 $ de liquidités.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-10-29T08:13:07+00:00",
    "prix_reference": 616.26,
    "pourcentage": 100.0,
-   "qty_estimee": 13
+   "qty_estimee": 13,
+   "resultat": "Vente exécutée : 13 META à 619.11 $ (plus-value -282.79 $)",
+   "prix_execution": 619.112308,
+   "qty": 13,
+   "traite_le": "2026-10-29T13:40:23+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-10-29T13:40:23+00:00"
 }
