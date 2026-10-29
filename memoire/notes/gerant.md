@@ -1,28 +1,25 @@
-_Mis à jour : 2026-10-29 09:02 (Paris)_
+_Mis à jour : 2026-10-29 19:01 (Paris)_
 
-_Mis à jour : 2026-10-29 09:15 (Paris) / 04:15 (NY)_
+JOURNAL DE BORD DU GÉRANT (29/10/2026 - Séance de Suivi Allégée)
 
-JOURNAL DE BORD DU GÉRANT (29/10/2026 - Séance de Préparation)
-
-## 1. État du Portefeuille (Valeur totale : ~98 886 $, Cash : 11 210 $ -> ~19 220 $ post-vente META)
-- **Positions actives (9/10 après exécution planifiée)** :
-  1. UNH (Healthcare) - 9 362 $ (-0.6%), Stop 384.66 $ (-5.5%), TP 458.32 $ (+12.6%). ER T4 janv 2027.
-  2. NVDA (Technology) - 9 815 $ (-1.5%), Stop 202.58 $ (-5.1%), TP 249.16 $ (+16.8%). ER 17/11/2026.
-  3. TSM (Technology) - 9 495 $ (+0.4%), Stop 403.85 $ (-6.4%), TP 494.07 $ (+14.5%). ER janv 2027.
-  4. TMO (Healthcare) - 14 097 $ (+0.2%), Stop 660.07 $ (-6.4%), TP 807.53 $ (+14.6%). ER janv 2027.
-  5. JPM (Financials) - 5 091 $ (+2.4%), Stop 314.68 $ (-7.3%), TP 366.03 $ (+7.8%). ER janv 2027.
-  6. PG (Cons. Defensive) - 7 282 $ (-1.5%), Stop 152.55 $ (-3.6%), TP 177.44 $ (+12.1%). ER janv 2027.
-  7. UNP (Industrials) - 7 737 $ (+0.4%), Stop 280.50 $ (-5.8%), TP 336.31 $ (+13.0%). ER janv 2027.
-  8. ASML (Technology) - 10 116 $ (+1.6%), Stop 1527.14 $ (-9.4%), TP 1884.34 $ (+11.8%). ER janv 2027.
-  9. DUK (Utilities) - 6 816 $ (-0.2%), Stop 116.40 $ (-6.1%), TP 138.69 $ (+11.9%). ER 05/11/2026 (dans 7j).
+## 1. État du Portefeuille (Valeur totale : ~99 147 $, Cash : 19 259 $ -> ~19,4% du portefeuille)
+- **Positions actives (9/10)** :
+  1. UNH (Healthcare) - 9 311 $ (-1.1%), Stop 384.66 $ (-5.0%), TP 458.32 $ (+13.2%). ER janv 2027.
+  2. NVDA (Technology) - 9 788 $ (-1.8%), Stop 202.58 $ (-4.8%), TP 249.16 $ (+17.1%). ER 17/11/2026.
+  3. TSM (Technology) - 9 460 $ (+0.0%), Stop 403.85 $ (-6.1%), TP 494.07 $ (+14.9%). ER janv 2027.
+  4. TMO (Healthcare) - 14 100 $ (+0.2%), Stop 660.07 $ (-6.4%), TP 807.53 $ (+14.5%). ER janv 2027.
+  5. JPM (Financials) - 5 147 $ (+3.5%), Stop 314.68 $ (-8.3%), TP 366.03 $ (+6.7%). ER janv 2027.
+  6. PG (Cons. Defensive) - 7 335 $ (-0.8%), Stop 152.55 $ (-4.3%), TP 177.44 $ (+11.3%). ER janv 2027.
+  7. UNP (Industrials) - 7 789 $ (+1.1%), Stop 280.23 $ (-6.5%), TP 329.59 $ (+10.0%). ER janv 2027.
+  8. ASML (Technology) - 10 055 $ (+2.3%), Stop 1523.73 $ (-9.1%), TP 1884.34 $ (+12.5%). ER janv 2027.
+  9. DUK (Utilities) - 6 931 $ (+1.3%), Stop 116.40 $ (-7.3%), TP 138.69 $ (+10.5%). ER 05/11/2026 (dans 7j).
 
 - **Secteurs représentés** : Tech (~30%), Healthcare (~24%), Financials (~5%), Cons. Defensive (~7%), Industrials (~8%), Utilities (~7%). Respect strict du plafond de 35% par secteur.
-- **Liquidités** : 11 210 $ actuels -> ~19 220 $ post-ouverture (~19,4% du portefeuille), bien au-dessus du minimum de 5%.
+- **Liquidités** : 19 259 $ (~19,4% du portefeuille), bien au-dessus du minimum de 5%.
 
-## 2. Déroulement & Décisions de la Séance
-- **Décision Vente META** : Retention de la proposition `equilibre-1` (avis Critique "OK"). Planification de la vente de 100% de la position META (13 actions, ~8 011 $) à l'ouverture.
-  - *Motifs* : Cassure nette de la SMA200 (631,29 $) à 612.63 $/616.26 $ avec volume élevé (1,8x moy 20j) ; faiblesse du secteur XLC (-5,3% sur 5j) ; déception sur les résultats d'Alphabet (GOOGL) ce matin créant un risque de contagion sur les valeurs ad-tech à l'ouverture.
-- **Gestion des Risques & Nouveaux Achats** : Aucun nouvel achat planifié ce matin. Contexte d'ouverture sous tension tech (futures Nasdaq -1%) et prudence recommandée avant la session de suivi de l'après-midi.
+## 2. Événements et Actions de la Séance
+- **Vente META effective** : Vente de la totalité de la position META (13 actions à 619.11 $) réalisée ce matin à l'ouverture, concrétisant la sortie de la thèse suite à la cassure de la SMA200 et la faiblesse du secteur ad-tech. Cash consolidé à ~19,3k$.
+- **Suivi des Positions** : Aucune alerte critique. Le portefeuille montre une bonne résilience globale malgré la tension sur le Nasdaq (-1,8% aujourd'hui). DUK approche de ses résultats du 05/11 (dans 7 jours, rappel actif r9-1105) ; RSI à surveiller (72, vigileant mais position saine au-dessus de ses moyennes).
 
 ## 3. Calendrier & Prochains Rappels à Surveiller
 - **05/11/2026** : Résultats DUK (Duke Energy) - dans 7 jours (Rappel r9-1105 actif).
