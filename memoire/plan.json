@@ -1,25 +1,22 @@
 {
- "date": "2026-10-29",
- "cree_le": "2026-10-29T08:02:38+00:00",
+ "date": "2026-10-30",
+ "cree_le": "2026-10-30T08:02:30+00:00",
  "simulation": false,
  "ordres": [
   {
    "compte": "equipe",
    "agent": "gerant",
-   "action": "vendre",
-   "symbole": "META",
+   "action": "acheter",
+   "symbole": "V",
    "source": "equilibre-1",
-   "these": "Vente totale 100% de META (13 actions). Raisons : 1) Cassure nette de la SMA200 (631,29 $) à 612.63 $/616.26 $ sur fort volume (1,8x moy 20j). 2) Dégradation sectorielle marquée sur XLC (-5,3% sur 5j). 3) Déception sur les résultats d Alphabet (GOOGL) ce matin créant un risque fort de gap baissier à l'ouverture. Sortie de protection pour encaisser une perte contenue (-3,8%) et libérer ~8 000 $ de liquidités.",
-   "statut": "execute",
-   "cree_le": "2026-10-29T08:13:07+00:00",
-   "prix_reference": 616.26,
-   "pourcentage": 100.0,
-   "qty_estimee": 13,
-   "resultat": "Vente exécutée : 13 META à 619.11 $ (plus-value -282.79 $)",
-   "prix_execution": 619.112308,
-   "qty": 13,
-   "traite_le": "2026-10-29T13:40:23+00:00"
+   "these": "Achat de Visa Inc. (V) sur proposition equilibre-1 : Leader mondial des paiements. Résultats T3 récents réussis (prochains résultats dans 88j, pas de risque binaire). Fondamentaux d'exception (marge nette 51.2%, ROE 63.5%, CA +13.2%). Tendance haussière forte (prix 410.56$, au-dessus SMA20 393.5$ et SMA50 380.4$). Le secteur financier passe de 5.2% à ~12.6% du portefeuille, sous le plafond de 35%. Stop loss à 5.5% (387.98$, sous SMA20) et Take Profit à 11.0% (455.72$), R/R 2.0x. Horizon 1-3 mois.",
+   "statut": "en_attente",
+   "cree_le": "2026-10-30T08:11:14+00:00",
+   "prix_reference": 410.56,
+   "montant_usd": 7390.08,
+   "qty_estimee": 18,
+   "stop_loss_pct": 5.5,
+   "take_profit_pct": 11.0
   }
- ],
- "execute_le": "2026-10-29T13:40:23+00:00"
+ ]
 }

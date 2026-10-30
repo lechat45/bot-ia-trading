@@ -1,9 +1,9 @@
-_Mis à jour : 2026-10-29 09:02 (Paris)_
+_Mis à jour : 2026-10-30 09:02 (Paris)_
 
-_Mis à jour : 2026-10-29 09:02 (Paris)_
+_Mis à jour : 2026-10-30 09:02 (Paris)_
 
 - Stratégie Sentiment & Élan :
-  - **ABBV (AbbVie)** : Excellente dynamique technique (proche de son plus haut annuel à -0.9%, SMA20 > SMA50 > SMA200), mais publication des résultats prévue sous 1 jour (2026-10-30). En vertu des garde-fous (interdiction d'achat si résultats dans 1 jour ou moins), achat suspendu/reporté post-résultats.
-  - **META** : Position actuelle toujours sous surveillance (stop bien placé, baisse du secteur communication).
-  - **MRNA / MU** : Momentum 12_1 élevé mais volatilité/retracement excessif récent (MRNA -13% sur 5j, MU rsi à 44). Pas de configuration propre pour le moment.
-  - Garder la discipline sur l'élan de fond : vérifier que le RSI ne surchauffe pas et qu'aucun catalyseur à très court terme (résultats) ne vienne fausser l'entrée.
+  - **MRNA (Moderna)** : Proposition transmise pour un **Achat Élan de fond** (Perf 12_1 à +658%, tendance claire SMA20 > SMA50 > SMA200, RSI sain à 49). Stop à 8% (204.91$), TP à 16% (258.36$). Prochains résultats le 06/11.
+  - **MU / DELL / AMD** : Bien que figurant dans le screener momentum 12_1, ces valeurs sont actuellement sous leurs moyennes mobiles courtes (SMA20/SMA50) en raison d'un repli/consolidation. Hors de mon champ d'action "Élan" tant qu'une cassure de confirmation n'a pas lieu avec du volume.
+  - **Positions du portefeuille** : Surveillance de NVDA et TSM. Pas d'invalidation de tendance majeure à signaler malgré le petit repli sur le secteur Tech.
+  - Rappel : Prioriser l'alignement des tendances (SMA20 > SMA50 > SMA200) et des indicateurs de surchauffe (RSI < 75) avant toute entrée momentum.

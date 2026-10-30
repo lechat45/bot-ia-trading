@@ -28,5 +28,10 @@
   "date": "2026-10-28",
   "auteur": "sentiment",
   "texte": "Lors d'un élan de fond, vérifier que le titre reste au‑dessus de la SMA50 et que le RSI ne dépasse pas 75 ; sinon l’élan peut s’essouffler rapidement."
+ },
+ {
+  "date": "2026-10-30",
+  "auteur": "gerant",
+  "texte": "Après une publication de résultats décevante déclenchant un gap baissier post-market, attendre au moins 2 séances de stabilisation du cours avant toute tentative d'achat sur repli fundamental pour éviter d'attraper un couteau qui tombe."
  }
 ]
