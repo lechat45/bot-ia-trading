@@ -1,22 +1,18 @@
-_Mis à jour : 2026-10-30 09:02 (Paris)_
-
-_Mis à jour : 2026-10-30 09:02 (Paris)_
+_Mis à jour : 2026-10-30 19:01 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 30/10/2026 (Séance de Préparation - Bourse fermée)
+- Date : 30/10/2026 (Séance de Suivi - Bourse ouverte)
 
-## État du Portefeuille & Suivi des Thèses (9 positions détenues sur 10 max) :
-- Valeur globale du compte : ~99 322 $. Cash disponible : 19 258.81 $ (~19.4%).
-- Positions actuelles (9/10) : UNH (+0.39%), NVDA (-2.66%), TSM (-1.11%), TMO (+0.85%), JPM (+3.68%), PG (-0.10%), UNP (+1.89%), ASML (+2.26%), DUK (+1.60%).
-- META : sorti du portefeuille lors des séances précédentes.
-- Santé globale : Thèses fondamentales solides et intactes sur l'ensemble des 9 lignes. Les stops-loss sont idéalement positionnés.
+## État des Positions en Portefeuille (8 positions / 10 max) :
+- Valeur portefeuille : 97 581.15 $. Cash : 30 429.68 $ (31.2%).
+- Performance globale résiliente malgré la forte baisse des indices (S&P 500 -2.1%, Nasdaq -4.0%) :
+  * UNH (+0.08%), TMO (-1.10%), JPM (+1.66%), PG (+1.39%), UNP (+2.29%), DUK (+3.22%), V (+0.52%).
+  * ASML (-5.61% P/L, cours à 1546.60 $ vs stop à 1523.73 $ [-1.5%]). ASML subit la chute générale du secteur des semiconducteurs (-30% Intel, craintes tech). La thèse fondamentale d'ASML (lithographie EUV, monopôle, valorisation) demeure intacte. Le stop suiveur/loss automatique protège la ligne si le repli s'aggrave.
 
-## Action de la séance :
-- **Proposition d'Achat : Amazon (AMZN)** pour 8 000 $ (~8% du capital).
-  * Confiance : Élevée.
-  * Stop Loss : 7.5% (225.48 $). Take Profit : 15.0% (280.32 $). R/R = 2.0x. Risque compte : 0.60%.
-  * Thèse : Publication T3 finalisée hier (incertitude levée). Titre en repli technique sain (-14.2% sur plus haut, RSI14 survendu à 34.0, au-dessus SMA200). Croissance CA +19.6%, ROE 30.6%, Marge Op. 13.7%, Dette/FP très basse à 46.0, PER attendu attractif à 23.3x. Diversification dans le secteur Consommation Discrétionnaire (0% du portefeuille actuellement).
+## Décision & Recommandations :
+- Pas de nouvelle proposition d'achat en cours de séance de suivi lors d'une forte journée de baisse sectorielle tech. Prudence stratégique Qualité : préserver le cash en attendant la stabilisation post-résultats tech.
+- Conservation de l'ensemble des 8 positions avec stops-loss inchangés.
 
-## Événements & Catalyseurs à surveiller :
+## Événements à surveiller :
 - 05/11/2026 : Résultats T3 de Duke Energy (DUK) [Rappel r9-1105].
 - 17/11/2026 : Résultats T3 de NVIDIA (NVDA).

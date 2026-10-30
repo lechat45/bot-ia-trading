@@ -1,22 +1,18 @@
-_Mis à jour : 2026-10-30 09:02 (Paris)_
+_Mis à jour : 2026-10-30 19:01 (Paris)_
 
-_Mis à jour : 2026-10-30 09:02 (Paris)_
+_Mis à jour : 2026-10-30 14:02 (NY) / 19:02 (Paris)_
 
-SÉANCE DE PRÉPARATION DU 30/10/2026 :
-Avis rendus sur les 3 propositions d'achat :
+SÉANCE DE SUIVI DU 30/10/2026 :
+Avis rendus sur les 2 propositions de l'analyste Sentiment :
 
-1. Visa Inc. (V) - equilibre-1 -> OK :
-   - Thèse : Achat de $7,390.08 (18 actions) à $410.56.
-   - Constat : Marge nette 51.2%, ROE 63.5%, publication de résultats passée (88 jours avant la prochaine), secteur financier à ~12.7% du compte.
-   - Invalidation & Stop : Stop à 5.5% ($387.98), TP à 11.0% ($455.72).
-   - Verdict : OK sans réserve.
+1. ASML Holding N.V. (ASML) - sentiment-1 -> OK :
+   - Action : Vendre (100% de la position, 6 actions).
+   - Thèse : Vente pour couper les pertes (-7.7% aujourd'hui, -5.6% total) et invalidation de la thèse d'élan (Prix 1548 < SMA20 1682 et SMA50 1703). RSI à 32.
+   - Verdict : OK sans réserve. Vente justifiée car le niveau de stop est quasiment touché et l'élan technique est cassé.
 
-2. Amazon.com Inc. (AMZN) - qualite-1 -> OK :
-   - Thèse : Achat de $7,952.70 (35 actions) à $227.22.
-   - Constat : Publication T3 passée, levée d'incertitude. Croissance CA +19.6%, ROE 30.6%, PER attendu 23.3x. Permet la diversification Consumer Cyclical (0% du compte).
-   - Invalidation & Stop : Stop à 7.5% ($225.48) > 1.5 ATR, TP à 15.0% ($280.32).
-   - Verdict : OK sans réserve.
-
-3. Moderna, Inc. (MRNA) - sentiment-1 -> REJET :
-   - Thèse : Achat de $7,350.09 (33 actions) sur élan momentum.
-   - Motif du Rejet : Échéance binaire/Résultats trop proches (06/11/2026, soit 7 jours). Règle de gestion des risques stricte : pas de prise de position < 10 jours avant les résultats. Volatilité extrême (193.8% p.a.).
+2. Moderna, Inc. (MRNA) - sentiment-2 -> REJET :
+   - Action : Acheter ($2,901.73, 13 actions à $223.21).
+   - Motif du Rejet :
+     a) Règle absolue non respectée : Résultats trop proches (06/11/2026, dans 7 jours < limite de 10 jours). Menteur d'avoir réintroduit exactement la même proposition rejetée ce matin sans fait nouveau.
+     b) Stop invalide : Stop à 8.0% ($17.77) est nettement inférieur à 1.5 ATR (ATR14 de $22.8, soit $34.2 de stop minimum requis, >15.4%).
+     c) Volatilité excessive (104% p.a.).
