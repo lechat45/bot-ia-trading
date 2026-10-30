@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 19258.810003000013,
+   "cash": 12227.820004000012,
    "positions": {
     "UNH": {
      "lots": [
@@ -149,6 +149,22 @@
       }
      ],
      "these": "Achat de DUK (Duke Energy) - Proposition equilibre-1 : Intégration stratégique du secteur Utilities (0% du portefeuille) qui est le secteur le plus fort du marché sur 5 séances (+2.4%). Valorisation attractive (PER 17.4x vs 18.8x secteur), dividende 3.48%. Stop loss à 6.0% (~117.32$) sous le support des SMA20 (118.86$) et SMA50 (118.98$). TP à +12.0% (139.79$), ratio R/R 2.0. Prochains résultats le 05/11/2026 (dans 8 jours)."
+    },
+    "V": {
+     "lots": [
+      {
+       "qty": 17,
+       "prix": 413.587647,
+       "date": "2026-10-30T13:40:25+00:00",
+       "stop": 390.99,
+       "tp": 459.26,
+       "statut": "ouvert",
+       "parent_id": "dc5a7c03-7d33-47f6-97a8-4c58494f30ba",
+       "stop_id": "33b6f712-b63e-447b-a663-1996866a59f5",
+       "tp_id": "47f11790-bd6d-4e26-915c-e704477b0739"
+      }
+     ],
+     "these": "Achat de Visa Inc. (V) sur proposition equilibre-1 : Leader mondial des paiements. Résultats T3 récents réussis (prochains résultats dans 88j, pas de risque binaire). Fondamentaux d'exception (marge nette 51.2%, ROE 63.5%, CA +13.2%). Tendance haussière forte (prix 410.56$, au-dessus SMA20 393.5$ et SMA50 380.4$). Le secteur financier passe de 5.2% à ~12.6% du portefeuille, sous le plafond de 35%. Stop loss à 5.5% (387.98$, sous SMA20) et Take Profit à 11.0% (455.72$), R/R 2.0x. Horizon 1-3 mois."
     }
    },
    "realise": -1114.7199970000001,
@@ -196,6 +212,10 @@
     {
      "ts": "2026-10-29T13:40:23+00:00",
      "texte": "Ouverture, ordre planifié vendre META : Vente exécutée : 13 META à 619.11 $ (plus-value -282.79 $)"
+    },
+    {
+     "ts": "2026-10-30T13:40:25+00:00",
+     "texte": "Ouverture, ordre planifié acheter V : Achat exécuté : 17 V à 413.59 $ (stop 390.99 $, objectif 459.26 $)"
     }
    ],
    "derniere_seance": "2026-10-30T08:02:30+00:00"

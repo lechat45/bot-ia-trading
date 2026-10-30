@@ -106,5 +106,16 @@
   "cree_par": "gerant",
   "cree_le": "2026-10-28T08:15:28+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r10-0126",
+  "date": "2027-01-26",
+  "titre": "Résultats de V",
+  "symbole": "V",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-10-30T13:40:25+00:00",
+  "statut": "actif"
  }
 ]
