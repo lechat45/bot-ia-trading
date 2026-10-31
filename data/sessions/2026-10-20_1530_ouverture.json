@@ -1,0 +1,144 @@
+{
+ "nom": "2026-10-20_1530_ouverture",
+ "quand": "2026-10-20 15:30 (Paris)",
+ "ts": "2026-10-20T13:30:48.964708+00:00",
+ "mode": "ouverture",
+ "simulation": false,
+ "hors_ligne": false,
+ "marche_ouvert": true,
+ "date_bourse": "2026-10-20",
+ "agents": {},
+ "propositions": [],
+ "decision": "",
+ "executions": [
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "acheter",
+   "symbole": "UNH",
+   "source": "equilibre-1",
+   "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01$), SMA50 (386.12$) et SMA200 (356.04$), surperformance +7.6% sur 5j. Stop loss à 6.0% (382.50$), Take Profit à 12.0% (455.75$). Prochains résultats dans 84 jours (12/01/2027).",
+   "statut": "execute",
+   "cree_le": "2026-10-20T12:43:34+00:00",
+   "prix_reference": 406.92,
+   "montant_usd": 9766.08,
+   "qty_estimee": 24,
+   "stop_loss_pct": 6.0,
+   "take_profit_pct": 12.0,
+   "resultat": "Achat exécuté : 23 UNH à 409.33 $ (stop 384.66 $, objectif 458.32 $)",
+   "prix_execution": 409.33,
+   "qty": 23,
+   "traite_le": "2026-10-20T13:31:03+00:00"
+  }
+ ],
+ "plan": [],
+ "compte": {
+  "cash": 80606.61,
+  "valeur": 100029.73,
+  "investi": 19423.12,
+  "capital_depart": 100000.0,
+  "pl": 29.73,
+  "pl_pct": 0.03,
+  "realise": 0.0,
+  "positions": [
+   {
+    "symbole": "AMZN",
+    "qty": 38,
+    "prix_achat": 262.6,
+    "prix": 263.45,
+    "valeur": 10011.29,
+    "pl": 32.49,
+    "pl_pct": 0.33,
+    "stop": 249.49,
+    "tp": 288.89,
+    "depuis": "2026-10-19",
+    "these": "Amazon (AMZN) présente une qualité financière indiscutable : CA +19.6%, BPA +242%, marge nette 17.4%, ROE 30.6%, dette/FP très saine à 46% et FCF positif de 3.2Md$. Le titre surperforme le marché (+5.1% ce jour, +22.5% sur 1 an), au-dessus de sa SMA200 (242.87$) et SMA20 (253.45$). Résultats trimest",
+    "en_attente": false
+   },
+   {
+    "symbole": "UNH",
+    "qty": 23,
+    "prix_achat": 409.33,
+    "prix": 409.21,
+    "valeur": 9411.83,
+    "pl": -2.76,
+    "pl_pct": -0.03,
+    "stop": 384.66,
+    "tp": 458.32,
+    "depuis": "2026-10-20",
+    "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01",
+    "en_attente": false
+   }
+  ]
+ },
+ "valeur_avant": 100000.0,
+ "cles": {
+  "groq#2": {
+   "tokens": 61688,
+   "appels": 9
+  },
+  "groq#1": {
+   "tokens": 77403,
+   "appels": 14
+  },
+  "gemini#1": {
+   "tokens": 102162,
+   "appels": 12
+  },
+  "gemini#2": {
+   "tokens": 121467,
+   "appels": 13
+  },
+  "groq#3": {
+   "tokens": 52725,
+   "appels": 8
+  },
+  "gemini#3": {
+   "tokens": 58416,
+   "appels": 6
+  }
+ },
+ "bilan": "",
+ "frein": null,
+ "lecons": [],
+ "resume_marche": "",
+ "stops_suiveurs": [],
+ "allegee": null,
+ "suivi_raisons": [],
+ "ecarts": [],
+ "rappels": [
+  {
+   "id": "r2-1029",
+   "date": "2026-10-29",
+   "titre": "Résultats T3 Amazon (AMZN)",
+   "details": "Résultats T3 Amazon (AMZN). Évaluer la position (plus-value, dynamique du marché) et décider d'alléger ou conserver avant l'annonce.",
+   "symbole": "AMZN",
+   "seance": "preparation",
+   "cree_par": "gerant",
+   "cree_le": "2026-10-20T11:35:28+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r3-1028",
+   "date": "2026-10-28",
+   "titre": "Suivi résultats DB",
+   "details": "Résultats DB, vérifier si catalyseur se produit, ajuster stop si nécessaire",
+   "symbole": "DB",
+   "seance": "preparation",
+   "cree_par": "critique",
+   "cree_le": "2026-10-20T12:42:00+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r4-0112",
+   "date": "2027-01-12",
+   "titre": "Résultats T4 UnitedHealth Group (UNH)",
+   "details": "Publication des résultats T4 de UnitedHealth Group (UNH). Évaluer la position et ajuster le stop loss ou prendre les bénéfices avant annonce.",
+   "symbole": "UNH",
+   "seance": "preparation",
+   "cree_par": "gerant",
+   "cree_le": "2026-10-20T12:44:24+00:00",
+   "statut": "actif"
+  }
+ ]
+}
