@@ -1,18 +1,21 @@
-_Mis à jour : 2026-10-30 19:01 (Paris)_
+_Mis à jour : 2026-11-02 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 30/10/2026 (Séance de Suivi - Bourse ouverte)
+- Date : 02/11/2026 (Séance de Préparation - Bourse fermée)
 
-## État des Positions en Portefeuille (8 positions / 10 max) :
-- Valeur portefeuille : 97 581.15 $. Cash : 30 429.68 $ (31.2%).
-- Performance globale résiliente malgré la forte baisse des indices (S&P 500 -2.1%, Nasdaq -4.0%) :
-  * UNH (+0.08%), TMO (-1.10%), JPM (+1.66%), PG (+1.39%), UNP (+2.29%), DUK (+3.22%), V (+0.52%).
-  * ASML (-5.61% P/L, cours à 1546.60 $ vs stop à 1523.73 $ [-1.5%]). ASML subit la chute générale du secteur des semiconducteurs (-30% Intel, craintes tech). La thèse fondamentale d'ASML (lithographie EUV, monopôle, valorisation) demeure intacte. Le stop suiveur/loss automatique protège la ligne si le repli s'aggrave.
+## État du Portefeuille & Suivi (7 positions / 10 max) :
+- Valeur portefeuille : 97 422.52 $. Cash : 39 694.22 $ (40.7 %).
+- Positions en portefeuille : UNH (-0.59%), TMO (-0.94%), JPM (+1.73%), PG (+0.52%), UNP (+2.59%), DUK (+2.83%), V (-0.01%).
+- Note ASML : La position n'est plus en portefeuille (coupée par son stop automatique/suiveur lors de la baisse du secteur semi-conducteurs).
 
-## Décision & Recommandations :
-- Pas de nouvelle proposition d'achat en cours de séance de suivi lors d'une forte journée de baisse sectorielle tech. Prudence stratégique Qualité : préserver le cash en attendant la stabilisation post-résultats tech.
-- Conservation de l'ensemble des 8 positions avec stops-loss inchangés.
+## Proposition d'Achat du jour :
+- **CRM (Salesforce, Inc.)** [Achat Qualité] :
+  * Montant : 7 500 $ (confiance ÉLEVÉE, ~7.7% du portefeuille).
+  * Thèse : Qualité fondamentale irréprochable (Marge op 21.4%, CA +10.8%, ROE 19.4%, FCF +17.7Md$). PER attendu très attractif (14.3x vs 23.3x médiane sectorielle). Repli de -7.8% sur 5j (RSI 46.0), cours bien au-dessus de la SMA200 (197.65 $). 35 révisions positives sur 30j et achat d'initié récent (1 M$).
+  * Stop Loss : -7.5% (211.96 $). Take Profit : +16.5% (267.00 $). Ratio R/R : 2.2x. Risque compte : 0.56%.
+  * Diversification : Réintroduit le secteur Tech (actuellement à 0% du portefeuille).
 
 ## Événements à surveiller :
 - 05/11/2026 : Résultats T3 de Duke Energy (DUK) [Rappel r9-1105].
+- 02/12/2026 : Résultats de Salesforce (CRM).
 - 17/11/2026 : Résultats T3 de NVIDIA (NVDA).
