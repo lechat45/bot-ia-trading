@@ -1,5 +1,7 @@
 {
- "satures": {},
+ "satures": {
+  "gemini|2|gemini-3.5-flash": 1793692860
+ },
  "jours": {
   "2026-10-20": {},
   "2026-10-21": {
@@ -232,8 +234,8 @@
     "appels": 2
    },
    "gemini#3": {
-    "tokens": 299796,
-    "appels": 21
+    "tokens": 347467,
+    "appels": 25
    }
   }
  }
