@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 39694.22003400001,
+   "cash": 24114.13003900001,
    "positions": {
     "UNH": {
      "lots": [
@@ -117,6 +117,38 @@
       }
      ],
      "these": "Achat de Visa Inc. (V) sur proposition equilibre-1 : Leader mondial des paiements. Résultats T3 récents réussis (prochains résultats dans 88j, pas de risque binaire). Fondamentaux d'exception (marge nette 51.2%, ROE 63.5%, CA +13.2%). Tendance haussière forte (prix 410.56$, au-dessus SMA20 393.5$ et SMA50 380.4$). Le secteur financier passe de 5.2% à ~12.6% du portefeuille, sous le plafond de 35%. Stop loss à 5.5% (387.98$, sous SMA20) et Take Profit à 11.0% (455.72$), R/R 2.0x. Horizon 1-3 mois."
+    },
+    "MSFT": {
+     "lots": [
+      {
+       "qty": 16,
+       "prix": 525.32,
+       "date": "2026-11-02T14:40:27+00:00",
+       "stop": 493.21,
+       "tp": 587.65,
+       "statut": "ouvert",
+       "parent_id": "b46ffd42-98e9-4549-a1af-f1abe70cb3b8",
+       "stop_id": "db11f1c4-387f-44b2-baa2-8e236dca181a",
+       "tp_id": "23d5ebd8-cf3e-4496-b4ee-fc1c9c5d0025"
+      }
+     ],
+     "these": "Reconstitution de la poche Technologie (0% du portefeuille post-ASML) via le leader le plus robuste, Microsoft (MSFT). Fondamentaux d'exception : Marge op 49.8%, CA +18.8%, PER 21.6x. Cours au-dessus de SMA50 (512.94$) et SMA200 (436.84$), RSI14 à 36. Stop à 6.0% (490.65$, 2.7 ATR), Take-Profit à +12.0% (584.60$). ER dans 86j. Invalidation si clôture sous la SMA50."
+    },
+    "CRM": {
+     "lots": [
+      {
+       "qty": 31,
+       "prix": 231.450645,
+       "date": "2026-11-02T14:40:37+00:00",
+       "stop": 213.96,
+       "tp": 269.48,
+       "statut": "ouvert",
+       "parent_id": "34cc0591-0695-44cd-b2fc-3d63f72240cd",
+       "stop_id": "b7165f3d-844e-4a09-98c4-0c66e53d0726",
+       "tp_id": "f9f38fc8-1f6b-459f-8d07-26e2fd986118"
+      }
+     ],
+     "these": "Achat sur repli dans une tendance haussière sur Salesforce (CRM), réintroduisant de la Qualité SaaS en Technologie. Marge op 21.4%, CA +10.8%, ROE 19.4%, FCF +17.7Md$. Valorisation très séduisante à PER 14.3x (vs 23.3x secteur). Repli de -7.8% 5j avec RSI à 46. Stop loss à 7.5% (211.96$, ~2 ATR), Take Profit à 16.5% (267.00$, vise retour plus haut 52s). ER le 02/12/2026 (dans 30j). Invalidation si cassure du support récent et 2 ATR."
     }
    },
    "realise": -2904.9599670000007,
@@ -176,6 +208,14 @@
     {
      "ts": "2026-10-30T18:01:23+00:00",
      "texte": "Stop loss déclenché : 22 TSM vendues à 403.85 $ (plus-value -573.83 $)"
+    },
+    {
+     "ts": "2026-11-02T14:40:27+00:00",
+     "texte": "Ouverture, ordre planifié acheter MSFT : Achat exécuté : 16 MSFT à 525.32 $ (stop 493.21 $, objectif 587.65 $)"
+    },
+    {
+     "ts": "2026-11-02T14:40:37+00:00",
+     "texte": "Ouverture, ordre planifié acheter CRM : Achat exécuté : 31 CRM à 231.45 $ (stop 213.96 $, objectif 269.48 $)"
     }
    ],
    "derniere_seance": "2026-11-02T08:02:37+00:00"

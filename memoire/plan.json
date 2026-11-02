@@ -10,13 +10,17 @@
    "symbole": "MSFT",
    "source": "equilibre-1",
    "these": "Reconstitution de la poche Technologie (0% du portefeuille post-ASML) via le leader le plus robuste, Microsoft (MSFT). Fondamentaux d'exception : Marge op 49.8%, CA +18.8%, PER 21.6x. Cours au-dessus de SMA50 (512.94$) et SMA200 (436.84$), RSI14 à 36. Stop à 6.0% (490.65$, 2.7 ATR), Take-Profit à +12.0% (584.60$). ER dans 86j. Invalidation si clôture sous la SMA50.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-02T08:15:20+00:00",
    "prix_reference": 521.85,
    "montant_usd": 8871.45,
    "qty_estimee": 17,
    "stop_loss_pct": 6.0,
-   "take_profit_pct": 12.0
+   "take_profit_pct": 12.0,
+   "resultat": "Achat exécuté : 16 MSFT à 525.32 $ (stop 493.21 $, objectif 587.65 $)",
+   "prix_execution": 525.32,
+   "qty": 16,
+   "traite_le": "2026-11-02T14:40:27+00:00"
   },
   {
    "compte": "equipe",
@@ -25,13 +29,18 @@
    "symbole": "CRM",
    "source": "qualite-1",
    "these": "Achat sur repli dans une tendance haussière sur Salesforce (CRM), réintroduisant de la Qualité SaaS en Technologie. Marge op 21.4%, CA +10.8%, ROE 19.4%, FCF +17.7Md$. Valorisation très séduisante à PER 14.3x (vs 23.3x secteur). Repli de -7.8% 5j avec RSI à 46. Stop loss à 7.5% (211.96$, ~2 ATR), Take Profit à 16.5% (267.00$, vise retour plus haut 52s). ER le 02/12/2026 (dans 30j). Invalidation si cassure du support récent et 2 ATR.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-02T08:15:23+00:00",
    "prix_reference": 229.15,
    "montant_usd": 7332.8,
    "qty_estimee": 32,
    "stop_loss_pct": 7.5,
-   "take_profit_pct": 16.5
+   "take_profit_pct": 16.5,
+   "resultat": "Achat exécuté : 31 CRM à 231.45 $ (stop 213.96 $, objectif 269.48 $)",
+   "prix_execution": 231.450645,
+   "qty": 31,
+   "traite_le": "2026-11-02T14:40:37+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-11-02T14:40:37+00:00"
 }

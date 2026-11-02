@@ -139,5 +139,27 @@
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-02T08:15:36+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r13-1202",
+  "date": "2026-12-02",
+  "titre": "Résultats de CRM",
+  "symbole": "CRM",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-02T14:40:37+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r14-0127",
+  "date": "2027-01-27",
+  "titre": "Résultats de MSFT",
+  "symbole": "MSFT",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-02T14:40:37+00:00",
+  "statut": "actif"
  }
 ]
