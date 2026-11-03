@@ -246,8 +246,8 @@
     "appels": 1
    },
    "gemini#1": {
-    "tokens": 275561,
-    "appels": 22
+    "tokens": 287536,
+    "appels": 23
    },
    "gemini#2": {
     "tokens": 235367,
@@ -258,8 +258,8 @@
     "appels": 1
    },
    "gemini#3": {
-    "tokens": 256071,
-    "appels": 20
+    "tokens": 337848,
+    "appels": 26
    }
   }
  }
