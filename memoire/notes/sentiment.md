@@ -1,12 +1,13 @@
-_Mis à jour : 2026-11-02 09:02 (Paris)_
+_Mis à jour : 2026-11-03 09:02 (Paris)_
 
-_Mis à jour : 2026-11-02 09:15 (Paris)_
+_Mis à jour : 2026-11-03 09:02 (Paris)_
 
-- Stratégie Sentiment & Élan :
-  - **EQNR (Equinor)** : Proposition transmise pour un **Achat Élan de fond/actualité** (Breakout plus haut, catalyseurs production/gaz/rachat d'actions). Stop à 5.4% (46.11$), TP à 11% (54.00$).
-  - **PM (Philip Morris)** : Proposition transmise pour un **Achat Élan de fond** (Breakout plus haut, tendance SMA propre, RSI sain). Stop à 5.3% (197.74$), TP à 10.5% (220.00$).
-  - **MRNA (Moderna)** : Proposition du 30/10 rejetée par le critique.
-  - **MU / DELL / AMD** : En consolidation sous les SMA20/50. À surveiller pour une cassure de confirmation.
-  - **Positions du portefeuille** : UNH, TMO, JPM, PG, UNP, DUK, V. Pas de changement de thèse majeur.
+- **Stratégie Sentiment & Élan** :
+  - **ABBV (AbbVie)** : Proposition transmise pour un **Achat Élan d'actualité** (Résultats T3 supérieurs, relèvement de dividende, objectifs d'analystes relevés, volume 2.4x). Stop à 5.0% (274.38$), TP à 10.0% (317.70$).
+  - **PM (Philip Morris)** : Thèse d'Élan de fond toujours valide (RSI 61, breakout proche des plus hauts, alignement des SMA). À surveiller si non exécuté.
+  - **EQNR (Equinor)** : Catalyseurs toujours présents, à suivre selon l'évolution du secteur Énergie.
+  - **Secteurs forts à privilégier** : Matériaux (XLB), Consommation cyclique (XLY), Consommation de base (XLP) et Santé (XLV).
+  - **Tech (XLK/QQQ)** : En repli net (-4.1% à 5j). Éviter de tenter de "rattraper les couteaux qui tombent" sur MU/DELL/AMD avant confirmation d'un support solide.
 
-- Rappel : Prioriser l'alignement des tendances (SMA20 > SMA50 > SMA200) et des indicateurs de surchauffe (RSI < 75). Les catalyseurs (gaz, production) peuvent valider un momentum même si le RSI est déjà élevé.
+- **Suivi Portefeuille** :
+  - Conserver les lignes fortes. Surveillance des résultats de DUK le 05/11.

@@ -1,21 +1,30 @@
-_Mis à jour : 2026-11-02 09:02 (Paris)_
+_Mis à jour : 2026-11-03 09:02 (Paris)_
+
+_Mis à jour : 2026-11-03 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 02/11/2026 (Séance de Préparation - Bourse fermée)
+- Date : 03/11/2026 (Séance de Préparation - Bourse fermée)
 
-## État du Portefeuille & Suivi (7 positions / 10 max) :
-- Valeur portefeuille : 97 422.52 $. Cash : 39 694.22 $ (40.7 %).
-- Positions en portefeuille : UNH (-0.59%), TMO (-0.94%), JPM (+1.73%), PG (+0.52%), UNP (+2.59%), DUK (+2.83%), V (-0.01%).
-- Note ASML : La position n'est plus en portefeuille (coupée par son stop automatique/suiveur lors de la baisse du secteur semi-conducteurs).
+## État du Portefeuille & Suivi (9 positions / 10 max) :
+- Valeur portefeuille : 97 022.26 $. Cash : 24 114.13 $ (24.8 %).
+- Positions détenues (9) :
+  1. UNH (-2.17%, Santé) - Stop à 384.66 $ (-3.9%).
+  2. TMO (-2.95%, Santé) - Stop à 660.07 $ (-3.3%).
+  3. JPM (+2.80%, Finance) - Stop à 314.68 $ (-7.6%).
+  4. PG (+1.79%, Conso Base) - Stop à 152.55 $ (-6.8%).
+  5. UNP (+3.61%, Industrielles) - Stop à 280.23 $ (-8.7%).
+  6. DUK (+3.61%, Utilities) - Stop à 116.40 $ (-9.3%).
+  7. V (+2.85%, Finance) - Stop à 390.99 $ (-8.1%).
+  8. MSFT (-3.38%, Tech) - En portefeuille.
+  9. CRM (-2.30%, Tech) - En portefeuille.
 
-## Proposition d'Achat du jour :
-- **CRM (Salesforce, Inc.)** [Achat Qualité] :
-  * Montant : 7 500 $ (confiance ÉLEVÉE, ~7.7% du portefeuille).
-  * Thèse : Qualité fondamentale irréprochable (Marge op 21.4%, CA +10.8%, ROE 19.4%, FCF +17.7Md$). PER attendu très attractif (14.3x vs 23.3x médiane sectorielle). Repli de -7.8% sur 5j (RSI 46.0), cours bien au-dessus de la SMA200 (197.65 $). 35 révisions positives sur 30j et achat d'initié récent (1 M$).
-  * Stop Loss : -7.5% (211.96 $). Take Profit : +16.5% (267.00 $). Ratio R/R : 2.2x. Risque compte : 0.56%.
-  * Diversification : Réintroduit le secteur Tech (actuellement à 0% du portefeuille).
+## Analyse du jour :
+- Screening Qualité réalisé sur `repli_dans_tendance` et `proche_du_plus_haut`.
+- Analyse de candidates (META, GOOGL, PANW) : bien que solides fondamentalement, META et GOOGL se situent actuellement sous leur SMA200 (invalidation de notre critère de tendance long terme Qualité) et PANW présente une marge opératoire trop faible (5.4% vs min 15%).
+- Décision : Pas de nouvelle proposition aujourd'hui. Le portefeuille est déjà à 9 positions sur 10 max, diversifié sur 6 secteurs solides. Konservation du cash restant (24.8%) pour amortir la volatilité des marchés.
 
 ## Événements à surveiller :
 - 05/11/2026 : Résultats T3 de Duke Energy (DUK) [Rappel r9-1105].
-- 02/12/2026 : Résultats de Salesforce (CRM).
 - 17/11/2026 : Résultats T3 de NVIDIA (NVDA).
+- 19/11/2026 : Résultats de Palo Alto Networks (PANW).
+- 02/12/2026 : Résultats de Salesforce (CRM).
