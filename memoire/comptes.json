@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 24114.13003900001,
+   "cash": 16930.93003900001,
    "positions": {
     "UNH": {
      "lots": [
@@ -149,6 +149,22 @@
       }
      ],
      "these": "Achat sur repli dans une tendance haussière sur Salesforce (CRM), réintroduisant de la Qualité SaaS en Technologie. Marge op 21.4%, CA +10.8%, ROE 19.4%, FCF +17.7Md$. Valorisation très séduisante à PER 14.3x (vs 23.3x secteur). Repli de -7.8% 5j avec RSI à 46. Stop loss à 7.5% (211.96$, ~2 ATR), Take Profit à 16.5% (267.00$, vise retour plus haut 52s). ER le 02/12/2026 (dans 30j). Invalidation si cassure du support récent et 2 ATR."
+    },
+    "XOM": {
+     "lots": [
+      {
+       "qty": 40,
+       "prix": 179.58,
+       "date": "2026-11-03T14:40:30+00:00",
+       "stop": 168.7,
+       "tp": 201.01,
+       "statut": "ouvert",
+       "parent_id": "b3f8812f-3ed1-40d7-8edd-0979b4f233ad",
+       "stop_id": "ab46c4d9-2047-4145-922b-f98fbd1157c9",
+       "tp_id": "7eae6bce-a615-4e8f-987c-f50f76755ed4"
+      }
+     ],
+     "these": "Achat sur proposition equilibre-1 : Entrée stratégique sur le secteur Énergie (0% du compte) via le leader mondial Exxon Mobil (XOM). Capitalisation 732.9 Md$, FCF massif de 28.9 Md$, bilan très assaini (dette/FP 13% vs 42% secteur). Tendance haussière solide (Prix > SMA20 > SMA50 > SMA200) avec repli sain de -4.0% sous le plus haut de 52 semaines. Stop à 6.0% (168.98$) protégé par la SMA50 (168.05$). Pas de résultats avant 87 jours (29/01/2027). Horizon 1 à 3 mois."
     }
    },
    "realise": -2904.9599670000007,
@@ -216,6 +232,10 @@
     {
      "ts": "2026-11-02T14:40:37+00:00",
      "texte": "Ouverture, ordre planifié acheter CRM : Achat exécuté : 31 CRM à 231.45 $ (stop 213.96 $, objectif 269.48 $)"
+    },
+    {
+     "ts": "2026-11-03T14:40:30+00:00",
+     "texte": "Ouverture, ordre planifié acheter XOM : Achat exécuté : 40 XOM à 179.58 $ (stop 168.70 $, objectif 201.01 $)"
     }
    ],
    "derniere_seance": "2026-11-03T08:02:32+00:00"

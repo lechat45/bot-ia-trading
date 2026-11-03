@@ -10,13 +10,18 @@
    "symbole": "XOM",
    "source": "equilibre-1",
    "these": "Achat sur proposition equilibre-1 : Entrée stratégique sur le secteur Énergie (0% du compte) via le leader mondial Exxon Mobil (XOM). Capitalisation 732.9 Md$, FCF massif de 28.9 Md$, bilan très assaini (dette/FP 13% vs 42% secteur). Tendance haussière solide (Prix > SMA20 > SMA50 > SMA200) avec repli sain de -4.0% sous le plus haut de 52 semaines. Stop à 6.0% (168.98$) protégé par la SMA50 (168.05$). Pas de résultats avant 87 jours (29/01/2027). Horizon 1 à 3 mois.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-03T08:10:31+00:00",
    "prix_reference": 179.77,
    "montant_usd": 7190.8,
    "qty_estimee": 40,
    "stop_loss_pct": 6.0,
-   "take_profit_pct": 12.0
+   "take_profit_pct": 12.0,
+   "resultat": "Achat exécuté : 40 XOM à 179.58 $ (stop 168.70 $, objectif 201.01 $)",
+   "prix_execution": 179.58,
+   "qty": 40,
+   "traite_le": "2026-11-03T14:40:30+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-11-03T14:40:30+00:00"
 }

@@ -161,5 +161,16 @@
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-02T14:40:37+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r15-0129",
+  "date": "2027-01-29",
+  "titre": "Résultats de XOM",
+  "symbole": "XOM",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-03T14:40:30+00:00",
+  "statut": "actif"
  }
 ]
