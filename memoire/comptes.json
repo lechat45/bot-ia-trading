@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 16930.93003900001,
+   "cash": 24033.370016000008,
    "positions": {
     "UNH": {
      "lots": [
@@ -124,31 +124,15 @@
        "qty": 16,
        "prix": 525.32,
        "date": "2026-11-02T14:40:27+00:00",
-       "stop": 493.21,
+       "stop": 525.32,
        "tp": 587.65,
        "statut": "ouvert",
        "parent_id": "b46ffd42-98e9-4549-a1af-f1abe70cb3b8",
-       "stop_id": "db11f1c4-387f-44b2-baa2-8e236dca181a",
+       "stop_id": "c3a0fd2d-e9d4-48e2-b3d9-34e352115f9c",
        "tp_id": "23d5ebd8-cf3e-4496-b4ee-fc1c9c5d0025"
       }
      ],
      "these": "Reconstitution de la poche Technologie (0% du portefeuille post-ASML) via le leader le plus robuste, Microsoft (MSFT). Fondamentaux d'exception : Marge op 49.8%, CA +18.8%, PER 21.6x. Cours au-dessus de SMA50 (512.94$) et SMA200 (436.84$), RSI14 à 36. Stop à 6.0% (490.65$, 2.7 ATR), Take-Profit à +12.0% (584.60$). ER dans 86j. Invalidation si clôture sous la SMA50."
-    },
-    "CRM": {
-     "lots": [
-      {
-       "qty": 31,
-       "prix": 231.450645,
-       "date": "2026-11-02T14:40:37+00:00",
-       "stop": 213.96,
-       "tp": 269.48,
-       "statut": "ouvert",
-       "parent_id": "34cc0591-0695-44cd-b2fc-3d63f72240cd",
-       "stop_id": "b7165f3d-844e-4a09-98c4-0c66e53d0726",
-       "tp_id": "f9f38fc8-1f6b-459f-8d07-26e2fd986118"
-      }
-     ],
-     "these": "Achat sur repli dans une tendance haussière sur Salesforce (CRM), réintroduisant de la Qualité SaaS en Technologie. Marge op 21.4%, CA +10.8%, ROE 19.4%, FCF +17.7Md$. Valorisation très séduisante à PER 14.3x (vs 23.3x secteur). Repli de -7.8% 5j avec RSI à 46. Stop loss à 7.5% (211.96$, ~2 ATR), Take Profit à 16.5% (267.00$, vise retour plus haut 52s). ER le 02/12/2026 (dans 30j). Invalidation si cassure du support récent et 2 ATR."
     },
     "XOM": {
      "lots": [
@@ -167,7 +151,7 @@
      "these": "Achat sur proposition equilibre-1 : Entrée stratégique sur le secteur Énergie (0% du compte) via le leader mondial Exxon Mobil (XOM). Capitalisation 732.9 Md$, FCF massif de 28.9 Md$, bilan très assaini (dette/FP 13% vs 42% secteur). Tendance haussière solide (Prix > SMA20 > SMA50 > SMA200) avec repli sain de -4.0% sous le plus haut de 52 semaines. Stop à 6.0% (168.98$) protégé par la SMA50 (168.05$). Pas de résultats avant 87 jours (29/01/2027). Horizon 1 à 3 mois."
     }
    },
-   "realise": -2904.9599670000007,
+   "realise": -2977.4899850000015,
    "evenements": [
     {
      "ts": "2026-10-20T13:31:03+00:00",
@@ -236,6 +220,14 @@
     {
      "ts": "2026-11-03T14:40:30+00:00",
      "texte": "Ouverture, ordre planifié acheter XOM : Achat exécuté : 40 XOM à 179.58 $ (stop 168.70 $, objectif 201.01 $)"
+    },
+    {
+     "ts": "2026-11-04T14:40:14+00:00",
+     "texte": "Stop suiveur sur MSFT : 493.21 $ → 525.32 $ (cours 551.76 $, achat 525.32 $)"
+    },
+    {
+     "ts": "2026-11-04T14:40:34+00:00",
+     "texte": "Ouverture, ordre planifié vendre CRM : Vente exécutée : 31 CRM à 229.11 $ (plus-value -72.53 $)"
     }
    ],
    "derniere_seance": "2026-11-04T08:02:34+00:00"

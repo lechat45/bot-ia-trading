@@ -10,11 +10,16 @@
    "symbole": "CRM",
    "source": "sentiment-1",
    "these": "Vente de clôture sur invalidation d'élan court terme et dégradation marquée du secteur Tech (XLK -6.9% sur 5 jours). Le titre CRM accuse une perte de -3.0% depuis l'achat (de 229.15$ à 222.19$) et s'est enfoncé sous ses SMA20 (237.05$) et SMA50 (239.38$). Vente intégrale (100% de la position) pour couper les pertes, alléger le secteur Tech et libérer du capital et un slot dans le portefeuille.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-04T08:11:19+00:00",
    "prix_reference": 222.19,
    "pourcentage": 100.0,
-   "qty_estimee": 31
+   "qty_estimee": 31,
+   "resultat": "Vente exécutée : 31 CRM à 229.11 $ (plus-value -72.53 $)",
+   "prix_execution": 229.110967,
+   "qty": 31,
+   "traite_le": "2026-11-04T14:40:34+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-11-04T14:40:34+00:00"
 }
