@@ -105,7 +105,10 @@
   "seance": "toutes",
   "cree_par": "gerant",
   "cree_le": "2026-10-28T08:15:28+00:00",
-  "statut": "actif"
+  "statut": "fait",
+  "note": "Résultats de DUK prévus demain (05/11/2026), rappel consulté en préparation. La position est saine (+2.08% P&L), stop à 116.40 (-8%). Pas d'action immédiate requise avant l'annonce demain, les règles interdisent d'acheter ou vendre si publication à 1 jour, mais on conserve la position en place.",
+  "fait_par": "equilibre",
+  "fait_le": "2026-11-04T08:03:14+00:00"
  },
  {
   "id": "r10-0126",
@@ -171,6 +174,17 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-03T14:40:30+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r16-1105",
+  "date": "2026-11-05",
+  "titre": "Résultats de DUK",
+  "symbole": "DUK",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-04T08:12:04+00:00",
   "statut": "actif"
  }
 ]
