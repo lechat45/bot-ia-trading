@@ -1,15 +1,19 @@
-_Mis à jour : 2026-11-04 09:02 (Paris)_
+_Mis à jour : 2026-11-04 19:01 (Paris)_
 
-_Mis à jour : 2026-11-04 09:02 (Paris)_
+_Mis à jour : 2026-11-04 19:05 (Paris - Session Suivi)_
 
 - **Stratégie Sentiment & Élan** :
-  - **Dégagement Tech (CRM)** : Proposition de VENTE à 100% de Salesforce (CRM). Thèse d'élan cassée par la correction sectorielle du Tech (XLK -6.9% sur 5j, QQQ -4.6%) et performance individuelle à -4.0%. Vente nécessaire pour libérer un slot sur le portefeuille (limite de 10 positions atteinte).
-  - **Top Opportunités Santé (ABBV & VRTX)** :
-    - **ABBV (AbbVie)** : Thèse ultra-solide d'Élan d'actualité (BPA T3 > attentes, dividende +5.2%, objectifs réhaussés jusqu'à 346$ par Morgan Stanley). Titre à -3.0% de ses plus hauts. Achat bloqué par la limite de 10 positions. À PROPOSER DÈS QU'UNE PLACE SE LIBÈRE.
-    - **VRTX (Vertex Pharma)** : Signal intéressant d'élan sur actualités. Malgré un léger miss EPS, réhausse généralisée des cours cibles par les analystes (jusqu'à 725$), volume 1.6x la moyenne 20j, RSI 61. À garder en réserve.
-  - **Secteurs forts à privilégier** : Santé (XLV +2.7% sur 5j), Immobilier (XLRE +2.9%), Finance (XLF +2.3%).
-  - **Secteurs à éviter** : Tech (XLK -6.9%) et Énergie (XLE -2.2%).
+  - **Achat proposé sur ABBV (AbbVie)** :
+    - Montant : 7 000 USD, Stop Loss -6.0% (273.48$), Take Profit +12.0% (325.85$), Confiance Élevée.
+    - Thèse : Élan de fond et d'actualité. Action à -1.3% de son plus haut historique (294.81$), configuration technique parfaite (Prix > SMA20 > SMA50 > SMA200), RSI14 sain à 59. Catalyseurs majeurs : BPA T3 supérieur aux attentes, dividende +5.2%, réhausse des objectifs de cours analystes (Morgan Stanley à 346$).
+    - Invalidation : Clôture sous la SMA20 / support à 273.50$.
+  - **État Portefeuille** :
+    - 8 positions détenues actuellement (UNH, TMO, JPM, PG, UNP, DUK, V, MSFT).
+    - Position CRM soldée.
+    - Cash disponible : 30 780 $.
+    - DUK publie ses résultats le 05/11/2026 : position déjà en gain (+4.66%), surveiller l'impact post-résultats.
 
-- **Suivi Portefeuille** :
-  - Portefeuille plein (10/10 positions). Priorité : couper les lignes faibles en perte d'élan (CRM) pour saisir les opportunités momentum sur la Santé (ABBV).
-  - Surveillance des résultats de DUK le 05/11.
+- **Secteurs & Dynamique de marché** :
+  - Marché porté par un fort rebond politique/macro.
+  - Secteurs à fort momentum : Immobilier (XLRE +6.7%), Conso Cyclique (XLY +6.6%), Conso de Base (XLP +6.1%), Santé (XLV).
+  - Secteur Santé contrôlé : ~24% du compte actuellement, restera sous 32% après exécution de l'ordre ABBV (max autorisé : 35%).

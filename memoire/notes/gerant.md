@@ -1,30 +1,34 @@
-_Mis à jour : 2026-11-04 09:02 (Paris)_
+_Mis à jour : 2026-11-04 19:01 (Paris)_
 
-JOURNAL DE BORD DU GÉRANT (Séance de Préparation du 04/11/2026)
+_Mis à jour : 2026-11-04 19:15 (Paris)_
 
-## 1. État du Portefeuille & Allocation (Valeur totale : ~97 027 $, Cash : ~16 930 $ avant vente CRM)
-- **Positions actives (9/10 après exécution de la vente CRM)** :
-  1. **UNH** (Healthcare) - Valeur ~9 290 $ (-1.3%), Stop 384.66 $ (-4.8%), TP 458.32 $ (+13.5%). ER janv 2027.
-  2. **TMO** (Healthcare) - Valeur ~13 967 $ (-0.7%), Stop 660.07 $ (-5.5%), TP 807.53 $ (+15.6%). ER janv 2027.
-  3. **JPM** (Financials) - Valeur ~5 070 $ (+2.0%), Stop 314.68 $ (-6.9%), TP 366.03 $ (+8.3%). ER janv 2027.
-  4. **PG** (Cons. Defensive) - Valeur ~7 455 $ (+0.8%), Stop 152.55 $ (-5.9%), TP 177.44 $ (+9.5%). ER janv 2027.
-  5. **UNP** (Industrials) - Valeur ~7 889 $ (+2.4%), Stop 280.23 $ (-7.6%), TP 329.59 $ (+8.6%). ER janv 2027.
-  6. **DUK** (Utilities) - Valeur ~6 958 $ (+2.1%), Stop 116.40 $ (-8.0%), TP 138.69 $ (+9.6%). Résultats T3 prévus le 05/11/2026 (demain).
-  7. **V** (Financials) - Valeur ~7 146 $ (+1.6%), Stop 390.99 $ (-7.0%), TP 459.26 $ (+9.3%). ER janv 2027.
-  8. **MSFT** (Technology) - Valeur ~8 333 $ (-0.9%), Stop 493.21 $ (-5.3%), TP 587.65 $ (+13.0%). ER janv 2027.
-  9. **XOM** (Energy) - Valeur ~7 183 $ (-1.1%), Stop 168.70 $ (-5.0%), TP 201.01 $ (+11.9%). ER 29/01/2027.
-  - **Ordre planifié à l'ouverture** : Vente de 100% de la position **CRM** (source: sentiment-1) suite à la dégradation du secteur Tech (XLK -6.9% sur 5j) et à l'invalidation de l'élan court terme (-3.0% depuis l'achat, cours passé sous SMA20/50).
+JOURNAL DE BORD DU GÉRANT (Séance de Suivi du 04/11/2026)
 
-- **Exposition sectorielle (avant vente CRM)** :
-  - Healthcare (~24.0%), Technology (~16.6%), Financial Services (~12.6%), Industrials (~8.1%), Consumer Defensive (~7.7%), Utilities (~7.2%), Energy (~7.4%).
+## 1. État du Portefeuille & Allocation (Valeur totale : ~98 628 $, Cash : ~27 280 $)
+- **Positions actives (9/10)** :
+  1. **UNH** (Healthcare) - Valeur ~9 399 $ (-0.2%), Stop 384.66 $ (-5.9%), TP 458.32 $ (+12.1%). ER janv 2027.
+  2. **TMO** (Healthcare) - Valeur ~14 141 $ (+0.5%), Stop 660.07 $ (-6.6%), TP 807.53 $ (+14.2%). ER janv 2027.
+  3. **JPM** (Financials) - Valeur ~5 271 $ (+6.0%), Stop 331.40 $ (remonté à l'achat), TP 366.03 $ (+4.2%). ER janv 2027.
+  4. **PG** (Cons. Defensive) - Valeur ~7 697 $ (+4.1%), Stop 152.55 $ (-8.8%), TP 177.44 $ (+6.0%). ER janv 2027.
+  5. **UNP** (Industrials) - Valeur ~7 986 $ (+3.7%), Stop 280.23 $ (-8.8%), TP 329.59 $ (+7.3%). ER janv 2027.
+  6. **DUK** (Utilities) - Valeur ~7 139 $ (+4.7%), Stop 116.40 $ (-10.3%), TP 138.69 $ (+6.8%). Résultats T3 prévus le 05/11/2026 (demain).
+  7. **V** (Financials) - Valeur ~7 351 $ (+4.5%), Stop 390.99 $ (-9.6%), TP 459.26 $ (+6.2%). ER janv 2027.
+  8. **MSFT** (Technology) - Valeur ~8 863 $ (+5.5%), Stop 525.32 $ (remonté à l'achat), TP 587.65 $ (+5.8%). ER janv 2027.
+  9. **ABBV** (Healthcare) - Valeur ~3 487 $ (-0.2% depuis achat ce jour), Stop 273.06 $ (-6.0%), TP 325.34 $ (+12.0%). Achat de suivi de tendance (source: sentiment-1 ajusté).
 
-## 2. Décisions de la Séance
-- **Gestion des positions** : Maintien de toutes les positions saines. Pour **DUK** (résultats demain 05/11), la position est défensive, modeste (~7.2%) et en gain (+2.1%), avec un stop confortable à -8.0%. Décision de conserver avant publication conformément à la doctrine.
-- **Arbitrage & Sortie** : Validation de la proposition `sentiment-1` pour la vente totale de **CRM** (-3.0% depuis l'achat) afin de couper une thèse d'élan court terme invalidée par la correction marquée de la Tech et de libérer un slot de position ainsi que du capital.
-- **Achats** : Aucun nouvel achat ce jour. Le portefeuille comptait 10/10 positions, la vente de CRM libère de la flexibilité pour de futurs setups de qualité.
+- **Événements de la séance** :
+  - Vente effective de **CRM** (soldée à 229.11 $).
+  - Stop loss touché sur **XOM** (vendue à 168.67 $, -436.26 $).
+  - Stops suiveurs relevés sur **MSFT** (525.32 $) et **JPM** (331.40 $) après franchissement du seuil de +5%.
+  - Achat de 12 **ABBV** à 290.61 $ (taille réduite à ~3 500 $ selon les recommandations du critique pour maintenir le secteur Santé à ~27.4% du portefeuille, sous le plafond de 35%).
+  - Évaluation et maintien de **DUK** avant ses résultats du 05/11/2026 (rappel validé).
 
-## 3. Calendrier & Rappels Clés
-- **05/11/2026** : Résultats T3 de Duke Energy (DUK) - Suivi post-publication.
-- **17/11/2026** : Résultats de NVDA.
-- **02/12/2026** : Résultats T3 de CRM (si la vente n'était pas passée, mais position liquidée).
-- **Janvier 2027** : Publications trimestrielles des principales lignes (UNH, TMO, JPM, PG, UNP, V, MSFT, XOM).
+- **Exposition sectorielle** :
+  - Healthcare (~27.4%), Technology (~9.0%), Financial Services (~12.7%), Industrials (~8.1%), Consumer Defensive (~7.8%), Utilities (~7.2%).
+
+## 2. Décisions & Prochaines étapes
+- **Gestion des positions** : Suivi rigoureux des stops et des thèses. Le portefeuille compte 9 positions et conserve un matelas de liquidités de ~27,3k USD (27.7%).
+- **Calendrier & Rappels Clés** :
+  - **05/11/2026** : Résultats T3 Duke Energy (DUK) - Suivi post-publication demain.
+  - **17/11/2026** : Résultats NVDA et Disney (DIS à surveiller pour un éventuel repli technique).
+  - **Janvier 2027** : Publications trimestrielles des principales positions.

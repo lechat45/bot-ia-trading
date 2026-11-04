@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 24033.370016000008,
+   "cash": 27292.990016000007,
    "positions": {
     "UNH": {
      "lots": [
@@ -44,11 +44,11 @@
        "qty": 15,
        "prix": 331.4,
        "date": "2026-10-23T17:08:00+00:00",
-       "stop": 314.68,
+       "stop": 331.4,
        "tp": 366.03,
        "statut": "ouvert",
        "parent_id": "550fbe01-64e0-4649-a343-3a756e7c51d1",
-       "stop_id": "812eb609-2347-44f6-9399-852f9f52bf53",
+       "stop_id": "b3f090f5-c995-4db6-be1d-d7010b17c4ed",
        "tp_id": "f0b08143-5e2a-4258-a2ee-94d1bbbda6be"
       }
      ],
@@ -134,24 +134,24 @@
      ],
      "these": "Reconstitution de la poche Technologie (0% du portefeuille post-ASML) via le leader le plus robuste, Microsoft (MSFT). Fondamentaux d'exception : Marge op 49.8%, CA +18.8%, PER 21.6x. Cours au-dessus de SMA50 (512.94$) et SMA200 (436.84$), RSI14 à 36. Stop à 6.0% (490.65$, 2.7 ATR), Take-Profit à +12.0% (584.60$). ER dans 86j. Invalidation si clôture sous la SMA50."
     },
-    "XOM": {
+    "ABBV": {
      "lots": [
       {
-       "qty": 40,
-       "prix": 179.58,
-       "date": "2026-11-03T14:40:30+00:00",
-       "stop": 168.7,
-       "tp": 201.01,
+       "qty": 12,
+       "prix": 290.61,
+       "date": "2026-11-04T18:07:31+00:00",
+       "stop": 273.06,
+       "tp": 325.34,
        "statut": "ouvert",
-       "parent_id": "b3f8812f-3ed1-40d7-8edd-0979b4f233ad",
-       "stop_id": "ab46c4d9-2047-4145-922b-f98fbd1157c9",
-       "tp_id": "7eae6bce-a615-4e8f-987c-f50f76755ed4"
+       "parent_id": "cb306360-517c-482e-b0a1-7a862abae6a2",
+       "stop_id": "13440c75-a2e6-4d59-a4e2-a9d43c50c650",
+       "tp_id": "81503130-471c-4c63-ae6b-2a0b63a97c5a"
       }
      ],
-     "these": "Achat sur proposition equilibre-1 : Entrée stratégique sur le secteur Énergie (0% du compte) via le leader mondial Exxon Mobil (XOM). Capitalisation 732.9 Md$, FCF massif de 28.9 Md$, bilan très assaini (dette/FP 13% vs 42% secteur). Tendance haussière solide (Prix > SMA20 > SMA50 > SMA200) avec repli sain de -4.0% sous le plus haut de 52 semaines. Stop à 6.0% (168.98$) protégé par la SMA50 (168.05$). Pas de résultats avant 87 jours (29/01/2027). Horizon 1 à 3 mois."
+     "these": "Achat de suivi de tendance sur ABBV (AbbVie) - Proposition sentiment-1 avec ajustement critique sur la taille : Publication de résultats T3 solide fin octobre, augmentation du dividende de +5.2%, objectifs réhaussés par les analystes. Tendance haussière parfaite (Prix > SMA20 284$ > SMA50 269$), RSI14 très sain à 59.0. Taille réduite à 3 500 $ pour maintenir le secteur Santé à ~27.4% (sous la limite globale de 35%). Invalidation sous 273.48 $ (-6.0%). Objective TP +12.0% (325.35 $)."
     }
    },
-   "realise": -2977.4899850000015,
+   "realise": -3413.749985000002,
    "evenements": [
     {
      "ts": "2026-10-20T13:31:03+00:00",
@@ -228,9 +228,17 @@
     {
      "ts": "2026-11-04T14:40:34+00:00",
      "texte": "Ouverture, ordre planifié vendre CRM : Vente exécutée : 31 CRM à 229.11 $ (plus-value -72.53 $)"
+    },
+    {
+     "ts": "2026-11-04T18:01:29+00:00",
+     "texte": "Stop loss déclenché : 40 XOM vendues à 168.67 $ (plus-value -436.26 $)"
+    },
+    {
+     "ts": "2026-11-04T18:01:30+00:00",
+     "texte": "Stop suiveur sur JPM : 314.68 $ → 331.40 $ (cours 351.72 $, achat 331.40 $)"
     }
    ],
-   "derniere_seance": "2026-11-04T08:02:34+00:00"
+   "derniere_seance": "2026-11-04T18:01:28+00:00"
   }
  }
 }

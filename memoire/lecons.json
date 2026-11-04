@@ -53,5 +53,10 @@
   "date": "2026-11-04",
   "auteur": "gerant",
   "texte": "En cas de correction sectorielle prononcée, couper sans hésitation les positions d'élan court terme qui cassent leurs moyennes mobiles (SMA20/50) pour préserver le capital."
+ },
+ {
+  "date": "2026-11-04",
+  "auteur": "gerant",
+  "texte": "En cas de renforcement sur un secteur déjà lourdement pondéré, réduire la taille de position conformément au critique pour respecter les plafonds sectoriels."
  }
 ]
