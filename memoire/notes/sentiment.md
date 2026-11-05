@@ -1,19 +1,21 @@
-_Mis à jour : 2026-11-04 19:01 (Paris)_
+_Mis à jour : 2026-11-05 09:02 (Paris)_
 
-_Mis à jour : 2026-11-04 19:05 (Paris - Session Suivi)_
+_Mis à jour : 2026-11-05 09:15 (Paris) - Séance Préparation_
 
 - **Stratégie Sentiment & Élan** :
-  - **Achat proposé sur ABBV (AbbVie)** :
-    - Montant : 7 000 USD, Stop Loss -6.0% (273.48$), Take Profit +12.0% (325.85$), Confiance Élevée.
-    - Thèse : Élan de fond et d'actualité. Action à -1.3% de son plus haut historique (294.81$), configuration technique parfaite (Prix > SMA20 > SMA50 > SMA200), RSI14 sain à 59. Catalyseurs majeurs : BPA T3 supérieur aux attentes, dividende +5.2%, réhausse des objectifs de cours analystes (Morgan Stanley à 346$).
-    - Invalidation : Clôture sous la SMA20 / support à 273.50$.
+  - **Achat proposé sur AAPL (Apple)** :
+    - Montant : 7 000 USD, Stop Loss -6.0% (328.58$), Take Profit +12.0% (391.50$), Confiance Élevée.
+    - Thèse : Élan de fond massif. Force relative exceptionnelle vs Secteur Tech (XLK). ATH à 349.56$, RSI 56 (sain).
+  - **Achat proposé sur KO (Coca-Cola)** :
+    - Montant : 7 000 USD, Stop Loss -6.0% (90.12$), Take Profit +12.0% (107.37$), Confiance Moyenne.
+    - Thèse : Élan de fond sectoriel (XLP leader). ATH à 95.87$, RSI 62.
+  - **Suivi DUK** :
+    - Résultats attendus à 7h00 ET (avant l'ouverture). Position en gain (+4.6%). Thèse maintenue, mais surveiller la réaction du cours à l'ouverture. Stop actuel à 10.2%, à resserrer si les résultats sont décevants mais que le titre tient.
   - **État Portefeuille** :
-    - 8 positions détenues actuellement (UNH, TMO, JPM, PG, UNP, DUK, V, MSFT).
-    - Position CRM soldée.
-    - Cash disponible : 30 780 $.
-    - DUK publie ses résultats le 05/11/2026 : position déjà en gain (+4.66%), surveiller l'impact post-résultats.
+    - 9 positions (UNH, TMO, JPM, PG, UNP, DUK, V, MSFT, ABBV).
+    - Cash disponible : ~27 300 $.
+    - Limite de 10 positions : le gérant devra choisir entre AAPL et KO, ou vendre une ligne moins performante (UNH ou TMO).
 
-- **Secteurs & Dynamique de marché** :
-  - Marché porté par un fort rebond politique/macro.
-  - Secteurs à fort momentum : Immobilier (XLRE +6.7%), Conso Cyclique (XLY +6.6%), Conso de Base (XLP +6.1%), Santé (XLV).
-  - Secteur Santé contrôlé : ~24% du compte actuellement, restera sous 32% après exécution de l'ordre ABBV (max autorisé : 35%).
+- **Secteurs & Dynamique** :
+  - Rotation défensive confirmée (XLP, XLRE, XLV).
+  - AAPL et MSFT se détachent du marasme de la tech, montrant une résilience de "valeur refuge" au sein du secteur.

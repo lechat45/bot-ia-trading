@@ -199,6 +199,20 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-04T18:08:42+00:00",
+  "statut": "fait",
+  "note": "Résultats DUK prévus aujourd'hui 05/11. Thèse défensive intacte, position en gain (+4.61%), maintien de la position recommandé.",
+  "fait_par": "qualite",
+  "fait_le": "2026-11-05T08:03:04+00:00"
+ },
+ {
+  "id": "r18-1105",
+  "date": "2026-11-05",
+  "titre": "Résultats de DUK",
+  "symbole": "DUK",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-05T08:09:50+00:00",
   "statut": "actif"
  }
 ]

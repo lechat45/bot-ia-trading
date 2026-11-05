@@ -1,25 +1,52 @@
 {
- "date": "2026-11-04",
- "cree_le": "2026-11-04T08:02:34+00:00",
+ "date": "2026-11-05",
+ "cree_le": "2026-11-05T08:02:39+00:00",
  "simulation": false,
  "ordres": [
   {
    "compte": "equipe",
    "agent": "gerant",
-   "action": "vendre",
-   "symbole": "CRM",
+   "action": "acheter",
+   "symbole": "XOM",
+   "source": "qualite-1",
+   "these": "05/11/2026 - Opportunité Qualité sur repli technique majeur : XOM (ExxonMobil). 1) Pourquoi maintenant : Repli sectoriel de -6.9% sur 5j ramenant XOM directement sur le support clé de sa SMA50 (168.50 $) avec un RSI14 sain à 44.0. Permet d'intégrer le secteur Énergie (0% du portefeuille). 2) Fondamentaux de Qualité : Marge op. 17.0%, ROE 15.5%, FCF massif de 28.9 Md$, Dette/FP 13%. Croissance du CA +32.6%, PER attendu 14.1x. Prochains résultats dans 85j (29/01/2027). 3) Sortie/Invalidation : Stop-loss à -7.0% (157.60$, sous la SMA50), TP à +14.5% (194.03$). Horizon 1 à 3 mois.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-05T08:09:20+00:00",
+   "prix_reference": 169.46,
+   "montant_usd": 6778.4,
+   "qty_estimee": 40,
+   "stop_loss_pct": 7.0,
+   "take_profit_pct": 14.5
+  },
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "acheter",
+   "symbole": "DIS",
+   "source": "equilibre-1",
+   "these": "Achat de DIS (Walt Disney Co) - Proposition Équilibre ajustée par le critique : Intégration du secteur Communication Services (actuellement à 0% du portefeuille). Titre leader de haute qualité, PER attendu attractif de 15,9x, dette maîtrisée (39% des fonds propres), volatilité faible (ATR 1,8%). Résultats T4 prévus dans 12 jours (17/11/2026). Stop loss à 5,5% (~112.40$), TP à 11.5% (~132.60$). Taille réduite à 4 500 $ suite à la remarque du critique sur la surchauffe technique (RSI à 72).",
+   "statut": "en_attente",
+   "cree_le": "2026-11-05T08:09:23+00:00",
+   "prix_reference": 118.95,
+   "montant_usd": 4401.15,
+   "qty_estimee": 37,
+   "stop_loss_pct": 5.5,
+   "take_profit_pct": 11.5
+  },
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "acheter",
+   "symbole": "AAPL",
    "source": "sentiment-1",
-   "these": "Vente de clôture sur invalidation d'élan court terme et dégradation marquée du secteur Tech (XLK -6.9% sur 5 jours). Le titre CRM accuse une perte de -3.0% depuis l'achat (de 229.15$ à 222.19$) et s'est enfoncé sous ses SMA20 (237.05$) et SMA50 (239.38$). Vente intégrale (100% de la position) pour couper les pertes, alléger le secteur Tech et libérer du capital et un slot dans le portefeuille.",
-   "statut": "execute",
-   "cree_le": "2026-11-04T08:11:19+00:00",
-   "prix_reference": 222.19,
-   "pourcentage": 100.0,
-   "qty_estimee": 31,
-   "resultat": "Vente exécutée : 31 CRM à 229.11 $ (plus-value -72.53 $)",
-   "prix_execution": 229.110967,
-   "qty": 31,
-   "traite_le": "2026-11-04T14:40:34+00:00"
+   "these": "Élan de fond (Proposition sentiment-1 validée par le critique). AAPL affiche une force relative exceptionnelle : elle atteint ses plus hauts historiques (349.56$) avec un volume soutenu (1.8x la moyenne) alors que son secteur (XLK) a chuté de -12% sur le mois. Le RSI à 56 indique que le mouvement a encore de la place. Invalidation si clôture sous la SMA20 (env. 343$). Horizon 1-3 mois.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-05T08:09:24+00:00",
+   "prix_reference": 349.5,
+   "montant_usd": 6990.0,
+   "qty_estimee": 20,
+   "stop_loss_pct": 6.0,
+   "take_profit_pct": 12.0
   }
- ],
- "execute_le": "2026-11-04T14:40:34+00:00"
+ ]
 }
