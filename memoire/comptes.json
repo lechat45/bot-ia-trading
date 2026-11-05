@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 20582.410010000007,
+   "cash": 31503.340010000007,
    "positions": {
     "UNH": {
      "lots": [
@@ -21,22 +21,6 @@
       }
      ],
      "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01$), SMA50 (386.12$) et SMA200 (356.04$), surperformance +7.6% sur 5j. Stop loss à 6.0% (382.50$), Take Profit à 12.0% (455.75$). Prochains résultats dans 84 jours (12/01/2027)."
-    },
-    "TMO": {
-     "lots": [
-      {
-       "qty": 20,
-       "prix": 703.54,
-       "date": "2026-10-22T13:40:28+00:00",
-       "stop": 660.07,
-       "tp": 807.53,
-       "statut": "ouvert",
-       "parent_id": "eb7b4eea-f827-44b8-ba9f-9d81e37aaef3",
-       "stop_id": "5cd53b11-618c-4796-9804-bb1a3f595802",
-       "tp_id": "f0682af5-df6b-42e2-adfd-584b3aab1887"
-      }
-     ],
-     "these": "Thermo Fisher Scientific (TMO) : publication de résultats T3 solides hier (21/10/2026) avec relèvement des prévisions de CA et de BPA. Volume supérieur à la moyenne (1.7x). Configuration haussière robuste (TMO proche de ses plus hauts annuels, RSI à 66). Diversification dans la santé avec un leader mondial de la recherche et du diagnostic. Stop loss à 6.0% (sécurisé), take profit à 15.0% (ratio R/R > 2). Horizon 1 à 3 mois."
     },
     "JPM": {
      "lots": [
@@ -118,22 +102,6 @@
      ],
      "these": "Achat de Visa Inc. (V) sur proposition equilibre-1 : Leader mondial des paiements. Résultats T3 récents réussis (prochains résultats dans 88j, pas de risque binaire). Fondamentaux d'exception (marge nette 51.2%, ROE 63.5%, CA +13.2%). Tendance haussière forte (prix 410.56$, au-dessus SMA20 393.5$ et SMA50 380.4$). Le secteur financier passe de 5.2% à ~12.6% du portefeuille, sous le plafond de 35%. Stop loss à 5.5% (387.98$, sous SMA20) et Take Profit à 11.0% (455.72$), R/R 2.0x. Horizon 1-3 mois."
     },
-    "MSFT": {
-     "lots": [
-      {
-       "qty": 16,
-       "prix": 525.32,
-       "date": "2026-11-02T14:40:27+00:00",
-       "stop": 525.32,
-       "tp": 587.65,
-       "statut": "ouvert",
-       "parent_id": "b46ffd42-98e9-4549-a1af-f1abe70cb3b8",
-       "stop_id": "c3a0fd2d-e9d4-48e2-b3d9-34e352115f9c",
-       "tp_id": "23d5ebd8-cf3e-4496-b4ee-fc1c9c5d0025"
-      }
-     ],
-     "these": "Reconstitution de la poche Technologie (0% du portefeuille post-ASML) via le leader le plus robuste, Microsoft (MSFT). Fondamentaux d'exception : Marge op 49.8%, CA +18.8%, PER 21.6x. Cours au-dessus de SMA50 (512.94$) et SMA200 (436.84$), RSI14 à 36. Stop à 6.0% (490.65$, 2.7 ATR), Take-Profit à +12.0% (584.60$). ER dans 86j. Invalidation si clôture sous la SMA50."
-    },
     "ABBV": {
      "lots": [
       {
@@ -165,9 +133,41 @@
       }
      ],
      "these": "05/11/2026 - Opportunité Qualité sur repli technique majeur : XOM (ExxonMobil). 1) Pourquoi maintenant : Repli sectoriel de -6.9% sur 5j ramenant XOM directement sur le support clé de sa SMA50 (168.50 $) avec un RSI14 sain à 44.0. Permet d'intégrer le secteur Énergie (0% du portefeuille). 2) Fondamentaux de Qualité : Marge op. 17.0%, ROE 15.5%, FCF massif de 28.9 Md$, Dette/FP 13%. Croissance du CA +32.6%, PER attendu 14.1x. Prochains résultats dans 85j (29/01/2027). 3) Sortie/Invalidation : Stop-loss à -7.0% (157.60$, sous la SMA50), TP à +14.5% (194.03$). Horizon 1 à 3 mois."
+    },
+    "DIS": {
+     "lots": [
+      {
+       "qty": 38,
+       "prix": 117.04,
+       "date": "2026-11-05T18:05:17+00:00",
+       "stop": 110.48,
+       "tp": 130.36,
+       "statut": "ouvert",
+       "parent_id": "97c9bd3b-02b6-4f58-9f8a-19a7e69303d3",
+       "stop_id": "e624f46b-b4be-4c2c-ad19-a2ddd872c323",
+       "tp_id": "18829057-dbea-4ae8-8277-6cd9dfad1f6e"
+      }
+     ],
+     "these": "Achat de DIS (Walt Disney Co.) : diversification sectorielle vers Communication Services (secteur fort +2.5% sur 5j). Taille ajustée à 4500$ (recommandation du critique). Stop -5.5%, TP +11.5%. Résultats le 17/11/2026."
+    },
+    "AAPL": {
+     "lots": [
+      {
+       "qty": 20,
+       "prix": 343.27,
+       "date": "2026-11-05T18:05:34+00:00",
+       "stop": 322.57,
+       "tp": 384.34,
+       "statut": "ouvert",
+       "parent_id": "c37d9338-e846-4c6d-95af-2d2c93fc5693",
+       "stop_id": "7eb6336d-057c-47c8-85be-f486c32ad28b",
+       "tp_id": "6866cd6d-6c50-4ca1-972f-114af141c468"
+      }
+     ],
+     "these": "Achat AAPL : Leader technologique montrant une force relative. Entrée à 7000$, stop -6%, TP +12%. Thèse sentiment-1 validée par le critique."
     }
    },
-   "realise": -3413.749985000002,
+   "realise": -3655.819985000003,
    "evenements": [
     {
      "ts": "2026-10-22T13:40:28+00:00",
@@ -270,7 +270,7 @@
      "texte": "Ouverture, ordre planifié acheter AAPL : déjà 10 positions : vendez-en une avant d'en ouvrir une autre"
     }
    ],
-   "derniere_seance": "2026-11-05T08:02:39+00:00"
+   "derniere_seance": "2026-11-05T18:01:20+00:00"
   }
  }
 }

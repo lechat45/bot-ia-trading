@@ -1,28 +1,28 @@
-_Mis à jour : 2026-11-05 09:02 (Paris)_
+_Mis à jour : 2026-11-05 19:01 (Paris)_
 
-_Mis à jour : 2026-11-05 09:02 (Paris)_ - Séance de Préparation (Bourse Fermée)
+_Mis à jour : 2026-11-05 13:01 (NY) / 19:01 (Paris)_ - Séance de Suivi (Bourse Ouverte)
 
 Analyste Équilibre - Résumé & Mémoire
 
-1. État du Portefeuille & Allocation Sectorielle :
-- Capital total : ~98.8k USD | Investi : 71.5k USD (72.4%) | Cash libre : 27.3k USD (27.6%).
-- 9 positions actuellement en portefeuille sur 10 max :
-  • Healthcare (27.4%) : TMO (14.3%), UNH (9.5%), ABBV (3.6%) -> Sous la limite de 35%.
-  • Financial Services (12.8%) : V (7.5%), JPM (5.3%).
-  • Technology (9.0%) : MSFT (9.0%).
-  • Industrials (8.1%) : UNP (8.1%).
-  • Consumer Defensive (7.8%) : PG (7.8%).
-  • Utilities (7.2%) : DUK (7.2%).
+1. Régime de marché & Contexte :
+- Correction marquée sur le marché US (Risk-Off) : S&P 500 -4.1%, Nasdaq 100 -5.9%.
+- Net surperformance des secteurs défensifs (Consommation de base, Utilities, Immobilier).
+- Tendance de fond 10-Mois toujours haussière pour le S&P 500 (+4.2% au-dessus de la SMA10M).
 
-2. Suivi des positions & Événements :
-- DUK (Utilities) : Résultats publiés aujourd'hui (05/11/2026). Position en plus-value (+4.61%). Thèse et stop-loss (116.40 $) maintenus.
-- Toutes les autres positions sont solides et en gain/stables avec leurs stops suiveurs en place.
+2. État du Portefeuille & Suivi des Positions :
+- Le portefeuille est complet (10 positions sur 10 max). Cash préservé à ~20.6k USD (21.2% du capital total).
+- Résistance et robustesse du portefeuille dans le choc du jour :
+  • DUK (Utilities, +5.60%) : Résultats Q3 très solides publiés ce jour (EPS $1.99 vs $1.86, CA $9.10B vs $8.91B) et relèvement de la guidance annuelle. Stop suiveur activé au breakeven ($123.92).
+  • PG (Consumer Def., +4.27%) : Valeur refuge classique en hausse de +0.1% dans la séance. Stop suiveur au breakeven ($160.74).
+  • V (Financials, +3.07%) : Solide. Stop suiveur au BE ($413.59).
+  • MSFT (Tech, +2.50%) : Maintient un gain résiduel malgré le repli global du secteur tech.
+  • JPM (Financials, +2.12%) : Maintien de la position, stop au BE ($331.40).
+  • UNP (+1.08%), ABBV (+1.20%) : Positions stables.
+  • UNH (-2.71%), TMO (-2.93%), XOM (-1.50%) : En léger repli, stops de protection actifs.
 
-3. Proposition du jour :
-- Proposition d'achat sur DIS (Walt Disney Co) - Communication Services (secteur à 0%) pour 7 000 USD (~7.1% du compte).
-  • Raisons : Leader mondial du divertissement, plus haut 52 sem (118.95 $), PER 15.9x, dette modérée (39% des FP), ATR 1.8%. Prochains résultats dans 12j (17/11/2026).
-  • Paramètres : Stop loss à 5.5% (~112.40 $), Take profit à 11.5% (~132.60 $). Risque maîtrisé de 0.38% du compte.
+3. Répartition Sectorielle :
+- Healthcare (27.2%) | Financials (12.7%) | Tech (8.9%) | Industrials (8.0%) | Consumer Def. (7.9%) | Utilities (7.4%) | Energy (3.6%). Aucun secteur ne dépasse 35%.
 
-4. À surveiller :
-- Décision du gérant sur la proposition DIS.
-- Résultats de DUK du 05/11/2026 post-publication.
+4. Décisions & Conclusion de Séance :
+- Conservation de l'ensemble des 10 positions (aucune thèse invalidée, aucune alerte stop touchée).
+- Aucune nouvelle proposition d'achat (portefeuille plein à 10/10 et phase de correction incitant à conserver 21% de liquidités).

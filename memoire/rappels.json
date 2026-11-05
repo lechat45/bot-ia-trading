@@ -213,6 +213,42 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-05T08:09:50+00:00",
+  "statut": "fait",
+  "note": "Résultats Q3 2026 de DUK supérieurs aux attentes (Adj. EPS $1.99 vs $1.86, ventes $9.1B vs $8.9B) et relèvement de la fourchette basse des prévisions annuelles. Thèse validée, position maintenue.",
+  "fait_par": "contrarien",
+  "fait_le": "2026-11-05T18:01:42+00:00"
+ },
+ {
+  "id": "r19-0128",
+  "date": "2027-01-28",
+  "titre": "Résultats de AAPL",
+  "symbole": "AAPL",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-05T18:05:44+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r20-1117",
+  "date": "2026-11-17",
+  "titre": "Résultats de DIS",
+  "symbole": "DIS",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-05T18:05:44+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r21-1105",
+  "date": "2026-11-05",
+  "titre": "Résultats de DUK",
+  "symbole": "DUK",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-05T18:05:44+00:00",
   "statut": "actif"
  }
 ]

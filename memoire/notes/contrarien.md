@@ -1,9 +1,5 @@
-_Mis à jour : 2026-11-05 09:02 (Paris)_
+_Mis à jour : 2026-11-05 19:01 (Paris)_
 
-_Mis à jour : 2026-11-05 09:02 (Paris)_
-
-- Portefeuille complet (10 positions). Aucune vente contrarienne justifiée.
-- Suivi DUK : Publication des résultats T3 prévue aujourd'hui avant l'ouverture du marché. La tendance reste haussière (+4,6 % P&L, au-dessus des SMA20/50). Stop en place.
-- Candidats contrariens identifiés pour réinvestissement ultérieur :
-  * SAN (Banco Santander ADR) : Bancaire européenne solide (PER attendu 8,6x vs médiane secteur 10,4x), repli de -13 % sur 1 mois avec rebond récent (+4 % sur 5j). A surveiller si une position est libérée.
-  * HSBC ADR : toujours sur la liste de surveillance.
+- Portefeuille globalement résilient (10 positions, P&L +1.1% à +5.6% sur la plupart des lignes, petites tensions sur UNH et TMO -2.7% / -2.9% mais stops en place).
+- DUK : Résultats T3 publiés aujourd'hui (bénéfices et ventes supérieurs aux attentes, prévisions annuelles relevées) -> Thèse pleinement validée, position conservée.
+- Candidats contrariens en attente (SAN, HSBC) : gardés sur l'étagère pour le jour où une position du portefeuille actuel se libérera. Aucune vente injustifiée nécessaire pour l'instant.
