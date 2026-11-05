@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 27292.990016000007,
+   "cash": 20582.410010000007,
    "positions": {
     "UNH": {
      "lots": [
@@ -60,11 +60,11 @@
        "qty": 46,
        "prix": 160.74,
        "date": "2026-10-26T13:40:19+00:00",
-       "stop": 152.55,
+       "stop": 160.74,
        "tp": 177.44,
        "statut": "ouvert",
        "parent_id": "2fc09fbe-1164-44cb-878e-1ac11878e4b7",
-       "stop_id": "e3c457df-b604-4101-a8ba-cc7e075508fe",
+       "stop_id": "da1b214c-833f-4182-8a7e-69715961589f",
        "tp_id": "e220b1b0-b4cc-4c99-8758-d249bb3b9e8e"
       }
      ],
@@ -92,11 +92,11 @@
        "qty": 55,
        "prix": 123.92,
        "date": "2026-10-28T13:40:21+00:00",
-       "stop": 116.4,
+       "stop": 123.92,
        "tp": 138.69,
        "statut": "ouvert",
        "parent_id": "a1ac75be-502c-41ff-8301-6ea8ec298bc8",
-       "stop_id": "7ab28a64-7d6e-41dd-aad9-60ba41c6cd8e",
+       "stop_id": "493b2f62-dc1d-4d53-9282-6ddd1ec9858a",
        "tp_id": "1bdf7c59-11f0-4a72-9b1e-aaff985d0800"
       }
      ],
@@ -108,11 +108,11 @@
        "qty": 17,
        "prix": 413.587647,
        "date": "2026-10-30T13:40:25+00:00",
-       "stop": 390.99,
+       "stop": 413.59,
        "tp": 459.26,
        "statut": "ouvert",
        "parent_id": "dc5a7c03-7d33-47f6-97a8-4c58494f30ba",
-       "stop_id": "33b6f712-b63e-447b-a663-1996866a59f5",
+       "stop_id": "8f55109a-a51c-45ef-9c0a-704b4b1a41c9",
        "tp_id": "47f11790-bd6d-4e26-915c-e704477b0739"
       }
      ],
@@ -149,18 +149,26 @@
       }
      ],
      "these": "Achat de suivi de tendance sur ABBV (AbbVie) - Proposition sentiment-1 avec ajustement critique sur la taille : Publication de résultats T3 solide fin octobre, augmentation du dividende de +5.2%, objectifs réhaussés par les analystes. Tendance haussière parfaite (Prix > SMA20 284$ > SMA50 269$), RSI14 très sain à 59.0. Taille réduite à 3 500 $ pour maintenir le secteur Santé à ~27.4% (sous la limite globale de 35%). Invalidation sous 273.48 $ (-6.0%). Objective TP +12.0% (325.35 $)."
+    },
+    "XOM": {
+     "lots": [
+      {
+       "qty": 39,
+       "prix": 172.066154,
+       "date": "2026-11-05T14:40:34+00:00",
+       "stop": 160.01,
+       "tp": 197.0,
+       "statut": "ouvert",
+       "parent_id": "ba4c86cd-11d6-4375-9650-9581d4d9b514",
+       "stop_id": "65a40ebd-684e-46e2-aa65-bc539aa15d09",
+       "tp_id": "57aac412-56c8-437d-b62d-5d835b931bd6"
+      }
+     ],
+     "these": "05/11/2026 - Opportunité Qualité sur repli technique majeur : XOM (ExxonMobil). 1) Pourquoi maintenant : Repli sectoriel de -6.9% sur 5j ramenant XOM directement sur le support clé de sa SMA50 (168.50 $) avec un RSI14 sain à 44.0. Permet d'intégrer le secteur Énergie (0% du portefeuille). 2) Fondamentaux de Qualité : Marge op. 17.0%, ROE 15.5%, FCF massif de 28.9 Md$, Dette/FP 13%. Croissance du CA +32.6%, PER attendu 14.1x. Prochains résultats dans 85j (29/01/2027). 3) Sortie/Invalidation : Stop-loss à -7.0% (157.60$, sous la SMA50), TP à +14.5% (194.03$). Horizon 1 à 3 mois."
     }
    },
    "realise": -3413.749985000002,
    "evenements": [
-    {
-     "ts": "2026-10-20T13:31:03+00:00",
-     "texte": "Ouverture, ordre planifié acheter UNH : Achat exécuté : 23 UNH à 409.33 $ (stop 384.66 $, objectif 458.32 $)"
-    },
-    {
-     "ts": "2026-10-21T13:40:17+00:00",
-     "texte": "Ouverture, ordre planifié acheter TSM : Achat exécuté : 22 TSM à 429.93 $ (stop 403.85 $, objectif 494.07 $)"
-    },
     {
      "ts": "2026-10-22T13:40:28+00:00",
      "texte": "Ouverture, ordre planifié acheter TMO : Achat exécuté : 20 TMO à 703.54 $ (stop 660.07 $, objectif 807.53 $)"
@@ -236,6 +244,30 @@
     {
      "ts": "2026-11-04T18:01:30+00:00",
      "texte": "Stop suiveur sur JPM : 314.68 $ → 331.40 $ (cours 351.72 $, achat 331.40 $)"
+    },
+    {
+     "ts": "2026-11-05T14:40:16+00:00",
+     "texte": "Stop suiveur sur PG : 152.55 $ → 160.74 $ (cours 168.88 $, achat 160.74 $)"
+    },
+    {
+     "ts": "2026-11-05T14:40:16+00:00",
+     "texte": "Stop suiveur sur DUK : 116.40 $ → 123.92 $ (cours 131.71 $, achat 123.92 $)"
+    },
+    {
+     "ts": "2026-11-05T14:40:16+00:00",
+     "texte": "Stop suiveur sur V : 390.99 $ → 413.59 $ (cours 438.83 $, achat 413.59 $)"
+    },
+    {
+     "ts": "2026-11-05T14:40:34+00:00",
+     "texte": "Ouverture, ordre planifié acheter XOM : Achat exécuté : 39 XOM à 172.07 $ (stop 160.01 $, objectif 197.00 $)"
+    },
+    {
+     "ts": "2026-11-05T14:40:35+00:00",
+     "texte": "Ouverture, ordre planifié acheter DIS : déjà 10 positions : vendez-en une avant d'en ouvrir une autre"
+    },
+    {
+     "ts": "2026-11-05T14:40:35+00:00",
+     "texte": "Ouverture, ordre planifié acheter AAPL : déjà 10 positions : vendez-en une avant d'en ouvrir une autre"
     }
    ],
    "derniere_seance": "2026-11-05T08:02:39+00:00"

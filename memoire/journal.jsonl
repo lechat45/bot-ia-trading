@@ -25,3 +25,7 @@
 {"type": "execution", "ts": "2026-11-04T18:01:29+00:00", "agent": "alpaca", "action": "vendre", "symbole": "XOM", "qty": 40, "statut": "exécuté", "prix": 168.6735, "plus_value": -436.26, "source": "stop loss"}
 {"type": "execution", "ts": "2026-11-04T18:01:30+00:00", "agent": "equipe", "action": "ajuster_stop", "symbole": "JPM", "qty": null, "statut": "exécuté", "stop": 331.4, "source": "stop suiveur"}
 {"type": "execution", "ts": "2026-11-04T18:07:31+00:00", "agent": "equipe", "action": "acheter", "symbole": "ABBV", "qty": 12, "statut": "exécuté", "prix": 290.61, "stop": 273.06, "tp": 325.34, "source": "sentiment-1"}
+{"type": "execution", "ts": "2026-11-05T14:40:16+00:00", "agent": "equipe", "action": "ajuster_stop", "symbole": "PG", "qty": null, "statut": "exécuté", "stop": 160.74, "source": "stop suiveur"}
+{"type": "execution", "ts": "2026-11-05T14:40:16+00:00", "agent": "equipe", "action": "ajuster_stop", "symbole": "DUK", "qty": null, "statut": "exécuté", "stop": 123.92, "source": "stop suiveur"}
+{"type": "execution", "ts": "2026-11-05T14:40:16+00:00", "agent": "equipe", "action": "ajuster_stop", "symbole": "V", "qty": null, "statut": "exécuté", "stop": 413.59, "source": "stop suiveur"}
+{"type": "execution", "ts": "2026-11-05T14:40:34+00:00", "agent": "equipe", "action": "acheter", "symbole": "XOM", "qty": 39, "statut": "exécuté", "prix": 172.066154, "stop": 160.01, "tp": 197.0, "source": "qualite-1"}
