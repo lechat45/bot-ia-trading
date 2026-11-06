@@ -1,30 +1,32 @@
-_Mis à jour : 2026-11-05 19:01 (Paris)_
+_Mis à jour : 2026-11-06 09:02 (Paris)_
+
+_Mis à jour : 2026-11-06 09:05 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 05/11/2026 (Séance de Suivi - Bourse Ouverte)
+- Date : 06/11/2026 (Séance de Préparation - Bourse Fermée)
 
 ## État du Portefeuille (10/10 positions max) :
-- Valeur portefeuille : 97 172.38 $. Cash : 20 582.41 $ (21.2%).
-- Contexte marché : Correction violente emmenée par la tech (SPY -4.1%, QQQ -5.9%). Forte réallocation vers les valeurs défensives.
-- Performance des 10 positions détenues :
-  1. DUK (+5.60%, +1.00% aujourd'hui) : T3 au-dessus des attentes (EPS 1.99 $ vs 1.86 $, CA 9.10 Md$ vs 8.91 Md$). Guidance 2026 relevée ($6.70-$6.80). Thèse renforcée.
-  2. PG (+4.27%, +0.10% aujourd'hui) : Excellente résistance défensive.
-  3. ABBV (+1.08%, -0.30% aujourd'hui) : Excellente tenue.
-  4. XOM (-1.50%, 0.00% aujourd'hui) : Position ouverte ce jour, stable.
-  5. V (+3.07%, -2.40% aujourd'hui) : Tenue satisfaisante.
-  6. MSFT (+2.50%, -3.20% aujourd'hui) : Subit le sell-off tech global mais conserve son gain latents.
-  7. JPM (+2.12%, -3.90% meurtrit le secteur financier).
-  8. UNP (+1.08%, -2.90% aujourd'hui).
-  9. UNH (-2.71%, -2.70% aujourd'hui) : Stop loss à 384.66 $ (-3.4%).
-  10. TMO (-2.93%, -3.30% aujourd'hui) : Stop loss à 660.07 $ (-3.3%).
+- Valeur portefeuille : 96 667.94 $. Cash : 31 503.34 $ (32.6%).
+- Contexte marché : Correction sur les indices (SPY -5.1% sur 5j, QQQ -9.4% sur 5j). Rotation marquée vers les valeurs défensives (Consumer Defensive XLP +3.6%, Communication XLC +3.2%, Real Estate XLRE +2.9%).
+- État des 10 positions détenues :
+  1. DUK (+5.13% latent) : T3 très solides (EPS 1.99 $ vs 1.86 $), guidance 2026 relevée. Stop suiveur remonté au prix d'achat (123.92 $). Rappel r21-1105 clôturé.
+  2. PG (+3.93% latent) : Excellente tenue en consommation de base. Stop suiveur à 160.74 $.
+  3. V (+2.13% latent) : Résistance solide des services financiers. Stop suiveur à 413.59 $.
+  4. JPM (+1.82% latent) : Leader financier incontesté. Stop suiveur à 331.40 $.
+  5. UNP (+0.56% latent) : Fret ferroviaire défensif. Stop à 280.23 $.
+  6. AAPL (+0.40% latent) : Tenue relative robuste malgré le sell-off tech. Stop à 243.68 $.
+  7. DIS (+0.20% latent) : Maintien au-dessus du prix d'achat. Stop à 103.62 $.
+  8. ABBV (-0.91% latent) : Consolidation normale post-résultats T3. Stop à 273.06 $.
+  9. UNH (-3.62% latent) : Sous pression sectorielle mais protégée par stop à 384.66 $.
+  10. XOM (-3.92% latent) : Impactée par la chute court terme du pétrole (-11.9% sur 5j). Bilan ultra-sain (dette/FP 13%, FCF 28.9 Md$). Stop à 160.00 $.
 
-## Décisions & Actions :
-- Maintien de l'ensemble des 10 positions (portefeuille plein à 10/10).
-- Aucune thèse de Qualité cassée. Les stops suiveurs et stops-loss standards assurent le contrôle strict du risque.
-- Aucune proposition d'achat (portefeuille complet à 10 positions et marché sous forte pression baissière court terme).
+## Décisions & Thèses :
+- Portefeuille complet (10/10). Aucune thèse de Qualité cassée.
+- Protection stricte du capital via les stops-loss et stops suiveurs automatiques (DUK, PG, V, JPM désormais immunisés contre une perte en capital).
+- Aucune nouvelle proposition d'achat lors de cette séance : priorité au suivi et au respect du nombre maximal de positions.
 
 ## Calendrier à surveiller :
-- 17/11/2026 : Résultats T3 de NVIDIA (NVDA).
+- 17/11/2026 : Résultats T3 de NVIDIA (NVDA) & Disney (DIS).
 - 02/12/2026 : Résultats de Salesforce (CRM).
 - 12/01/2027 : Résultats T4 de UnitedHealth (UNH).
-- 29/01/2027 : Résultats T4 d'ExxonMobil (XOM).
+- 28/01/2027 : Résultats T4 d'ExxonMobil (XOM).

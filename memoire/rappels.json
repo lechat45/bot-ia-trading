@@ -249,6 +249,9 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-05T18:05:44+00:00",
-  "statut": "actif"
+  "statut": "fait",
+  "note": "Résultats Q3 de DUK très solides publiés le 05/11 (EPS $1.99 vs $1.86 attendu, CA $9.10B vs $8.91B). Guidance relevée. Position en gain (+5.1%), stop remonté au prix d'achat. Thèse renforcée, position conservée.",
+  "fait_par": "equilibre",
+  "fait_le": "2026-11-06T08:02:47+00:00"
  }
 ]
