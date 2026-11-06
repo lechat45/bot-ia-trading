@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 38585.03001000001,
+   "cash": 33592.77001000001,
    "positions": {
     "UNH": {
      "lots": [
@@ -149,6 +149,22 @@
       }
      ],
      "these": "Achat AAPL : Leader technologique montrant une force relative. Entrée à 7000$, stop -6%, TP +12%. Thèse sentiment-1 validée par le critique."
+    },
+    "SAN": {
+     "lots": [
+      {
+       "qty": 422,
+       "prix": 11.83,
+       "date": "2026-11-06T18:08:18+00:00",
+       "stop": 11.0,
+       "tp": 13.6,
+       "statut": "ouvert",
+       "parent_id": "ab753d47-b54f-4e44-befb-a7caa5a8f6bb",
+       "stop_id": "f0b0ed33-39b0-47ae-a672-05d0a936e6c8",
+       "tp_id": "45d13489-8480-4983-9409-d456a0b8819e"
+      }
+     ],
+     "these": "Achat contrarien sur Banco Santander (SAN) proposé par contrarien-1 et validé avec ajustement de taille à 5000$ par le critique. Titre décoté (PER attendu 8.4 vs 10.1 médiane sectorielle, marge nette 32.6%, ROE 13.1%). Stabilisation confirmée avec 5 séances au-dessus du support des 11.12$ (cours 11.82$, RSI 36). Stop loss à 11.00$ (-7.0%), TP à 13.60$ (+15.0%). Position de 5 000$ calibrée pour contrôler le risque sectoriel."
     }
    },
    "realise": -3605.119984000003,
@@ -254,7 +270,7 @@
      "texte": "Stop loss déclenché : 17 V vendues à 416.57 $ (plus-value +50.70 $)"
     }
    ],
-   "derniere_seance": "2026-11-06T08:02:35+00:00"
+   "derniere_seance": "2026-11-06T18:01:22+00:00"
   }
  }
 }

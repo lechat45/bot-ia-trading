@@ -34,3 +34,4 @@
 {"type": "execution", "ts": "2026-11-05T18:05:17+00:00", "agent": "equipe", "action": "acheter", "symbole": "DIS", "qty": 38, "statut": "exécuté", "prix": 117.04, "stop": 110.48, "tp": 130.36, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-11-05T18:05:34+00:00", "agent": "equipe", "action": "acheter", "symbole": "AAPL", "qty": 20, "statut": "exécuté", "prix": 343.27, "stop": 322.57, "tp": 384.34, "source": "sentiment-1"}
 {"type": "execution", "ts": "2026-11-06T14:40:19+00:00", "agent": "alpaca", "action": "vendre", "symbole": "V", "qty": 17, "statut": "exécuté", "prix": 416.57, "plus_value": 50.7, "source": "stop loss"}
+{"type": "execution", "ts": "2026-11-06T18:08:18+00:00", "agent": "equipe", "action": "acheter", "symbole": "SAN", "qty": 422, "statut": "exécuté", "prix": 11.83, "stop": 11.0, "tp": 13.6, "source": "contrarien-1"}

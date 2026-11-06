@@ -58,5 +58,15 @@
   "date": "2026-11-04",
   "auteur": "gerant",
   "texte": "En cas de renforcement sur un secteur déjà lourdement pondéré, réduire la taille de position conformément au critique pour respecter les plafonds sectoriels."
+ },
+ {
+  "date": "2026-11-06",
+  "auteur": "bilan",
+  "texte": "Une réentrée sur un titre stoppé (ex: XOM) doit impérativement exiger un support technique confirmé et un calibrage de taille plus prudent."
+ },
+ {
+  "date": "2026-11-06",
+  "auteur": "bilan",
+  "texte": "Le remontage systématique du stop loss au prix d'achat dès +3 % de gain est indispensable pour protéger le capital face aux rotations sectorielles."
  }
 ]

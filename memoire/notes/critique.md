@@ -1,7 +1,9 @@
-_Mis à jour : 2026-11-05 19:01 (Paris)_
+_Mis à jour : 2026-11-06 19:01 (Paris)_
 
-Notes de Critique - 2026-11-05 (Suivi) :
-- Contexte : Rotation sectorielle agressive. Tech (XLK -13.5%) et Énergie en forte baisse ; Consommation de base (XLP +3.8%) et Défensifs en hausse. S&P 500 en correction (-4,1% sur la séance).
-- Avis sentiment-1 (Vente MSFT) : OK. Vente préventive justifiée par la dérotation massive sur la Tech, malgré la légère plus-value (+2,29%). Permet de préserver le capital.
-- Avis sentiment-2 (Vente TMO) : OK. Allègement du secteur Santé (surpondéré) et de la position en perte (-3,15%) pour libérer du cash et suivre la dynamique de rotation vers les défensifs.
-- Respect des règles : Validation des deux propositions de vente sans réserve, en cohérence avec la phase de protection et de suivi en cours de séance.
+_Mis à jour : 2026-11-06 19:01 (Paris)_
+
+Notes de Critique - 2026-11-06 (Suivi) :
+- Contexte : Leger rebond des indices (SPY +0,4%, QQQ +1,1%), mais Tech et Énergie restent sous pression sur 5 séances (-8,5% et -11,5%).
+- Avis contrarien-1 (Achat SAN) : RÉSERVE. Thèse fondamentale et technique (support 11,12 $) solide, mais réduction recommandée de 7 000 $ à 5 000 $ par précaution sur un titre bancaire européen en cours de retournement (respect des leçons sur la taille des positions en phase de volatilité).
+- Avis sentiment-1 (Achat AAPL) : OK. Titre très résilient au sein du secteur Tech (au-dessus de SMA20/50/200, RSI 51). Renforcement acceptable (cumul sous la limite de 15 % par titre).
+- Suivi du portefeuille : Surveiller l'exécution éventuelle des propositions et l'évolution des positions défensives et financières.
