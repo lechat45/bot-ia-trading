@@ -1,0 +1,487 @@
+{
+ "nom": "2026-10-20_1751_suivi",
+ "quand": "2026-10-20 17:51 (Paris)",
+ "ts": "2026-10-20T15:51:22.009439+00:00",
+ "mode": "suivi",
+ "simulation": false,
+ "hors_ligne": false,
+ "marche_ouvert": true,
+ "date_bourse": "2026-10-20",
+ "agents": {
+  "gerant": {
+   "nom": "Gérant",
+   "role": "gerant",
+   "modele": "gemini#3:gemini-3.7-flash",
+   "etapes": [
+    {
+     "t": "2026-10-20T15:51:28+00:00",
+     "type": "notes",
+     "texte": "Relit ses notes, les propositions et les avis"
+    },
+    {
+     "t": "2026-10-20T15:53:47+00:00",
+     "type": "outil",
+     "nom": "consulter_portefeuille",
+     "args": {},
+     "resultat": "{\"cash\":80606.61,\"valeur\":100287.35,\"investi\":19680.74,\"capital_depart\":100000.0,\"pl\":287.35,\"pl_pct\":0.29,\"realise\":0.0,\"positions\":[{\"symbole\":\"AMZN\",\"qty\":38,\"prix_achat\":262.6,\"prix\":263.28,\"valeur\":10004.64,\"pl\":25.84,\"pl_pct\":0.26,\"stop\":249.49,\"tp\":288.89,\"depuis\":\"2026-10-19\",\"these\":\"Amazon (AMZN) présente une qualité financière indiscutable : CA +19.6%, BPA +242%, marge nette 17.4%, ROE 30.6%, dette/FP très saine à 46% et FCF positif de 3.2Md$. Le titre surperforme le marché (+5.1% ce jour, +22.5% sur 1 an), au-dessus de sa SMA200 (242.87$) et SMA20 (253.45$). Résultats trimest\",\"en_",
+     "donnees": {
+      "cash": 80606.61,
+      "valeur": 100287.35,
+      "investi": 19680.74,
+      "capital_depart": 100000.0,
+      "pl": 287.35,
+      "pl_pct": 0.29,
+      "realise": 0.0,
+      "positions": [
+       {
+        "symbole": "AMZN",
+        "qty": 38,
+        "prix_achat": 262.6,
+        "prix": 263.28,
+        "valeur": 10004.64,
+        "pl": 25.84,
+        "pl_pct": 0.26,
+        "stop": 249.49,
+        "tp": 288.89,
+        "depuis": "2026-10-19",
+        "these": "Amazon (AMZN) présente une qualité financière indiscutable : CA +19.6%, BPA +242%, marge nette 17.4%, ROE 30.6%, dette/FP très saine à 46% et FCF positif de 3.2Md$. Le titre surperforme le marché (+5.1% ce jour, +22.5% sur 1 an), au-dessus de sa SMA200 (242.87$) et SMA20 (253.45$). Résultats trimest",
+        "en_attente": false
+       },
+       {
+        "symbole": "UNH",
+        "qty": 23,
+        "prix_achat": 409.33,
+        "prix": 420.7,
+        "valeur": 9676.1,
+        "pl": 261.51,
+        "pl_pct": 2.78,
+        "stop": 384.66,
+        "tp": 458.32,
+        "depuis": "2026-10-20",
+        "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01",
+        "en_attente": false
+       }
+      ],
+      "ordres_planifies_pour_ouverture": [],
+      "limites": {
+       "max_par_titre_usd": 15043.0,
+       "liquidites_utilisables_usd": 75592.0,
+       "positions_max": 10,
+       "max_par_secteur_pct": 35.0,
+       "frein_d_urgence": "inactif",
+       "stop_loss_pct": "entre 1 et 15",
+       "ratio_gain_perte_min": 1.5
+      }
+     }
+    },
+    {
+     "t": "2026-10-20T15:54:12+00:00",
+     "type": "outil",
+     "nom": "historique_prix",
+     "args": {
+      "symbole": "AMZN"
+     },
+     "resultat": "{\"prix\":262.9,\"sma20\":253.83,\"sma50\":256.52,\"sma200\":243.05,\"perf_5j_pct\":1.7,\"perf_1m_pct\":1.7,\"perf_3m_pct\":7.4,\"perf_1an_pct\":23.4,\"rsi14\":63.0,\"atr14\":6.46,\"volat_annuelle_pct\":28.0,\"plus_haut_52s\":284.12,\"plus_bas_52s\":198.81,\"ecart_plus_haut_pct\":-7.5,\"volume_vs_moy20\":0.7,\"perf_1j_pct\":0.2,\"cours_hebdo_1an\":[222.04,229.23,249.4,249.05,222.71,229.57,232.42,231.69,221.29,232.44,226.49,247.32,239.09,238.38,242.88,208.66,201.25,208.6,208.63,214.3,215.34,207.28,208.39,221.33,248.46,255.37,263.22,274.98,270.14,265,273.98,253.85,241.42,244.61,230.6,244.16,247.32,249.97,231.42,284.12,277.99,261",
+     "donnees": {
+      "prix": 262.9,
+      "sma20": 253.83,
+      "sma50": 256.52,
+      "sma200": 243.05,
+      "perf_5j_pct": 1.7,
+      "perf_1m_pct": 1.7,
+      "perf_3m_pct": 7.4,
+      "perf_1an_pct": 23.4,
+      "rsi14": 63.0,
+      "atr14": 6.46,
+      "volat_annuelle_pct": 28.0,
+      "plus_haut_52s": 284.12,
+      "plus_bas_52s": 198.81,
+      "ecart_plus_haut_pct": -7.5,
+      "volume_vs_moy20": 0.7,
+      "perf_1j_pct": 0.2,
+      "cours_hebdo_1an": [
+       222.04,
+       229.23,
+       249.4,
+       249.05,
+       222.71,
+       229.57,
+       232.42,
+       231.69,
+       221.29,
+       232.44,
+       226.49,
+       247.32,
+       239.09,
+       238.38,
+       242.88,
+       208.66,
+       201.25,
+       208.6,
+       208.63,
+       214.3,
+       215.34,
+       207.28,
+       208.39,
+       221.33,
+       248.46,
+       255.37,
+       263.22,
+       274.98,
+       270.14,
+       265,
+       273.98,
+       253.85,
+       241.42,
+       244.61,
+       230.6,
+       244.16,
+       247.32,
+       249.97,
+       231.42,
+       284.12,
+       277.99,
+       261.34,
+       262.04,
+       259.75,
+       256.95,
+       248.45,
+       254.99,
+       246.61,
+       256.31,
+       258.62,
+       262.9
+      ],
+      "cours_20_derniers_jours": [
+       249.38,
+       249.34,
+       249.63,
+       246.33,
+       246.61,
+       249.17,
+       248.27,
+       251.42,
+       251.28,
+       256.31,
+       259.9,
+       254.1,
+       262.42,
+       259.62,
+       258.62,
+       254.18,
+       254.76,
+       249.92,
+       262.5,
+       262.9
+      ],
+      "date_dernier_cours": "2026-10-20",
+      "marche_SPY": {
+       "perf_5j_pct": -1.1,
+       "perf_1m_pct": -0.6,
+       "perf_3m_pct": 3.2
+      },
+      "dernier_prix": 263.28,
+      "niveaux": {
+       "plus_bas_10j": 248.6,
+       "plus_bas_20j": 244.75,
+       "plus_haut_20j": 265.28,
+       "atr_pct": 2.5,
+       "ecart_sma50_pct": 2.6,
+       "ecart_sma200_pct": 8.3,
+       "stops_possibles": {
+        "a_1_5_atr": {
+         "prix": 253.59,
+         "stop_loss_pct": 3.7
+        },
+        "a_2_atr": {
+         "prix": 250.36,
+         "stop_loss_pct": 4.9
+        },
+        "sous_plus_bas_20j": {
+         "prix": 242.31,
+         "stop_loss_pct": 8.0
+        }
+       }
+      },
+      "vs_secteur": {
+       "fonds": "XLY",
+       "secteur": "Consumer Cyclical",
+       "secteur_perf_1m_pct": 3.0,
+       "ecart_1m_points": -1.3,
+       "secteur_perf_3m_pct": 1.5,
+       "ecart_3m_points": 5.9
+      }
+     }
+    },
+    {
+     "t": "2026-10-20T15:54:35+00:00",
+     "type": "outil",
+     "nom": "historique_prix",
+     "args": {
+      "symbole": "UNH"
+     },
+     "resultat": "{\"prix\":420.53,\"sma20\":382.39,\"sma50\":386.4,\"sma200\":356.49,\"perf_5j_pct\":11.4,\"perf_1m_pct\":11.4,\"perf_3m_pct\":-1.9,\"perf_1an_pct\":21.1,\"rsi14\":81.0,\"atr14\":12.85,\"volat_annuelle_pct\":27.0,\"plus_haut_52s\":433.72,\"plus_bas_52s\":256.11,\"ecart_plus_haut_pct\":-3.0,\"volume_vs_moy20\":0.7,\"perf_1j_pct\":3.3,\"cours_hebdo_1an\":[355.92,358.41,322.24,318.85,305.42,317.83,330.98,321.92,325.11,321.32,329.94,337.35,324.67,344.77,280.21,270.23,283.69,268.71,283.56,279.05,284.25,269.07,267.36,302.32,310.39,349.28,366.35,362.72,396.33,378.68,377.91,391.86,400.5,398.68,424.82,415.55,426.42,419.27,415.01,412.84,",
+     "donnees": {
+      "prix": 420.53,
+      "sma20": 382.39,
+      "sma50": 386.4,
+      "sma200": 356.49,
+      "perf_5j_pct": 11.4,
+      "perf_1m_pct": 11.4,
+      "perf_3m_pct": -1.9,
+      "perf_1an_pct": 21.1,
+      "rsi14": 81.0,
+      "atr14": 12.85,
+      "volat_annuelle_pct": 27.0,
+      "plus_haut_52s": 433.72,
+      "plus_bas_52s": 256.11,
+      "ecart_plus_haut_pct": -3.0,
+      "volume_vs_moy20": 0.7,
+      "perf_1j_pct": 3.3,
+      "cours_hebdo_1an": [
+       355.92,
+       358.41,
+       322.24,
+       318.85,
+       305.42,
+       317.83,
+       330.98,
+       321.92,
+       325.11,
+       321.32,
+       329.94,
+       337.35,
+       324.67,
+       344.77,
+       280.21,
+       270.23,
+       283.69,
+       268.71,
+       283.56,
+       279.05,
+       284.25,
+       269.07,
+       267.36,
+       302.32,
+       310.39,
+       349.28,
+       366.35,
+       362.72,
+       396.33,
+       378.68,
+       377.91,
+       391.86,
+       400.5,
+       398.68,
+       424.82,
+       415.55,
+       426.42,
+       419.27,
+       415.01,
+       412.84,
+       406.25,
+       393.12,
+       396.42,
+       387.17,
+       398.48,
+       375.93,
+       372.9,
+       374.98,
+       376.15,
+       377.56,
+       420.53
+      ],
+      "cours_20_derniers_jours": [
+       371.27,
+       375.17,
+       376.7,
+       377.94,
+       374.98,
+       367.25,
+       365.11,
+       371.77,
+       378.62,
+       376.15,
+       375.81,
+       370.75,
+       379.31,
+       378.16,
+       377.56,
+       395.69,
+       406.66,
+       401.45,
+       406.92,
+       420.53
+      ],
+      "date_dernier_cours": "2026-10-20",
+      "marche_SPY": {
+       "perf_5j_pct": -1.1,
+       "perf_1m_pct": -0.6,
+       "perf_3m_pct": 3.2
+      },
+      "dernier_prix": 420.7,
+      "niveaux": {
+       "plus_bas_10j": 368.61,
+       "plus_bas_20j": 362.66,
+       "plus_haut_20j": 420.62,
+       "atr_pct": 3.1,
+       "ecart_sma50_pct": 8.9,
+       "ecart_sma200_pct": 18.0,
+       "stops_possibles": {
+        "a_1_5_atr": {
+         "prix": 401.43,
+         "stop_loss_pct": 4.6
+        },
+        "a_2_atr": {
+         "prix": 395.0,
+         "stop_loss_pct": 6.1
+        },
+        "sous_plus_bas_20j": {
+         "prix": 359.03,
+         "stop_loss_pct": 14.7
+        }
+       }
+      },
+      "vs_secteur": {
+       "fonds": "XLV",
+       "secteur": "Healthcare",
+       "secteur_perf_1m_pct": 6.4,
+       "ecart_1m_points": 5.0,
+       "secteur_perf_3m_pct": 13.2,
+       "ecart_3m_points": -15.1
+      }
+     }
+    },
+    {
+     "t": "2026-10-20T15:55:04+00:00",
+     "type": "outil",
+     "nom": "ecrire_notes",
+     "args": {
+      "contenu": "# JOURNAL DE BORD DU GÉRANT (20/10/2026 - Séance de Suivi)\n\n## 1. Portefeuille & Positions Actives (Valeur totale : ~100 287 $, P&L : +287.35 $ soit +0.29 %)\n- **AMZN (Amazon.com, Inc.)** :\n  - Quantité : 38 actions achetées à 262.60 $ (cours actuel : 263.28 $, valeur ~10 004 $, ~10 % du compte).\n  - P&L : +25.84 $ (+0.26 %).\n  - Secteur : Consumer Cyclical.\n  - Thèse & Niveaux : Stop loss à 249.49 $, Take Profit à 288.89 $. Cours au-dessus de SMA20 (253.83 $) et SMA200 (243.05 $). RSI à 63.\n  - Prochains résultats : 29/10/2026 (dans 9 jours, rappel r2-1029 actif). Surveillance rapprochée pour décider d'alléger ou de garder avant la publication.\n\n- **UNH (UnitedHealth Group Incorporated)** :\n  - Quantité : 23 actions achetées à 409.33 $ (cours actuel : 420.70 $, valeur ~9 676 $, ~9.6 % du compte).\n  - P&L : +261.51 $ (+2.78 %).\n  - Secteur : Healthcare.\n  - Thèse & Niveaux : Stop loss à 384.66 $, Take Profit à 458.32 $. Excellente performance à court terme (+11.4 % sur 5j). RSI à 81 (suracheté à court terme, mais tendance de fond très robuste au-dessus de SMA20 / SMA50 / SMA200).\n  - Prochains résultats : 12/01/2027 (dans 84 jours, rappel r4-0112 actif).\n\n## 2. Liquidités & Risque\n- **Cash** : 80 606.61 $ (~80.3 % du portefeuille), ce qui respecte largement la règle de garde de 5 % minimum de liquidités.\n- **Exposition** : 2 positions actives saines, risque global totalement maîtrisé.\n\n## 3. Calendrier & Surveillances\n- **28/10/2026** : Résultats Deutsche Bank (DB) - Observation.\n- **29/10/2026** : Résultats T3 Amazon (AMZN) - Décision de garder ou alléger à l'approche de la date.\n- **12/01/2027** : Résultats T4 UnitedHealth Group (UNH)."
+     },
+     "resultat": "{\"ok\":true,\"caracteres\":1665,\"info\":\"notes enregistrées\"}",
+     "donnees": {
+      "ok": true,
+      "caracteres": 1665,
+      "info": "notes enregistrées"
+     }
+    },
+    {
+     "t": "2026-10-20T15:57:04+00:00",
+     "type": "outil",
+     "nom": "terminer_session",
+     "args": {
+      "compte_rendu": "Séance de suivi allégée du 20/10/2026 :\n- Consultation du portefeuille : le compte est valorisé à 100 287 $ avec 80 606 $ de cash (~80 %) et 2 positions en plus-value (+287 $ global).\n- Suivi des positions :\n  1. AMZN : cours stable à 263.28 $ (+0.26 % depuis l'achat). Thèse intacte, stop à 249.49 $, résultats dans 9 jours (29/10).\n  2. UNH : achat exécuté à l'ouverture à 409.33 $, cours actuel à 420.70 $ (+2.78 %). Le titre profite pleinement de la rotation vers le secteur de la santé (+11.4 % sur 5 jours). Stop initial en place à 384.66 $.\n- Décision : statu quo justifié, respect de la discipline, aucune intervention requise en séance ouverte. Notes et calendrier mis à jour."
+     },
+     "resultat": "{\"ok\":true,\"message\":\"Séance terminée.\"}",
+     "donnees": {
+      "ok": true,
+      "message": "Séance terminée."
+     }
+    }
+   ],
+   "compte_rendu": "Séance de suivi allégée du 20/10/2026 :\n- Consultation du portefeuille : le compte est valorisé à 100 287 $ avec 80 606 $ de cash (~80 %) et 2 positions en plus-value (+287 $ global).\n- Suivi des positions :\n  1. AMZN : cours stable à 263.28 $ (+0.26 % depuis l'achat). Thèse intacte, stop à 249.49 $, résultats dans 9 jours (29/10).\n  2. UNH : achat exécuté à l'ouverture à 409.33 $, cours actuel à 420.70 $ (+2.78 %). Le titre profite pleinement de la rotation vers le secteur de la santé (+11.4 % sur 5 jours). Stop initial en place à 384.66 $.\n- Décision : statu quo justifié, respect de la discipline, aucune intervention requise en séance ouverte. Notes et calendrier mis à jour.",
+   "propositions": [],
+   "avis": [],
+   "ordres": [],
+   "erreur": null,
+   "duree_s": 336,
+   "outils": 5,
+   "tokens": 42002,
+   "appels": 5
+  }
+ },
+ "propositions": [],
+ "decision": "Séance de suivi allégée du 20/10/2026 :\n- Consultation du portefeuille : le compte est valorisé à 100 287 $ avec 80 606 $ de cash (~80 %) et 2 positions en plus-value (+287 $ global).\n- Suivi des positions :\n  1. AMZN : cours stable à 263.28 $ (+0.26 % depuis l'achat). Thèse intacte, stop à 249.49 $, résultats dans 9 jours (29/10).\n  2. UNH : achat exécuté à l'ouverture à 409.33 $, cours actuel à 420.70 $ (+2.78 %). Le titre profite pleinement de la rotation vers le secteur de la santé (+11.4 % sur 5 jours). Stop initial en place à 384.66 $.\n- Décision : statu quo justifié, respect de la discipline, aucune intervention requise en séance ouverte. Notes et calendrier mis à jour.",
+ "executions": [],
+ "plan": [],
+ "compte": {
+  "cash": 80606.61,
+  "valeur": 100305.36,
+  "investi": 19698.75,
+  "capital_depart": 100000.0,
+  "pl": 305.36,
+  "pl_pct": 0.31,
+  "realise": 0.0,
+  "positions": [
+   {
+    "symbole": "AMZN",
+    "qty": 38,
+    "prix_achat": 262.6,
+    "prix": 263.3,
+    "valeur": 10005.4,
+    "pl": 26.6,
+    "pl_pct": 0.27,
+    "stop": 249.49,
+    "tp": 288.89,
+    "depuis": "2026-10-19",
+    "these": "Amazon (AMZN) présente une qualité financière indiscutable : CA +19.6%, BPA +242%, marge nette 17.4%, ROE 30.6%, dette/FP très saine à 46% et FCF positif de 3.2Md$. Le titre surperforme le marché (+5.1% ce jour, +22.5% sur 1 an), au-dessus de sa SMA200 (242.87$) et SMA20 (253.45$). Résultats trimest",
+    "en_attente": false
+   },
+   {
+    "symbole": "UNH",
+    "qty": 23,
+    "prix_achat": 409.33,
+    "prix": 421.45,
+    "valeur": 9693.35,
+    "pl": 278.76,
+    "pl_pct": 2.96,
+    "stop": 384.66,
+    "tp": 458.32,
+    "depuis": "2026-10-20",
+    "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01",
+    "en_attente": false
+   }
+  ]
+ },
+ "valeur_avant": 100000.0,
+ "cles": {
+  "gemini#3": {
+   "tokens": 42002,
+   "appels": 5
+  }
+ },
+ "bilan": "",
+ "frein": null,
+ "lecons": [],
+ "resume_marche": "RÉSUMÉ DU MARCHÉ (préparé par le programme au début de la séance ; variations depuis la dernière clôture, sur 5 et sur 21 séances) :\n- Indices : S&P 500 (SPY) +0,3 % · 5 séances -1,1 % · 1 mois -0,6 % ; Nasdaq 100 (QQQ) +0,1 % · 5 séances -3,3 % · 1 mois -3,1 % ; petites capitalisations (IWM) +1,6 % · 5 séances -0,3 % · 1 mois -3,4 % ; Dow Jones (DIA) +0,9 % · 5 séances +1,5 % · 1 mois +0,8 %\n- Taux, matières premières et dollar : obligations US à 20 ans (TLT) +0,7 % · 5 séances +2,1 % · 1 mois -1,8 % ; or (GLD) -0,2 % · 5 séances -0,7 % · 1 mois -4,9 % ; pétrole (USO) -1,0 % · 5 séances +4,1 % · 1 mois +7,5 % ; dollar (UUP) -0,3 % · 5 séances -0,4 % · 1 mois +1,6 %\n- Largeur du marché : sur 163 grandes valeurs, 52 % sont au-dessus de leur moyenne 50 jours et 59 % au-dessus de leur moyenne 200 jours ; 21 sont à moins de 2 % de leur plus haut sur un an, 2 à moins de 2 % de leur plus bas\n- Secteurs sur 5 séances : les plus forts santé (XLV) +5,9 %, consommation de base (XLP) +4,3 %, consommation cyclique (XLY) +2,8 % ; les plus faibles technologie (XLK) -5,3 %, communication (XLC) -1,8 %, industrie (XLI) -1,3 %\n- Positions du compte : AMZN +0,2 % aujourd'hui, +0,1 % depuis l'achat, stop à 5,1 % sous le cours; UNH +3,3 % aujourd'hui, +2,7 % depuis l'achat, stop à 8,5 % sous le cours\n- Grands titres de l'actualité financière (heure UTC) :\n  - 10-20 15:16 · WSJ · Stock Market Today: Dow Jumps 500 Points on Mideast Hopes; Brent Crude Drops — Live Updates\n  - 10-20 13:39 · Fox Business · Walmart rolls out new bundle combining Walmart+, Sam’s Club Plus\n  - 10-20 12:36 · CNBC · Data center stocks slide as Korea IPO plunges 30%, pressuring tech sentiment\n  - 10-20 13:32 · Yahoo Finance · SpaceX earnings: Live updates\n  - 10-20 14:14 · Detroit Free Press · GM's third quarter net income surged 151% even as overall sales dipped\n  - 10-20 15:46 · benzinga · $100 Invested In JB Hunt Transport Servs 20 Years Ago Would Be Worth This Much Today\n  - 10-20 15:45 · benzinga · Live On CNN News18, U.S. Secretary Of State Rubio Says Oil Going Through Hormuz Nearly Equal To Before War\n  - 10-20 15:45 · benzinga · Michael Burry Sees a 2000-Style Rotation Out of the Market's Winners\n  - 10-20 15:45 · benzinga · Axonex AI Group Announces 2-For-5 Reverse Stock Split, Effective Oct. 22\n\n",
+ "stops_suiveurs": [],
+ "allegee": "rien de notable depuis ce matin : pas de rappel du jour, pas d'événement sur le compte, marché et positions calmes",
+ "suivi_raisons": [],
+ "ecarts": [],
+ "rappels": [
+  {
+   "id": "r2-1029",
+   "date": "2026-10-29",
+   "titre": "Résultats T3 Amazon (AMZN)",
+   "details": "Résultats T3 Amazon (AMZN). Évaluer la position (plus-value, dynamique du marché) et décider d'alléger ou conserver avant l'annonce.",
+   "symbole": "AMZN",
+   "seance": "preparation",
+   "cree_par": "gerant",
+   "cree_le": "2026-10-20T11:35:28+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r3-1028",
+   "date": "2026-10-28",
+   "titre": "Suivi résultats DB",
+   "details": "Résultats DB, vérifier si catalyseur se produit, ajuster stop si nécessaire",
+   "symbole": "DB",
+   "seance": "preparation",
+   "cree_par": "critique",
+   "cree_le": "2026-10-20T12:42:00+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r4-0112",
+   "date": "2027-01-12",
+   "titre": "Résultats T4 UnitedHealth Group (UNH)",
+   "details": "Publication des résultats T4 de UnitedHealth Group (UNH). Évaluer la position et ajuster le stop loss ou prendre les bénéfices avant annonce.",
+   "symbole": "UNH",
+   "seance": "preparation",
+   "cree_par": "gerant",
+   "cree_le": "2026-10-20T12:44:24+00:00",
+   "statut": "actif"
+  }
+ ]
+}
