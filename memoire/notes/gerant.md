@@ -1,25 +1,25 @@
-_Mis à jour : 2026-11-06 19:01 (Paris)_
+_Mis à jour : 2026-11-09 09:02 (Paris)_
 
-JOURNAL DE BORD DU GÉRANT - SÉANCE DE SUIVI (06/11/2026)
+_Mis à jour : 2026-11-09 09:05 (Paris)_
 
-## 1. État du Portefeuille & Allocation (Valeur totale : ~96 329 $, Cash : ~33 593 $)
+JOURNAL DE BORD DU GÉRANT - SÉANCE DE PRÉPARATION (09/11/2026)
+
+## 1. État du Portefeuille & Allocation (Valeur totale : ~96 073 $, Cash : ~33 593 $)
 - **Positions actives (10/10 - Capacité maximale atteinte)** :
-  1. **UNH** (Healthcare) - Valeur ~9 084 $ (-3.5%), PRU 409.33 $, Prix 394.95 $, Stop 384.66 $, TP 458.32 $. Thèse intacte.
-  2. **JPM** (Financial Services) - Valeur ~5 059 $ (+1.8%), PRU 331.40 $, Prix 337.24 $, Stop 331.40 $ (au PRU), TP 366.03 $.
-  3. **PG** (Consumer Defensive) - Valeur ~7 645 $ (+3.4%), PRU 160.74 $, Prix 166.20 $, Stop 160.74 $ (au PRU), TP 177.44 $.
-  4. **UNP** (Industrials) - Valeur ~7 600 $ (-1.4%), PRU 296.30 $, Prix 292.30 $, Stop 280.23 $, TP 329.59 $.
-  5. **DUK** (Utilities) - Valeur ~7 061 $ (+3.6%), PRU 123.92 $, Prix 128.38 $, Stop 123.92 $ (au PRU), TP 138.69 $.
-  6. **ABBV** (Healthcare) - Valeur ~3 495 $ (+0.2%), PRU 290.61 $, Prix 291.21 $, Stop 273.06 $, TP 325.34 $.
-  7. **XOM** (Energy) - Valeur ~6 471 $ (-3.6%), PRU 172.07 $, Prix 165.92 $, Stop 160.01 $, TP 197.00 $.
-  8. **DIS** (Communication Services) - Valeur ~4 449 $ (0.0%), PRU 117.04 $, Prix 117.09 $, Stop 110.48 $, TP 130.36 $. ER le 17/11/2026.
-  9. **AAPL** (Technology) - Valeur ~6 866 $ (+0.4%), PRU 342.00 $, Prix 343.32 $, Stop 322.57 $, TP 384.34 $.
-  10. **SAN** (Financial Services) - Valeur ~4 988 $ (0.0%), PRU 11.83 $, Prix 11.83 $, Stop 11.00 $, TP 13.60 $. Achetée ce jour (source : contrarien-1, calibrée à 5 000 $).
+  1. **UNH** (Healthcare) - Val ~9 067 $ (-3.7%), PRU 409.33 $, Prix 394.22 $, Stop 384.66 $, TP 458.32 $. Thèse défensive intacte.
+  2. **PG** (Consumer Defensive) - Val ~7 608 $ (+2.9%), PRU 160.74 $, Prix 165.39 $, Stop 160.74 $ (au PRU), TP 177.44 $.
+  3. **UNP** (Industrials) - Val ~7 547 $ (-2.0%), PRU 296.30 $, Prix 290.26 $, Stop 280.23 $, TP 329.59 $.
+  4. **DUK** (Utilities) - Val ~7 029 $ (+3.1%), PRU 123.92 $, Prix 127.80 $, Stop 123.92 $ (au PRU), TP 138.69 $.
+  5. **AAPL** (Technology) - Val ~6 824 $ (-0.2%), PRU 342.00 $, Prix 341.22 $, Stop 322.57 $, TP 384.34 $.
+  6. **XOM** (Energy) - Val ~6 469 $ (-3.6%), PRU 172.07 $, Prix 165.88 $, Stop 160.01 $, TP 197.00 $. Support technique en surveillance.
+  7. **JPM** (Financial Services) - Val ~5 017 $ (+0.9%), PRU 331.40 $, Prix 334.46 $, Stop 331.40 $ (au PRU), TP 366.03 $.
+  8. **SAN** (Financial Services) - Val ~4 957 $ (-0.6%), PRU 11.83 $, Prix 11.76 $, Stop 11.00 $, TP 13.60 $.
+  9. **DIS** (Communication Services) - Val ~4 436 $ (-0.3%), PRU 117.04 $, Prix 116.73 $, Stop 110.48 $, TP 130.36 $. Prochains résultats le 17/11/2026.
+  10. **ABBV** (Healthcare) - Val ~3 498 $ (+0.3%), PRU 290.61 $, Prix 291.53 $, Stop 273.06 $, TP 325.34 $.
 
-- **Mouvements & Arbitrages de la séance** :
-  - **V (Visa)** vendue par le stop suiveur automatique à 416.57 $ (plus-value +50.70 $).
-  - **Achat de SAN** (Banco Santander) exécuté pour 5 000 $ (422 actions à 11.83 $) suite à la proposition contrarienne `contrarien-1` validée avec réserve par le critique.
-
-## 2. Décisions & Suivi
-- **Régime Macro** : S&P 500 au-dessus de sa moyenne 10 mois (Régime Haussier long terme intact).
-- **Sécurisation** : DUK, PG, JPM ont leurs stops remontés au PRU. V sécurisée et sortie en gain.
-- **Prochains catalyseurs** : DIS (résultats le 17/11/2026, à surveiller de près).
+## 2. Décisions & Stratégie de la Séance
+- **Aucun mouvement d'achat ni de vente** : Le portefeuille comptabilise 10 positions ouvertes sur 10 max. Aucune thèse n'est invalidée et aucun stop n'est menacé.
+- **Régime Macro** : S&P 500 haussier long terme (+4.2 % au-dessus de sa moyenne 10 mois), bien que sous tension à court terme (QQQ -12.1% sur 1 mois).
+- **Prochains catalyseurs à surveiller** :
+  - **DIS** : Résultats T3 le 17/11/2026 (réévaluation prévue avant publication).
+  - **NVDA** : Résultats le 17/11/2026.

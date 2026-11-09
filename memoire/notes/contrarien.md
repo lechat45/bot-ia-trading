@@ -1,10 +1,11 @@
-_Mis à jour : 2026-11-06 19:01 (Paris)_
+_Mis à jour : 2026-11-09 09:02 (Paris)_
 
-Notes séance 2026-11-06 19:01 Paris
-- Portefeuille complet, liquidités 38.6k, positions 10, aucune thèse cassée.
-- SAN a été identifié comme opportunité contrarienne (PER attendu 8.4 vs médiane 10.1, marge nette 32.6%, RSI 36, stabilisation >2 séances, prix actuel 11.82$). Historique montre proposition précédente non achetée (3.2% rendement). J’ai proposé d’acheter 7k$ (~7% du compte) avec stop 7% et TP 15% (ratio 2.14). Confiance moyen.
-- Rappel DUK : résultats T3 solides, thèse intacte, suivi normal.
-- Positions existantes surveillées : UNH, JPM, PG, UNP, DUK, ABBV, XOM, DIS, AAPL – stops respectés, aucune action à vendre.
-- Suivi secteur semi‑conducteurs : chute non stabilisée, pas d’entrée.
-- Leçon rappelée : attendre 2 séances sans nouveau plus bas avant d’entrer contrarien.
-- Prochaine action : surveiller SAN pour éventuel stop ou prise de profit, surveiller résultats de SAN (28/10 déjà passés) et tout revirement macro.
+_Mis à jour : 2026-11-09 09:05 (Paris)_
+
+Notes séance 2026-11-09 09:05 Paris
+- Portefeuille & Positions : 10 positions ouvertes (UNH, JPM, PG, UNP, DUK, ABBV, XOM, DIS, AAPL, SAN). Liquidités ~33.6k$. Toutes les thèses restent intactes, aucun stop touché. SAN (acheté le 06/11) en légère consolidation (-0.6%), thèse contrarienne toujours valide.
+- Recherche de nouvelles opportunités contrariennes :
+  - ASML (Europe/Semis) : Forts fondamentaux (croissance CA +55%, marge nette 34%, dette/FP 9%), chute de -19.5% sur 1m (RSI 35). Rebond de +4.8% lors de la dernière séance (1359.29$ -> 1424.37$). Toutefois, le secteur des semi-conducteurs reste sous pression et il n'y a qu'une seule vraie journée de rebond (la règle exige 2+ séances sans nouveau plus bas). Mise sous surveillance active pour confirmation de la stabilisation.
+  - ENPH & NOK : Fondamentaux dégradés ou marges trop faibles par rapport à l'industrie, opportunités écairtées.
+- Leçon & Discipline : Ne pas précipiter les entrées sur le secteur semi-conducteur en baisse globale sans confirmation absolue de support sur au moins 2 séances.
+- Prochaines actions : Surveiller la tenue de SAN et la stabilisation d'ASML pour un éventuel achat ultérieur.

@@ -1,21 +1,31 @@
-_Mis à jour : 2026-11-06 19:01 (Paris)_
+_Mis à jour : 2026-11-09 09:02 (Paris)_
 
-_Mis à jour : 2026-11-06 19:01 (Paris) / 13:01 (NY)_ - Séance de Suivi (Bourse Ouverte)
+_Mis à jour : 2026-11-09 09:02 (Paris) / 03:02 (NY)_ - Séance de Préparation (Bourse Fermée)
 
 Analyste Équilibre - Résumé & Mémoire de Séance
 
 1. Contexte Macro & Régime de Marché :
-- Marché globalement stable lors de cette séance de suivi (S&P 500 +0,4%, Nasdaq +1,1%). Le rapport sur l'emploi américain d'octobre a surpris positivement (+165k créations d'emplois, chômage à 4,1%), apaisant les craintes de récession à court terme.
-- La rotation sectorielle vers les défensifs et la stabilisation technologique se poursuivent.
+- S&P 500 : +0,1% sur la séance (5j: -2,6%, 1m: -4,9%). Nasdaq 100 : -12,1% sur 1m (correction tech).
+- Tendance de fond S&P 500 (règle des 10 mois de Faber) : Haussière (+4,2% au-dessus de la SMA 10 mois à 725.41).
+- Rotation sectorielle marquée : repli marqué sur la Tech (XLK -8,2% sur 5j) et l'Énergie (XLE -11,9% sur 5j) ; résilience des secteurs défensifs (Communication +4,9%, Utilities, Conso de base, Santé).
 
-2. État du Portefeuille & Suivi des Positions (10 positions / 10 max) :
-- Valeur totale : ~96 277 USD | Liquidités : ~38 585 USD (39,5% de cash, excellente réserve de sécurité).
-- Performance globale du portefeuille : -3,72% depuis l'origine (impacté par les corrections récentes sur certaines valeurs d'énergie et de santé, mais l'exposition est saine).
-- Positions en gain et protégées par stop suiveur au breakeven : DUK (+3,6%), PG (+3,2%), JPM (+1,6%), AAPL (+0,2%).
-- Positions en léger repli mais thèses intactes et stops éloignés respectant la gestion du risque : UNH (-3,7%), XOM (-3,5%), UNP (-1,4%), ABBV (-0,0%), DIS (-0,1%). Aucune invalidation de stop ni de thèse fondamentale.
+2. État du Portefeuille & Allocation Sectorielle (10 positions / 10 MAX) :
+- Valeur totale : ~96 073 USD | Cash : ~33 593 USD (~35,0% de liquidités, coussin de sécurité idéal).
+- Portefeuille au complet (10/10 positions) réparti de manière très équilibrée sur 8 secteurs :
+  * Santé (~13.1%) : UNH (-3,7%), ABBV (+0,3%)
+  * Finance (~11.1%) : JPM (+0,9%), SAN (-0,6%)
+  * Conso de Base (~7.9%) : PG (+2,9%)
+  * Industrie (~7.8%) : UNP (-2,0%)
+  * Utilities (~7.3%) : DUK (+3,1%)
+  * Énergie (~6.7%) : XOM (-3,6%)
+  * Technologie (~6.2%) : AAPL (-0,2%)
+  * Communication (~4.6%) : DIS (-0,3%)
 
-3. Évaluation Sectorielle & Équilibre :
-- Excellente diversification sectorielle maintenue : Santé, Finance, Consommation de base, Industrielles, Services aux collectivités (Utilities), Énergie, Communication, Technologie. Aucun secteur ne dépasse les limites réglementaires.
+3. Suivi des Positions & Risque :
+- Aucune invalidation de thèse ni de stop loss.
+- Stops suiveurs au breakeven actifs sur DUK (+3,1%), PG (+2,9%), JPM (+0,9%), ABBV (+0,3%).
+- Positions en léger retrait (UNH, XOM, UNP, SAN, DIS, AAPL) conservent des stops protecteurs bien calibrés.
 
-4. Décision pour cette Séance de Suivi :
-- Maintien intégral des 10 positions actuelles. Aucune vente requise car les stops protègent le capital et les thèses fondamentales restent valides. Le cash important (~40%) offre une flexibilité optimale pour la suite.
+4. Décision pour cette Séance de Préparation :
+- AUCUNE PROPOSITION D'ACHAT OU DE VENTE. Le portefeuille est au maximum du nombre de positions autorisées (10/10) et sa diversification sectorielle est optimale. Alléger ou vendre une position sans raison valable altérerait l'équilibre du compte.
+- Conserver 35% de cash pour amortir les turbulences de marché et conserver une grande flexibilité.
