@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 33592.77001000001,
+   "cash": 40031.28001000001,
    "positions": {
     "UNH": {
      "lots": [
@@ -102,22 +102,6 @@
      ],
      "these": "Achat de suivi de tendance sur ABBV (AbbVie) - Proposition sentiment-1 avec ajustement critique sur la taille : Publication de résultats T3 solide fin octobre, augmentation du dividende de +5.2%, objectifs réhaussés par les analystes. Tendance haussière parfaite (Prix > SMA20 284$ > SMA50 269$), RSI14 très sain à 59.0. Taille réduite à 3 500 $ pour maintenir le secteur Santé à ~27.4% (sous la limite globale de 35%). Invalidation sous 273.48 $ (-6.0%). Objective TP +12.0% (325.35 $)."
     },
-    "XOM": {
-     "lots": [
-      {
-       "qty": 39,
-       "prix": 172.066154,
-       "date": "2026-11-05T14:40:34+00:00",
-       "stop": 160.01,
-       "tp": 197.0,
-       "statut": "ouvert",
-       "parent_id": "ba4c86cd-11d6-4375-9650-9581d4d9b514",
-       "stop_id": "65a40ebd-684e-46e2-aa65-bc539aa15d09",
-       "tp_id": "57aac412-56c8-437d-b62d-5d835b931bd6"
-      }
-     ],
-     "these": "05/11/2026 - Opportunité Qualité sur repli technique majeur : XOM (ExxonMobil). 1) Pourquoi maintenant : Repli sectoriel de -6.9% sur 5j ramenant XOM directement sur le support clé de sa SMA50 (168.50 $) avec un RSI14 sain à 44.0. Permet d'intégrer le secteur Énergie (0% du portefeuille). 2) Fondamentaux de Qualité : Marge op. 17.0%, ROE 15.5%, FCF massif de 28.9 Md$, Dette/FP 13%. Croissance du CA +32.6%, PER attendu 14.1x. Prochains résultats dans 85j (29/01/2027). 3) Sortie/Invalidation : Stop-loss à -7.0% (157.60$, sous la SMA50), TP à +14.5% (194.03$). Horizon 1 à 3 mois."
-    },
     "DIS": {
      "lots": [
       {
@@ -156,18 +140,18 @@
        "qty": 422,
        "prix": 11.83,
        "date": "2026-11-06T18:08:18+00:00",
-       "stop": 11.0,
+       "stop": 11.83,
        "tp": 13.6,
        "statut": "ouvert",
        "parent_id": "ab753d47-b54f-4e44-befb-a7caa5a8f6bb",
-       "stop_id": "f0b0ed33-39b0-47ae-a672-05d0a936e6c8",
+       "stop_id": "e64f073b-4e60-440e-a863-b07b58c2f7ea",
        "tp_id": "45d13489-8480-4983-9409-d456a0b8819e"
       }
      ],
      "these": "Achat contrarien sur Banco Santander (SAN) proposé par contrarien-1 et validé avec ajustement de taille à 5000$ par le critique. Titre décoté (PER attendu 8.4 vs 10.1 médiane sectorielle, marge nette 32.6%, ROE 13.1%). Stabilisation confirmée avec 5 séances au-dessus du support des 11.12$ (cours 11.82$, RSI 36). Stop loss à 11.00$ (-7.0%), TP à 13.60$ (+15.0%). Position de 5 000$ calibrée pour contrôler le risque sectoriel."
     }
    },
-   "realise": -3605.119984000003,
+   "realise": -3877.1899900000035,
    "evenements": [
     {
      "ts": "2026-10-23T07:02:31+00:00",
@@ -270,7 +254,7 @@
      "texte": "Stop loss déclenché : 17 V vendues à 416.57 $ (plus-value +50.70 $)"
     }
    ],
-   "derniere_seance": "2026-11-09T08:02:34+00:00"
+   "derniere_seance": "2026-11-09T18:01:21+00:00"
   }
  }
 }
