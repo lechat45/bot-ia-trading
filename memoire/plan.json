@@ -1,6 +1,37 @@
 {
- "date": "2026-11-09",
- "cree_le": "2026-11-09T08:02:34+00:00",
+ "date": "2026-11-10",
+ "cree_le": "2026-11-10T08:02:38+00:00",
  "simulation": false,
- "ordres": []
+ "ordres": [
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "acheter",
+   "symbole": "LIN",
+   "source": "qualite-1",
+   "these": "Achat de LIN (Linde plc) - Leader mondial des gaz industriels et des technologies de procédés (Secteur Matériaux de base actuellement à 0% du portefeuille). Fondamentaux irréprochables validant les critères Qualité : croissance du CA de 9.2% (>8%), marge opérationnelle de 28.0% (>15%), ROE de 17.7% (>15%), FCF positif de 4.2Md$ et dette/FP de 65 (<150). Tendance technique saine au-dessus de sa SMA50 et SMA200. Résultats T3 déjà publiés, incertitude levée. Risque : ralentissement industriel mondial. Invalidation : clôture durable sous SMA200 ou cassure du stop à 7.5%. Horizon 3-6 mois. Confiance élevée.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-10T08:11:14+00:00",
+   "prix_reference": 520.55,
+   "montant_usd": 6246.6,
+   "qty_estimee": 12,
+   "stop_loss_pct": 7.5,
+   "take_profit_pct": 15.0
+  },
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "acheter",
+   "symbole": "ABNB",
+   "source": "equilibre-1",
+   "these": "Achat de ABNB (Airbnb, Inc.) pour ~6 500 USD (~6.7% du portefeuille). Ouverture du secteur Consommation Cyclique (XLY) actuellement à 0%. Leader incontesté du voyage/hébergement (Market Cap : 113.6 Md$). Marge opérationnelle de 41.5%, FCF positif de 3.2 Md$, dette très faible (Dette/FP = 27%). Résultats T3 publiés le 05/11/2026 : croissance CA +18.9%, bénéfices +42.7%. Prix nettement au-dessus des SMA20, SMA50 et SMA200. Stop-loss élargi à 7.0% suite à l'avis du critique (1,8 ATR). Take-profit à 12.0%. Horizon 1-3 mois. Confiance élevée.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-10T08:11:14+00:00",
+   "prix_reference": 190.42,
+   "montant_usd": 6474.28,
+   "qty_estimee": 34,
+   "stop_loss_pct": 7.0,
+   "take_profit_pct": 12.0
+  }
+ ]
 }
