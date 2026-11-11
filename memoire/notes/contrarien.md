@@ -1,6 +1,10 @@
-_Mis à jour : 2026-11-10 09:02 (Paris)_
+_Mis à jour : 2026-11-11 09:02 (Paris)_
 
-- Portefeuille & Positions : 9 positions détenues. La place libérée par la proposition de vente sur DIS (ou le rééquilibrage potentiel) et le cash disponible permettent d'envisager de nouvelles opportunités.
-- Opportunités Contrariennes validées :
-  - ASML : Position proposée à l'achat pour un montant de 5000$ (risque ~0.47% du compte). Chute de -14.9% sur 1 mois suite à des craintes sectorielles exagérées. Fondamentaux extrêmement solides (CA +55%, marge 34%, dette/FP 9%, PER attendu 23.9x). Stabilisation confirmée (rebond à 1512$ après un plus bas à 1359$, RSI à 43). Stop loss à 10%, objectif à +22%.
-- Prochaines étapes : Suivre la validation des ordres par le critique et le gérant à l'ouverture de la bourse. Continuer à surveiller les positions et le respect des règles de gestion des risques.
+_Mis à jour : 2026-11-11 09:02 (Paris)_
+
+- Portefeuille : 10 positions actuellement ouvertes (limite maximale atteinte). Aucune nouvelle position ne peut être ouverte sans la vente d'une ligne existante (ex: proposition sur DIS).
+- Opportunité identifiée & en attente de place disponible :
+  - NOK (Nokia) : Chute de -16.5% sur un mois malgré de très bons résultats T3 (BPA 0.10$ vs 0.08$) et un relèvement de note par Moody's le 03/11. Dette/FP de 16%, FCF de 1.3Md$, PER forward à 17.1x. Rebond stabilisé sur 3 séances après un bas à 7.45$ (actuellement 8.24$, RSI 42). À proposer dès qu'un emplacement se libère (Montant ~4000$, Stop -12% à 7.25$, TP +21% à 9.97$).
+- Suivi des propositions :
+  - ASML : Toujours en attente d'arbitrage/décision du gérant.
+- Prochaines étapes : Attendre les arbitrages du gérant à l'ouverture du marché et la libération potentielle d'un slot de position pour soumettre NOK.
