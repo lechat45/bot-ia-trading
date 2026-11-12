@@ -1,23 +1,27 @@
-_Mis à jour : 2026-11-11 19:01 (Paris)_
+_Mis à jour : 2026-11-12 09:02 (Paris)_
+
+_Mis à jour : 2026-11-12 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 11/11/2026 (Séance de Suivi - Bourse Ouverte)
+- Date : 12/11/2026 (Séance de Préparation - Bourse Fermée)
 
-## État du Portefeuille (10/10 positions) :
-- Valeur globale : ~97 355 $ (Cash : ~33 791 $).
+## État du Portefeuille (10/10 positions - Portefeuille au complet) :
+- Valeur globale : ~97 640 $ (Cash : ~33 791 $).
 - Suivi des positions :
-  1. UNH : -2.47% (Stop 384.66 $, distance 3.6%). Thèse intacte, repli technique dans une tendance de fond saine.
-  2. JPM : +3.73% (Stop au BE à 331.40 $ grâce au suiveur auto). Solide.
-  3. PG : +3.87% (Stop au BE à 160.74 $). Tendance haussière confirmée.
-  4. UNP : +1.69% (Stop à 280.23 $). RAS.
-  5. DUK : +3.36% (Stop au BE à 123.92 $). RAS.
-  6. ABBV : +0.44% (Stop à 273.06 $). RAS.
-  7. DIS : +1.76% (Stop à 110.48 $). Résultats T3 prévus le 17/11/2026 (dans 6 jours). À surveiller de près lors des prochaines séances.
-  8. AAPL : +3.34% (Stop à 322.30 $). Bien orienté avec le rebond du secteur technologique (Nasdaq +2.8%).
-  9. SAN : +5.40% (Stop à 10.01 $). Solide.
-  10. LIN : +0.70% (Stop à 480.37 $). RAS.
+  1. UNH : -1.55% (Stop 384.66 $, distance 4.6%). Thèse intacte dans le secteur défensif Santé.
+  2. JPM : +3.60% (Stop au BE à 331.40 $). Très solide.
+  3. PG : +4.29% (Stop au BE à 160.74 $). Solide tendance haussière.
+  4. UNP : +1.94% (Stop à 280.23 $). RAS.
+  5. DUK : +3.93% (Stop au BE à 123.92 $). RAS.
+  6. ABBV : +1.47% (Stop à 273.06 $). RAS.
+  7. DIS : +2.23% (Stop à 110.48 $). Résultats T3 prévus le 17/11/2026 (dans 5 jours).
+  8. AAPL : +3.64% (Stop à 343.27 $). Tendance préservée.
+  9. SAN : +5.40% (Stop à 10.01 $). Meilleure performance du portefeuille.
+  10. LIN : +1.30% (Stop à 480.37 $). RAS.
+
+## Watchlist / Titres sous surveillance (pour réallocation future) :
+- **MSFT (Microsoft)** : Repli technique de -6.4% sur la SMA50 (518.23 $), RSI à 50.0. Excellente Qualité (Marge Op 47.1%, ROE 34.2%, Dette/FP 28%, PER attendu 21.5x). Candidat N°1 au prochain débouclage de position.
 
 ## Bilan et Décision de la Séance :
-- Portefeuille complet à 10/10 positions.
-- Aucune invalidation de thèse ni déclenchement de stop loss. Les mécanismes automatiques de stop suiveur à +3% ont sécurisé plusieurs lignes (JPM, PG, DUK) au niveau du prix d'achat.
-- Aucune action requise en cette session de suivi : le maintien intégral de la structure en cours est la décision optimale.
+- Portefeuille complet à 10/10 positions. Aucune invalidation de thèse ni déclenchement de stop.
+- Aucune transaction proposée ce jour : conservation intégrale de l'allocation.

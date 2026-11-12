@@ -1,10 +1,8 @@
-_Mis à jour : 2026-11-11 09:02 (Paris)_
+_Mis à jour : 2026-11-12 09:02 (Paris)_
 
-_Mis à jour : 2026-11-11 09:02 (Paris)_
+_Mis à jour : 2026-11-12 09:02 (Paris)_
 
-- Portefeuille : 10 positions actuellement ouvertes (limite maximale atteinte). Aucune nouvelle position ne peut être ouverte sans la vente d'une ligne existante (ex: proposition sur DIS).
-- Opportunité identifiée & en attente de place disponible :
-  - NOK (Nokia) : Chute de -16.5% sur un mois malgré de très bons résultats T3 (BPA 0.10$ vs 0.08$) et un relèvement de note par Moody's le 03/11. Dette/FP de 16%, FCF de 1.3Md$, PER forward à 17.1x. Rebond stabilisé sur 3 séances après un bas à 7.45$ (actuellement 8.24$, RSI 42). À proposer dès qu'un emplacement se libère (Montant ~4000$, Stop -12% à 7.25$, TP +21% à 9.97$).
-- Suivi des propositions :
-  - ASML : Toujours en attente d'arbitrage/décision du gérant.
-- Prochaines étapes : Attendre les arbitrages du gérant à l'ouverture du marché et la libération potentielle d'un slot de position pour soumettre NOK.
+- État du portefeuille : 10 positions (limite maximale atteinte). Aucune vente arbitraire/préccipitée de nos positions solides actuelles n'est justifiée à ce stade (UNH a une thèse moyen/long terme solide avec PER à 17,3x et FCF à 26,5Md$).
+- Opportunité suivie & prête à être soumise dès qu'une position sera clôturée par le gérant :
+  - NOK (Nokia) : Chute exagérée (-14,4% sur 1m), nette stabilisation (de 7,45$ à 8,42$, RSI 56). Dette/FP 16%, FCF 1,3Md$, PER fwd 17,5x, croissance bénéfices +222%. Ordre de 4 000$ préparé (Stop -12% à ~7,41$, TP +21% à ~10,19$).
+- Prochaines étapes : Attendre qu'une ligne du portefeuille se dénoue (ex: prise de profit sur PG, JPM ou SAN) pour proposer Nokia (NOK).

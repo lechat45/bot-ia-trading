@@ -1,35 +1,34 @@
-_Mis à jour : 2026-11-11 19:01 (Paris)_
+_Mis à jour : 2026-11-12 09:02 (Paris)_
 
-_Mis à jour : 2026-11-11 19:02 (Paris) / 13:02 (NY)_ - Séance de Suivi (Bourse Ouverte)
+_Mis à jour : 2026-11-12 09:02 (Paris) / 03:02 (NY)_ - Séance de Préparation (Bourse Fermée)
 
 Analyste Équilibre - Synthèse & Carnet de Bord
 
 1. Contexte du Marché & Régime Macro :
-- Régime Macro : Tendance de fond toujours haussière (S&P 500 +4,2 % au-dessus de sa SMA 10 mois).
-- Bourse ouverte : Rebonds puissants du QQQ (+2,8 %) et du S&P 500 (+1,5 %) tirés par la technologie.
-- Dynamicité sectorielle : Élan cyclique/tech aujourd'hui, repli temporaire de certaines valeurs défensives/santé.
+- Régime Macro : Tendance de fond haussière (S&P 500 +4,2 % au-dessus de sa SMA 10 mois).
+- Marché stable à l'approche de la séance de New York : SPY (0,0 %), QQQ (-0,2 %), IWM (-0,0 %).
+- Largeur de marché solide : 66 % des grandes valeurs au-dessus de leur SMA 200 et 59 % au-dessus de leur SMA 50.
 
-2. État du Portefeuille (10/10 positions max atteintes, ~34,7 % cash) :
-- Valeur totale du compte : 97 355,76 USD | Cash : 33 791,04 USD (34,7 %).
-- Portefeuille robuste et diversifié sur 8 secteurs distincts :
-  1. Healthcare (13,0 %) : UNH (9 181,94 $, -2,5 %) & ABBV (3 502,62 $, +0,4 %)
-  2. Financial Services (11,3 %) : JPM (5 156,55 $, +3,7 %) & SAN (5 860 $, +5,4 %)
-  3. Industrials (8,0 %) : UNP (7 833,80 $, +1,7 %)
-  4. Consumer Defensive (7,9 %) : PG (7 680,39 $, +3,9 %)
-  5. Technology (7,3 %) : AAPL (7 094,90 $, +3,3 %)
-  6. Utilities (7,2 %) : DUK (7 044,68 $, +3,4 %)
-  7. Basic Materials (5,8 %) : LIN (5 660 $, +0,7 %)
-  8. Communication Services (4,6 %) : DIS (4 525,99 $, +1,8 %)
+2. État du Portefeuille (10/10 positions max atteintes, ~34,6 % cash) :
+- Valeur totale du compte : 97 640,90 USD | Cash : 33 791,04 USD (34,6 %).
+- Répartition sectorielle équilibrée sur 8 secteurs distincts :
+  1. Healthcare (13,1 %) : UNH (9 269 $, -1,55 %) & ABBV (3 538 $, +1,47 %)
+  2. Financial Services (11,3 %) : JPM (5 150 $, +3,60 %) & SAN (5 860 $, +5,40 %)
+  3. Industrials (8,0 %) : UNP (7 853 $, +1,94 %)
+  4. Consumer Defensive (7,9 %) : PG (7 711 $, +4,29 %)
+  5. Technology (7,3 %) : AAPL (7 116 $, +3,64 %)
+  6. Utilities (7,3 %) : DUK (7 083 $, +3,93 %)
+  7. Basic Materials (5,8 %) : LIN (5 660 $, +1,30 %)
+  8. Communication Services (4,7 %) : DIS (4 547 $, +2,23 %)
 
 3. Analyse de Santé & Gestion des Risques :
 - 9 positions sur 10 en gain net.
-- Protection par stops au point d'entrée (breakeven) déjà en place sur JPM, PG et DUK.
-- UNH en léger repli (-2,47 %), mais s'inscrit dans un cadre technique et fondamental solide (stop maintenu à 384,66 $, soit -3,6 % du cours).
-- Respect strict des limites sectorielles (max 35 %, secteur max ici à 13,0 %) et individuelles (max 15 %, ligne max à 9,4 %).
+- Stops de protection breakeven / bénéficiaires en place sur plusieurs lignes (JPM, PG, DUK, etc.).
+- UNH en léger repli (-1,55 %), stop maintenu à 384,66 $ (à 4,6 % du cours).
+- Strict respect des garde-fous : aucun secteur ne dépasse 13,1 % (limite 35 %), aucune ligne ne dépasse 9,5 % (limite 15 %).
 
-4. Recommandation / Décision :
-- **STATU QUO / MAINTIEN** : Portefeuille plein (10/10), thèses de tenue intactes sur l'ensemble des titres. Pas de recommandation de vente ou d'allègement requis.
+4. Décision :
+- **STATU QUO / MAINTIEN DE POSITION (0 ordre proposé)** : Portefeuille plein (10/10 positions) et optimalement diversifié. Les thèses d'investissement initiales demeurent pleinement valides sur tous les titres détenus.
 
-5. Prochains Événements & Surveillance :
-- Résultats de DIS et NVDA le 17/11/2026.
-- Suivi du stop loss de UNH.
+5. Prochains Événements à Surveiller :
+- 17/11/2026 : Publication des résultats T3 de Walt Disney (DIS).
