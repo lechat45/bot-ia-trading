@@ -353,16 +353,16 @@
     "appels": 14
    },
    "gemini#1": {
-    "tokens": 265288,
-    "appels": 19
+    "tokens": 292050,
+    "appels": 21
    },
    "groq#3": {
     "tokens": 12776,
     "appels": 2
    },
    "gemini#3": {
-    "tokens": 78073,
-    "appels": 7
+    "tokens": 132274,
+    "appels": 11
    }
   }
  }
