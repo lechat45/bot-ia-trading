@@ -4,24 +4,8 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 33791.04001000001,
+   "cash": 43100.52001000001,
    "positions": {
-    "UNH": {
-     "lots": [
-      {
-       "qty": 23,
-       "prix": 409.33,
-       "date": "2026-10-20T13:31:03+00:00",
-       "stop": 384.66,
-       "tp": 458.32,
-       "statut": "ouvert",
-       "parent_id": "52b8b77d-57ba-408e-a769-5a8bc7b5f0a6",
-       "stop_id": "a8c86701-c2c3-4487-bf4e-ccc4bb109b7b",
-       "tp_id": "a986985f-fc21-49c4-be65-6741ec1535a8"
-      }
-     ],
-     "these": "Diversification sectorielle vers la Santé (Healthcare) dans un marché en réallocation vers les valeurs défensives (XLK -6.3%, QQQ -4.4% sur 5j). Leader incontournable de l'assurance santé (Cap 365.2Md$), FCF massif de 26.5Md$, PER attendu 17.5. Tendance haussière confirmée au-dessus de SMA20 (380.01$), SMA50 (386.12$) et SMA200 (356.04$), surperformance +7.6% sur 5j. Stop loss à 6.0% (382.50$), Take Profit à 12.0% (455.75$). Prochains résultats dans 84 jours (12/01/2027)."
-    },
     "JPM": {
      "lots": [
       {
@@ -167,12 +151,8 @@
      "these": "Achat de LIN (Linde plc) - Leader mondial des gaz industriels et des technologies de procédés (Secteur Matériaux de base actuellement à 0% du portefeuille). Fondamentaux irréprochables validant les critères Qualité : croissance du CA de 9.2% (>8%), marge opérationnelle de 28.0% (>15%), ROE de 17.7% (>15%), FCF positif de 4.2Md$ et dette/FP de 65 (<150). Tendance technique saine au-dessus de sa SMA50 et SMA200. Résultats T3 déjà publiés, incertitude levée. Risque : ralentissement industriel mondial. Invalidation : clôture durable sous SMA200 ou cassure du stop à 7.5%. Horizon 3-6 mois. Confiance élevée."
     }
    },
-   "realise": -3877.1899900000035,
+   "realise": -3982.299990000003,
    "evenements": [
-    {
-     "ts": "2026-10-26T13:40:19+00:00",
-     "texte": "Ouverture, ordre planifié acheter PG : Achat exécuté : 46 PG à 160.74 $ (stop 152.55 $, objectif 177.44 $)"
-    },
     {
      "ts": "2026-10-26T13:40:25+00:00",
      "texte": "Ouverture, ordre planifié acheter VLO : Achat exécuté : 14 VLO à 424.51 $ (stop 401.34 $, objectif 473.54 $)"
@@ -268,6 +248,10 @@
     {
      "ts": "2026-11-10T14:40:30+00:00",
      "texte": "Ouverture, ordre planifié acheter ABNB : déjà 10 positions : vendez-en une avant d'en ouvrir une autre"
+    },
+    {
+     "ts": "2026-11-13T14:40:20+00:00",
+     "texte": "Ouverture, ordre planifié vendre UNH : Vente exécutée : 23 UNH à 404.76 $ (plus-value -105.11 $)"
     }
    ],
    "derniere_seance": "2026-11-13T08:02:36+00:00"

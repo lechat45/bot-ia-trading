@@ -10,11 +10,16 @@
    "symbole": "UNH",
    "source": "sentiment-1",
    "these": "Vente totale de UNH suite à la proposition sentiment-1 validée par le critique. UNH stagne depuis 24 jours (-1,03 %, RSI 40) et sous-performe nettement la dynamique de marché (+6,9% sur la Tech, +3,3% sur le SP500). Cette vente permet d'optimiser la rotation du portefeuille (10/10) et de garder la ligne Healthcare ABBV déjà en gain.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-13T08:10:50+00:00",
    "prix_reference": 405.13,
    "pourcentage": 100.0,
-   "qty_estimee": 23
+   "qty_estimee": 23,
+   "resultat": "Vente exécutée : 23 UNH à 404.76 $ (plus-value -105.11 $)",
+   "prix_execution": 404.76,
+   "qty": 23,
+   "traite_le": "2026-11-13T14:40:20+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-11-13T14:40:20+00:00"
 }
