@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bot IA Trading</title>
+  <script>
+    // Thème appliqué avant l'affichage pour éviter un flash (clair par défaut).
+    try { if (localStorage.getItem("theme") === "dark") document.documentElement.dataset.theme = "dark"; } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23f4884a'/><stop offset='1' stop-color='%23c4502c'/></linearGradient></defs><rect width='32' height='32' rx='7' fill='url(%23g)'/><path d='M8 21l5-5 4 4 7-8' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 4 4 7-7"/><circle cx="20" cy="8" r="0.6" fill="currentColor"/></svg></span>
+      <span class="brand-name">Bot IA Trading</span>
+    </div>
+    <div class="topbar-mid">
+      <span class="js-mode pill">…</span>
+      <span class="js-market market"><i class="dot"></i><span>Marché…</span></span>
+    </div>
+    <div class="topbar-actions">
+      <button id="theme-btn" class="icon-btn" aria-label="Passer en thème sombre" title="Thème clair / sombre"></button>
+      <button id="btn-real" class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></svg>
+        <span>Séance réelle</span>
+      </button>
+      <button id="btn-sim" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8a1 1 0 0 0-1.5.86z"/></svg>
+        <span>Lancer une simulation</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="sidenav" aria-label="Pages">
+      <a class="nav-item active" href="#accueil" data-p="accueil"><span class="js-ic" data-ic="home"></span>Accueil</a>
+      <a class="nav-item" href="#ia" data-p="ia"><span class="js-ic" data-ic="users"></span>Les IA<span class="count">6</span></a>
+      <a class="nav-item" href="#journal" data-p="journal"><span class="js-ic" data-ic="list"></span>Journal</a>
+      <a class="nav-item" href="#bureau" data-p="bureau"><span class="js-ic" data-ic="desktop"></span>Bureau</a>
+      <div class="nav-foot" id="nav-foot"></div>
+    </nav>
+
+    <main class="content" id="main">
+      <div id="banner" class="banner" hidden></div>
+
+      <!-- ============ Page 1 : Accueil, les chiffres ============ -->
+      <section class="page" id="page-accueil" data-page="accueil">
+        <div class="page-head">
+          <div>
+            <div class="overline">6 IA en équipe · fonctions d'Aywen</div>
+            <h1>Accueil</h1>
+          </div>
+          <div class="status-mobile">
+            <span class="js-mode pill">…</span>
+            <span class="js-market market"><i class="dot"></i><span>Marché…</span></span>
+          </div>
+        </div>
+
+        <div class="band">
+          <svg class="band-curves" viewBox="0 0 560 280" aria-hidden="true">
+            <path d="M40 250 C 160 250, 200 120, 320 140 S 480 40, 560 30" stroke-width="2" opacity=".55"/>
+            <path d="M120 290 C 240 270, 270 170, 380 175 S 520 90, 600 80" stroke-width="1.4" opacity=".3"/>
+            <path d="M0 210 C 110 220, 170 90, 280 100 S 440 0, 540 -10" stroke-width="1" opacity=".2"/>
+          </svg>
+          <div>
+            <div class="overline">Valeur du compte de l'équipe</div>
+            <div class="band-value skeleton" id="k-equity">100 000,00 $</div>
+            <div class="band-delta" id="k-day">&nbsp;</div>
+          </div>
+          <div class="band-tiles">
+            <div class="tile">
+              <div class="overline">Performance 1 mois</div>
+              <div class="tile-v skeleton" id="k-perf">+0,00 %</div>
+              <div class="tile-s" id="k-perf-sub">&nbsp;</div>
+            </div>
+            <div class="tile">
+              <div class="overline">Liquidités</div>
+              <div class="tile-v skeleton" id="k-cash">0 $</div>
+              <div class="meter"><i id="k-cash-bar" style="width:0%"></i></div>
+            </div>
+            <div class="tile">
+              <div class="overline">Positions</div>
+              <div class="tile-v skeleton" id="k-pos">0</div>
+              <div class="tile-s" id="k-pos-sub">&nbsp;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="bilan-card" hidden>
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="book"></span>
+            <h2>Bilan de la semaine</h2>
+            <span class="right" id="bilan-date"></span>
+          </div>
+          <div class="b-text" id="bilan-text"></div>
+        </div>
+
+        <div class="row-2">
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="chart"></span>
+              <h2>Évolution du compte</h2>
+              <span class="right" id="chart-legend">30 derniers jours</span>
+            </div>
+            <div id="chart"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="calendar"></span>
+              <h2>Journée de bourse</h2>
+              <span class="right" id="live-status">En veille</span>
+            </div>
+            <ol class="day" id="day"></ol>
+            <div class="live" id="live"></div>
+            <pre class="console" id="console" hidden></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="briefcase"></span>
+            <h2>Positions</h2>
+            <span class="right">Stop loss, prix actuel et objectif de gain</span>
+          </div>
+          <div class="table-wrap" id="positions-table"></div>
+        </div>
+
+        <div class="row-2">
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="calendar"></span>
+              <h2>Plan d'ouverture</h2>
+              <span class="right" id="plan-sub"></span>
+            </div>
+            <div id="plan-card"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="wallet"></span>
+              <h2>Répartition du compte</h2>
+              <span class="right">par secteur</span>
+            </div>
+            <div id="repart-card"></div>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="chart"></span>
+              <h2>Statistiques</h2>
+              <span class="right" id="stats-sub"></span>
+            </div>
+            <div id="stats-card"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="book"></span>
+              <h2>Leçons de l'équipe</h2>
+              <span class="right" id="lecons-sub"></span>
+            </div>
+            <div id="lecons-card"></div>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="bell"></span>
+              <h2>Rappels de l'équipe</h2>
+              <span class="right" id="rappels-sub"></span>
+            </div>
+            <div id="rappels-card"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="ic-box js-ic" data-ic="shield"></span>
+              <h2>État du système</h2>
+              <span class="right" id="systeme-sub"></span>
+            </div>
+            <div id="systeme-card"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Page 2 : les IA et leur réflexion ============ -->
+      <section class="page" id="page-ia" data-page="ia" hidden>
+        <div class="page-head">
+          <div>
+            <div class="overline">4 analystes, un critique, un gérant</div>
+            <h1>Les IA</h1>
+          </div>
+          <label class="field"><span class="small muted">Séance</span><select class="js-session select"></select></label>
+        </div>
+        <div class="ia-layout">
+          <div class="ia-list" id="ia-list"></div>
+          <div class="card ia-panel" id="ia-panel"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="spark"></span>
+            <h2>Classement des analystes</h2>
+            <span class="right" id="rank-sub"></span>
+          </div>
+          <div id="rank-card"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ic-box js-ic" data-ic="filter"></span>
+            <h2>Ce que valent les critères du screener</h2>
+            <span class="right" id="bt-sub"></span>
+          </div>
+          <div id="bt-card"></div>
+        </div>
+      </section>
+
+      <!-- ============ Page 3 : le journal (outils et réflexions) ============ -->
+      <section class="page" id="page-journal" data-page="journal" hidden>
+        <div class="page-head">
+          <div>
+            <div class="overline">Chaque outil utilisé et chaque réflexion</div>
+            <h1>Journal</h1>
+          </div>
+          <label class="field"><span class="small muted">Séance</span><select class="js-session select"></select></label>
+        </div>
+        <div class="card">
+          <div class="filters" id="j-agents"></div>
+          <div class="filters" id="j-types"></div>
+          <div class="usage" id="j-usage"></div>
+        </div>
+        <div class="card"><div id="j-timeline"></div></div>
+      </section>
+
+      <!-- ============ Page 4 : le bureau façon Windows ============ -->
+      <section class="page page-desk" id="page-bureau" data-page="bureau" hidden>
+        <div class="desktop" id="desktop">
+          <div class="desk-icons" id="desk-icons"></div>
+          <div class="desk-windows" id="desk-windows"></div>
+          <div class="desk-hint" id="desk-hint">Ouvrez une icône pour voir ce que les IA ont lu pendant la séance.</div>
+          <div class="taskbar">
+            <label class="tb-session"><span class="js-ic" data-ic="clock"></span><select id="desk-scope" class="select" aria-label="Séances affichées"></select></label>
+            <div class="tb-apps" id="tb-apps"></div>
+            <div class="tb-clock" id="tb-clock"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="tabbar" aria-label="Pages">
+    <a class="active" href="#accueil" data-p="accueil"><span class="js-ic" data-ic="home"></span>Accueil</a>
+    <a href="#ia" data-p="ia"><span class="js-ic" data-ic="users"></span>Les IA</a>
+    <a href="#journal" data-p="journal"><span class="js-ic" data-ic="list"></span>Journal</a>
+    <a href="#bureau" data-p="bureau"><span class="js-ic" data-ic="desktop"></span>Bureau</a>
+  </nav>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <div class="body">
+        <h3 id="modal-title">Lancer une séance réelle ?</h3>
+        <p id="modal-text">L'équipe va envoyer de vrais ordres sur votre compte Alpaca.</p>
+      </div>
+      <div class="row">
+        <button class="btn" id="modal-no">Annuler</button>
+        <button class="btn btn-primary" id="modal-yes">Lancer la séance</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="force-modal" role="dialog" aria-modal="true" aria-labelledby="force-title">
+    <div class="modal-box">
+      <div class="body">
+        <h3 id="force-title">Forcer le lancement des IA</h3>
+        <p>La séance démarre tout de suite sur GitHub, même en dehors des horaires prévus.</p>
+        <div class="form">
+          <label class="field"><span class="label">Séance</span>
+            <select class="select" id="force-mode">
+              <option value="auto">Automatique : préparation si la bourse est fermée, suivi si elle est ouverte</option>
+              <option value="preparation">Préparation (ordres planifiés pour l'ouverture)</option>
+              <option value="suivi">Suivi (ordres immédiats, bourse ouverte)</option>
+              <option value="ouverture">Ouverture (attend 15 h 30 si besoin, puis exécute le plan du jour)</option>
+              <option value="verification">Vérification de l'installation</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" id="force-sim"><span>Simulation : aucun ordre envoyé, rien d'enregistré</span></label>
+          <label class="field" id="force-token-field"><span class="label">Jeton GitHub (demandé une seule fois)</span>
+            <input class="input" type="password" id="force-token" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+            <span class="hint">Il reste dans ce navigateur, n'est jamais publié et ne sert qu'à lancer le workflow.
+              <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un jeton</a> :
+              accès au seul dépôt <b class="js-depot">bot-ia-trading</b>, permission <b>Actions : lecture et écriture</b>.</span>
+          </label>
+          <p class="hint" id="force-token-saved" hidden>Jeton enregistré dans ce navigateur. <a href="#" id="force-forget">L'oublier</a></p>
+          <div class="banner err" id="force-error" hidden></div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" id="force-no">Annuler</button>
+        <button class="btn btn-primary" id="force-yes">Lancer maintenant</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>window.STATIC_SITE = true;</script>
+  <script src="app.js"></script>
+</body>
+</html>
