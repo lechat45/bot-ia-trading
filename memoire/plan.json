@@ -10,13 +10,18 @@
    "symbole": "MSFT",
    "source": "qualite-1",
    "these": "Achat Qualité sur MSFT (Microsoft) suite au repli technique de -5,7 % sur support SMA50 (519,03 $). Ratios fondamentaux exceptionnels : marge op. 47,1 %, ROE 34,2 %, PER attendu 21,7x vs croissance bénéfices +32,3 % (PEG 0,67). Prochains résultats dans 72j (27/01/2027). Invalidation : cassure sous 500 $. Stop loss à 490,00 $ (-6,52 %, soit 2,0x ATR), TP à 590,00 $ (+12,55 %, R:R 1,92x).",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-16T08:10:15+00:00",
    "prix_reference": 524.19,
    "montant_usd": 6814.47,
    "qty_estimee": 13,
    "stop_loss_pct": 6.52,
-   "take_profit_pct": 12.55
+   "take_profit_pct": 12.55,
+   "resultat": "Achat exécuté : 13 MSFT à 520.00 $ (stop 486.50 $, objectif 585.74 $)",
+   "prix_execution": 520.0,
+   "qty": 13,
+   "traite_le": "2026-11-16T14:40:27+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-11-16T14:40:27+00:00"
 }
