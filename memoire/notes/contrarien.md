@@ -1,7 +1,8 @@
-_Mis à jour : 2026-11-13 09:02 (Paris)_
+_Mis à jour : 2026-11-16 09:02 (Paris)_
 
-- État du portefeuille : 10/10 positions. Aucune place pour de nouveaux achats sans vente préalable.
-- Opportunité SHEL (Shell) : Très forte thèse contrarienne identifiée. RSI 26 (survendu), PER 8.6 (bas), FCF solide et rachat d'actions en cours. La baisse semble liée à une réaction excessive à la nouvelle de Santander. À proposer dès qu'une place se libère.
-- Opportunité NOK (Nokia) : Toujours prête (RSI 56, stabilisation, fondamentaux OK). Priorité n°1 pour libérer une place.
-- Analyse STLA (Stellantis) : Écartée. Bien que très peu chère (PER 3.2), la rentabilité et le FCF sont négatifs. Risque de modèle économique cassé trop élevé.
-- Surveillance : PG et JPM pour prises de profit éventuelles afin de libérer de la liquidité. NVDA et DIS (résultats le 17/11) à surveiller.
+_Mis à jour : 2026-11-16 09:02 (Paris)_
+
+- État du portefeuille : 9/10 positions détenues. 1 emplacement libre identifié et utilisé pour la proposition SHEL.
+- Proposition formulée : Achat SHEL (Shell PLC) - Montant 6 500 $, Stop -5,0 % (94,13 $), Take Profit +9,0 % (108,00 $). Thèse : sur-réaction baissière à la dégradation de Santander du 10/11 (-10,5 %), stabilisation nette sur 3 séances au-dessus de SMA50 (98,93 $), RSI à 33.0, FCF massif (29 Mds $), PER 8,8 (vs 10,4 secteur) et secteur Énergie en tête sur 5j (+5,3 %).
+- Opportunités en réserve : Nokia (NOK) conservée sous surveillance mais seconde priorité (PER 16,7 et ROE 3,9 % moins attractifs que SHEL).
+- Surveillance positions et événements : NVDA et DIS publient leurs résultats le 17/11/2026. Suivre l'exécution de l'ordre planifié SHEL à l'ouverture de Wall Street.

@@ -1,25 +1,28 @@
-_Mis à jour : 2026-11-13 09:02 (Paris)_
+_Mis à jour : 2026-11-16 09:02 (Paris)_
+
+_Mis à jour : 2026-11-16 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 13/11/2026 (Séance de Préparation - Bourse Fermée)
+- Date : 16/11/2026 (Séance de Préparation - Bourse Fermée)
 
-## État du Portefeuille (10/10 positions - Portefeuille au complet) :
-- Valeur globale : ~97 474 $ (Cash : ~33 791 $).
+## État du Portefeuille (9/10 positions actives) :
+- Valeur globale : ~97 721 $ (Cash : ~43 100 $).
 - Suivi des positions :
-  1. UNH : -1.03% (Stop 384.66 $, distance 5.1%). Thèse intacte dans le secteur défensif Santé.
-  2. JPM : +3.43% (Stop au BE à 331.40 $). Solide.
-  3. PG : +4.57% (Stop au BE à 160.74 $). Solide tendance haussière.
-  4. UNP : +2.67% (Stop à 280.23 $). RAS.
-  5. DUK : +3.78% (Stop au BE à 123.92 $). RAS.
-  6. ABBV : +1.33% (Stop à 273.06 $). RAS.
-  7. DIS : +1.02% (Stop à 110.48 $). Résultats T3 prévus le 17/11/2026 (dans 4 jours). À surveiller de près.
-  8. AAPL : +3.37% (Stop à 343.27 $). Tendance préservée.
-  9. SAN : +2.5% (Stop à 10.01 $). RAS.
-  10. LIN : +0.5% (Stop à 480.37 $). RAS.
+  1. JPM : +4.49% (Stop au BE à 331.40 $).
+  2. PG : +5.66% (Stop au BE à 160.74 $).
+  3. UNP : +2.11% (Stop à 280.23 $).
+  4. DUK : +4.19% (Stop au BE à 123.92 $).
+  5. ABBV : +1.51% (Stop à 273.06 $).
+  6. DIS : +1.66% (Stop à 110.48 $). Attention : Résultats T3 prévus le 17/11/2026 (demain).
+  7. AAPL : +3.82% (Stop à 322.57 $).
+  8. SAN : +3.09% (Stop à 11.83 $).
+  9. LIN : +1.11% (Stop à 480.37 $).
 
-## Watchlist / Titres sous surveillance (pour réallocation future) :
-- **MSFT (Microsoft)** : Repli technique de -2.5% sur la semaine, se négociant à 523 $ (SMA50 à 518.75 $). Excellente Qualité (Marge Op 47.1%, ROE 34.2%, Dette/FP 28%, PER attendu 21.6x). Candidat N°1 en cas de débouclage d'une position.
+## Proposition d'Achat du jour :
+- **MSFT (Microsoft)** : Proposed 7 000 $ (7.2% du capital). Stop à 490.00 $ (-6.52%), Take Profit à 590.00 $ (+12.55%).
+  - Thèse Qualité : Marge op 47.1%, ROE 34.2%, Dette/FP 28%, FCF 3.0Md$, PER attendu 21.7x pour 32.3% de croissance (PEG = 0.67).
+  - Technique : Rebond SMA50 (519.03 $), RSI 47.0, repli de -5.7% depuis le plus haut. Résultats dans 72 jours.
 
-## Bilan et Décision de la Séance :
-- Portefeuille complet à 10/10 positions. Aucune invalidation de thèse ni déclenchement de stop.
-- Aucune transaction proposée ce jour : conservation intégrale de l'allocation. Le marché reste bien orienté (S&P 500 au-dessus de sa moyenne 10 mois, +4.2%).
+## À surveiller :
+- Publications de résultats demain 17/11 pour DIS (position en gain +1.66%).
+- Suivi de la validation/exécution de l'ordre MSFT par le gérant à l'ouverture.
