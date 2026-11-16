@@ -1,7 +1,8 @@
 {
  "satures": {
   "gemini|1|gemini-3.5-flash": 1794902460,
-  "gemini|2|gemini-3.5-flash": 1794902460
+  "gemini|2|gemini-3.5-flash": 1794902460,
+  "gemini|0|gemini-3.5-flash": 1794902460
  },
  "jours": {
   "2026-10-28": {
@@ -344,28 +345,28 @@
   },
   "2026-11-16": {
    "groq#2": {
-    "tokens": 6235,
-    "appels": 1
+    "tokens": 12343,
+    "appels": 2
    },
    "groq#1": {
-    "tokens": 6304,
-    "appels": 1
+    "tokens": 12477,
+    "appels": 2
    },
    "gemini#1": {
-    "tokens": 219082,
-    "appels": 19
+    "tokens": 359176,
+    "appels": 32
    },
    "gemini#2": {
-    "tokens": 247877,
-    "appels": 20
+    "tokens": 357296,
+    "appels": 32
    },
    "groq#3": {
     "tokens": 7111,
     "appels": 1
    },
    "gemini#3": {
-    "tokens": 343252,
-    "appels": 24
+    "tokens": 362080,
+    "appels": 26
    }
   }
  }
