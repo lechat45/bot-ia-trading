@@ -1,6 +1,6 @@
-_Mis à jour : 2026-11-16 19:01 (Paris)_
+_Mis à jour : 2026-11-17 09:02 (Paris)_
 
-- État du portefeuille : 10/10 positions détenues, portefeuille complet. Aucune nouvelle position ne peut être ouverte sans cession préalable.
-- Suivi positions : NVDA et DIS publient leurs résultats le 17/11/2026. Surveillance stricte de ces positions avant les publications.
-- Idées contrariennes identifiées : VLO (Valero Energy) présente une excellente configuration contrarienne (PER 7,2, FCF 12,6 Mds $, stabilisation nette à +3,5 % sur 5j, RSI 44) mais l'ordre a été refusé en raison de la saturation du portefeuille (10 positions). À garder sous le coude dès qu'un emplacement se libère.
-- Stratégie : rester discipliné, attendre l'évolution des résultats de NVDA/DIS et surveiller les stop loss suiveurs.
+- État du portefeuille : 10/10 positions détenues, portefeuille complet. Aucune nouvelle position ne peut être ouverte sans cession préalable d'une position existante.
+- Suivi positions : Résultats de DIS et NVDA suivis ce jour (17/11/2026). Surveillance stricte des stops suiveurs.
+- Idées contrariennes prêtes : Valero Energy (VLO) présente une configuration parfaite (PER 7,2 vs 10,6 médiane, FCF 12,6 Mds $, stabilisation à +3,6% sur 5j, RSI 44, support SMA200 solide). Prête à être proposée dès qu'un emplacement se libère dans le portefeuille.
+- Discipline : Respect strict des règles contrariennes et de la gestion du risque.

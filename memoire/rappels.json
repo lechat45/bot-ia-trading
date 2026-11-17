@@ -269,6 +269,20 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-16T18:08:30+00:00",
+  "statut": "fait",
+  "note": "Rappel vérifié : DIS publie aujourd'hui. Position conservée avec son stop suiveur, perspectives haussières confirmées par Jefferies (objectif relevé à 140$).",
+  "fait_par": "sentiment",
+  "fait_le": "2026-11-17T08:03:08+00:00"
+ },
+ {
+  "id": "r23-1117",
+  "date": "2026-11-17",
+  "titre": "Résultats de DIS",
+  "symbole": "DIS",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-17T08:05:24+00:00",
   "statut": "actif"
  }
 ]
