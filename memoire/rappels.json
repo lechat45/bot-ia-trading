@@ -283,6 +283,20 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-17T08:05:24+00:00",
+  "statut": "fait",
+  "note": "Rappel traité : Résultats de DIS examinés, le titre progresse de +0,5% et maintient ses gains. Thèse intacte.",
+  "fait_par": "contrarien",
+  "fait_le": "2026-11-17T18:01:54+00:00"
+ },
+ {
+  "id": "r24-1117",
+  "date": "2026-11-17",
+  "titre": "Résultats de DIS",
+  "symbole": "DIS",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-17T18:03:08+00:00",
   "statut": "actif"
  }
 ]

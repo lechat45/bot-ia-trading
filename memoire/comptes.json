@@ -4,24 +4,8 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 36340.52001000001,
+   "cash": 46299.78000500001,
    "positions": {
-    "JPM": {
-     "lots": [
-      {
-       "qty": 15,
-       "prix": 331.4,
-       "date": "2026-10-23T17:08:00+00:00",
-       "stop": 331.4,
-       "tp": 366.03,
-       "statut": "ouvert",
-       "parent_id": "550fbe01-64e0-4649-a343-3a756e7c51d1",
-       "stop_id": "b3f090f5-c995-4db6-be1d-d7010b17c4ed",
-       "tp_id": "f0b08143-5e2a-4258-a2ee-94d1bbbda6be"
-      }
-     ],
-     "these": "Achat de JPM (JP Morgan Chase & Co.) - Proposition equilibre-1 ajustée par le critique : Leader financier incontesté (secteur Finance actuellement à 0% du portefeuille). Excellent point d'entrée sur repli (-8.8%), PER attendu attractif de 13.0x, marge opérationnelle exceptionnelle de 42.6% et ROE de 18.0%. Prix au-dessus de la SMA200 (319.75$). Prochains résultats dans 83 jours. Stop loss à 5% sous le prix d'achat, take profit à +10.5%. Horizon 1-3 mois. Risque ajusté à 5 000 $ selon la réserve du critique."
-    },
     "PG": {
      "lots": [
       {
@@ -118,22 +102,6 @@
      ],
      "these": "Achat AAPL : Leader technologique montrant une force relative. Entrée à 7000$, stop -6%, TP +12%. Thèse sentiment-1 validée par le critique."
     },
-    "SAN": {
-     "lots": [
-      {
-       "qty": 422,
-       "prix": 11.83,
-       "date": "2026-11-06T18:08:18+00:00",
-       "stop": 11.83,
-       "tp": 13.6,
-       "statut": "ouvert",
-       "parent_id": "ab753d47-b54f-4e44-befb-a7caa5a8f6bb",
-       "stop_id": "e64f073b-4e60-440e-a863-b07b58c2f7ea",
-       "tp_id": "45d13489-8480-4983-9409-d456a0b8819e"
-      }
-     ],
-     "these": "Achat contrarien sur Banco Santander (SAN) proposé par contrarien-1 et validé avec ajustement de taille à 5000$ par le critique. Titre décoté (PER attendu 8.4 vs 10.1 médiane sectorielle, marge nette 32.6%, ROE 13.1%). Stabilisation confirmée avec 5 séances au-dessus du support des 11.12$ (cours 11.82$, RSI 36). Stop loss à 11.00$ (-7.0%), TP à 13.60$ (+15.0%). Position de 5 000$ calibrée pour contrôler le risque sectoriel."
-    },
     "LIN": {
      "lots": [
       {
@@ -167,16 +135,8 @@
      "these": "Achat Qualité sur MSFT (Microsoft) suite au repli technique de -5,7 % sur support SMA50 (519,03 $). Ratios fondamentaux exceptionnels : marge op. 47,1 %, ROE 34,2 %, PER attendu 21,7x vs croissance bénéfices +32,3 % (PEG 0,67). Prochains résultats dans 72j (27/01/2027). Invalidation : cassure sous 500 $. Stop loss à 490,00 $ (-6,52 %, soit 2,0x ATR), TP à 590,00 $ (+12,55 %, R:R 1,92x)."
     }
    },
-   "realise": -3982.299990000003,
+   "realise": -3986.299995000003,
    "evenements": [
-    {
-     "ts": "2026-10-27T13:40:22+00:00",
-     "texte": "Ouverture, ordre planifié acheter UNP : Achat exécuté : 26 UNP à 296.30 $ (stop 280.23 $, objectif 329.59 $)"
-    },
-    {
-     "ts": "2026-10-27T18:01:19+00:00",
-     "texte": "Stop loss déclenché : 14 VLO vendues à 401.11 $ (plus-value -327.60 $)"
-    },
     {
      "ts": "2026-10-28T13:40:21+00:00",
      "texte": "Ouverture, ordre planifié acheter DUK : Achat exécuté : 55 DUK à 123.92 $ (stop 116.40 $, objectif 138.69 $)"
@@ -268,9 +228,17 @@
     {
      "ts": "2026-11-16T14:40:27+00:00",
      "texte": "Ouverture, ordre planifié acheter MSFT : Achat exécuté : 13 MSFT à 520.00 $ (stop 486.50 $, objectif 585.74 $)"
+    },
+    {
+     "ts": "2026-11-17T18:01:18+00:00",
+     "texte": "Stop loss déclenché : 15 JPM vendues à 331.13 $ (plus-value -4.00 $)"
+    },
+    {
+     "ts": "2026-11-17T18:01:19+00:00",
+     "texte": "Stop loss déclenché : 422 SAN vendues à 11.83 $ (plus-value +0.00 $)"
     }
    ],
-   "derniere_seance": "2026-11-17T08:02:37+00:00"
+   "derniere_seance": "2026-11-17T18:01:18+00:00"
   }
  }
 }

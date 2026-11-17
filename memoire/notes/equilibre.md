@@ -1,32 +1,21 @@
-_Mis à jour : 2026-11-17 09:02 (Paris)_
+_Mis à jour : 2026-11-17 19:01 (Paris)_
 
-_Mis à jour : 2026-11-17 09:10 (Paris)_
-
-Analyste Équilibre - Synthèse & Carnet de Bord
+Analyste Équilibre - Notes & Carnet de Bord (Séance du 17/11/2026)
 
 1. Contexte de Marché & Macro :
-- Tendance de fond haussière (S&P 500 à 755,72 $ vs SMA 10 mois à 725,41 $), mais consolidation court terme (SPY -1,7 % sur 5j, -3,1 % sur 1 mois).
-- Leadership sectoriel défensif confirmé : Énergie (XLE +2,8 %), Consommation de base (XLP +1,9 %) et Utilities (XLU +0,8 %) résistent, tandis que la Tech (XLK -3,6 %) et les Cycliques corrigent.
+- Marché global en consolidation saine (S&P 500 en repli court terme mais tendance de fond toujours haussière, au-dessus de sa moyenne mobile 10 mois de 725,41 $).
+- Rotation sectorielle vers la défense confirmée (Énergie XLE, Consommation de base XLP, Utilities XLU), tandis que la Technologie (XLK) corrige.
 
-2. Architecture & Équilibre du Portefeuille :
-- Capacité atteinte : 10 positions actives sur le maximum réglementaire de 10.
-- Liquidités : 36 340 USD (~37,2 % du compte) apportant un puissant coussin de sécurité.
-- Répartition sectorielle robuste (8 secteurs représentés) :
-  * Financial Services : JPM (5,2 %), SAN (5,2 %)
-  * Consumer Defensive : PG (8,2 %)
-  * Industrials : UNP (8,1 %)
-  * Utilities : DUK (7,4 %)
-  * Healthcare : ABBV (3,6 %)
-  * Communication Services : DIS (4,6 %)
-  * Technology : AAPL (7,2 %), MSFT (~5-7 %)
-  * Basic Materials : LIN (~5 %)
-- Aucun secteur ne dépasse 15 % du compte (plafond réglementaire à 35 %). Risque sectoriel et idiosyncratique parfaitement maîtrisé.
+2. État du Portefeuille & Allocation d'Actifs :
+- Nombre de positions : 10 / 10 (capacité maximale atteinte).
+- Liquidités : 46 299,78 USD (~47,7 % du compte), offrant un coussin de sécurité exceptionnel et un matelas robuste pour absorber toute correction ou saisir de futures opportunités.
+- Diversification sectorielle exemplaire : 8 secteurs représentés (Consommation de Base, Industrielles, Utilities, Santé, Communication Services, Technologie, Matériaux de Base, Finance). Aucun secteur ne dépasse 15 % (très loin du plafond de 35 %).
 
-3. Gestion des Lignes & Catalyseurs :
-- PG : +7,72 % de gain, nouveau plus haut 52s (173,15 $), force relative majeure face au repli des indices. TP à 177,44 $.
-- DIS : Résultats T4 attendus ce jour (17/11/2026). Thèse maintenue avec stop de protection à 110,48 $ (-6,9 %) et relèvement de PT Jefferies à 140 $.
-- DUK (+5,37 %) et JPM (+2,07 %) : stops remontés au prix d'achat, risque nul sur le capital initial.
-- MSFT (-0,3 %) et AAPL (+2,74 %) : tiennent bien leurs supports malgré la faiblesse du XLK.
+3. Suivi des Lignes & Catalyseurs :
+- Disney (DIS) : Publication des résultats aujourd'hui (17/11/2026) accompagnée de superbes annonces (hausse de 33 % du dividende annuel à 2,00 $, objectif de rachat d'actions de 9 milliards de dollars, relèvement d'objectif de cours par Jefferies à 140 $). Position saine en gain (+1,9 %), stop de protection maintenu à 110,48 $.
+- Procter & Gamble (PG) : +7,53 %, plus haut de 52 semaines, valeur refuge par excellence.
+- Duke Energy (DUK) et JPMorgan (JPM) : stops remontés au prix d'achat, risque nul sur le capital initial.
+- MSFT : en repli (-3,69 %), surveillé de près mais stop respecté et discipline maintenue.
 
-4. Décision de la séance :
-- Pas de proposition d'achat : le portefeuille est à son quota maximal de 10 lignes et aucune thèse n'est invalidée pour justifier une vente ou un allègement anticipé. Discipline et conservation des gagnants.
+4. Décisions de la Séance :
+- Aucune proposition d'achat formulée : le portefeuille est à son quota maximal de 10 lignes et les liquidités sont préservées pour maintenir l'équilibre défensif/offensif. Aucune thèse n'est invalidée, pas de vente nécessaire. Discipline de conservation des gagnants et de protection du capital.

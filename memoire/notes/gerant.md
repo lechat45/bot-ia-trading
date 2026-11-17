@@ -1,20 +1,15 @@
-_Mis à jour : 2026-11-17 09:02 (Paris)_
+_Mis à jour : 2026-11-17 19:01 (Paris)_
 
-_Mis à jour : 2026-11-17 09:30 (Paris)_
+JOURNAL DE BORD DU GÉRANT - SÉANCE DE SUIVI (17/11/2026)
 
-JOURNAL DE BORD DU GÉRANT - SÉANCE DE PRÉPARATION (17/11/2026)
+## 1. État du Portefeuille & Allocation (Valeur totale : ~143 353 $, Cash : ~46 300 $, Investi : ~97 053 $)
+- **Nombre de positions : 9/10** (Suite au déclenchement des stop loss sur JPM et SAN depuis la dernière séance, 1 emplacement est désormais vacant).
+- **Événements de la séance** :
+  - **JPM** : Stop loss déclenché (15 actions vendues à 331,13 $, PnL -4,00 $).
+  - **SAN** : Stop loss déclenché (422 actions vendues à 11,83 $, PnL 0,00 $).
+  - **DIS** : Résultats publiés avec succès (hausse du dividende de 33 %, rachat d'actions de 9 Md$), position maintenue (+1,9 % de gain).
+- **Répartition & Liquidités** : Cash robuste de ~46 300 $ (~32 %), offrant d'excellentes marges de manœuvre pour redéployer le capital sur des opportunités de qualité dans un marché globalement sous pression.
 
-## 1. État du Portefeuille & Allocation (Valeur totale : ~97 629 $, Cash : ~36 340 $, Investi : ~61 288 $)
-- **Nombre de positions : 10/10 (Portefeuille complet à saturation)**
-- **Répartition sectorielle & Santé** :
-  - Les 10 positions (JPM, PG, UNP, DUK, ABBV, DIS, AAPL, SAN, LIN, MSFT) sont saines. 9 positions sur 10 affichent un gain latent, MSFT étant quasi-flat (-0,3 %).
-  - 4 positions disposent déjà de stops remontés au prix d'entrée (PG, DUK, JPM, SAN).
-- **Cash disponible** : ~36 340 $ (~37,2 %), offrant une excellente marge de manœuvre en cas d'opportunité future.
-
-## 2. Événements et Catalyseurs du Jour
-- **Walt Disney (DIS)** : Publication des résultats aujourd'hui avant l'ouverture. La position (~4,5k$, gain de +1,44%) est maintenue et strictement surveillée via son stop loss (110,48 $).
-- **NVIDIA (NVDA)** : Également sous surveillance étroite de l'équipe pour les résultats.
-
-## 3. Décisions du Gérant
-- **Aucun nouvel achat** en cette séance de préparation : le portefeuille est complet (10/10) et la règle de discipline qualitative impose de ne pas sur-allouer ou forcer l'entrée sans libérer d'emplacement au préalable.
-- Maintien rigoureux des stop loss et suivi post-résultats pour DIS. Aucune modification d'ordre n'est nécessaire ce jour.
+## 2. Décisions du Gérant
+- Aucune précipitation pour réinvestir les liquidités issues de JPM et SAN en cette séance de suivi marquée par la baisse des indices. Le maintien d'un matelas de cash élevé protège le capital et permet d'attendre des configurations techniques de rebond idéales.
+- Surveillance continue des stops suiveurs sur les 9 positions restantes.

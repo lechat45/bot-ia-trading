@@ -1,19 +1,17 @@
-_Mis à jour : 2026-11-17 09:02 (Paris)_
+_Mis à jour : 2026-11-17 19:01 (Paris)_
+
+_Mis à jour : 2026-11-17 19:01 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 17/11/2026 (Séance de Préparation - Bourse Fermée)
+- Date : 17/11/2026 (Séance de Suivi - Bourse Ouverte)
 
 ## État du Portefeuille (10/10 positions actives) :
-- Valeur portefeuille : ~97 629 $ (Cash : ~36 340 $).
-- Positions : JPM (+2.07%), PG (+7.72%), UNP (+2.51%), DUK (+5.37%), ABBV (+1.35%), DIS (+1.44%), AAPL (+2.74%), SAN (+1.18%), LIN (+0.67%), MSFT (-0.32%).
-- Gestion des stops : stops breakeven déjà enclenchés sur PG, DUK, JPM, SAN.
-- Portefeuille complet au plafond réglementaire de 10 positions.
-
-## Catalyseur Immédiat du Jour :
-- **DIS (Walt Disney Co.)** : Publication des résultats T4 / exercice 2026 ce jour 17/11/2026 à 8h30 ET (14h30 Paris, avant ouverture).
-  - Évaluation : Position modeste de 4 511 $ (4,6 % de l'actif). Cours 118,72 $, gain +1,44 %. Stop technique fixé à 110,48 $ (risque résiduel de 313 $, soit 0,32 % du capital).
-  - Décision Qualité : Maintenir la position à travers la publication. Objectif Jefferies relevé à 140 $ la veille. Suivi en temps réel dès la séance d'après-midi à l'ouverture US.
+- Valeur portefeuille : ~97 037 $ (Cash : ~46 300 $ avec la réserve de liquidités).
+- Positions : Portefeuille complet à 10 titres (JPM, PG, UNP, DUK, ABBV, DIS, AAPL, SAN, LIN, MSFT).
+- Suivi du jour : Publication de résultats de DIS intervenue ce jour. Cours stable autour de 119,26 $ (+1,9% de gain), rappel `r23-1117` traité avec succès et position maintenue, la thèse fondamentale restant intacte.
+- MSFT reste en léger retrait (-3,69%), mais conserve son stop loss technique et le système de stop suiveur.
 
 ## Orientation Stratégique :
-- Aucune proposition d'achat ni d'élagage ce matin : les 10 thèses restent saines, aucune invalidation technique ou fondamentale n'est constatée.
-- Conservation intégrale et surveillance de l'impact des résultats DIS et NVDA cet après-midi.
+- Portefeuille au plafond réglementaire de 10 positions avec un matelas de cash de plus de 46 k$.
+- Aucune action d'achat requise pour le moment (tendance générale de marché S&P 500 en repli de -1,2% aujourd'hui, prudence de mise).
+- Maintien rigoureux des positions de qualité et surveillance des stops suiveurs automatiques.
