@@ -337,28 +337,28 @@
   },
   "2026-11-18": {
    "groq#2": {
-    "tokens": 6112,
-    "appels": 1
+    "tokens": 12022,
+    "appels": 2
    },
    "groq#1": {
-    "tokens": 13208,
-    "appels": 3
+    "tokens": 26903,
+    "appels": 5
    },
    "gemini#1": {
-    "tokens": 200789,
-    "appels": 18
+    "tokens": 338253,
+    "appels": 31
    },
    "gemini#2": {
-    "tokens": 221514,
-    "appels": 20
+    "tokens": 305389,
+    "appels": 29
    },
    "groq#3": {
     "tokens": 6681,
     "appels": 1
    },
    "gemini#3": {
-    "tokens": 274150,
-    "appels": 21
+    "tokens": 332738,
+    "appels": 27
    }
   }
  }

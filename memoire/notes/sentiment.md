@@ -1,5 +1,11 @@
-_Mis à jour : 2026-11-18 09:02 (Paris)_
+_Mis à jour : 2026-11-18 19:01 (Paris)_
 
-- Analyse du Marché : Tendance de fond Faber haussière. Énergie en tête des performances hebdomadaires (XLE +1,8%).
-- Portefeuille : 10 positions détenues. Protection par stop suiveur active. DIS conservé après des résultats solides (dividende +33%, rachats d'actions), RSI à 78.
-- Idée proposée : VLO (Valero Energy) - Élan de fond et opportunité de réallocation sectorielle (Énergie). Solides fondamentaux (PER 8.3, ROE 46.9%), RSI neutre à 42, et alignement avec la rotation sectorielle. Stop à 7.5%, objectif cible analystes à 421$.
+_Mis à jour : 2026-11-18 19:15 (Paris)_
+
+- Analyse du Marché : Correction en cours (SPY -5% sur 1 mois). Rotation vers les secteurs défensifs (Consommation de base, Services publics).
+- Portefeuille : 10 positions.
+- DIS : Elan d'actualité très fort (+4.9% aujourd'hui, plus haut annuel), confirmé par les résultats. Conserver malgré RSI élevé (75).
+- VLO : Thèse d'élan de fond compromise (sous SMA20/50). Impossible de vendre aujourd'hui (achat récent). À vendre dès que possible si l'élan ne revient pas.
+- MSFT : Performance décevante (-3% depuis achat). À surveiller si cassure SMA50.
+- Opportunités futures : SBUX, TGT, COST montrent une force relative impressionnante dans ce marché baissier (élan de fond/proche plus haut).
+- Stratégie : Prudence extrême. Le momentum 12-1 historique (tech/énergie) souffre, le momentum récent est sur les valeurs défensives.
