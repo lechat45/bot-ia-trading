@@ -1,21 +1,23 @@
-_Mis à jour : 2026-11-17 19:01 (Paris)_
+_Mis à jour : 2026-11-18 09:02 (Paris)_
 
-Analyste Équilibre - Notes & Carnet de Bord (Séance du 17/11/2026)
+_Mis à jour : 2026-11-18 09:05 (Paris)_
+
+Analyste Équilibre - Notes & Carnet de Bord (Séance du 18/11/2026)
 
 1. Contexte de Marché & Macro :
-- Marché global en consolidation saine (S&P 500 en repli court terme mais tendance de fond toujours haussière, au-dessus de sa moyenne mobile 10 mois de 725,41 $).
-- Rotation sectorielle vers la défense confirmée (Énergie XLE, Consommation de base XLP, Utilities XLU), tandis que la Technologie (XLK) corrige.
+- Marché global : S&P 500 en phase de consolidation court terme (-2,2 % sur 5 séances), mais tendance de fond toujours haussière au-dessus de la SMA 10 mois (clôture 755,72 $ vs SMA10 725,41 $). Tailles de positions normales.
+- Rotation sectorielle : L'énergie (XLE +1,8 %) et la consommation de base (XLP +0,5 %) mènent, tandis que les matériaux (XLB -3,8 %) et la tech (XLK -3,3 %) corrigent.
 
 2. État du Portefeuille & Allocation d'Actifs :
-- Nombre de positions : 10 / 10 (capacité maximale atteinte).
-- Liquidités : 46 299,78 USD (~47,7 % du compte), offrant un coussin de sécurité exceptionnel et un matelas robuste pour absorber toute correction ou saisir de futures opportunités.
-- Diversification sectorielle exemplaire : 8 secteurs représentés (Consommation de Base, Industrielles, Utilities, Santé, Communication Services, Technologie, Matériaux de Base, Finance). Aucun secteur ne dépasse 15 % (très loin du plafond de 35 %).
+- Nombre de positions : 8 / 10 (2 places disponibles).
+- Liquidités : 46 299,78 USD (~47,8 % du compte), maintenant un excellent matelas de sécurité.
+- Répartition sectorielle : 7 secteurs représentés (Consommation défensive PG, Industrielles UNP, Utilities DUK, Santé ABBV, Services de communication DIS, Technologie AAPL+MSFT 14,0 %, Matériaux LIN). Le secteur financier était retombé à 0 %.
 
-3. Suivi des Lignes & Catalyseurs :
-- Disney (DIS) : Publication des résultats aujourd'hui (17/11/2026) accompagnée de superbes annonces (hausse de 33 % du dividende annuel à 2,00 $, objectif de rachat d'actions de 9 milliards de dollars, relèvement d'objectif de cours par Jefferies à 140 $). Position saine en gain (+1,9 %), stop de protection maintenu à 110,48 $.
-- Procter & Gamble (PG) : +7,53 %, plus haut de 52 semaines, valeur refuge par excellence.
-- Duke Energy (DUK) et JPMorgan (JPM) : stops remontés au prix d'achat, risque nul sur le capital initial.
-- MSFT : en repli (-3,69 %), surveillé de près mais stop respecté et discipline maintenue.
+3. Décision & Proposition de la Séance :
+- Proposition equilibre-1 : Achat de V (Visa Inc.) pour 5 000 USD (stop -6,0 %, TP +12,0 %).
+- Objectif d'équilibrage : Réintroduire le secteur Finance (0 % du portefeuille) avec une méga-capitalisation ultra-rentable (marge opérationnelle 66,3 %, ROE 63,5 %), en tendance haussière confirmée (+14,2 % sur 3 mois, RSI à 60, au-dessus de sa SMA200), sans risque de résultats immédiats (prochains résultats dans 69 jours).
 
-4. Décisions de la Séance :
-- Aucune proposition d'achat formulée : le portefeuille est à son quota maximal de 10 lignes et les liquidités sont préservées pour maintenir l'équilibre défensif/offensif. Aucune thèse n'est invalidée, pas de vente nécessaire. Discipline de conservation des gagnants et de protection du capital.
+4. Suivi des Lignes :
+- DIS : Résultats publiés hier (17/11/2026) bien digérés (hausse du dividende de 33 %, rachats de 9 Md$). Position stable (-0,1 %), stop maintenu à 110,48 $.
+- PG (+6,9 %) et DUK (+4,7 %) : valeurs refuges robustes, stops sécurisés au prix d'achat.
+- ABBV, UNP, AAPL, LIN, MSFT : thèses intactes, stops respectés.

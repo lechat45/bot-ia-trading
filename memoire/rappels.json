@@ -297,6 +297,9 @@
   "cree_par": "systeme",
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-17T18:03:08+00:00",
-  "statut": "actif"
+  "statut": "fait",
+  "note": "Résultats de DIS traités, stop suiveur actif, position conservée.",
+  "fait_par": "contrarien",
+  "fait_le": "2026-11-18T08:02:55+00:00"
  }
 ]
