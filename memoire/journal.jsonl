@@ -42,3 +42,5 @@
 {"type": "execution", "ts": "2026-11-16T14:40:27+00:00", "agent": "equipe", "action": "acheter", "symbole": "MSFT", "qty": 13, "statut": "exécuté", "prix": 520.0, "stop": 486.5, "tp": 585.74, "source": "qualite-1"}
 {"type": "execution", "ts": "2026-11-17T18:01:18+00:00", "agent": "alpaca", "action": "vendre", "symbole": "JPM", "qty": 15, "statut": "exécuté", "prix": 331.133333, "plus_value": -4.0, "source": "stop loss"}
 {"type": "execution", "ts": "2026-11-17T18:01:19+00:00", "agent": "alpaca", "action": "vendre", "symbole": "SAN", "qty": 422, "statut": "exécuté", "prix": 11.83, "plus_value": 0.0, "source": "stop loss"}
+{"type": "execution", "ts": "2026-11-18T14:40:23+00:00", "agent": "equipe", "action": "acheter", "symbole": "V", "qty": 11, "statut": "exécuté", "prix": 416.211818, "stop": 391.27, "tp": 466.2, "source": "equilibre-1"}
+{"type": "execution", "ts": "2026-11-18T14:40:25+00:00", "agent": "equipe", "action": "acheter", "symbole": "VLO", "qty": 13, "statut": "exécuté", "prix": 350.75, "stop": 318.14, "tp": 412.99, "source": "contrarien-1"}

@@ -301,5 +301,27 @@
   "note": "Résultats de DIS traités, stop suiveur actif, position conservée.",
   "fait_par": "contrarien",
   "fait_le": "2026-11-18T08:02:55+00:00"
+ },
+ {
+  "id": "r25-0201",
+  "date": "2027-02-01",
+  "titre": "Résultats de DIS",
+  "symbole": "DIS",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-18T14:40:25+00:00",
+  "statut": "actif"
+ },
+ {
+  "id": "r26-0128",
+  "date": "2027-01-28",
+  "titre": "Résultats de VLO",
+  "symbole": "VLO",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-18T14:40:25+00:00",
+  "statut": "actif"
  }
 ]

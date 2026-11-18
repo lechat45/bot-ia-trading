@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 46299.78000500001,
+   "cash": 37161.70000700001,
    "positions": {
     "PG": {
      "lots": [
@@ -133,18 +133,42 @@
       }
      ],
      "these": "Achat Qualité sur MSFT (Microsoft) suite au repli technique de -5,7 % sur support SMA50 (519,03 $). Ratios fondamentaux exceptionnels : marge op. 47,1 %, ROE 34,2 %, PER attendu 21,7x vs croissance bénéfices +32,3 % (PEG 0,67). Prochains résultats dans 72j (27/01/2027). Invalidation : cassure sous 500 $. Stop loss à 490,00 $ (-6,52 %, soit 2,0x ATR), TP à 590,00 $ (+12,55 %, R:R 1,92x)."
+    },
+    "V": {
+     "lots": [
+      {
+       "qty": 11,
+       "prix": 416.211818,
+       "date": "2026-11-18T14:40:23+00:00",
+       "stop": 391.27,
+       "tp": 466.2,
+       "statut": "ouvert",
+       "parent_id": "3433caf7-21b1-43ad-93f1-de5884fe9e44",
+       "stop_id": "fe94e628-6539-4cec-a876-104440ce77ad",
+       "tp_id": "f5635be3-bc4b-4a87-a111-974310ebc08f"
+      }
+     ],
+     "these": "Reconstitution de l'exposition au secteur Financier (0% du portefeuille suite aux sorties de JPM et SAN). Visa (V) dispose de marges exceptionnelles (marge op. 66,3%, ROE 63,5%, FCF 21 Md$) et d'un bilan très solide. Tendance haussière confirmée (+14,2% sur 3m). Invalidation sous la SMA50 (391,75$). Sortie : stop loss à 391,73$ (-6,0%), objectif 466,75$ (+12,0%). Horizon 1 à 3 mois. Avis critique 'ok'."
+    },
+    "VLO": {
+     "lots": [
+      {
+       "qty": 13,
+       "prix": 350.75,
+       "date": "2026-11-18T14:40:25+00:00",
+       "stop": 318.14,
+       "tp": 412.99,
+       "statut": "ouvert",
+       "parent_id": "a4a7fe3f-3d86-4bd0-9283-440e4d0fb4a6",
+       "stop_id": "1032f40c-a93f-48b2-b1cf-fba0d6c9df7a",
+       "tp_id": "93494968-574d-42ea-b23d-e05ad215509c"
+      }
+     ],
+     "these": "Intégration du secteur Énergie (0% du portefeuille, secteur en tête sur 5 séances avec +1,8%). Repli contrarien de -16% sur 1 mois sur Valero Energy (VLO) après fort élan de fond (perf 12-1 +143%). Fondamentaux très attractifs : PER attendu à 7,1, FCF 12,6 Md$, ROE 46,9%, dette maîtrisée. Stabilisation au-dessus de la SMA200 (295,6$) avec RSI 42. Invalidation sous le support des 342$. Stop loss à 330,46$ (-9,1%, ~2 ATR), objectif 429$ (+18,0%). Sélection unique de contrarien-1 conformément à la recommandation du critique (évite tout doublon avec sentiment-1). Horizon 4 à 8 semaines."
     }
    },
    "realise": -3986.299995000003,
    "evenements": [
-    {
-     "ts": "2026-10-28T13:40:21+00:00",
-     "texte": "Ouverture, ordre planifié acheter DUK : Achat exécuté : 55 DUK à 123.92 $ (stop 116.40 $, objectif 138.69 $)"
-    },
-    {
-     "ts": "2026-10-29T13:40:23+00:00",
-     "texte": "Ouverture, ordre planifié vendre META : Vente exécutée : 13 META à 619.11 $ (plus-value -282.79 $)"
-    },
     {
      "ts": "2026-10-30T13:40:25+00:00",
      "texte": "Ouverture, ordre planifié acheter V : Achat exécuté : 17 V à 413.59 $ (stop 390.99 $, objectif 459.26 $)"
@@ -236,6 +260,14 @@
     {
      "ts": "2026-11-17T18:01:19+00:00",
      "texte": "Stop loss déclenché : 422 SAN vendues à 11.83 $ (plus-value +0.00 $)"
+    },
+    {
+     "ts": "2026-11-18T14:40:23+00:00",
+     "texte": "Ouverture, ordre planifié acheter V : Achat exécuté : 11 V à 416.21 $ (stop 391.27 $, objectif 466.20 $)"
+    },
+    {
+     "ts": "2026-11-18T14:40:25+00:00",
+     "texte": "Ouverture, ordre planifié acheter VLO : Achat exécuté : 13 VLO à 350.75 $ (stop 318.14 $, objectif 412.99 $)"
     }
    ],
    "derniere_seance": "2026-11-18T08:02:37+00:00"
