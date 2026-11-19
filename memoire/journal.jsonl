@@ -44,3 +44,4 @@
 {"type": "execution", "ts": "2026-11-17T18:01:19+00:00", "agent": "alpaca", "action": "vendre", "symbole": "SAN", "qty": 422, "statut": "exécuté", "prix": 11.83, "plus_value": 0.0, "source": "stop loss"}
 {"type": "execution", "ts": "2026-11-18T14:40:23+00:00", "agent": "equipe", "action": "acheter", "symbole": "V", "qty": 11, "statut": "exécuté", "prix": 416.211818, "stop": 391.27, "tp": 466.2, "source": "equilibre-1"}
 {"type": "execution", "ts": "2026-11-18T14:40:25+00:00", "agent": "equipe", "action": "acheter", "symbole": "VLO", "qty": 13, "statut": "exécuté", "prix": 350.75, "stop": 318.14, "tp": 412.99, "source": "contrarien-1"}
+{"type": "execution", "ts": "2026-11-19T18:08:56+00:00", "agent": "equipe", "action": "ajuster_stop", "symbole": "DIS", "qty": null, "statut": "exécuté", "stop": 117.04, "source": ""}

@@ -76,11 +76,11 @@
        "qty": 38,
        "prix": 117.04,
        "date": "2026-11-05T18:05:17+00:00",
-       "stop": 110.48,
+       "stop": 117.04,
        "tp": 130.36,
        "statut": "ouvert",
        "parent_id": "97c9bd3b-02b6-4f58-9f8a-19a7e69303d3",
-       "stop_id": "e624f46b-b4be-4c2c-ad19-a2ddd872c323",
+       "stop_id": "463cc9ce-caf5-4956-a200-eed909ecbbaa",
        "tp_id": "18829057-dbea-4ae8-8277-6cd9dfad1f6e"
       }
      ],
@@ -270,7 +270,7 @@
      "texte": "Ouverture, ordre planifié acheter VLO : Achat exécuté : 13 VLO à 350.75 $ (stop 318.14 $, objectif 412.99 $)"
     }
    ],
-   "derniere_seance": "2026-11-19T08:02:36+00:00"
+   "derniere_seance": "2026-11-19T18:01:16+00:00"
   }
  }
 }

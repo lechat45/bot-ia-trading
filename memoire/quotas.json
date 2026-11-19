@@ -345,16 +345,16 @@
     "appels": 1
    },
    "gemini#1": {
-    "tokens": 165709,
-    "appels": 17
+    "tokens": 181739,
+    "appels": 18
    },
    "gemini#2": {
     "tokens": 51861,
     "appels": 5
    },
    "gemini#3": {
-    "tokens": 64812,
-    "appels": 7
+    "tokens": 139992,
+    "appels": 13
    }
   }
  }
