@@ -1,21 +1,18 @@
-_Mis à jour : 2026-11-18 19:01 (Paris)_
+_Mis à jour : 2026-11-19 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 18/11/2026 (Séance de Suivi - Bourse Ouverte)
+- Date : 19/11/2026 (Séance de Préparation)
 
-## Suivi des Positions Portefeuille (10/10 positions actives - Portefeuille Complet) :
-- PG (Consommation de base) : +6,15 %, stop suiveur actif au niveau d'achat (160,74 $). Tendance très résiliente.
-- UNP (Industrie) : +1,95 %, stop à 280,23 $. Thèse solide.
-- DUK (Utilities) : +4,91 %, stop à 123,92 $. Secteur défensif porteur.
-- ABBV (Santé) : -0,86 %, stop à 273,06 $. Thèse intacte.
-- DIS (Communication Services) : +4,81 %, stop à 110,48 $. Excellents résultats T4, dividende rehaussé, rachats d'actions.
-- AAPL (Tech) : +2,94 %, stop à 322,57 $. Force relative.
-- LIN (Matériaux) : -1,58 %, stop à 480,61 $. Solide leader des gaz industriels.
-- MSFT (Tech) : -2,96 %, stop à 486,50 $.
-- V (Financial Services) : +0,30 %, stop à 486,50 $ environ.
-- VLO (Énergie) : -1,80 %, stop à 7,6 % sous cours.
+## État du Portefeuille & Contraintes :
+- Le portefeuille est à 10/10 positions (maximum réglementaire atteint). Aucun nouvel achat direct ne peut être passé sans vente préalable par l'équipe.
+- Le marché montre une correction de court terme (-3,8 % sur 5 séances sur le S&P 500), mais la tendance de fond reste haussière (S&P 500 au-dessus de sa moyenne 10 mois, +4,2 %).
 
-## État du Portefeuille & Candidats :
-- Le portefeuille est à 10/10 positions (maximum réglementaire atteint). Impossible d'ouvrir de nouvelles lignes sans vendre au préalable.
-- Candidat de grande qualité identifié pour la suite (ex: SPGI - S&P Global), affichant d'excellents fondamentaux (marge op 44%, ROE 17.9%, repli technique vers la SMA50 à 430$). À garder en tête si une position actuelle est liquidée.
-- Précautions : Respect absolu des règles de gestion des stops suiveurs automatiques sur les positions gagnantes, surveillance des secteurs en correction (technologie, matériaux).
+## Candidat Qualité Validé :
+- SPGI (S&P Global Inc. - Services Financiers) :
+  - Fondamentaux exceptionnels : Marge opérationnelle de 44,1 %, ROE de 17,9 %, FCF de 6,0 Md$, dette sur fonds propres modérée (54.0).
+  - Situation technique : Repli de -6,1 % sur 5 séances, cours à 446.31 $, proche de la SMA50 (430.16 $) et solidement au-dessus de la SMA200 (413.99 $). RSI à 43.0.
+  - Plan d'action : Prêt à être proposé dès qu'une position actuelle sous-performante sera liquidée par l'équipe.
+
+## Suivi des Positions Actuelles :
+- Les stops suiveurs automatiques protègent le capital (notamment sur PG, DUK, DIS, AAPL). Les positions en léger retrait (MSFT, LIN, VLO, ABBV) doivent être surveillées de près lors de l'ouverture de New York.
+- Respect strict des consignes : pas d'achat forcé si le portefeuille est saturé. La qualité exige de la patience et de la discipline.

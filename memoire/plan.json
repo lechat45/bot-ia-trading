@@ -1,46 +1,6 @@
 {
- "date": "2026-11-18",
- "cree_le": "2026-11-18T08:02:37+00:00",
+ "date": "2026-11-19",
+ "cree_le": "2026-11-19T08:02:36+00:00",
  "simulation": false,
- "ordres": [
-  {
-   "compte": "equipe",
-   "agent": "gerant",
-   "action": "acheter",
-   "symbole": "V",
-   "source": "equilibre-1",
-   "these": "Reconstitution de l'exposition au secteur Financier (0% du portefeuille suite aux sorties de JPM et SAN). Visa (V) dispose de marges exceptionnelles (marge op. 66,3%, ROE 63,5%, FCF 21 Md$) et d'un bilan très solide. Tendance haussière confirmée (+14,2% sur 3m). Invalidation sous la SMA50 (391,75$). Sortie : stop loss à 391,73$ (-6,0%), objectif 466,75$ (+12,0%). Horizon 1 à 3 mois. Avis critique 'ok'.",
-   "statut": "execute",
-   "cree_le": "2026-11-18T08:24:38+00:00",
-   "prix_reference": 416.74,
-   "montant_usd": 4584.14,
-   "qty_estimee": 11,
-   "stop_loss_pct": 6.0,
-   "take_profit_pct": 12.0,
-   "resultat": "Achat exécuté : 11 V à 416.21 $ (stop 391.27 $, objectif 466.20 $)",
-   "prix_execution": 416.211818,
-   "qty": 11,
-   "traite_le": "2026-11-18T14:40:23+00:00"
-  },
-  {
-   "compte": "equipe",
-   "agent": "gerant",
-   "action": "acheter",
-   "symbole": "VLO",
-   "source": "contrarien-1",
-   "these": "Intégration du secteur Énergie (0% du portefeuille, secteur en tête sur 5 séances avec +1,8%). Repli contrarien de -16% sur 1 mois sur Valero Energy (VLO) après fort élan de fond (perf 12-1 +143%). Fondamentaux très attractifs : PER attendu à 7,1, FCF 12,6 Md$, ROE 46,9%, dette maîtrisée. Stabilisation au-dessus de la SMA200 (295,6$) avec RSI 42. Invalidation sous le support des 342$. Stop loss à 330,46$ (-9,1%, ~2 ATR), objectif 429$ (+18,0%). Sélection unique de contrarien-1 conformément à la recommandation du critique (évite tout doublon avec sentiment-1). Horizon 4 à 8 semaines.",
-   "statut": "execute",
-   "cree_le": "2026-11-18T08:24:42+00:00",
-   "prix_reference": 363.7,
-   "montant_usd": 4728.1,
-   "qty_estimee": 13,
-   "stop_loss_pct": 9.1,
-   "take_profit_pct": 18.0,
-   "resultat": "Achat exécuté : 13 VLO à 350.75 $ (stop 318.14 $, objectif 412.99 $)",
-   "prix_execution": 350.75,
-   "qty": 13,
-   "traite_le": "2026-11-18T14:40:25+00:00"
-  }
- ],
- "execute_le": "2026-11-18T14:40:25+00:00"
+ "ordres": []
 }
