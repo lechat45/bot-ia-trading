@@ -1,18 +1,22 @@
-_Mis à jour : 2026-11-20 09:02 (Paris)_
+_Mis à jour : 2026-11-20 19:01 (Paris)_
+
+_Mis à jour : 2026-11-20 19:05 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 20/11/2026 (Séance de Préparation)
+- Date : 20/11/2026 (Séance de Suivi)
 
-## État du Portefeuille & Contraintes :
-- Le portefeuille est à 10/10 positions (maximum réglementaire atteint). Aucun nouvel achat direct ne peut être passé sans vente préalable par l'équipe.
-- Le marché continue de traverser une phase de correction technique (S&P 500 -5,6% sur 5 séances, -7,6% sur 1 mois), mais la tendance de fond Faber reste HAUSSIÈRE (+4,2% au-dessus de la moyenne 10 mois).
+## Analyse du Portefeuille (8/10 positions actives) :
+- Les 8 positions actuelles (PG, UNP, DUK, ABBV, DIS, AAPL, LIN, V) sont bien encadrées par leurs stops.
+- Les positions défensives (PG, DUK) et la communication (DIS) affichent des gains modérés (+5.8%, +5.6%, +1.4%) en plein recul du marché général.
+- Les positions en repli temporaire (LIN -2.2%, V -2.5%, UNP -2.0%) restent soutenues au-dessus de leurs stops respectifs.
 
-## Candidat Qualité Validé :
-- SPGI (S&P Global Inc. - Services Financiers) :
-  - Fondamentaux exceptionnels validés : Marge opérationnelle de 44,1 %, ROE de 17,9 %, FCF de 6,0 Md$, dette sur fonds propres de 54.0.
-  - Situation technique : Repli à 442.53 $ (RSI 38.0), proche de la SMA50 (430.80 $) et au-dessus de la SMA200 (414.02 $).
-  - Statut : Proposition formulée, mais bloquée par la saturation du portefeuille (10/10 positions). L'équipe doit procéder à un arbitrage (vente d'une position sous-performante ou stagnante) pour permettre l'entrée sur ce dossier de haute qualité.
+## Action de la séance :
+- Proposition faite sur **SPGI (S&P Global Inc.)** :
+  - Montant : 6 000 $ (confiance ÉLEVÉE).
+  - Fondamentaux : Marge op. 44.1 %, ROE 17.9 %, FCF 6.0 Md$, dette/FP 54.0, PER attendu 22.1.
+  - Signal Technique : Repli à 446.25 $ (RSI 35.0, au-dessus de SMA50 à 431.51 $ et SMA200 à 414.13 $).
+  - Risk Management : Stop -6.5% (417.24 $, sous SMA50/2x ATR), TP +14.0% (508.70 $), risque compte 0.39%.
 
-## Suivi des Positions Actuelles :
-- Les stops suiveurs automatiques et les stops de protection encadrent le risque. Les lignes en retrait (MSFT, LIN, VLO, ABBV, UNP) font l'objet d'une surveillance étroite.
-- Discipline Qualité maintenue : pas d'achat forcé hors des clous réglementaires, exigence de rigueur fondamentale et technique.
+## Prochaines étapes :
+- Surveiller l'exécution de la proposition SPGI par le critique et le gérant.
+- Continuer d'observer les replis sur les leaders de qualité en cas de poursuite de la correction du marché.

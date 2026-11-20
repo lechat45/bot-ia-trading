@@ -1,6 +1,7 @@
-_Mis à jour : 2026-11-20 09:02 (Paris)_
+_Mis à jour : 2026-11-20 19:01 (Paris)_
 
-- État du portefeuille : 10/10 positions. Portefeuille complet.
-- Analyse ASML : Chute prononcée à 1356.13 (-19% sur 1 mois, RSI 34), mais fondamentaux exceptionnels (ROE 65.6%, FCF 10.4Md, dette/FP 9). Stabilisation en cours autour de 1350-1360. Catalyseur des résultats le 2027-01-27. Cependant, le portefeuille est actuellement saturé (10/10 positions) et aucune vente d'urgence n'est justifiée pour libérer du capital. 
-- Décision : Pas de nouvelle proposition d'ordre ce jour en raison de la saturation du portefeuille et de la nécessité de préserver le matelas de liquidités dans ce marché volatil.
-- À surveiller : Évolution de la stabilisation des grandes valeurs technologiques européennes et opportunités de réallocation si une position actuelle est liquidée.
+_Mis à jour : 2026-11-20 19:01 (Paris) - Séance de Suivi_
+
+- Portefeuille : 8/10 positions actives (47,9% cash). Performance remarquable du portefeuille en relative neutralité/hausse défensive (PG +5.8%, DUK +5.6%, DIS +1.4%, AAPL +0.8%) au milieu de la purge boursière globale (SPY -7.1% sur 5j, QQQ -8.7% sur 5j).
+- Analyse contrarienne ASML : ASML poursuit son repli à 1281.75 $ (-5.5% aujourd'hui) dans le sillage de la débâcle du secteur des semi-conducteurs et de la tech (NVDA, AMD, AVGO). Le critère contrarien n°4 (stabilisation sur au moins 2 séances sans nouveau plus bas) N'EST PAS rempli. Interdiction stricte d'attraper le couteau qui tombe.
+- Décision : Pas de nouvelle proposition d'achat ni de vente en séance de suivi. Conservation des positions défensives actuelles protégées par leurs stops. Preservation de 47.9% de liquidités pour saisir de véritables points d'inflexion contrariens ultérieurs.

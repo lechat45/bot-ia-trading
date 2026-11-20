@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 47968.20001000001,
+   "cash": 42609.120010000006,
    "positions": {
     "PG": {
      "lots": [
@@ -133,6 +133,22 @@
       }
      ],
      "these": "Reconstitution de l'exposition au secteur Financier (0% du portefeuille suite aux sorties de JPM et SAN). Visa (V) dispose de marges exceptionnelles (marge op. 66,3%, ROE 63,5%, FCF 21 Md$) et d'un bilan très solide. Tendance haussière confirmée (+14,2% sur 3m). Invalidation sous la SMA50 (391,75$). Sortie : stop loss à 391,73$ (-6,0%), objectif 466,75$ (+12,0%). Horizon 1 à 3 mois. Avis critique 'ok'."
+    },
+    "SPGI": {
+     "lots": [
+      {
+       "qty": 12,
+       "prix": 446.59,
+       "date": "2026-11-20T18:22:48+00:00",
+       "stop": 415.38,
+       "tp": 511.41,
+       "statut": "ouvert",
+       "parent_id": "53c11597-a366-4f9d-a271-f016c22f238c",
+       "stop_id": "ce7c369f-8b61-40c6-93f6-808c18e35292",
+       "tp_id": "5012047a-4b72-4d17-8663-0bbfb8e4e9b8"
+      }
+     ],
+     "these": "Achat de SPGI (S&P Global Inc.) - Proposition qualite-1 (Avis Critique: OK). Marge opérationnelle de 44,1 %, ROE de 17,9 %, FCF de 6,0 Md$. Titre en repli sain dans une tendance haussière solide (cours 446.65 $ au-dessus de SMA50 à 431.51 $ et SMA200 à 414.13 $). RSI à 35. Force relative marquée vs S&P 500 (-1.5 % sur 1 mois vs -8.3 % pour l'indice). Invalidation sous la SMA50 avec stop à 7.0 % (415,40 $), Take Profit à 14.5 % (511,40 $, proche plus haut 52 sem à 513,20 $). Horizon 1-6 mois."
     }
    },
    "realise": -4499.549992000003,
@@ -238,7 +254,7 @@
      "texte": "Ouverture, ordre planifié vendre VLO : Vente exécutée : 13 VLO à 336.07 $ (plus-value -190.88 $)"
     }
    ],
-   "derniere_seance": "2026-11-20T08:02:45+00:00"
+   "derniere_seance": "2026-11-20T18:01:14+00:00"
   }
  }
 }
