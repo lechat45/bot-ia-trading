@@ -1,18 +1,16 @@
-_Mis à jour : 2026-11-19 09:02 (Paris)_
+_Mis à jour : 2026-11-20 09:02 (Paris)_
 
-_Mis à jour : 2026-11-19 09:02 (Paris)_
+Analyste Équilibre - Carnet de Bord (Séance du 20/11/2026)
 
-Analyste Équilibre - Notes & Carnet de Bord (Séance du 19/11/2026)
+1. État du Portefeuille & Contexte :
+- Portefeuille : 10 positions (compte saturé à 10/10), liquidités : ~37 161 USD (~38,3%).
+- Régime de marché : S&P 500 toujours au-dessus de sa moyenne 10 mois (+4,2%) -> Tendance de fond HAUSSIÈRE (tailles normales). Cependant, le marché subit une forte correction récente (Nasdaq -6,3% sur 5 séances, technologie -7,5%).
+- Nos positions défensives (PG, DUK) amortissent le choc, tandis que les stops suiveurs automatiques protèlent les gains.
 
-1. Contexte de Marché & Portefeuille :
-- Portefeuille : 10 positions (compte saturé à 10/10), liquidités : ~37 161 USD (~38,3% du compte).
-- Régime de marché : S&P 500 au-dessus de sa moyenne 10 mois (+4,2%) -> Tendance de fond HAUSSIÈRE (tailles normales). Cependant, sur les 5 dernières séances, correction sensible sur la technologie (-6,1%) et les matériaux (-4,8%).
-- Diversification sectorielle exemplaire : 10 positions couvrant 9 secteurs différents. Le portefeuille est d'une robustesse maximale.
+2. Analyse et Décisions :
+- Le compte est saturé (10/10 positions), rendant l'ouverture de nouvelles lignes (comme Southern Company - SO) impossible sans libérer préalablement du capital.
+- Aucune position ne nécessite de coupe immédiate car les stops et thèses restent intacts (les replis s'inscrivent dans la correction sectorielle saine sans invalidation structurelle majeure).
+- Stratégie maintenue : conserver la structure équilibrée actuelle (couvrant 9 secteurs) et le matelas de liquidité robuste (~38%) jusqu'à ce qu'une position atteigne son objectif ou déclenche son stop.
 
-2. Suivi des positions :
-- Les positions sont protégées par les stops automatiques (stops suiveurs activés sur les lignes en gain).
-- Aucune position n'a cassé son stop ou sa thèse. Les légers replis sur MSFT, LIN, ABBV et VLO s'inscrivent dans la correction sectorielle en cours, sans invalidation structurelle.
-
-3. Cap pour la suite :
-- Compte à 10/10 positions, matelas de liquidités de sécurité très confortable (38,3%).
-- Aucune proposition d'achat formulée aujourd'hui : l'architecture du portefeuille est optimale et aucun emplacement n'est libre. Attendre la clôture d'une position existante (par stop ou take profit) pour libérer de la liquidité et initier de nouvelles opportunités équilibrées.
+3. Prochaine étape :
+- Attendre la libération d'un emplacement pour initier un renforcement ou une diversification ciblée dans un secteur robuste sous-représenté.

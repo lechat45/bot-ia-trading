@@ -1,6 +1,33 @@
 {
- "date": "2026-11-19",
- "cree_le": "2026-11-19T08:02:36+00:00",
+ "date": "2026-11-20",
+ "cree_le": "2026-11-20T08:02:45+00:00",
  "simulation": false,
- "ordres": []
+ "ordres": [
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "vendre",
+   "symbole": "MSFT",
+   "source": "sentiment-1",
+   "these": "Thèse brisée (élan de fond) : Le titre MSFT est passé sous ses moyennes mobiles SMA20 (524.1) et SMA50 (519.12), cotant à 498.45. Secteur tech en forte correction. Vente totale pour préserver le capital et libérer une place au portefeuille.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-20T08:27:33+00:00",
+   "prix_reference": 498.45,
+   "pourcentage": 100.0,
+   "qty_estimee": 13
+  },
+  {
+   "compte": "equipe",
+   "agent": "gerant",
+   "action": "vendre",
+   "symbole": "VLO",
+   "source": "sentiment-2",
+   "these": "Thèse cassée (momentum et tendance) : VLO est en forte chute (-22,5 % sur 1 mois) sous ses moyennes mobiles SMA20 (374,0) et SMA50 (397,74). Vente totale pour couper les pertes et éviter d'attraper un couteau qui tombe.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-20T08:27:51+00:00",
+   "prix_reference": 338.49,
+   "pourcentage": 100.0,
+   "qty_estimee": 13
+  }
+ ]
 }
