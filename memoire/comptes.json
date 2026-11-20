@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 37161.70000700001,
+   "cash": 47968.20001000001,
    "positions": {
     "PG": {
      "lots": [
@@ -118,22 +118,6 @@
      ],
      "these": "Achat de LIN (Linde plc) - Leader mondial des gaz industriels et des technologies de procédés (Secteur Matériaux de base actuellement à 0% du portefeuille). Fondamentaux irréprochables validant les critères Qualité : croissance du CA de 9.2% (>8%), marge opérationnelle de 28.0% (>15%), ROE de 17.7% (>15%), FCF positif de 4.2Md$ et dette/FP de 65 (<150). Tendance technique saine au-dessus de sa SMA50 et SMA200. Résultats T3 déjà publiés, incertitude levée. Risque : ralentissement industriel mondial. Invalidation : clôture durable sous SMA200 ou cassure du stop à 7.5%. Horizon 3-6 mois. Confiance élevée."
     },
-    "MSFT": {
-     "lots": [
-      {
-       "qty": 13,
-       "prix": 520.0,
-       "date": "2026-11-16T14:40:27+00:00",
-       "stop": 486.5,
-       "tp": 585.74,
-       "statut": "ouvert",
-       "parent_id": "560db1fb-bd5d-4286-a3b1-745979635f1b",
-       "stop_id": "cc1bf413-c9ec-423a-bca0-b23e81e1b838",
-       "tp_id": "616b93b9-5778-4bfe-a539-e7677749f6ad"
-      }
-     ],
-     "these": "Achat Qualité sur MSFT (Microsoft) suite au repli technique de -5,7 % sur support SMA50 (519,03 $). Ratios fondamentaux exceptionnels : marge op. 47,1 %, ROE 34,2 %, PER attendu 21,7x vs croissance bénéfices +32,3 % (PEG 0,67). Prochains résultats dans 72j (27/01/2027). Invalidation : cassure sous 500 $. Stop loss à 490,00 $ (-6,52 %, soit 2,0x ATR), TP à 590,00 $ (+12,55 %, R:R 1,92x)."
-    },
     "V": {
      "lots": [
       {
@@ -149,34 +133,10 @@
       }
      ],
      "these": "Reconstitution de l'exposition au secteur Financier (0% du portefeuille suite aux sorties de JPM et SAN). Visa (V) dispose de marges exceptionnelles (marge op. 66,3%, ROE 63,5%, FCF 21 Md$) et d'un bilan très solide. Tendance haussière confirmée (+14,2% sur 3m). Invalidation sous la SMA50 (391,75$). Sortie : stop loss à 391,73$ (-6,0%), objectif 466,75$ (+12,0%). Horizon 1 à 3 mois. Avis critique 'ok'."
-    },
-    "VLO": {
-     "lots": [
-      {
-       "qty": 13,
-       "prix": 350.75,
-       "date": "2026-11-18T14:40:25+00:00",
-       "stop": 318.14,
-       "tp": 412.99,
-       "statut": "ouvert",
-       "parent_id": "a4a7fe3f-3d86-4bd0-9283-440e4d0fb4a6",
-       "stop_id": "1032f40c-a93f-48b2-b1cf-fba0d6c9df7a",
-       "tp_id": "93494968-574d-42ea-b23d-e05ad215509c"
-      }
-     ],
-     "these": "Intégration du secteur Énergie (0% du portefeuille, secteur en tête sur 5 séances avec +1,8%). Repli contrarien de -16% sur 1 mois sur Valero Energy (VLO) après fort élan de fond (perf 12-1 +143%). Fondamentaux très attractifs : PER attendu à 7,1, FCF 12,6 Md$, ROE 46,9%, dette maîtrisée. Stabilisation au-dessus de la SMA200 (295,6$) avec RSI 42. Invalidation sous le support des 342$. Stop loss à 330,46$ (-9,1%, ~2 ATR), objectif 429$ (+18,0%). Sélection unique de contrarien-1 conformément à la recommandation du critique (évite tout doublon avec sentiment-1). Horizon 4 à 8 semaines."
     }
    },
-   "realise": -3986.299995000003,
+   "realise": -4499.549992000003,
    "evenements": [
-    {
-     "ts": "2026-10-30T13:40:25+00:00",
-     "texte": "Ouverture, ordre planifié acheter V : Achat exécuté : 17 V à 413.59 $ (stop 390.99 $, objectif 459.26 $)"
-    },
-    {
-     "ts": "2026-10-30T18:01:23+00:00",
-     "texte": "Stop loss déclenché : 46 NVDA vendues à 202.55 $ (plus-value -649.59 $)"
-    },
     {
      "ts": "2026-10-30T18:01:23+00:00",
      "texte": "Stop loss déclenché : 22 TSM vendues à 403.85 $ (plus-value -573.83 $)"
@@ -268,6 +228,14 @@
     {
      "ts": "2026-11-18T14:40:25+00:00",
      "texte": "Ouverture, ordre planifié acheter VLO : Achat exécuté : 13 VLO à 350.75 $ (stop 318.14 $, objectif 412.99 $)"
+    },
+    {
+     "ts": "2026-11-20T14:40:27+00:00",
+     "texte": "Ouverture, ordre planifié vendre MSFT : Vente exécutée : 13 MSFT à 495.20 $ (plus-value -322.37 $)"
+    },
+    {
+     "ts": "2026-11-20T14:40:34+00:00",
+     "texte": "Ouverture, ordre planifié vendre VLO : Vente exécutée : 13 VLO à 336.07 $ (plus-value -190.88 $)"
     }
    ],
    "derniere_seance": "2026-11-20T08:02:45+00:00"
