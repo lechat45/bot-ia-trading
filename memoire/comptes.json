@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 42609.120010000006,
+   "cash": 39193.290010000004,
    "positions": {
     "PG": {
      "lots": [
@@ -149,14 +149,26 @@
       }
      ],
      "these": "Achat de SPGI (S&P Global Inc.) - Proposition qualite-1 (Avis Critique: OK). Marge opérationnelle de 44,1 %, ROE de 17,9 %, FCF de 6,0 Md$. Titre en repli sain dans une tendance haussière solide (cours 446.65 $ au-dessus de SMA50 à 431.51 $ et SMA200 à 414.13 $). RSI à 35. Force relative marquée vs S&P 500 (-1.5 % sur 1 mois vs -8.3 % pour l'indice). Invalidation sous la SMA50 avec stop à 7.0 % (415,40 $), Take Profit à 14.5 % (511,40 $, proche plus haut 52 sem à 513,20 $). Horizon 1-6 mois."
+    },
+    "BLK": {
+     "lots": [
+      {
+       "qty": 3,
+       "prix": 1138.61,
+       "date": "2026-11-23T14:40:37+00:00",
+       "stop": 1058.31,
+       "tp": 1314.36,
+       "statut": "ouvert",
+       "parent_id": "c180c05d-57e8-45dc-9875-814d9dc0ce36",
+       "stop_id": "b5e95563-d772-4912-93e0-c1930b590f4d",
+       "tp_id": "f5f3c18e-f0ef-48eb-8ad3-506161193510"
+      }
+     ],
+     "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$). Repli technique sain de -9,9 % sur 5j ramenant le RSI à 40, tout en restant au-dessus de la SMA200 (1062.09 $). Aucun résultat avant 52 jours (14/01/2027). Stop à -7,0 %, Take Profit à +15,5 %."
     }
    },
    "realise": -4499.549992000003,
    "evenements": [
-    {
-     "ts": "2026-10-30T18:01:23+00:00",
-     "texte": "Stop loss déclenché : 22 TSM vendues à 403.85 $ (plus-value -573.83 $)"
-    },
     {
      "ts": "2026-11-02T14:40:27+00:00",
      "texte": "Ouverture, ordre planifié acheter MSFT : Achat exécuté : 16 MSFT à 525.32 $ (stop 493.21 $, objectif 587.65 $)"
@@ -252,6 +264,10 @@
     {
      "ts": "2026-11-20T14:40:34+00:00",
      "texte": "Ouverture, ordre planifié vendre VLO : Vente exécutée : 13 VLO à 336.07 $ (plus-value -190.88 $)"
+    },
+    {
+     "ts": "2026-11-23T14:40:37+00:00",
+     "texte": "Ouverture, ordre planifié acheter BLK : Achat exécuté : 3 BLK à 1138.61 $ (stop 1058.31 $, objectif 1314.36 $)"
     }
    ],
    "derniere_seance": "2026-11-23T08:02:33+00:00"

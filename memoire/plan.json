@@ -10,13 +10,18 @@
    "symbole": "BLK",
    "source": "",
    "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$). Repli technique sain de -9,9 % sur 5j ramenant le RSI à 40, tout en restant au-dessus de la SMA200 (1062.09 $). Aucun résultat avant 52 jours (14/01/2027). Stop à -7,0 %, Take Profit à +15,5 %.",
-   "statut": "en_attente",
+   "statut": "execute",
    "cree_le": "2026-11-23T08:09:59+00:00",
    "prix_reference": 1102.02,
    "montant_usd": 4408.08,
    "qty_estimee": 4,
    "stop_loss_pct": 7.0,
-   "take_profit_pct": 15.5
+   "take_profit_pct": 15.5,
+   "resultat": "Achat exécuté : 3 BLK à 1138.61 $ (stop 1058.31 $, objectif 1314.36 $)",
+   "prix_execution": 1138.61,
+   "qty": 3,
+   "traite_le": "2026-11-23T14:40:37+00:00"
   }
- ]
+ ],
+ "execute_le": "2026-11-23T14:40:37+00:00"
 }
