@@ -1,42 +1,22 @@
 {
- "date": "2026-11-20",
- "cree_le": "2026-11-20T08:02:45+00:00",
+ "date": "2026-11-23",
+ "cree_le": "2026-11-23T08:02:33+00:00",
  "simulation": false,
  "ordres": [
   {
    "compte": "equipe",
    "agent": "gerant",
-   "action": "vendre",
-   "symbole": "MSFT",
-   "source": "sentiment-1",
-   "these": "Thèse brisée (élan de fond) : Le titre MSFT est passé sous ses moyennes mobiles SMA20 (524.1) et SMA50 (519.12), cotant à 498.45. Secteur tech en forte correction. Vente totale pour préserver le capital et libérer une place au portefeuille.",
-   "statut": "execute",
-   "cree_le": "2026-11-20T08:27:33+00:00",
-   "prix_reference": 498.45,
-   "pourcentage": 100.0,
-   "qty_estimee": 13,
-   "resultat": "Vente exécutée : 13 MSFT à 495.20 $ (plus-value -322.37 $)",
-   "prix_execution": 495.202308,
-   "qty": 13,
-   "traite_le": "2026-11-20T14:40:27+00:00"
-  },
-  {
-   "compte": "equipe",
-   "agent": "gerant",
-   "action": "vendre",
-   "symbole": "VLO",
-   "source": "sentiment-2",
-   "these": "Thèse cassée (momentum et tendance) : VLO est en forte chute (-22,5 % sur 1 mois) sous ses moyennes mobiles SMA20 (374,0) et SMA50 (397,74). Vente totale pour couper les pertes et éviter d'attraper un couteau qui tombe.",
-   "statut": "execute",
-   "cree_le": "2026-11-20T08:27:51+00:00",
-   "prix_reference": 338.49,
-   "pourcentage": 100.0,
-   "qty_estimee": 13,
-   "resultat": "Vente exécutée : 13 VLO à 336.07 $ (plus-value -190.88 $)",
-   "prix_execution": 336.066923,
-   "qty": 13,
-   "traite_le": "2026-11-20T14:40:34+00:00"
+   "action": "acheter",
+   "symbole": "BLK",
+   "source": "",
+   "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$). Repli technique sain de -9,9 % sur 5j ramenant le RSI à 40, tout en restant au-dessus de la SMA200 (1062.09 $). Aucun résultat avant 52 jours (14/01/2027). Stop à -7,0 %, Take Profit à +15,5 %.",
+   "statut": "en_attente",
+   "cree_le": "2026-11-23T08:09:59+00:00",
+   "prix_reference": 1102.02,
+   "montant_usd": 4408.08,
+   "qty_estimee": 4,
+   "stop_loss_pct": 7.0,
+   "take_profit_pct": 15.5
   }
- ],
- "execute_le": "2026-11-20T14:40:34+00:00"
+ ]
 }

@@ -1,34 +1,6 @@
 {
- "satures": {
-  "gemini|2|gemini-3.5-flash": 1795248060
- },
+ "satures": {},
  "jours": {
-  "2026-11-03": {
-   "groq#1": {
-    "tokens": 6033,
-    "appels": 1
-   },
-   "groq#2": {
-    "tokens": 5906,
-    "appels": 1
-   },
-   "gemini#1": {
-    "tokens": 287536,
-    "appels": 23
-   },
-   "gemini#2": {
-    "tokens": 235367,
-    "appels": 21
-   },
-   "groq#3": {
-    "tokens": 6601,
-    "appels": 1
-   },
-   "gemini#3": {
-    "tokens": 337848,
-    "appels": 26
-   }
-  },
   "2026-11-04": {
    "groq#1": {
     "tokens": 28510,
@@ -357,6 +329,32 @@
    "gemini#3": {
     "tokens": 308995,
     "appels": 25
+   }
+  },
+  "2026-11-23": {
+   "groq#1": {
+    "tokens": 6114,
+    "appels": 1
+   },
+   "groq#2": {
+    "tokens": 6111,
+    "appels": 1
+   },
+   "gemini#2": {
+    "tokens": 166652,
+    "appels": 17
+   },
+   "gemini#1": {
+    "tokens": 299154,
+    "appels": 21
+   },
+   "groq#3": {
+    "tokens": 13842,
+    "appels": 2
+   },
+   "gemini#3": {
+    "tokens": 126813,
+    "appels": 12
    }
   }
  }

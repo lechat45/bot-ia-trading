@@ -1,22 +1,19 @@
-_Mis à jour : 2026-11-20 19:01 (Paris)_
-
-_Mis à jour : 2026-11-20 19:05 (Paris)_
+_Mis à jour : 2026-11-23 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 20/11/2026 (Séance de Suivi)
+- Date : 23/11/2026 (Séance de Préparation)
 
-## Analyse du Portefeuille (8/10 positions actives) :
-- Les 8 positions actuelles (PG, UNP, DUK, ABBV, DIS, AAPL, LIN, V) sont bien encadrées par leurs stops.
-- Les positions défensives (PG, DUK) et la communication (DIS) affichent des gains modérés (+5.8%, +5.6%, +1.4%) en plein recul du marché général.
-- Les positions en repli temporaire (LIN -2.2%, V -2.5%, UNP -2.0%) restent soutenues au-dessus de leurs stops respectifs.
+## Situation du Portefeuille (9 positions) :
+- Le portefeuille détient 9 positions stables et bien protégées par leurs stops respectifs.
+- Aucune détérioration fondamentale sur les positions actuelles (PG, UNP, DUK, ABBV, DIS, AAPL, LIN, V, SPGI).
 
-## Action de la séance :
-- Proposition faite sur **SPGI (S&P Global Inc.)** :
-  - Montant : 6 000 $ (confiance ÉLEVÉE).
-  - Fondamentaux : Marge op. 44.1 %, ROE 17.9 %, FCF 6.0 Md$, dette/FP 54.0, PER attendu 22.1.
-  - Signal Technique : Repli à 446.25 $ (RSI 35.0, au-dessus de SMA50 à 431.51 $ et SMA200 à 414.13 $).
-  - Risk Management : Stop -6.5% (417.24 $, sous SMA50/2x ATR), TP +14.0% (508.70 $), risque compte 0.39%.
+## Action de la séance (Proposition qualite-1) :
+- Proposition d'achat sur **BLK (BlackRock, Inc.)** :
+  - Montant : 5 500 $ (Confiance ÉLEVÉE).
+  - Fondamentaux : Marge op. 36.7 %, Croissance CA +19.1 %, FCF 8.5 Md$, Dette/FP 22.0, PER attendu 17.0 (PEG 0.67).
+  - Signal Technique : Repli de -9.9 % sur 5j à 1 102.02 $ (RSI 40.0), supporté au-dessus de sa SMA200 (1 062.09 $).
+  - Risk Management : Stop -7.0 % (1 024.88 $, sous la SMA200 et 2x ATR), TP +15.5 % (1 272.83 $), risque compte 0.32 %, R/R 2.21.
 
-## Prochaines étapes :
-- Surveiller l'exécution de la proposition SPGI par le critique et le gérant.
-- Continuer d'observer les replis sur les leaders de qualité en cas de poursuite de la correction du marché.
+## À surveiller pour les prochaines séances :
+- Décision du gérant sur la proposition BLK.
+- Poursuite du balayage des leaders de qualité (MSFT, LLY) en cas de replis ou de consolidation du marché.
