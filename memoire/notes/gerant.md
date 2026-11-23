@@ -1,25 +1,24 @@
-_Mis à jour : 2026-11-23 09:02 (Paris)_
+_Mis à jour : 2026-11-23 19:01 (Paris)_
 
-# JOURNAL DE BORD DU GÉRANT - SÉANCE DE PRÉPARATION (23/11/2026)
+# JOURNAL DE BORD DU GÉRANT - SÉANCE DE SUIVI (23/11/2026)
 
-## 1. État du Portefeuille & Allocation (~95 542 $ valeur totale, ~42 600 $ cash / ~44,6 % de liquidités)
+## 1. État du Portefeuille & Allocation
+- **Valeur totale** : ~96 158 $ | **Cash** : ~46 688 $ (~48,5 % de liquidités suite à la vente de UNP)
 - **Positions actuelles (9/10)** : 
-  - PG (+5,49 %), UNP (-3,07 %), DUK (+4,76 %), ABBV (-1,44 %), DIS (+0,79 %), AAPL (+0,04 %), LIN (-3,30 %), V (-3,31 %), SPGI (-1,48 %).
+  - PG (+5,95 %, stop à l'équilibre), DUK (+4,12 %, stop à l'équilibre), DIS (+2,39 %, stop à l'équilibre), AAPL (+1,57 %), SPGI (+0,90 %), BLK (+1,0 %), ABBV (-1,16 %), LIN (-1,09 %), V (-1,43 %).
   - Tous les stops suiveurs automatiques et protections de gains sont opérationnels.
 
-## 2. Décisions de la Séance (Préparation du 23/11/2026)
-- **Ordre Planifié : Achat de BLK (BlackRock, Inc.)** :
-  - **Source** : `qualite-1` (Validé par le critique avec avis OK).
-  - **Montant** : ~4 408 $ (~4 actions au prix de ref 1 102.02 $).
-  - **Thèse** : Leader mondial de la gestion d'actifs, fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$, PER attendu 17.0x). Repli technique de -9,9 % sur 5j avec RSI à 40, cours au-dessus de la SMA200 (1 062.09 $). Pas de résultats avant le 14/01/2027 (52 jours).
-  - **Gestion du Risque** : Stop loss à -7.0 %, Take profit à +15.5 %. Le portefeuille passera à 10 positions (limite maximale atteinte).
-- **Refus de BRK.B (`equilibre-1`)** :
-  - Bien que le dossier soit très solide et la volatilité faible, le portefeuille possède déjà 9 positions et va atteindre sa limite maximale de 10 positions avec BLK. Le maintien d'un matelas de liquidités élevé (~40%) est prioritaire dans le contexte de correction sectorielle en cours.
+## 2. Décisions de la Séance
+- **Vente de UNP (Source : `contrarien-1`)** :
+  - Vente totale de la position (26 actions) exécutée à 289.02 $ (plus-value nette de -189.28 $).
+  - Justification : Libération d'un slot de position (le portefeuille passe à 9/10) et renforcement du matelas de liquidités à ~48,5 % dans un contexte de rotation sectorielle incertaine.
+- **Maintien des 9 autres positions** :
+  - Les thèses restent valides, les stops et les stops suiveurs protègent le capital.
 
 ## 3. Contexte Macro & Marché
 - Tendance de fond S&P 500 : Haussière (+4,2 % au-dessus de la moyenne 10 mois de Faber).
-- Volatilité / Rotation : Forte correction récente du marché (-8 % sur 5j pour le S&P 500, -9,6 % pour le Nasdaq), avec une rotation vers les valeurs défensives. Les futures montrent un rebond ce matin.
+- Volatilité et prudence maintenues : Matelas de liquidités élevé (>45%) pour faire face aux incertitudes.
 
 ## 4. Prochaines Étapes
-- Suivi de l'exécution de l'ordre d'achat de BLK à l'ouverture de New York.
-- Surveillance attentive des niveaux de stops et des 10 positions actives.
+- Suivi régulier des 9 positions et surveillance des niveaux de stops.
+- Attente d'opportunités de qualité pour réemployer sélectivement le cash.

@@ -334,5 +334,16 @@
   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
   "cree_le": "2026-11-23T14:40:37+00:00",
   "statut": "actif"
+ },
+ {
+  "id": "r28-0122",
+  "date": "2027-01-22",
+  "titre": "Résultats de PG",
+  "symbole": "PG",
+  "seance": "toutes",
+  "cree_par": "systeme",
+  "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+  "cree_le": "2026-11-23T18:12:04+00:00",
+  "statut": "actif"
  }
 ]

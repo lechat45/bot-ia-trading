@@ -1,5 +1,7 @@
-_Mis à jour : 2026-11-23 09:02 (Paris)_
+_Mis à jour : 2026-11-23 19:01 (Paris)_
 
-- Portefeuille : 8/10 positions, 47.9% de cash. Le compte résiste bien à la tempête technologique grâce au positionnement défensif.
-- Idées Contrariennes : ASML est surveillé de près (chute à ~1268$, PER attendu de 20, fondamentaux solides avec marge et FCF robustes), mais le RSI à 31 et l'absence de stabilisation claire sur 2 séances interdisent l'achat immédiat (critère n°4 non rempli suite au risque politique US/export).
-- Décision du jour : Pas de nouvelle proposition d'achat ni de vente en cette ouverture de semaine. Maintien de la discipline contrarienne rigoureuse (pas d'achat prématuré sans stabilisation technique confirmée). Conservation du matelas de liquidités de ~48%.
+_Mis à jour : 2026-11-23 19:05 (Paris) - Séance de Suivi_
+
+- **Portefeuille actuel** : 10/10 positions (capacité maximale atteinte). Liquidités à ~40.7%. Les positions se comportent très bien dans cette séance de net rebond du marché (BLK +4.4%, SPGI +2.5%, LIN +2.2%, AAPL +1.6%, DIS +1.4%).
+- **Suivi ASML** : Signal d'achat Contrarien validé sur le plan technique et fondamental. Rebond puissant de +8.9% à 1380.87$, rebondissant sur la zone support 1258$-1268$ et remontant le RSI14 à 39.0. PER attendu attractif de 21.8 avec un FCF de 10.4 Md$.
+- **Blocage opérationnel** : Proposition d'achat refusée par le garde-fou en raison de la limite des 10 positions atteintes dans le compte. Aucune raison de couper une ligne existante ce jour. ASML reste en haut de la liste de surveillances si un slot venait à se libérer.

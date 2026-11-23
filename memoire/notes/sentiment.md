@@ -1,12 +1,8 @@
-_Mis à jour : 2026-11-23 09:02 (Paris)_
+_Mis à jour : 2026-11-23 19:01 (Paris)_
 
-_Mis à jour : 2026-11-23 09:02 (Paris)_
-
-- Marché : Correction majeure confirmée (S&P 500 -9,2% sur 1 mois, Nasdaq -12,7% sur 1 mois). La tech reste sous très forte pression (-12,4% sur 5 jours). Rotation marquée vers les secteurs défensifs (XLP, XLU).
-- Portefeuille : 10 positions (capacité maximale atteinte), cash très confortable (42,6% du compte, amortisseur précieux).
-- Surveillance des positions :
-  - PG et DUK : Poursuivent leur rôle de valeur refuge, proches de leurs plus hauts de 52 semaines (+5,5% et +4,8% de gain).
-  - AAPL : Sous forte pression sectorielle tech, mais conserve de la force relative (-1,3% sur 1 mois vs -12,4% pour XLK sur 5j) et se maintient au-dessus de sa SMA50 (341,63 $). À surveiller très étroitement.
-  - DIS, V, UNP, LIN : Maintiennent leurs supports (SMA50). DIS est proche du stop (117,04 $ vs cours 117,97 $).
-- Stratégie Sentiment : Aucune nouvelle proposition d'achat aujourd'hui. Portefeuille saturé (10 positions) et contexte de marche dégradé. Priorité absolue à la préservation du capital, à l'encaissement passif via stops suiveurs automatiques et à la conservation des liquidités.
-- Candidats à surveiller pour rotation future si un emplacement se libère : COST (Costco), TGT (Target) et KO (Coca-Cola), tous très solides dans la rotation défensive.
+Séance de suivi du 23/11/2026 :
+- Portefeuille : 10 positions, cash 39 193 $, respect du plafond de positions.
+- Vérification des thèses : aucune position ne montre de cassure technique évidente (stops encore largement en dessous du cours, SMA50/20 respectées d’après les données internes). DIS proche du stop mais toujours au-dessus, aucune alerte de volume ou actualité négative.
+- Aucun nouveau catalyseur d’élan détecté aujourd’hui et aucune marge de position disponible pour de nouvelles entrées (limite 10 titres). 
+- Décision : ne pas proposer d’ordre d’achat ou de vente. Surveillance continue des stops automatiques et des actualités. 
+- Rappel : surveiller les résultats de AAPL (prochain earnings 2026‑12‑13) et les éventuels rebonds de DIS.

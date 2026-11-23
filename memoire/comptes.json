@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 39193.290010000004,
+   "cash": 46707.81001,
    "positions": {
     "PG": {
      "lots": [
@@ -21,22 +21,6 @@
       }
      ],
      "these": "Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). Fondamentaux d'exception (FCF 12.7Md$, marge op 27.1%, ROE 29.6%). PER attendu 21.7x (médiane sectorielle 31.8x). Tendance haussière confirmée au-dessus de SMA20 (151.82$) et SMA200 (146.34$). Horizon 1-3 mois, aucun résultat avant 87 jours. Invalidation si rupture SMA20 à 151.80$. Stop -5.0% (153.06$), TP +10.5% (178.04$), R/R 2.1x."
-    },
-    "UNP": {
-     "lots": [
-      {
-       "qty": 26,
-       "prix": 296.3,
-       "date": "2026-10-27T13:40:22+00:00",
-       "stop": 280.23,
-       "tp": 329.59,
-       "statut": "ouvert",
-       "parent_id": "c3d54705-87b3-4661-b3f2-9025547bd1f9",
-       "stop_id": "530e2cef-2ccb-4069-a283-2aa95a432d39",
-       "tp_id": "e8e996aa-255c-49d8-abbf-a9cee591cf91"
-      }
-     ],
-     "these": "Diversification vers les Industrielles avec le leader du fret ferroviaire nord-américain UNP. Résultats T3 déjà publiés (22/10), incertitude levée. FCF robuste 5.1Md$, marge opérationnelle 41.3%, PER attractif de 20.6x. Invalidation à -5.2%, objectif à +11.5%."
     },
     "DUK": {
      "lots": [
@@ -167,7 +151,7 @@
      "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$). Repli technique sain de -9,9 % sur 5j ramenant le RSI à 40, tout en restant au-dessus de la SMA200 (1062.09 $). Aucun résultat avant 52 jours (14/01/2027). Stop à -7,0 %, Take Profit à +15,5 %."
     }
    },
-   "realise": -4499.549992000003,
+   "realise": -4688.829992000004,
    "evenements": [
     {
      "ts": "2026-11-02T14:40:27+00:00",
@@ -270,7 +254,7 @@
      "texte": "Ouverture, ordre planifié acheter BLK : Achat exécuté : 3 BLK à 1138.61 $ (stop 1058.31 $, objectif 1314.36 $)"
     }
    ],
-   "derniere_seance": "2026-11-23T08:02:33+00:00"
+   "derniere_seance": "2026-11-23T18:01:25+00:00"
   }
  }
 }

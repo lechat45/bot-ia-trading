@@ -1,19 +1,21 @@
-_Mis à jour : 2026-11-23 09:02 (Paris)_
+_Mis à jour : 2026-11-23 19:01 (Paris)_
+
+_Mis à jour : 2026-11-23 19:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 23/11/2026 (Séance de Préparation)
+- Date : 23/11/2026 (Séance de Suivi)
 
-## Situation du Portefeuille (9 positions) :
-- Le portefeuille détient 9 positions stables et bien protégées par leurs stops respectifs.
-- Aucune détérioration fondamentale sur les positions actuelles (PG, UNP, DUK, ABBV, DIS, AAPL, LIN, V, SPGI).
+## État du Portefeuille (10 positions - Limite max atteinte) :
+- Exécution de l'ordre d'achat sur **BLK (BlackRock)** au cours de la séance de préparation : position entrée avec succès, la valeur affiche +4,4 % sur la journée (+1,0 % par rapport à notre prix d'entrée).
+- Portefeuille actuellement à 10/10 positions (100 % de la capacité en titres) et ~40,7 % de liquidités résiduelles.
+- Analyse des positions en léger repli (UNP -2.4 %, V -1.5 %, ABBV -1.3 %, LIN -1.1 %) :
+  - **UNP** : Le cours à 289,31 $ reste au-dessus de sa SMA50 (288,28 $) et SMA200 (274,03 $). Le stop-loss à 280,23 $ (3,1 % du cours) protège parfaitement la position. Thèse intacte.
+  - Toutes les autres positions sont techniquement saines, bien au-dessus de leurs supports majeurs et sous la protection de leurs stops respectifs.
 
-## Action de la séance (Proposition qualite-1) :
-- Proposition d'achat sur **BLK (BlackRock, Inc.)** :
-  - Montant : 5 500 $ (Confiance ÉLEVÉE).
-  - Fondamentaux : Marge op. 36.7 %, Croissance CA +19.1 %, FCF 8.5 Md$, Dette/FP 22.0, PER attendu 17.0 (PEG 0.67).
-  - Signal Technique : Repli de -9.9 % sur 5j à 1 102.02 $ (RSI 40.0), supporté au-dessus de sa SMA200 (1 062.09 $).
-  - Risk Management : Stop -7.0 % (1 024.88 $, sous la SMA200 et 2x ATR), TP +15.5 % (1 272.83 $), risque compte 0.32 %, R/R 2.21.
+## Décisions & Actions :
+- Aucune vente ou modification de stop requise.
+- Aucune nouvelle proposition d'achat formulée en raison de la saturation du nombre maximal de positions (10/10).
 
 ## À surveiller pour les prochaines séances :
-- Décision du gérant sur la proposition BLK.
-- Poursuite du balayage des leaders de qualité (MSFT, LLY) en cas de replis ou de consolidation du marché.
+- Évolution des positions en gain protégé (PG +5,8 %, DUK +4,0 %, DIS +2,2 %, AAPL +1,6 %, BLK +1,0 %).
+- Surveillance de la ré-allocation capital en cas de déclenchement de stop ou de prise de bénéfices sur une position mature.
