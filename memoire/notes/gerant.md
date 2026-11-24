@@ -1,19 +1,34 @@
-_Mis à jour : 2026-11-24 09:02 (Paris)_
+_Mis à jour : 2026-11-24 19:01 (Paris)_
 
-# JOURNAL DE BORD DU GÉRANT - SÉANCE DE PRÉPARATION (24/11/2026)
+_Mis à jour : 2026-11-24 19:02 (Paris) / 13:02 (NY)_
 
-## 1. État du Portefeuille & Allocation
-- **Valeur totale** : ~96 233 $ | **Cash** : ~46 708 $ (~48,5 %)
-- **Positions actuelles (9/10 positions actives)** :
-  - PG, DUK, DIS, AAPL, SPGI, BLK, ABBV, LIN, V.
-  - Tous les stops suiveurs automatiques et protections sont actifs.
-- **Ordre planifié pour l'ouverture (Séance de préparation du 24/11/2026)** :
-  - **Achat de GILD (Gilead Sciences)** : Montant de ~3 411 $ (~20 actions), source `sentiment-1`. Stop loss à 8.0%, take profit à 16.0%. Portant le portefeuille à 10/10 positions.
+# JOURNAL DE BORD DU GÉRANT - SÉANCE DE SUIVI (24/11/2026)
 
-## 2. Contexte Macro & Marché
-- Tendance de fond S&P 500 : Haussière (+4,2% au-dessus de la moyenne 10 mois de Faber). Tailles normales.
-- Volatilité et prudence maintenues : Matelas de liquidités élevé (>45%) permettant de déployer sélectivement du capital sur des valeurs de qualité (GILD).
+## 1. Exécution des Ordres Planifiés
+- **GILD (Gilead Sciences)** : Ordre planifié d'achat de 19 actions à 175,31 $ exécuté avec succès à l'ouverture de New York.
+  - Position initiale : ~3 330 $ (~3,4 % du portefeuille).
+  - Stop Loss initial fixé à 160,94 $ (-8,2 %), Take Profit à 202,93 $ (+15,8 %).
+  - Source : `sentiment-1`.
 
-## 3. Prochaines Étapes
-- Validation et suivi de l'exécution de l'ordre GILD à l'ouverture de New York.
-- Surveillance continue des 10 positions et des niveaux de stops suiveurs.
+## 2. État du Portefeuille & Allocations (10/10 positions actives)
+- **Valeur totale du portefeuille** : ~96 991 $ | **Cash disponible** : ~43 377 $ (~44,7 %)
+- **Positions en portefeuille** :
+  1. **PG** (Consumer Defensive) : +7,32 % | Stop breakeven actif (160,74 $)
+  2. **DUK** (Utilities) : +6,05 % | Stop breakeven actif (123,92 $)
+  3. **DIS** (Communication Services) : +4,93 % | Stop breakeven actif (117,04 $)
+  4. **ABBV** (Healthcare) : +3,20 % | Stop 273,06 $
+  5. **AAPL** (Technology) : +2,99 % | Stop 322,57 $
+  6. **SPGI** (Financial Services) : +2,67 % | Stop 415,38 $
+  7. **GILD** (Healthcare) : +1,83 % | Stop 160,94 $
+  8. **BLK** (Financial Services) : +0,50 % | Stop 942,50 $
+  9. **V** (Financial Services) : -0,03 % | Stop 391.27 $
+  10. **LIN** (Basic Materials) : -0,43 % | Stop 480.61 $
+
+## 3. Analyse & Décisions de Séance (Suivi Bourse Ouverte)
+- **Résistance remarquable** : En dépit de la faiblesse des indices majeurs (QQQ -1,8 %, SPY -0,4 %), le portefeuille global affiche une dynamique très positive (8 positions dans le vert sur 10, dont GILD +1,8 % dès la première séance, ABBV +4,0 % et PG +1,6 % en séance).
+- **Protection du capital** : Tres bon comportement global, 3 stops déjà remontés automatiquement au breakeven (PG, DUK, DIS).
+- **Décision** : Aucune intervention en séance de suivi. Maintien de l'intégralité des 10 lignes avec un matelas de liquidités protecteur de ~44,7 %.
+
+## 4. Prochaines Étapes
+- Prochain événement d'entreprise suivi : Résultats CRM le 02/12/2026.
+- Poursuite de la surveillance des stops suiveurs automatiques sur l'ensemble des 10 positions.
