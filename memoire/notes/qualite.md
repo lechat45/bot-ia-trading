@@ -1,21 +1,27 @@
-_Mis à jour : 2026-11-23 19:01 (Paris)_
-
-_Mis à jour : 2026-11-23 19:02 (Paris)_
+_Mis à jour : 2026-11-24 09:02 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 23/11/2026 (Séance de Suivi)
+- Date : 24/11/2026 (Séance de Préparation)
 
-## État du Portefeuille (10 positions - Limite max atteinte) :
-- Exécution de l'ordre d'achat sur **BLK (BlackRock)** au cours de la séance de préparation : position entrée avec succès, la valeur affiche +4,4 % sur la journée (+1,0 % par rapport à notre prix d'entrée).
-- Portefeuille actuellement à 10/10 positions (100 % de la capacité en titres) et ~40,7 % de liquidités résiduelles.
-- Analyse des positions en léger repli (UNP -2.4 %, V -1.5 %, ABBV -1.3 %, LIN -1.1 %) :
-  - **UNP** : Le cours à 289,31 $ reste au-dessus de sa SMA50 (288,28 $) et SMA200 (274,03 $). Le stop-loss à 280,23 $ (3,1 % du cours) protège parfaitement la position. Thèse intacte.
-  - Toutes les autres positions sont techniquement saines, bien au-dessus de leurs supports majeurs et sous la protection de leurs stops respectifs.
+## État du Portefeuille (10 positions - Capacité maximale atteinte) :
+- Le portefeuille est à sa capacité maximale (10/10 positions) avec ~46 708 $ de liquidités résiduelles (48.5 % des actifs totaux).
+- Reconstitution des positions en cours :
+  1. **PG** (+5,65 %) - Stop remonté au prix d'achat (160,74 $).
+  2. **DUK** (+4,50 %) - Stop au prix d'achat (123,92 $).
+  3. **DIS** (+2,82 %) - Stop au prix d'achat (117,04 $).
+  4. **AAPL** (+1,88 %) - Stop sous support (322,57 $).
+  5. **SPGI** (+1,16 %) - Stop sous support (415,38 $).
+  6. **BLK** (+0,60 %) - Entrée récente validée, stop à 1 085,52 $.
+  7. **LIN** (-0,60 %) - Consolidation saine, stop à 480,61 $.
+  8. **ABBV** (-0,78 %) - Consolidation défensive, stop à 273,06 $.
+  9. **V** (-1,60 %) - Repli technique court terme, stop à 391,27 $.
+  10. **UNP** (-2,40 %) - Cours à 288,85 $, au niveau exact de sa SMA50 (288,27 $) et au-dessus de sa SMA200 (274,02 $). Stop à 280,23 $.
 
-## Décisions & Actions :
-- Aucune vente ou modification de stop requise.
-- Aucune nouvelle proposition d'achat formulée en raison de la saturation du nombre maximal de positions (10/10).
+## Décisions & Stratégie :
+- Aucune vente n'est à proposer : les 10 entreprises en portefeuille répondent à tous nos critères Qualité et conservent des configurations techniques intactes.
+- Aucune proposition d'achat : la limite globale de 10 positions ouvertes est atteinte.
+- En cas de libération future d'un emplacement (déclenchement de stop suiveur ou prise de bénéfices), surveiller des candidats Qualité à fort ROE / marge op. sur repli (ex. RELX, MO, ABNB).
 
 ## À surveiller pour les prochaines séances :
-- Évolution des positions en gain protégé (PG +5,8 %, DUK +4,0 %, DIS +2,2 %, AAPL +1,6 %, BLK +1,0 %).
-- Surveillance de la ré-allocation capital en cas de déclenchement de stop ou de prise de bénéfices sur une position mature.
+- Tenue de la SMA50 sur UNP (288,27 $).
+- Progression des gains sur PG et DUK vers leurs objectifs respectifs.

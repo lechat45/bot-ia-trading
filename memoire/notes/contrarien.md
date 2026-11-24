@@ -1,7 +1,9 @@
-_Mis à jour : 2026-11-23 19:01 (Paris)_
+_Mis à jour : 2026-11-24 09:02 (Paris)_
 
-_Mis à jour : 2026-11-23 19:05 (Paris) - Séance de Suivi_
+_Mis à jour : 2026-11-24 09:02 (Paris) - Séance de Préparation_
 
-- **Portefeuille actuel** : 10/10 positions (capacité maximale atteinte). Liquidités à ~40.7%. Les positions se comportent très bien dans cette séance de net rebond du marché (BLK +4.4%, SPGI +2.5%, LIN +2.2%, AAPL +1.6%, DIS +1.4%).
-- **Suivi ASML** : Signal d'achat Contrarien validé sur le plan technique et fondamental. Rebond puissant de +8.9% à 1380.87$, rebondissant sur la zone support 1258$-1268$ et remontant le RSI14 à 39.0. PER attendu attractif de 21.8 avec un FCF de 10.4 Md$.
-- **Blocage opérationnel** : Proposition d'achat refusée par le garde-fou en raison de la limite des 10 positions atteintes dans le compte. Aucune raison de couper une ligne existante ce jour. ASML reste en haut de la liste de surveillances si un slot venait à se libérer.
+- **Portefeuille actuel** : 10/10 positions (capacité maximale atteinte). Liquidités à ~40.7%. Pas de thèse cassée sur nos lignes actuelles (PG, DUK, ABBV, DIS, AAPL, LIN, V, SPGI, BLK).
+- **Analyse du marché contrarien** :
+  - **SHEL (Shell)** : RSI14 à 16.0 (extrêmement survendu), PER attendu à 8.3 contre 12.5+ pour ses pairs US (XOM, CVX). La chute (-13.4% sur 1m) est liée à la baisse du pétrole (rumeurs OPEC+). Fondamentaux béton (Dette/FP 38%, FCF 29 Md$). *Action : Attendre 2 séances de stabilisation avant de proposer un achat dès qu'un slot se libère.*
+  - **ASML** : Rebond technique confirmé (+9% hier à 1383$), RSI à 39. Toujours en tête de liste pour réallocation.
+- **Stratégie** : Pas d'ordre d'achat possible sans libérer de position. Pas de vente forcée car les lignes actuelles tiennent leurs supports. Attente d'un signal clair sur SHEL ou d'un stop déclenché pour arbitrer.
