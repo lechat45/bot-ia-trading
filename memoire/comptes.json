@@ -4,7 +4,7 @@
  "agents": {
   "equipe": {
    "capital_depart": 100000.0,
-   "cash": 46707.81001,
+   "cash": 43376.879996,
    "positions": {
     "PG": {
      "lots": [
@@ -149,14 +149,26 @@
       }
      ],
      "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$). Repli technique sain de -9,9 % sur 5j ramenant le RSI à 40, tout en restant au-dessus de la SMA200 (1062.09 $). Aucun résultat avant 52 jours (14/01/2027). Stop à -7,0 %, Take Profit à +15,5 %."
+    },
+    "GILD": {
+     "lots": [
+      {
+       "qty": 19,
+       "prix": 175.312106,
+       "date": "2026-11-24T14:40:43+00:00",
+       "stop": 160.94,
+       "tp": 202.93,
+       "statut": "ouvert",
+       "parent_id": "34e43829-ce5f-46af-bd06-6a92d2e63485",
+       "stop_id": "744a1347-08da-4302-b40b-46ce9f370177",
+       "tp_id": "870694fe-5029-40df-8771-c72559582099"
+      }
+     ],
+     "these": "Type : Élan de fond (proposition sentiment-1). Momentum solide : Perf 12/1 de +27.9% et tendance haussière confirmée (Prix > SMA20 > SMA50 > SMA200). Catalyseur : Rehaussement d'objectif par Mizuho (170$ à 182$) le 20/11/2026. Santé financière : Marges opérationnelles solides (38.2%) et PER attractif de 16.8. Invalidation : Cassure de la SMA50 à 157.74$. Sortie : Stop à 8.0% (~157$), objectif à 16.0% (~198$). Horizon 1-3 mois."
     }
    },
    "realise": -4688.829992000004,
    "evenements": [
-    {
-     "ts": "2026-11-02T14:40:27+00:00",
-     "texte": "Ouverture, ordre planifié acheter MSFT : Achat exécuté : 16 MSFT à 525.32 $ (stop 493.21 $, objectif 587.65 $)"
-    },
     {
      "ts": "2026-11-02T14:40:37+00:00",
      "texte": "Ouverture, ordre planifié acheter CRM : Achat exécuté : 31 CRM à 231.45 $ (stop 213.96 $, objectif 269.48 $)"
@@ -252,6 +264,10 @@
     {
      "ts": "2026-11-23T14:40:37+00:00",
      "texte": "Ouverture, ordre planifié acheter BLK : Achat exécuté : 3 BLK à 1138.61 $ (stop 1058.31 $, objectif 1314.36 $)"
+    },
+    {
+     "ts": "2026-11-24T14:40:43+00:00",
+     "texte": "Ouverture, ordre planifié acheter GILD : Achat exécuté : 19 GILD à 175.31 $ (stop 160.94 $, objectif 202.93 $)"
     }
    ],
    "derniere_seance": "2026-11-24T08:02:35+00:00"
