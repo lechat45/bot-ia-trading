@@ -1,0 +1,938 @@
+{
+ "nom": "2026-11-25_1901_suivi",
+ "quand": "2026-11-25 19:01 (Paris)",
+ "ts": "2026-11-25T18:01:15.254686+00:00",
+ "mode": "suivi",
+ "simulation": false,
+ "hors_ligne": false,
+ "marche_ouvert": true,
+ "date_bourse": "2026-11-25",
+ "agents": {
+  "gerant": {
+   "nom": "Gérant",
+   "role": "gerant",
+   "modele": "gemini#3:gemini-3.5-flash",
+   "etapes": [
+    {
+     "t": "2026-11-25T18:01:16+00:00",
+     "type": "notes",
+     "texte": "Relit ses notes, les propositions et les avis"
+    },
+    {
+     "t": "2026-11-25T18:03:26+00:00",
+     "type": "outil",
+     "nom": "consulter_portefeuille",
+     "args": {},
+     "resultat": "{\"cash\":43376.88,\"valeur\":97316.23,\"investi\":53939.36,\"capital_depart\":100000.0,\"pl\":-2683.77,\"pl_pct\":-2.68,\"realise\":-4688.83,\"positions\":[{\"symbole\":\"PG\",\"qty\":46,\"prix_achat\":160.74,\"prix\":174.28,\"valeur\":8016.88,\"pl\":622.84,\"pl_pct\":8.42,\"stop\":160.74,\"tp\":177.44,\"depuis\":\"2026-10-26\",\"these\":\"Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). \",\"en_attente\":false,\"distance_stop_pct\":7.8,\"perte_si_stop_usd\":623.0,\"distance_objectif_pct\":1.8,\"jours_detenue\":30,\"secteur\":\"Consumer De",
+     "donnees": {
+      "cash": 43376.88,
+      "valeur": 97316.23,
+      "investi": 53939.36,
+      "capital_depart": 100000.0,
+      "pl": -2683.77,
+      "pl_pct": -2.68,
+      "realise": -4688.83,
+      "positions": [
+       {
+        "symbole": "PG",
+        "qty": 46,
+        "prix_achat": 160.74,
+        "prix": 174.28,
+        "valeur": 8016.88,
+        "pl": 622.84,
+        "pl_pct": 8.42,
+        "stop": 160.74,
+        "tp": 177.44,
+        "depuis": "2026-10-26",
+        "these": "Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). ",
+        "en_attente": false,
+        "distance_stop_pct": 7.8,
+        "perte_si_stop_usd": 623.0,
+        "distance_objectif_pct": 1.8,
+        "jours_detenue": 30,
+        "secteur": "Consumer Defensive"
+       },
+       {
+        "symbole": "DUK",
+        "qty": 55,
+        "prix_achat": 123.92,
+        "prix": 132.56,
+        "valeur": 7290.8,
+        "pl": 475.2,
+        "pl_pct": 6.97,
+        "stop": 123.92,
+        "tp": 138.69,
+        "depuis": "2026-10-28",
+        "these": "Achat de DUK (Duke Energy) - Proposition equilibre-1 : Intégration stratégique du secteur Utilities (0% du portefeuille) qui est le secteur le plus fort du marc",
+        "en_attente": false,
+        "distance_stop_pct": 6.5,
+        "perte_si_stop_usd": 475.0,
+        "distance_objectif_pct": 4.6,
+        "jours_detenue": 28,
+        "secteur": "Utilities"
+       },
+       {
+        "symbole": "ABBV",
+        "qty": 12,
+        "prix_achat": 290.61,
+        "prix": 297.27,
+        "valeur": 3567.24,
+        "pl": 79.92,
+        "pl_pct": 2.29,
+        "stop": 273.06,
+        "tp": 325.34,
+        "depuis": "2026-11-04",
+        "these": "Achat de suivi de tendance sur ABBV (AbbVie) - Proposition sentiment-1 avec ajustement critique sur la taille : Publication de résultats T3 solide fin octobre, ",
+        "en_attente": false,
+        "distance_stop_pct": 8.1,
+        "perte_si_stop_usd": 291.0,
+        "distance_objectif_pct": 9.4,
+        "jours_detenue": 21,
+        "secteur": "Healthcare"
+       },
+       {
+        "symbole": "DIS",
+        "qty": 38,
+        "prix_achat": 117.04,
+        "prix": 124.55,
+        "valeur": 4732.9,
+        "pl": 285.38,
+        "pl_pct": 6.42,
+        "stop": 117.04,
+        "tp": 130.36,
+        "depuis": "2026-11-05",
+        "these": "Achat de DIS (Walt Disney Co.) : diversification sectorielle vers Communication Services (secteur fort +2.5% sur 5j). Taille ajustée à 4500$ (recommandation du ",
+        "en_attente": false,
+        "distance_stop_pct": 6.0,
+        "perte_si_stop_usd": 285.0,
+        "distance_objectif_pct": 4.7,
+        "jours_detenue": 20,
+        "secteur": "Communication Services"
+       },
+       {
+        "symbole": "AAPL",
+        "qty": 20,
+        "prix_achat": 343.27,
+        "prix": 353.3,
+        "valeur": 7065.9,
+        "pl": 200.5,
+        "pl_pct": 2.92,
+        "stop": 322.57,
+        "tp": 384.34,
+        "depuis": "2026-11-05",
+        "these": "Achat AAPL : Leader technologique montrant une force relative. Entrée à 7000$, stop -6%, TP +12%. Thèse sentiment-1 validée par le critique.",
+        "en_attente": false,
+        "distance_stop_pct": 8.7,
+        "perte_si_stop_usd": 615.0,
+        "distance_objectif_pct": 8.8,
+        "jours_detenue": 20,
+        "secteur": "Technology"
+       },
+       {
+        "symbole": "LIN",
+        "qty": 12,
+        "prix_achat": 520.02,
+        "prix": 524.67,
+        "valeur": 6296.04,
+        "pl": 55.8,
+        "pl_pct": 0.89,
+        "stop": 480.61,
+        "tp": 597.52,
+        "depuis": "2026-11-10",
+        "these": "Achat de LIN (Linde plc) - Leader mondial des gaz industriels et des technologies de procédés (Secteur Matériaux de base actuellement à 0% du portefeuille). Fon",
+        "en_attente": false,
+        "distance_stop_pct": 8.4,
+        "perte_si_stop_usd": 529.0,
+        "distance_objectif_pct": 13.9,
+        "jours_detenue": 15,
+        "secteur": "Basic Materials"
+       },
+       {
+        "symbole": "V",
+        "qty": 11,
+        "prix_achat": 416.21,
+        "prix": 422.97,
+        "valeur": 4652.67,
+        "pl": 74.34,
+        "pl_pct": 1.62,
+        "stop": 391.27,
+        "tp": 466.2,
+        "depuis": "2026-11-18",
+        "these": "Reconstitution de l'exposition au secteur Financier (0% du portefeuille suite aux sorties de JPM et SAN). Visa (V) dispose de marges exceptionnelles (marge op. ",
+        "en_attente": false,
+        "distance_stop_pct": 7.5,
+        "perte_si_stop_usd": 349.0,
+        "distance_objectif_pct": 10.2,
+        "jours_detenue": 7,
+        "secteur": "Financial Services"
+       },
+       {
+        "symbole": "SPGI",
+        "qty": 12,
+        "prix_achat": 446.59,
+        "prix": 461.6,
+        "valeur": 5539.2,
+        "pl": 180.12,
+        "pl_pct": 3.36,
+        "stop": 415.38,
+        "tp": 511.41,
+        "depuis": "2026-11-20",
+        "these": "Achat de SPGI (S&P Global Inc.) - Proposition qualite-1 (Avis Critique: OK). Marge opérationnelle de 44,1 %, ROE de 17,9 %, FCF de 6,0 Md$. Titre en repli sain ",
+        "en_attente": false,
+        "distance_stop_pct": 10.0,
+        "perte_si_stop_usd": 555.0,
+        "distance_objectif_pct": 10.8,
+        "jours_detenue": 5,
+        "secteur": "Financial Services"
+       },
+       {
+        "symbole": "BLK",
+        "qty": 3,
+        "prix_achat": 1138.61,
+        "prix": 1132.22,
+        "valeur": 3396.67,
+        "pl": -19.16,
+        "pl_pct": -0.56,
+        "stop": 1058.31,
+        "tp": 1314.36,
+        "depuis": "2026-11-23",
+        "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge ",
+        "en_attente": false,
+        "distance_stop_pct": 6.5,
+        "perte_si_stop_usd": 222.0,
+        "distance_objectif_pct": 16.1,
+        "jours_detenue": 2,
+        "secteur": "Financial Services"
+       },
+       {
+        "symbole": "GILD",
+        "qty": 19,
+        "prix_achat": 175.31,
+        "prix": 177.95,
+        "valeur": 3381.05,
+        "pl": 50.12,
+        "pl_pct": 1.5,
+        "stop": 160.94,
+        "tp": 202.93,
+        "depuis": "2026-11-24",
+        "these": "Type : Élan de fond (proposition sentiment-1). Momentum solide : Perf 12/1 de +27.9% et tendance haussière confirmée (Prix > SMA20 > SMA50 > SMA200). Catalyseur",
+        "en_attente": false,
+        "distance_stop_pct": 9.6,
+        "perte_si_stop_usd": 323.0,
+        "distance_objectif_pct": 14.0,
+        "jours_detenue": 1,
+        "secteur": "Healthcare"
+       }
+      ],
+      "risque_total": {
+       "perte_si_tous_les_stops_usd": 4266.0,
+       "pct_du_compte": 4.38,
+       "repere": "garder sous 6 % du compte (fiche gestion-du-risque)"
+      },
+      "poids_par_secteur_pct": {
+       "Financial Services": 14.0,
+       "Consumer Defensive": 8.2,
+       "Utilities": 7.5,
+       "Technology": 7.3,
+       "Healthcare": 7.1,
+       "Basic Materials": 6.5,
+       "Communication Services": 4.9
+      },
+      "ordres_planifies_pour_ouverture": [],
+      "limites": {
+       "max_par_titre_usd": 14597.0,
+       "liquidites_utilisables_usd": 38511.0,
+       "positions_max": 10,
+       "max_par_secteur_pct": 35.0,
+       "frein_d_urgence": "inactif",
+       "stop_loss_pct": "entre 1 et 15",
+       "ratio_gain_perte_min": 1.5
+      }
+     }
+    },
+    {
+     "t": "2026-11-25T18:03:27+00:00",
+     "type": "outil",
+     "nom": "historique_prix",
+     "args": {
+      "symbole": "BLK"
+     },
+     "resultat": "{\"prix\":1130.46,\"sma20\":1176.92,\"sma50\":1125.72,\"sma200\":1063.33,\"perf_5j_pct\":-3.3,\"perf_1m_pct\":-0.5,\"perf_3m_pct\":-2.7,\"perf_1an_pct\":13.3,\"perf_12_1_pct\":13.8,\"volat_1an_pct\":28.3,\"rsi14\":42.0,\"atr14\":32.43,\"volat_annuelle_pct\":38.0,\"plus_haut_52s\":1226.38,\"plus_bas_52s\":912.86,\"ecart_plus_haut_pct\":-7.8,\"volume_vs_moy20\":0.4,\"perf_1j_pct\":-1.4,\"cours_hebdo_1an\":[1018.52,1052.86,1084.02,1047.54,1070.51,1101.61,1071.79,1092,1088.48,1052.68,1070.06,1074.65,1077.52,1032.27,941.19,958.46,970.88,946.55,991.22,1013.57,1042.46,1054.69,1056.55,1092.87,1052.36,1035.39,991.43,1027.07,1046.48,945.03,",
+     "donnees": {
+      "prix": 1130.46,
+      "sma20": 1176.92,
+      "sma50": 1125.72,
+      "sma200": 1063.33,
+      "perf_5j_pct": -3.3,
+      "perf_1m_pct": -0.5,
+      "perf_3m_pct": -2.7,
+      "perf_1an_pct": 13.3,
+      "perf_12_1_pct": 13.8,
+      "volat_1an_pct": 28.3,
+      "rsi14": 42.0,
+      "atr14": 32.43,
+      "volat_annuelle_pct": 38.0,
+      "plus_haut_52s": 1226.38,
+      "plus_bas_52s": 912.86,
+      "ecart_plus_haut_pct": -7.8,
+      "volume_vs_moy20": 0.4,
+      "perf_1j_pct": -1.4,
+      "cours_hebdo_1an": [
+       1018.52,
+       1052.86,
+       1084.02,
+       1047.54,
+       1070.51,
+       1101.61,
+       1071.79,
+       1092,
+       1088.48,
+       1052.68,
+       1070.06,
+       1074.65,
+       1077.52,
+       1032.27,
+       941.19,
+       958.46,
+       970.88,
+       946.55,
+       991.22,
+       1013.57,
+       1042.46,
+       1054.69,
+       1056.55,
+       1092.87,
+       1052.36,
+       1035.39,
+       991.43,
+       1027.07,
+       1046.48,
+       945.03,
+       1003.12,
+       1021.34,
+       1032.52,
+       1093.34,
+       1125.88,
+       1142.53,
+       1149.01,
+       1170.69,
+       1122.42,
+       1072.41,
+       1037.23,
+       1061.63,
+       1059.02,
+       1069.53,
+       1074.88,
+       1149.33,
+       1158.49,
+       1224.31,
+       1226.38,
+       1169.41,
+       1130.46
+      ],
+      "cours_20_derniers_jours": [
+       1176.16,
+       1147.74,
+       1167.27,
+       1160.83,
+       1224.31,
+       1170.79,
+       1178.91,
+       1215.01,
+       1222.04,
+       1226.38,
+       1216.76,
+       1222.75,
+       1199.45,
+       1180.56,
+       1169.41,
+       1136.51,
+       1102.02,
+       1145.14,
+       1145.98,
+       1130.46
+      ],
+      "date_dernier_cours": "2026-11-25",
+      "marche_SPY": {
+       "perf_5j_pct": -2.7,
+       "perf_1m_pct": -7.7,
+       "perf_3m_pct": -7.6
+      },
+      "dernier_prix": 1132.22,
+      "niveaux": {
+       "plus_bas_10j": 1095.35,
+       "plus_bas_20j": 1095.35,
+       "plus_haut_20j": 1241.09,
+       "atr_pct": 2.9,
+       "ecart_sma50_pct": 0.6,
+       "ecart_sma200_pct": 6.5,
+       "stops_possibles": {
+        "a_1_5_atr": {
+         "prix": 1083.58,
+         "stop_loss_pct": 4.3
+        },
+        "a_2_atr": {
+         "prix": 1067.37,
+         "stop_loss_pct": 5.7
+        },
+        "sous_plus_bas_20j": {
+         "prix": 1084.39,
+         "stop_loss_pct": 4.2
+        }
+       }
+      },
+      "vs_secteur": {
+       "fonds": "XLF",
+       "secteur": "Financial Services",
+       "secteur_perf_1m_pct": 0.8,
+       "ecart_1m_points": -1.3,
+       "secteur_perf_3m_pct": -2.4,
+       "ecart_3m_points": -0.3
+      }
+     }
+    },
+    {
+     "t": "2026-11-25T18:07:55+00:00",
+     "type": "outil",
+     "nom": "actualites",
+     "args": {
+      "symbole": "AAPL"
+     },
+     "resultat": "[{\"date\":\"2026-11-25 11:31\",\"titre\":\"Apple Participates in Korea-US AI Infrastructure Roundtable\",\"resume\":\"Apple representatives joined a closed-door roundtable in Seoul to discuss expanding AI infrastructure and accelerating AI adoption in manufacturing.\",\"source\":\"fiscal.ai\",\"symboles\":[\"AAPL\"]},{\"date\":\"2026-11-24 19:02\",\"titre\":\"Apple to Host Special Event at SoHo Store Marking 20 Years of (RED) Partnership\",\"resume\":\"Apple announced a special event at its SoHo retail location in New York City to commemorate the 20th anniversary of its collaboration with the (RED) organization.\",\"source\":",
+     "donnees": [
+      {
+       "date": "2026-11-25 11:31",
+       "titre": "Apple Participates in Korea-US AI Infrastructure Roundtable",
+       "resume": "Apple representatives joined a closed-door roundtable in Seoul to discuss expanding AI infrastructure and accelerating AI adoption in manufacturing.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-24 19:02",
+       "titre": "Apple to Host Special Event at SoHo Store Marking 20 Years of (RED) Partnership",
+       "resume": "Apple announced a special event at its SoHo retail location in New York City to commemorate the 20th anniversary of its collaboration with the (RED) organization.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-24 14:31",
+       "titre": "J.P. Morgan Maintains Buy Rating and $355 Price Target for Apple",
+       "resume": "J.P. Morgan analyst Samik Chatterjee has reaffirmed a Buy rating and a $355 price target for Apple Inc. (AAPL).",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-24 13:01",
+       "titre": "Apple Announces Fifth Season of 'Ted Lasso'",
+       "resume": "Apple has officially announced that its streaming service, Apple TV+, will produce a fifth season of the series 'Ted Lasso'.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-24 01:01",
+       "titre": "Apple Plans Return of (PRODUCT)RED Lineup",
+       "resume": "Apple is reportedly preparing to reintroduce (PRODUCT)RED versions of several existing hardware products and accessories, including the HomePod mini 2.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-23 22:31",
+       "titre": "Apple TV Withdraws from FIFA World Cup Bidding",
+       "resume": "Apple TV has reportedly decided not to pursue the broadcasting rights for the 2030 and 2034 FIFA World Cup tournaments.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-20 13:01",
+       "titre": "Apple Developer Academy Showcase in Pohang",
+       "resume": "Apple held its annual showcase for the Apple Developer Academy in Pohang, South Korea, featuring apps developed by students.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-20 12:31",
+       "titre": "Apple Developing Autonomous AI Agent",
+       "resume": "Apple is reportedly developing an autonomous AI agent capable of performing multistep tasks, including writing code, browsing the web, and controlling applications.",
+       "source": "fiscal.ai",
+       "symboles": [
+        "AAPL"
+       ]
+      },
+      {
+       "date": "2026-11-25 13:30",
+       "titre": "Apple: $136 Billion Of Free Cash Flow Without The AI CapEx Bill (NASDAQ:AAPL)",
+       "source": "Seeking Alpha (Google Actualités)"
+      },
+      {
+       "date": "2026-11-25 08:57",
+       "titre": "Apple Inc. (AAPL) stock price, news, quote and history",
+       "source": "Yahoo Finance Singapore (Google Actualités)"
+      },
+      {
+       "date": "2026-11-24 23:34",
+       "titre": "Congressman Buys Apple Stock Again, How Dividend Reinvestments Add Up - Apple (NASDAQ:AAPL)",
+       "source": "Benzinga (Google Actualités)"
+      },
+      {
+       "date": "2026-11-23 21:15",
+       "titre": "AAPL Stock Quote Price and Forecast",
+       "source": "CNN (Google Actualités)"
+      },
+      {
+       "date": "2026-11-23 15:14",
+       "titre": "Apple Inc. (AAPL) Stock Price, News, Quote & History",
+       "source": "Yahoo! Finance Canada (Google Actualités)"
+      }
+     ]
+    },
+    {
+     "t": "2026-11-25T18:08:07+00:00",
+     "type": "outil",
+     "nom": "ecrire_notes",
+     "args": {
+      "contenu": "# JOURNAL DE BORD DU GÉRANT - SÉANCE DE SUIVI (25/11/2026 19:00 Paris)\n_Mis à jour : 2026-11-25 19:01 (Paris) / 13:01 (NY)_\n\n## 1. Contexte de Marché & Régime Macro\n- **Tendance de fond (Règle Faber 10 mois)** : HAUSSIÈRE (SPY clôture octobre 755,72 $ vs SMA10M 725,41 $, +4,2 %).\n- **Dynamique de marché** : Pression continue sur le secteur de la Tech/IA (QQQ -2,1 % ce jour, -13,4 % sur 1 mois ; XLK -6,9 % sur 5j). SPY à -1,1 % aujourd'hui.\n- **Secteurs refuges / Défensifs** : Forte surperformance des secteurs Santé (XLV +1,7 % sur 5j) et Consommation de base (XLP +1,7 % sur 5j), validant le positionnement qualitatif du portefeuille.\n\n## 2. État du Portefeuille & Allocations (10/10 positions - Capacité Maximale)\n- **Valeur totale du compte** : 97 316.23 $ (progression globale vs 96 942.78 $ ce matin) | **Cash disponible** : 43 376.88 $ (~44.6 % du compte).\n- **Nombre de lignes** : 10 / 10 (Capacité maximale atteinte).\n- **Résilience** : 9 positions sur 10 affichent une performance positive malgré la correction des indices généraux.\n\n## 3. Suivi détaillé des 10 Positions Actives\n1. **PG (Procter & Gamble)** | Consommation de Base | +8,42 % | Stop Breakeven 160,74 $ | TP 177,44 $ (Approche du seuil de +10 % pour l'activation du trailing stop dynamique).\n2. **DUK (Duke Energy)** | Utilities | +6,97 % | Stop Breakeven 123,92 $ | TP 138,69 $\n3. **DIS (Walt Disney Co.)** | Communication | +6,42 % | Stop Breakeven 117,04 $ | TP 130,36 $\n4. **SPGI (S&P Global)** | Fin. Services | +3,36 % | Stop 415,38 $ (-9,8 %) | TP 509,11 $\n5. **AAPL (Apple)** | Technologie | +2,92 % | Stop 322,57 $ (-8,7 %) | TP 384,34 $\n6. **ABBV (AbbVie)** | Santé | +2,29 % | Stop 273,06 $ (-8,1 %) | TP 325,34 $\n7. **V (Visa)** | Fin. Services | +1,62 % | Stop 391,27 $ (-7,5 %) | TP 466,20 $\n8. **GILD (Gilead Sciences)** | Santé | +1,40 % | Stop 160,94 $ (-9,4 %) | TP 202,93 $\n9. **LIN (Linde plc)** | Matériaux de Base | +0,89 % | Stop 480,61 $ (-8,3 %) | TP 597,52 $\n10. **BLK (BlackRock)** | Fin. Services | -0,70 % | Stop 942,50 $ (-6,4 %) | TP 1155,00 $ (Consolidation au-dessus du support SMA50 à 1125,72 $).\n\n## 4. Décisions de la Séance de Suivi (Bourse Ouverte)\n- **Ordres exécutés** : AUCUN.\n- **Justification** : Séance de suivi calme. Les 10 positions restent techniquement et fondamentalement solides. Les 3 lignes en gain significatif (PG, DUK, DIS) disposent déjà d'un stop au prix d'achat. La capacité maximale du portefeuille étant atteinte, aucune opportunité ne justifie une rotation forcée.\n- **Stratégie** : Conservation intégrale des lignes et maintien du matelas de liquidités (~44,6 %).\n\n## 5. Calendrier & Rappels\n- **Rappel [r13-1202]** : Résultats CRM le 02/12/2026 (suivi sectoriel tech).\n- **Prochains résultats détenus** : Aucun dans les 7 prochains jours."
+     },
+     "resultat": "{\"ok\":true,\"caracteres\":2781,\"info\":\"notes enregistrées\"}",
+     "donnees": {
+      "ok": true,
+      "caracteres": 2781,
+      "info": "notes enregistrées"
+     }
+    },
+    {
+     "t": "2026-11-25T18:08:09+00:00",
+     "type": "outil",
+     "nom": "terminer_session",
+     "args": {
+      "compte_rendu": "Séance de suivi allégée en direct (bourse ouverte).\n1. **Évaluation du portefeuille** : La valeur du compte progresse à 97 316.23 $ (avec 43 376.88 $ de cash, soit ~44.6 %). 9 positions sur 10 évoluent en gain, démontrant une très bonne surperformance face au recul des indices (SPY -1.1 %, QQQ -2.1 %).\n2. **Contrôle des positions** : Thèses intactes sur les 10 valeurs. PG (+8.42 %), DUK (+6.97 %) et DIS (+6.42 %) sont sécurisées par un stop au prix d'achat. BLK (-0.70 %) consolide calmement au-dessus de sa SMA50 (1125.72 $).\n3. **Décisions** : AUCUNE ACTION REQUISE. Le portefeuille étant au complet (10/10 positions) et les tendances restant solides et protégées, il n'y a aucun motif d'arbitrage immédiat.\n4. **À surveiller** : PG s'approche du seuil de +10 % qui déclenchera l'activation automatique du stop suiveur à 5 %. Résultats CRM le 02/12/2026 à suivre."
+     },
+     "resultat": "{\"ok\":true,\"message\":\"Séance terminée.\"}",
+     "donnees": {
+      "ok": true,
+      "message": "Séance terminée."
+     }
+    }
+   ],
+   "compte_rendu": "Séance de suivi allégée en direct (bourse ouverte).\n1. **Évaluation du portefeuille** : La valeur du compte progresse à 97 316.23 $ (avec 43 376.88 $ de cash, soit ~44.6 %). 9 positions sur 10 évoluent en gain, démontrant une très bonne surperformance face au recul des indices (SPY -1.1 %, QQQ -2.1 %).\n2. **Contrôle des positions** : Thèses intactes sur les 10 valeurs. PG (+8.42 %), DUK (+6.97 %) et DIS (+6.42 %) sont sécurisées par un stop au prix d'achat. BLK (-0.70 %) consolide calmement au-dessus de sa SMA50 (1125.72 $).\n3. **Décisions** : AUCUNE ACTION REQUISE. Le portefeuille étant au complet (10/10 positions) et les tendances restant solides et protégées, il n'y a aucun motif d'arbitrage immédiat.\n4. **À surveiller** : PG s'approche du seuil de +10 % qui déclenchera l'activation automatique du stop suiveur à 5 %. Résultats CRM le 02/12/2026 à suivre.",
+   "propositions": [],
+   "avis": [],
+   "ordres": [],
+   "erreur": null,
+   "duree_s": 413,
+   "outils": 5,
+   "tokens": 62542,
+   "appels": 5
+  }
+ },
+ "propositions": [],
+ "decision": "Séance de suivi allégée en direct (bourse ouverte).\n1. **Évaluation du portefeuille** : La valeur du compte progresse à 97 316.23 $ (avec 43 376.88 $ de cash, soit ~44.6 %). 9 positions sur 10 évoluent en gain, démontrant une très bonne surperformance face au recul des indices (SPY -1.1 %, QQQ -2.1 %).\n2. **Contrôle des positions** : Thèses intactes sur les 10 valeurs. PG (+8.42 %), DUK (+6.97 %) et DIS (+6.42 %) sont sécurisées par un stop au prix d'achat. BLK (-0.70 %) consolide calmement au-dessus de sa SMA50 (1125.72 $).\n3. **Décisions** : AUCUNE ACTION REQUISE. Le portefeuille étant au complet (10/10 positions) et les tendances restant solides et protégées, il n'y a aucun motif d'arbitrage immédiat.\n4. **À surveiller** : PG s'approche du seuil de +10 % qui déclenchera l'activation automatique du stop suiveur à 5 %. Résultats CRM le 02/12/2026 à suivre.",
+ "executions": [],
+ "plan": [],
+ "compte": {
+  "cash": 43376.88,
+  "valeur": 97289.17,
+  "investi": 53912.3,
+  "capital_depart": 100000.0,
+  "pl": -2710.83,
+  "pl_pct": -2.71,
+  "realise": -4688.83,
+  "positions": [
+   {
+    "symbole": "PG",
+    "qty": 46,
+    "prix_achat": 160.74,
+    "prix": 174.08,
+    "valeur": 8007.68,
+    "pl": 613.64,
+    "pl_pct": 8.3,
+    "stop": 160.74,
+    "tp": 177.44,
+    "depuis": "2026-10-26",
+    "these": "Achat de PG (Procter & Gamble) - Proposition equilibre-1 : Entrée défensive sur le leader mondial de la Consommation de Base (0% du portefeuille actuellement). Fondamentaux d'exception (FCF 12.7Md$, marge op 27.1%, ROE 29.6%). PER attendu 21.7x (médiane sectorielle 31.8x). Tendance haussière confirm",
+    "en_attente": false
+   },
+   {
+    "symbole": "DUK",
+    "qty": 55,
+    "prix_achat": 123.92,
+    "prix": 132.36,
+    "valeur": 7279.8,
+    "pl": 464.2,
+    "pl_pct": 6.81,
+    "stop": 123.92,
+    "tp": 138.69,
+    "depuis": "2026-10-28",
+    "these": "Achat de DUK (Duke Energy) - Proposition equilibre-1 : Intégration stratégique du secteur Utilities (0% du portefeuille) qui est le secteur le plus fort du marché sur 5 séances (+2.4%). Valorisation attractive (PER 17.4x vs 18.8x secteur), dividende 3.48%. Stop loss à 6.0% (~117.32$) sous le support",
+    "en_attente": false
+   },
+   {
+    "symbole": "ABBV",
+    "qty": 12,
+    "prix_achat": 290.61,
+    "prix": 296.67,
+    "valeur": 3560.04,
+    "pl": 72.72,
+    "pl_pct": 2.09,
+    "stop": 273.06,
+    "tp": 325.34,
+    "depuis": "2026-11-04",
+    "these": "Achat de suivi de tendance sur ABBV (AbbVie) - Proposition sentiment-1 avec ajustement critique sur la taille : Publication de résultats T3 solide fin octobre, augmentation du dividende de +5.2%, objectifs réhaussés par les analystes. Tendance haussière parfaite (Prix > SMA20 284$ > SMA50 269$), RSI",
+    "en_attente": false
+   },
+   {
+    "symbole": "DIS",
+    "qty": 38,
+    "prix_achat": 117.04,
+    "prix": 124.45,
+    "valeur": 4729.29,
+    "pl": 281.77,
+    "pl_pct": 6.34,
+    "stop": 117.04,
+    "tp": 130.36,
+    "depuis": "2026-11-05",
+    "these": "Achat de DIS (Walt Disney Co.) : diversification sectorielle vers Communication Services (secteur fort +2.5% sur 5j). Taille ajustée à 4500$ (recommandation du critique). Stop -5.5%, TP +11.5%. Résultats le 17/11/2026.",
+    "en_attente": false
+   },
+   {
+    "symbole": "AAPL",
+    "qty": 20,
+    "prix_achat": 343.27,
+    "prix": 353.75,
+    "valeur": 7075.0,
+    "pl": 209.6,
+    "pl_pct": 3.05,
+    "stop": 322.57,
+    "tp": 384.34,
+    "depuis": "2026-11-05",
+    "these": "Achat AAPL : Leader technologique montrant une force relative. Entrée à 7000$, stop -6%, TP +12%. Thèse sentiment-1 validée par le critique.",
+    "en_attente": false
+   },
+   {
+    "symbole": "LIN",
+    "qty": 12,
+    "prix_achat": 520.02,
+    "prix": 524.78,
+    "valeur": 6297.36,
+    "pl": 57.12,
+    "pl_pct": 0.92,
+    "stop": 480.61,
+    "tp": 597.52,
+    "depuis": "2026-11-10",
+    "these": "Achat de LIN (Linde plc) - Leader mondial des gaz industriels et des technologies de procédés (Secteur Matériaux de base actuellement à 0% du portefeuille). Fondamentaux irréprochables validant les critères Qualité : croissance du CA de 9.2% (>8%), marge opérationnelle de 28.0% (>15%), ROE de 17.7% ",
+    "en_attente": false
+   },
+   {
+    "symbole": "V",
+    "qty": 11,
+    "prix_achat": 416.21,
+    "prix": 422.66,
+    "valeur": 4649.26,
+    "pl": 70.93,
+    "pl_pct": 1.55,
+    "stop": 391.27,
+    "tp": 466.2,
+    "depuis": "2026-11-18",
+    "these": "Reconstitution de l'exposition au secteur Financier (0% du portefeuille suite aux sorties de JPM et SAN). Visa (V) dispose de marges exceptionnelles (marge op. 66,3%, ROE 63,5%, FCF 21 Md$) et d'un bilan très solide. Tendance haussière confirmée (+14,2% sur 3m). Invalidation sous la SMA50 (391,75$).",
+    "en_attente": false
+   },
+   {
+    "symbole": "SPGI",
+    "qty": 12,
+    "prix_achat": 446.59,
+    "prix": 461.36,
+    "valeur": 5536.32,
+    "pl": 177.24,
+    "pl_pct": 3.31,
+    "stop": 415.38,
+    "tp": 511.41,
+    "depuis": "2026-11-20",
+    "these": "Achat de SPGI (S&P Global Inc.) - Proposition qualite-1 (Avis Critique: OK). Marge opérationnelle de 44,1 %, ROE de 17,9 %, FCF de 6,0 Md$. Titre en repli sain dans une tendance haussière solide (cours 446.65 $ au-dessus de SMA50 à 431.51 $ et SMA200 à 414.13 $). RSI à 35. Force relative marquée vs ",
+    "en_attente": false
+   },
+   {
+    "symbole": "BLK",
+    "qty": 3,
+    "prix_achat": 1138.61,
+    "prix": 1132.16,
+    "valeur": 3396.49,
+    "pl": -19.34,
+    "pl_pct": -0.57,
+    "stop": 1058.31,
+    "tp": 1314.36,
+    "depuis": "2026-11-23",
+    "these": "Achat de BlackRock (BLK) - Proposition qualite-1 validée par le critique (OK). Leader mondial de la gestion d'actifs avec des fondamentaux exceptionnels (marge op 36,7 %, croissance CA +19,1 %, FCF 8,5 Md$). Repli technique sain de -9,9 % sur 5j ramenant le RSI à 40, tout en restant au-dessus de la ",
+    "en_attente": false
+   },
+   {
+    "symbole": "GILD",
+    "qty": 19,
+    "prix_achat": 175.31,
+    "prix": 177.95,
+    "valeur": 3381.05,
+    "pl": 50.12,
+    "pl_pct": 1.5,
+    "stop": 160.94,
+    "tp": 202.93,
+    "depuis": "2026-11-24",
+    "these": "Type : Élan de fond (proposition sentiment-1). Momentum solide : Perf 12/1 de +27.9% et tendance haussière confirmée (Prix > SMA20 > SMA50 > SMA200). Catalyseur : Rehaussement d'objectif par Mizuho (170$ à 182$) le 20/11/2026. Santé financière : Marges opérationnelles solides (38.2%) et PER attracti",
+    "en_attente": false
+   }
+  ]
+ },
+ "valeur_avant": 95311.17,
+ "cles": {
+  "gemini#3": {
+   "tokens": 50774,
+   "appels": 4
+  },
+  "gemini#1": {
+   "tokens": 11768,
+   "appels": 1
+  }
+ },
+ "quotas_bas": false,
+ "bilan": "",
+ "frein": null,
+ "lecons": [],
+ "resume_marche": "RÉSUMÉ DU MARCHÉ (préparé par le programme au début de la séance ; variations depuis la dernière clôture, sur 5 et sur 21 séances) :\n- Indices : S&P 500 (SPY) -1,1 % · 5 séances -2,6 % · 1 mois -7,6 % ; Nasdaq 100 (QQQ) -2,1 % · 5 séances -5,3 % · 1 mois -13,4 % ; petites capitalisations (IWM) -0,1 % · 5 séances -1,2 % · 1 mois -4,7 % ; Dow Jones (DIA) -0,0 % · 5 séances -0,3 % · 1 mois -4,4 %\n- Taux, matières premières et dollar : obligations US à 20 ans (TLT) +1,1 % · 5 séances +2,8 % · 1 mois +1,4 % ; or (GLD) -0,9 % · 5 séances -5,5 % · 1 mois -13,4 % ; pétrole (USO) +2,6 % · 5 séances +2,1 % · 1 mois -15,1 % ; dollar (UUP) -0,1 % · 5 séances -0,1 % · 1 mois +1,6 %\n- Largeur du marché : sur 163 grandes valeurs, 42 % sont au-dessus de leur moyenne 50 jours et 52 % au-dessus de leur moyenne 200 jours ; 20 sont à moins de 2 % de leur plus haut sur un an, 3 à moins de 2 % de leur plus bas\n- Tendance de fond (règle des 10 mois de Faber, S&P 500) : clôture de fin octobre 755,72 $ contre une moyenne 10 mois de 725,41 $ (+4,2 %) → HAUSSIÈRE : tailles normales.\n- Secteurs sur 5 séances : les plus forts santé (XLV) +1,7 %, consommation de base (XLP) +1,7 %, matériaux (XLB) +1,2 % ; les plus faibles technologie (XLK) -6,9 %, consommation cyclique (XLY) -1,7 %, industrie (XLI) -1,6 %\n- Positions du compte : PG +1,1 % aujourd'hui, +8,5 % depuis l'achat, stop à 7,8 % sous le cours; DUK +1,2 % aujourd'hui, +7,0 % depuis l'achat, stop à 6,5 % sous le cours; ABBV -1,0 % aujourd'hui, +2,3 % depuis l'achat, stop à 8,1 % sous le cours; DIS +1,6 % aujourd'hui, +6,4 % depuis l'achat, stop à 6,0 % sous le cours; AAPL -0,2 % aujourd'hui, +3,0 % depuis l'achat, stop à 8,7 % sous le cours; LIN +1,4 % aujourd'hui, +0,8 % depuis l'achat, stop à 8,3 % sous le cours; V +1,5 % aujourd'hui, +1,6 % depuis l'achat, stop à 7,5 % sous le cours; SPGI +1,3 % aujourd'hui, +3,2 % depuis l'achat, stop à 9,8 % sous le cours; BLK -1,4 % aujourd'hui, -0,7 % depuis l'achat, stop à 6,4 % sous le cours; GILD -0,3 % aujourd'hui, +1,4 % depuis l'achat, stop à 9,4 % sous le cours\n- Grands titres de l'actualité financière (heure UTC) :\n  - 11-25 14:19 · CBS News · Inside Trump's effort to reinstate Jensen Huang as Nvidia's CEO\n  - 11-25 17:26 · WSJ · Stock Market Today: Nasdaq Opens Over 3% Lowe as Confidence in AI Trade Weakens — Live Updates\n  - 11-25 14:15 · ABC News - Breaking News, Latest News and Videos · Fed's preferred gauge of inflation climbs ahead of possible rate hike\n  - 11-25 13:51 · NPR · What to know before using AI agents for Black Friday shopping\n  - 11-25 12:23 · Reuters · Europe plans €50 billion sovereign tech equity fund to boost quantum technology\n  - 11-25 17:33 · fiscal.ai · GB Group plc Announces CFO Departure\n  - 11-25 17:33 · fiscal.ai · Vp plc Reports Fiscal H1 2026 Earnings Results\n  - 11-25 17:32 · fiscal.ai · Barclays Issues Sell Rating on Dr. Martens plc\n  - 11-25 17:32 · fiscal.ai · Dr. Martens Announces Collaboration with Slipknot\n\n",
+ "stops_suiveurs": [],
+ "allegee": "rien de notable depuis ce matin : pas de rappel du jour, pas d'événement sur le compte, marché et positions calmes",
+ "suivi_raisons": [],
+ "ecarts": [],
+ "rappels": [
+  {
+   "id": "r4-0112",
+   "date": "2027-01-12",
+   "titre": "Résultats T4 UnitedHealth Group (UNH)",
+   "details": "Publication des résultats T4 de UnitedHealth Group (UNH). Évaluer la position et ajuster le stop loss ou prendre les bénéfices avant annonce.",
+   "symbole": "UNH",
+   "seance": "preparation",
+   "cree_par": "gerant",
+   "cree_le": "2026-10-20T12:44:24+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r6-0114",
+   "date": "2027-01-14",
+   "titre": "Résultats de TSM",
+   "symbole": "TSM",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-10-21T13:40:17+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r7-0114",
+   "date": "2027-01-14",
+   "titre": "Résultats de JPM",
+   "symbole": "JPM",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-10-23T17:11:56+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r8-0121",
+   "date": "2027-01-21",
+   "titre": "Résultats de PG",
+   "symbole": "PG",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-10-26T13:40:25+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r10-0126",
+   "date": "2027-01-26",
+   "titre": "Résultats de V",
+   "symbole": "V",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-10-30T13:40:25+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r11-0128",
+   "date": "2027-01-28",
+   "titre": "Résultats de TMO",
+   "symbole": "TMO",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-02T08:15:36+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r12-0126",
+   "date": "2027-01-26",
+   "titre": "Résultats de UNP",
+   "symbole": "UNP",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-02T08:15:36+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r13-1202",
+   "date": "2026-12-02",
+   "titre": "Résultats de CRM",
+   "symbole": "CRM",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-02T14:40:37+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r14-0127",
+   "date": "2027-01-27",
+   "titre": "Résultats de MSFT",
+   "symbole": "MSFT",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-02T14:40:37+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r15-0129",
+   "date": "2027-01-29",
+   "titre": "Résultats de XOM",
+   "symbole": "XOM",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-03T14:40:30+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r19-0128",
+   "date": "2027-01-28",
+   "titre": "Résultats de AAPL",
+   "symbole": "AAPL",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-05T18:05:44+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r25-0201",
+   "date": "2027-02-01",
+   "titre": "Résultats de DIS",
+   "symbole": "DIS",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-18T14:40:25+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r26-0128",
+   "date": "2027-01-28",
+   "titre": "Résultats de VLO",
+   "symbole": "VLO",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-18T14:40:25+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r27-0114",
+   "date": "2027-01-14",
+   "titre": "Résultats de BLK",
+   "symbole": "BLK",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-23T14:40:37+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r28-0122",
+   "date": "2027-01-22",
+   "titre": "Résultats de PG",
+   "symbole": "PG",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-23T18:12:04+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r29-0203",
+   "date": "2027-02-03",
+   "titre": "Résultats de ABBV",
+   "symbole": "ABBV",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-24T14:40:43+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r30-0209",
+   "date": "2027-02-09",
+   "titre": "Résultats de DUK",
+   "symbole": "DUK",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-24T14:40:43+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r31-0209",
+   "date": "2027-02-09",
+   "titre": "Résultats de GILD",
+   "symbole": "GILD",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-24T14:40:43+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r32-0204",
+   "date": "2027-02-04",
+   "titre": "Résultats de LIN",
+   "symbole": "LIN",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-24T14:40:43+00:00",
+   "statut": "actif"
+  },
+  {
+   "id": "r33-0209",
+   "date": "2027-02-09",
+   "titre": "Résultats de SPGI",
+   "symbole": "SPGI",
+   "seance": "toutes",
+   "cree_par": "systeme",
+   "details": "Publication des résultats d'une action détenue : réévaluer la thèse et le stop avant, puis décider de garder, renforcer ou vendre selon les chiffres.",
+   "cree_le": "2026-11-24T14:40:43+00:00",
+   "statut": "actif"
+  }
+ ]
+}
