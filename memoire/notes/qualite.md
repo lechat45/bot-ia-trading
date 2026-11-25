@@ -1,30 +1,32 @@
-_Mis à jour : 2026-11-24 19:01 (Paris)_
+_Mis à jour : 2026-11-25 09:02 (Paris)_
+
+_Mis à jour : 2026-11-25 09:05 (Paris)_
 
 # Notes - Analyste Qualité
-- Date : 24/11/2026 (Séance de Suivi - Bourse ouverte)
+- Date : 25/11/2026 (Séance de Préparation - Bourse fermée)
 
-## État des Positions en Portefeuille (10/10 - Capacité maximale) :
-1. **PG** (+7,34 %) - Consommation de base, résilience remarquable (+1,6 % auj.). Stop au prix d'achat (160,74 $).
-2. **DUK** (+5,98 %) - Utilities, dynamique haussière intacte (+1,4 % auj.). Stop au prix d'achat (123,92 $).
-3. **DIS** (+4,81 %) - Services de communication, poursuite du rebond (+1,9 % auj.). Stop au prix d'achat (117,04 $).
-4. **ABBV** (+3,19 %) - Santé défensive, forte hausse du jour (+4,0 %). Stop à 273,06 $.
-5. **AAPL** (+3,03 %) - Technologie, résistance dans un secteur sous pression (+1,2 % auj.). Stop à 322,57 $.
-6. **SPGI** (+2,68 %) - Services financiers/notation (+1,4 % auj.). Stop à 415,38 $.
-7. **GILD** (+1,77 %) - Santé/Biotech, belle impulsion (+4,7 % auj.). Stop à 96,87 $.
-8. **BLK** (+0,51 %) - Gestion d'actifs, stabilisation (-0,1 % auj.). Stop à 1 085,52 $.
-9. **V** (-0,05 %) - Services financiers, rebond intraday (+1,6 % auj.). Stop à 391,27 $.
-10. **LIN** (-0,40 %) - Matériaux de base, consolidation très stable (+0,2 % auj.). Stop à 480,61 $.
+## État des Positions en Portefeuille (10/10 - Capacité maximale atteinte) :
+1. **PG** (+7,34 %) - Consommation de base. Stop sécurisé à 160,74 $ (+0 % vs achat). Résilience exemplaire.
+2. **DUK** (+5,71 %) - Utilities. Stop sécurisé à 123,92 $ (+0 % vs achat). Dynamique haussière intacte.
+3. **DIS** (+4,68 %) - Services de communication. Stop sécurisé à 117,04 $ (+0 % vs achat). Rebond bien orienté.
+4. **ABBV** (+3,35 %) - Santé défensive. Stop à 273,06 $. Forte dynamique post-résultats.
+5. **AAPL** (+3,20 %) - Technologie. Stop à 322,57 $. Excellente force relative dans le secteur Tech.
+6. **SPGI** (+2,00 %) - Services financiers / Notation. Stop à 415,38 $. Tendance de fond saine.
+7. **GILD** (+1,77 %) - Santé / Biotech. Stop à 96,87 $. Impulsion haussière confirmée.
+8. **BLK** (+0,71 %) - Services financiers. Stop à 1085,52 $. Stabilisation et repli sain.
+9. **V** (+0,13 %) - Services financiers. Stop à 391,27 $. Base solide et rentabilité exceptionnelle.
+10. **LIN** (-0,60 %) - Matériaux de base. Stop à 480,61 $. Consolidation à proximité du prix d'achat.
 
 ## Diagnostic du Marché & Portefeuille :
-- Excellente tenue et surperformance relative du portefeuille de Qualité face au repli général des indices (QQQ -1,8 %, SPY -0,4 %).
-- La rotation vers les valeurs de qualité/défensives profite pleinement à nos positions (PG, DUK, ABBV, GILD, DIS, V).
-- Les thèses d'investissement sur l'ensemble des 10 titres restent parfaitement valides. Aucun signal d'invalidation ni d'alerte technique/fondamentale.
+- Portefeuille parfaitement aligné avec la stratégie Qualité : surperformance nette vs indices (QQQ -10,5 % sur 1m, SPY -6,2 % sur 1m).
+- Aucune des 10 positions ne présente de signe de dégradation fondamentale ou de rupture de support technique.
+- Les stops suiveurs automatiques sécuriseront les gains si les seuils de +5 % / +10 % sont franchis durant la séance à venir (DIS, DUK, PG, ABBV, AAPL proches ou déjà sécurisés).
 
 ## Décisions & Recommandations :
-- **Conserver 100 % des positions actuelles** : Laisser travailler les stop-loss / stops suiveurs automatiques et laisser courir les profits.
-- **Pas de proposition de vente** : Aucun motif fondamental ne justifie d'élaguer les lignes actuelles.
-- **Pas de proposition d'achat** : Limite maximale de 10 positions atteinte.
+- **Conserver 100 % des positions actuelles** : Aucune raison fondamentale ou technique d'élaguer le portefeuille.
+- **Aucune proposition de vente** : Les thèses sont solides et valides.
+- **Aucune proposition d'achat** : Capacité maximale atteinte (10/10).
 
-## À surveiller pour les prochaines séances :
-- Déclenchement potentiel des stops suiveurs automatiques sur DIS, ABBV, AAPL et SPGI si leurs gains atteignent les seuils de +5 % / +10 %.
-- Poursuite de la tendance sur les valeurs défensives de qualité (PG, DUK, ABBV).
+## Surveillance :
+- Évolution de CRM avant la publication des résultats prévue le 02/12/2026 (rappel actif).
+- Exécution automatique des stops suiveurs en cas d'extension haussière sur PG, DUK, DIS, ABBV, AAPL.

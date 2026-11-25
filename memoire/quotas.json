@@ -1,32 +1,6 @@
 {
  "satures": {},
  "jours": {
-  "2026-11-05": {
-   "groq#1": {
-    "tokens": 12626,
-    "appels": 2
-   },
-   "groq#2": {
-    "tokens": 11994,
-    "appels": 2
-   },
-   "gemini#2": {
-    "tokens": 305850,
-    "appels": 29
-   },
-   "gemini#1": {
-    "tokens": 481349,
-    "appels": 40
-   },
-   "gemini#3": {
-    "tokens": 359149,
-    "appels": 29
-   },
-   "groq#3": {
-    "tokens": 26572,
-    "appels": 4
-   }
-  },
   "2026-11-06": {
    "groq#1": {
     "tokens": 12526,
@@ -355,6 +329,28 @@
    "groq#3": {
     "tokens": 12939,
     "appels": 2
+   }
+  },
+  "2026-11-25": {
+   "groq#1": {
+    "tokens": 6379,
+    "appels": 1
+   },
+   "groq#2": {
+    "tokens": 5971,
+    "appels": 1
+   },
+   "gemini#2": {
+    "tokens": 210344,
+    "appels": 17
+   },
+   "gemini#1": {
+    "tokens": 139908,
+    "appels": 13
+   },
+   "gemini#3": {
+    "tokens": 49334,
+    "appels": 4
    }
   }
  }
