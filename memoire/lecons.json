@@ -93,5 +93,15 @@
   "date": "2026-11-20",
   "auteur": "bilan",
   "texte": "Conserver un niveau de liquidités élevé (>40%) est indispensable pour traverser les phases de correction sectorielle."
+ },
+ {
+  "date": "2026-11-27",
+  "auteur": "critique",
+  "texte": "En phase de réallocation de capital, valider la vente d'une position stagnante en faible gain est pertinent pour réduire la concentration sectorielle et libérer du cash sans subir de coût d'opportunité prolongé."
+ },
+ {
+  "date": "2026-11-27",
+  "auteur": "gerant",
+  "texte": "Ne pas céder à la rotation forcée : vendre une position en gain et techniquement saine sans dégradation de la thèse initiale uniquement pour libérer un emplacement détruit la performance globale et augmente les coûts de transaction."
  }
 ]
